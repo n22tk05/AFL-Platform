@@ -1,0 +1,147 @@
+{
+  "formId": "form_01_lptb",
+  "formTitle": "Tờ khai lệ phí trước bạ (nhà, đất)",
+  "formCode": "Mẫu số: 01/LPTB",
+  "status": "active",
+  "steps": [
+    {
+      "stepIndex": 1,
+      "boxId": "box_01",
+      "sectionName": "Mục I: Người nộp thuế",
+      "label": "Họ và tên người nộp thuế",
+      "voiceGuidance": "Bác nhìn vào Mục 1, dòng số 1. Bác lấy bút ghi họ và tên của mình bằng chữ in hoa có dấu, giống như chữ mẫu màu đỏ trên màn hình nhé.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "NGUYỄN VĂN BA",
+      "highlightCoords": [0.185, 0.280, 0.215, 0.885],
+      "faqs": [
+        {
+          "question": "Viết chữ in thường có được không?",
+          "answer": "Dạ không bác ơi, quy định tờ khai thuế bắt buộc ghi chữ in hoa để cán bộ máy quét không bị nhầm lẫn ạ."
+        },
+        {
+          "question": "Tôi đứng tên chung với vợ/chồng thì ghi ai?",
+          "answer": "Dạ bác ghi tên người đứng tên chính trên Hợp đồng mua bán hoặc Sổ đỏ bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 2,
+      "boxId": "box_02",
+      "sectionName": "Mục I: Người nộp thuế",
+      "label": "Mã số thuế cá nhân",
+      "voiceGuidance": "Dòng số 2 là mã số thuế. Bác ghi 10 chữ số mã số thuế cá nhân vào 10 ô vuông nhỏ. Nếu bác không có mã số thuế, bác có thể để trống ô này nhé.",
+      "audioUrl": "/audio/step_02.mp3",
+      "exampleRedText": "8012345678",
+      "highlightCoords": [0.225, 0.280, 0.255, 0.650],
+      "faqs": [
+        {
+          "question": "Tôi không nhớ mã số thuế thì tìm ở đâu?",
+          "answer": "Dạ bác có thể hỏi cán bộ Một cửa tra cứu nhanh bằng số Căn cước công dân của bác ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 3,
+      "boxId": "box_03",
+      "sectionName": "Mục I: Người nộp thuế",
+      "label": "Địa chỉ cư trú (Ca khó: Chữ dài để test tràn viền)",
+      "voiceGuidance": "Dòng số 3 là địa chỉ. Bác ghi rõ số nhà, ngõ, tên đường, phường xã nơi bác đang ở thường trú nhé.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "Số 12 ngõ 45 đường Giải Phóng, Phường Phương Mai, Quận Đống Đa, TP Hà Nội",
+      "highlightCoords": [0.265, 0.280, 0.310, 0.885],
+      "faqs": [
+        {
+          "question": "Ghi địa chỉ theo Căn cước hay nơi đang ở?",
+          "answer": "Dạ bác ghi theo địa chỉ thường trú ghi trên Căn cước công dân gắn chip của bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 4,
+      "boxId": "box_04",
+      "sectionName": "Mục I: Người nộp thuế",
+      "label": "Số điện thoại liên hệ",
+      "voiceGuidance": "Dòng số 4, bác ghi số điện thoại di động của bác hoặc con cháu để cơ quan thuế nhắn tin thông báo tiền thuế.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "0912345678",
+      "highlightCoords": [0.320, 0.280, 0.350, 0.550],
+      "faqs": []
+    },
+    {
+      "stepIndex": 5,
+      "boxId": "box_05",
+      "sectionName": "Mục II: Bất động sản (Đặc điểm nhà đất)",
+      "label": "Thửa đất số",
+      "voiceGuidance": "Sang Mục 2, bác mở trang 2 của cuốn Sổ đỏ ra. Tìm dòng 'Thửa đất số' và chép số đó vào ô này nhé.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "128",
+      "highlightCoords": [0.420, 0.150, 0.450, 0.450],
+      "requiresPrerequisiteDoc": true,
+      "sourceFieldFromPrerequisite": "so_do.thua_dat_so",
+      "faqs": [
+        {
+          "question": "Số thửa đất xem ở đâu trên Sổ đỏ?",
+          "answer": "Dạ bác mở trang 2 của Sổ đỏ, nhìn ngay dòng đầu tiên '1. Thửa đất: a) Thửa đất số: ...' là thấy ngay ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 6,
+      "boxId": "box_06",
+      "sectionName": "Mục II: Bất động sản (Đặc điểm nhà đất)",
+      "label": "Tờ bản đồ số",
+      "voiceGuidance": "Bên cạnh số thửa là 'Tờ bản đồ số'. Bác cũng nhìn trên Sổ đỏ dòng đó và ghi vào ô này.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "15",
+      "highlightCoords": [0.420, 0.550, 0.450, 0.885],
+      "requiresPrerequisiteDoc": true,
+      "sourceFieldFromPrerequisite": "so_do.to_ban_do_so",
+      "faqs": []
+    },
+    {
+      "stepIndex": 7,
+      "boxId": "box_07",
+      "sectionName": "Mục II: Bất động sản (Đặc điểm nhà đất)",
+      "label": "Diện tích đất (m2)",
+      "voiceGuidance": "Dòng tiếp theo là diện tích đất. Bác ghi diện tích bằng mét vuông ghi trên Sổ đỏ, ví dụ tám mươi lăm phẩy năm mét vuông.",
+      "audioUrl": "/audio/step_07.mp3",
+      "exampleRedText": "85.5 m2",
+      "highlightCoords": [0.465, 0.280, 0.495, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "sourceFieldFromPrerequisite": "so_do.dien_tich",
+      "faqs": [
+        {
+          "question": "Ghi diện tích theo Sổ đỏ hay Hợp đồng mua bán?",
+          "answer": "Dạ bác ghi theo số mét vuông trên Sổ đỏ được cấp bác nhé!"
+        }
+      ]
+    },
+    {
+      "stepIndex": 8,
+      "boxId": "box_08",
+      "sectionName": "Mục II: Bất động sản (Đặc điểm nhà đất)",
+      "label": "Nguồn gốc nhà đất",
+      "voiceGuidance": "Dòng nguồn gốc nhà đất. Nếu bác mua lại của người khác, bác tích dấu nhân vào ô 'Nhận chuyển nhượng' giống như trên màn hình.",
+      "audioUrl": "/audio/step_08.mp3",
+      "exampleRedText": "[X] Nhận chuyển nhượng",
+      "highlightCoords": [0.550, 0.150, 0.585, 0.885],
+      "faqs": []
+    },
+    {
+      "stepIndex": 9,
+      "boxId": "box_09",
+      "sectionName": "Mục III: Giá trị nhà đất tính thuế",
+      "label": "Giá trị nhà đất theo hợp đồng",
+      "voiceGuidance": "Mục 3, bác ghi số tiền mua bán ghi trong Hợp đồng công chứng. Bác ghi rõ số tiền bằng chữ số vào ô này.",
+      "audioUrl": "/audio/step_09.mp3",
+      "exampleRedText": "2.500.000.000 ĐỒNG",
+      "highlightCoords": [0.650, 0.450, 0.685, 0.885],
+      "faqs": [
+        {
+          "question": "Có cần viết thêm số tiền bằng chữ không?",
+          "answer": "Dạ ở dòng phía dưới có ô ghi bằng chữ, bước sau cháu sẽ hướng dẫn bác ghi nhé."
+        }
+      ]
+    }
+  ]
+}

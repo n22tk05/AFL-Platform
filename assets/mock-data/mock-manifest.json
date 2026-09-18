@@ -1,0 +1,74 @@
+{
+  "formId": "form_01_lptb",
+  "formTitle": "Tờ khai lệ phí trước bạ (nhà, đất)",
+  "formCode": "Mẫu số: 01/LPTB (Thông tư số 80/2021/TT-BTC)",
+  "imageDimensions": {
+    "width": 2480,
+    "height": 3508
+  },
+  "boxes": [
+    {
+      "boxId": "box_01",
+      "normalizedCoords": [0.185, 0.280, 0.215, 0.885],
+      "rawText": "[01] Người nộp thuế: ....................................................................................",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.605
+    },
+    {
+      "boxId": "box_02",
+      "normalizedCoords": [0.225, 0.280, 0.255, 0.650],
+      "rawText": "[02] Mã số thuế: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.370
+    },
+    {
+      "boxId": "box_03",
+      "normalizedCoords": [0.265, 0.280, 0.310, 0.885],
+      "rawText": "[03] Địa chỉ cư trú: ....................................................................................",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.605
+    },
+    {
+      "boxId": "box_04",
+      "normalizedCoords": [0.320, 0.280, 0.350, 0.550],
+      "rawText": "[04] Số điện thoại: .......................................",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.270
+    },
+    {
+      "boxId": "box_05",
+      "normalizedCoords": [0.420, 0.150, 0.450, 0.450],
+      "rawText": "[05] Thửa đất số: ................",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.300
+    },
+    {
+      "boxId": "box_06",
+      "normalizedCoords": [0.420, 0.550, 0.450, 0.885],
+      "rawText": "[06] Tờ bản đồ số: ................",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.335
+    },
+    {
+      "boxId": "box_07",
+      "normalizedCoords": [0.465, 0.280, 0.495, 0.600],
+      "rawText": "[07] Diện tích đất (m2): ..............................",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.320
+    },
+    {
+      "boxId": "box_08",
+      "normalizedCoords": [0.550, 0.150, 0.585, 0.885],
+      "rawText": "[08] Nguồn gốc nhà đất: [ ] Nhà nước giao  [x] Nhận chuyển nhượng",
+      "boxType": "checkbox",
+      "estimatedWidthRatio": 0.735
+    },
+    {
+      "boxId": "box_09",
+      "normalizedCoords": [0.650, 0.450, 0.685, 0.885],
+      "rawText": "[09] Giá trị nhà, đất (đồng): ........................................",
+      "boxType": "text",
+      "estimatedWidthRatio": 0.435
+    }
+  ]
+}
