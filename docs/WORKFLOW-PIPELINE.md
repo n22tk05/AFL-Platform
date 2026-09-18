@@ -28,12 +28,7 @@
 
 Hệ thống được thiết kế theo 2 dòng chảy hoàn toàn độc lập để tối ưu hóa hiệu năng và chi phí:
 ```mermaid
----
-config:
-  theme: redux
-  look: classic
-  fontFamily: '''Open Sans Variable'', sans-serif'
----
+
 flowchart TD
     subgraph DONG_CHAY_1 ["DÒNG CHẢY 1: CÁN BỘ SOẠN QUY TRÌNH (ADMIN INGESTION - LÀM 1 LẦN)"]
         direction LR
@@ -58,12 +53,6 @@ flowchart TD
 ## 3. BẢN ÁNH XẠ TOÀN DIỆN 11 YÊU CẦU CHỨC NĂNG (FR MAPPING)
 
 ```mermaid
----
-config:
-  look: classic
-  theme: redux
-  fontFamily: '''Open Sans Variable'', sans-serif'
----
 flowchart TD
     N1["NGƯỜI 1 trách nhiệm nền tảng: 
     Monorepo, contracts.ts,
