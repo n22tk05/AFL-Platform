@@ -24,6 +24,8 @@ Toàn bộ tài liệu quan trọng nhất đã được tổng hợp, phân lo�
 | **04** | [WORKFLOW-PIPELINE.md](WORKFLOW-PIPELINE.md) | **Kế hoạch Phân công & Action Sheets:** Tờ lệnh nhiệm vụ chi tiết của 4 người, quy tắc "Nền móng là số 1", phân tách 2 dòng chảy, lộ trình Sprint 7 ngày. | **Cả 4 thành viên** |
 | **05** | [MOCK-DATA.md](MOCK-DATA.md) | **Hợp đồng Dữ liệu & Hướng dẫn Mock:** Chi tiết file `contracts.ts`, `mock-manifest.json` (OpenCV) và `mock-workflow.json` (Gemini & UI). | **Cả 4 thành viên** |
 | **06** | [PRE-MORTEM.md](PRE-MORTEM.md) | **Sổ tay Phòng ngừa Rủi ro (Pre-Mortem Playbook):** 8 kịch bản xấu có thể làm đổ vỡ dự án và phương án phòng thủ (Vaccine). | **Cả 4 thành viên** |
+| **07** | [ACTION-PLAN-VOICE-QA.md](ACTION-PLAN-VOICE-QA.md) | **Kế hoạch Tác chiến Sprint 1 (Voice & QA):** Kế hoạch hành động 7 ngày chi tiết của Người 4, ma trận I/O và tiêu chuẩn nghiệm thu 11 FR. | **Người 4 (Chiến)** |
+| **08** | [HANDOFF-INTEGRATION-VOICE-QA.md](HANDOFF-INTEGRATION-VOICE-QA.md) | **Báo Cáo Tiến Độ & Ma Trận Khớp Nối (Handoff & P2P Integration):** Tổng hợp những gì đã làm được, ma trận I/O chi tiết cho từng người (Tech Lead, Frontend, OpenCV) và hướng dẫn đấu nối. | **Cả 4 thành viên** |
 
 ---
 

@@ -12,6 +12,9 @@
 .env*.local
 .env
 
+#google
+src\liquid-fort-495615-t9-c6764d63ade7.json
+
 # Log & Debug
 npm-debug.log*
 yarn-debug.log*
@@ -22,3 +25,7 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Cache & Build Info
+*.tsbuildinfo
+src/modules/voice-ai/gemini-cache.json

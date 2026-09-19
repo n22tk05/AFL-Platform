@@ -47,7 +47,7 @@
       "label": "Địa chỉ cư trú (Ca khó: Chữ dài để test tràn viền)",
       "voiceGuidance": "Dòng số 3 là địa chỉ. Bác ghi rõ số nhà, ngõ, tên đường, phường xã nơi bác đang ở thường trú nhé.",
       "audioUrl": "/audio/step_03.mp3",
-      "exampleRedText": "Số 12 ngõ 45 đường Giải Phóng, Phường Phương Mai, Quận Đống Đa, TP Hà Nội",
+      "exampleRedText": "SỐ 12 NGÕ 45 ĐƯỜNG GIẢI PHÓNG, PHƯỜNG PHƯƠNG MAI, QUẬN ĐỐNG ĐA, TP HÀ NỘI",
       "highlightCoords": [0.265, 0.280, 0.310, 0.885],
       "faqs": [
         {
@@ -65,7 +65,12 @@
       "audioUrl": "/audio/step_04.mp3",
       "exampleRedText": "0912345678",
       "highlightCoords": [0.320, 0.280, 0.350, 0.550],
-      "faqs": []
+      "faqs": [
+        {
+          "question": "Tôi không có số điện thoại riêng thì ghi số của ai?",
+          "answer": "Dạ bác có thể ghi số điện thoại của con cháu hoặc người thân trong gia đình để nhận tin nhắn thuế nhé."
+        }
+      ]
     },
     {
       "stepIndex": 5,
@@ -96,7 +101,12 @@
       "highlightCoords": [0.420, 0.550, 0.450, 0.885],
       "requiresPrerequisiteDoc": true,
       "sourceFieldFromPrerequisite": "so_do.to_ban_do_so",
-      "faqs": []
+      "faqs": [
+        {
+          "question": "Tờ bản đồ số xem ở mục nào?",
+          "answer": "Dạ nằm ngay cạnh mục Thửa đất số ở trang 2 của Sổ đỏ bác nhé."
+        }
+      ]
     },
     {
       "stepIndex": 7,
@@ -105,7 +115,7 @@
       "label": "Diện tích đất (m2)",
       "voiceGuidance": "Dòng tiếp theo là diện tích đất. Bác ghi diện tích bằng mét vuông ghi trên Sổ đỏ, ví dụ tám mươi lăm phẩy năm mét vuông.",
       "audioUrl": "/audio/step_07.mp3",
-      "exampleRedText": "85.5 m2",
+      "exampleRedText": "85.5 M2",
       "highlightCoords": [0.465, 0.280, 0.495, 0.600],
       "requiresPrerequisiteDoc": true,
       "sourceFieldFromPrerequisite": "so_do.dien_tich",
@@ -123,9 +133,14 @@
       "label": "Nguồn gốc nhà đất",
       "voiceGuidance": "Dòng nguồn gốc nhà đất. Nếu bác mua lại của người khác, bác tích dấu nhân vào ô 'Nhận chuyển nhượng' giống như trên màn hình.",
       "audioUrl": "/audio/step_08.mp3",
-      "exampleRedText": "[X] Nhận chuyển nhượng",
+      "exampleRedText": "[X] NHẬN CHUYỂN NHƯỢNG",
       "highlightCoords": [0.550, 0.150, 0.585, 0.885],
-      "faqs": []
+      "faqs": [
+        {
+          "question": "Đất do bố mẹ tặng cho thì tích ô nào?",
+          "answer": "Dạ bác tích vào ô 'Thừa kế, quà tặng' ở dòng ngay bên dưới nhé."
+        }
+      ]
     },
     {
       "stepIndex": 9,

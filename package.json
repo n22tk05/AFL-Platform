@@ -6,9 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:voice": "tsx src/modules/voice-ai/tests/test-voice.ts",
+    "test:qa": "tsx src/modules/voice-ai/tests/qa-suite.ts",
+    "test:tts": "tsx src/modules/voice-ai/tests/test-tts-api.ts",
+    "test:stt": "tsx src/modules/voice-ai/tests/test-stt.ts",
+    "generate:audio": "tsx src/modules/voice-ai/tests/generate-full-audio.ts"
   },
   "dependencies": {
+    "@google-cloud/text-to-speech": "^7.1.0",
+    "@google/genai": "^2.23.0",
+    "@techstark/opencv-js": "^5.0.0-release.1",
+    "dotenv": "^18.0.0",
+    "lucide-react": "^1.47.0",
     "next": "^14.2.24",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -17,6 +27,7 @@
     "@types/node": "^20.17.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "tsx": "^4.23.13",
     "typescript": "^5.6.3"
   }
 }

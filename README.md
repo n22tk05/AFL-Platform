@@ -103,8 +103,20 @@ Toàn bộ tài liệu quy chuẩn kỹ thuật và kế hoạch thực thi đã
    ```bash
    npm install
    ```
-3. **Chạy máy chủ phát triển:**
+3. **Thiết lập biến môi trường:**
+   ```bash
+   cp .env.example .env.local
+   ```
+4. **Kiểm thử phân hệ Voice AI & Kiểm toán QA:**
+   ```bash
+   # Kiểm thử phân hệ Voice AI (Người 4):
+   npm run test:voice
+
+   # Kiểm toán tuân thủ 11 FRs & 4 NFRs:
+   npm run test:qa
+   ```
+5. **Chạy máy chủ phát triển:**
    ```bash
    npm run dev
    ```
-4. **Mở trình duyệt:** Truy cập `http://localhost:3000` để xem ứng dụng di động dành cho người cao tuổi hoặc `http://localhost:3000/admin` để vào Cổng Quản trị Một cửa.
+6. **Mở trình duyệt:** Truy cập `http://localhost:3000` để xem ứng dụng di động dành cho người cao tuổi hoặc `http://localhost:3000/admin` để vào Cổng Quản trị Một cửa.

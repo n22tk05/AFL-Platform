@@ -48,6 +48,7 @@ export interface WorkflowStep {
   highlightCoords: NormalizedBoundingBox; // Tọa độ để vẽ viền nhấp nháy trên màn hình
   requiresPrerequisiteDoc?: boolean; // Ô này có cần lấy thông tin từ Sổ đỏ/Biên bản phạt không?
   sourceFieldFromPrerequisite?: string; // Tên trường nguồn (ví dụ: "so_do.dien_tich")
+  legalWarningFlag?: boolean;        // Cờ cảnh báo ô nhạy cảm tài chính/pháp lý cần cán bộ đối soát kỹ (FR-8)
   faqs: StepFaqItem[];               // Nút bấm gợi ý câu hỏi khi quầy tiếp dân bị ồn (Fallback)
 }
 
