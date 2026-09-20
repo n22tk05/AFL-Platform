@@ -2,8 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 
-// Nạp file .env.local
-dotenv.config({ path: path.join(process.cwd(), '.env.local') });
+dotenv.config();
 
 async function verifyTTSApiKey() {
   console.log('===============================================================');
@@ -18,7 +17,7 @@ async function verifyTTSApiKey() {
   console.log(`   - GEMINI_API_KEY:     ${geminiKey ? `Đã cấu hình (${geminiKey.substring(0, 8)}...${geminiKey.slice(-4)})` : '❌ CHƯA CẤU HÌNH'}`);
 
   if (!apiKey) {
-    console.error('\n❌ Không tìm thấy GOOGLE_TTS_API_KEY trong file .env.local!');
+    console.error('\n❌ Không tìm thấy GOOGLE_TTS_API_KEY trong file .env!');
     process.exit(1);
   }
 

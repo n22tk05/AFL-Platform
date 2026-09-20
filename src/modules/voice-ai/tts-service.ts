@@ -4,10 +4,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { localCache } from './local-cache';
 
-try {
-  dotenv.config({ path: path.join(process.cwd(), '.env.local') });
-} catch {}
-
+dotenv.config()
 export type VietnameseVoiceRegion = 'NORTH' | 'SOUTH';
 
 export interface WordTimestamp {

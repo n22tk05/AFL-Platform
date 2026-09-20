@@ -1,10 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import dotenv from 'dotenv';
 import { TTSService, WordTimestamp } from '../tts-service';
-
-dotenv.config({ path: path.join(process.cwd(), '.env.local') });
-
 interface TimestampsManifest {
   formId: string;
   formTitle: string;

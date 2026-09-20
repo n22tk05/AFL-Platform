@@ -4,7 +4,7 @@ import fs from 'fs';
 import { FormGeometricManifest } from '../../../shared/contracts';
 import { geminiPromptService } from '../gemini-prompt';
 
-dotenv.config({ path: path.join(process.cwd(), '.env.local') });
+dotenv.config();
 
 async function verifyGeminiAndGenerate() {
   console.log('===============================================================');
@@ -15,7 +15,7 @@ async function verifyGeminiAndGenerate() {
   console.log(`1. Khóa GEMINI_API_KEY: ${apiKey ? `Đã cấu hình (${apiKey.substring(0, 10)}...${apiKey.slice(-4)})` : '❌ CHƯA CẤU HÌNH'}`);
 
   if (!apiKey) {
-    console.error('❌ Vui lòng cung cấp GEMINI_API_KEY trong .env.local');
+    console.error('❌ Vui lòng cung cấp GEMINI_API_KEY trong .env');
     process.exit(1);
   }
 
