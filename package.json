@@ -1,5 +1,6 @@
 {
   "name": "afl-platform",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,23 +12,30 @@
     "test:qa": "tsx src/modules/voice-ai/tests/qa-suite.ts",
     "test:tts": "tsx src/modules/voice-ai/tests/test-tts-api.ts",
     "test:stt": "tsx src/modules/voice-ai/tests/test-stt.ts",
-    "generate:audio": "tsx src/modules/voice-ai/tests/generate-full-audio.ts"
+    "generate:audio": "tsx src/modules/voice-ai/tests/generate-full-audio.ts",
+    "postinstall": "prisma skills sync || exit 0"
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^7.1.0",
     "@google/genai": "^2.23.0",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
     "@techstark/opencv-js": "^5.0.0-release.1",
-    "dotenv": "^18.0.0",
     "lucide-react": "^1.47.0",
     "next": "^14.2.24",
+    "pg": "^8.23.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20.17.0",
+    "@prisma/config": "^7.10.0",
+    "@types/node": "^20.19.43",
+    "@types/pg": "^8.23.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "tsx": "^4.23.13",
-    "typescript": "^5.6.3"
+    "dotenv": "^18.0.1",
+    "prisma": "^7.10.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
   }
 }

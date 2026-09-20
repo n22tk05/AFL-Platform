@@ -33,9 +33,11 @@ Thumbs.db
 
 # AI Tooling & Assistants
 .agent
+.agents
 .claude
 .cursor
 .gemini
+.devin
 _bmad
 _bmad-output
 .github
@@ -43,3 +45,4 @@ _bmad-output
 *.pem
 *.key
 src/modules/voice-ai/gemini-cache.json
+node_modules/

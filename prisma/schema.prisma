@@ -1,0 +1,232 @@
+// Prisma Schema cho Dự án AFL (AI For Life - Nền tảng Hướng dẫn Điền Biểu mẫu Hành chính)
+// Kết nối PostgreSQL thông qua cấu hình trong prisma.config.ts
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+enum FormStatus {
+  DRAFT            // Bản nháp đang biên tập
+  PENDING_REVIEW   // Chờ cán bộ một cửa kiểm duyệt
+  ACTIVE           // Đã kích hoạt, cho phép công dân quét mã QR sử dụng
+  ARCHIVED         // Đã lưu trữ / hết hiệu lực văn bản
+}
+
+enum BoxType {
+  TEXT             // Ô nhập văn bản thông thường
+  CHECKBOX         // Ô tích chọn đánh dấu (V) hoặc (X)
+  TABLE_CELL       // Ô nằm trong bảng dữ liệu nhiều cột/dòng
+}
+
+// -----------------------------------------------------------------------------
+// 1. Quản lý Mẫu biểu Hành chính (Form Template)
+// -----------------------------------------------------------------------------
+model FormTemplate {
+  id               String       @id @default(cuid())
+  formCode         String       @unique // Ký hiệu mẫu, ví dụ: "01/LPTB", "TK-01"
+  formTitle        String       // Tên biểu mẫu, ví dụ: "Tờ khai Lệ phí trước bạ nhà, đất"
+  description      String?      // Mô tả biểu mẫu và đối tượng áp dụng
+  category         String?      // Lĩnh vực: Đất đai, Thuế, Hộ tịch, Giao thông...
+  originalPdfUrl   String?      // Đường dẫn file PDF / ảnh mẫu gốc
+  qrCodeUrl        String?      // URL ảnh mã QR phục vụ in dán tại quầy tiếp dân
+  status           FormStatus   @default(DRAFT)
+  version          Int          @default(1)
+  
+  // Quan hệ dữ liệu
+  manifest         FormGeometricManifest?
+  workflow         FormWorkflow?
+  auditLogs        FormAuditLog[]
+
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@map("form_templates")
+}
+
+// -----------------------------------------------------------------------------
+// 2. Tọa độ Hình học Tổng thể từ OpenCV WASM (Form Geometric Manifest)
+// -----------------------------------------------------------------------------
+model FormGeometricManifest {
+  id              String             @id @default(cuid())
+  formTemplateId  String             @unique
+  formTemplate    FormTemplate       @relation(fields: [formTemplateId], references: [id], onDelete: Cascade)
+  
+  imageWidth      Int                // Chiều rộng ảnh gốc (pixel)
+  imageHeight     Int                // Chiều cao ảnh gốc (pixel)
+  
+  // Quan hệ danh sách các ô nhận diện (boxes model)
+  boxes           FormGeometricBox[]
+
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@map("form_geometric_manifests")
+}
+
+// -----------------------------------------------------------------------------
+// 3. Chi tiết từng ô Bounding Box (Geometric Box Model)
+// -----------------------------------------------------------------------------
+model FormGeometricBox {
+  id                  String                @id @default(cuid())
+  manifestId          String
+  manifest            FormGeometricManifest @relation(fields: [manifestId], references: [id], onDelete: Cascade)
+  
+  boxId               String                // Mã định danh ô: "box_01", "box_02"...
+  rawText             String                // Chữ thô trích xuất từ nhãn bên cạnh ô
+  boxType             BoxType               @default(TEXT)
+  estimatedWidthRatio Float                 // Tỉ lệ chiều rộng ô so với trang (0.0 - 1.0)
+  spatialOrder        Int                   @default(0) // Thứ tự quét từ trên xuống dưới, trái qua phải
+  
+  // Tọa độ chuẩn hóa Normalized Coords [0.0 - 1.0] (dùng @map để tránh xung đột system column xmin/xmax của PostgreSQL)
+  boxYmin             Float                 @map("box_ymin")
+  boxXmin             Float                 @map("box_xmin")
+  boxYmax             Float                 @map("box_ymax")
+  boxXmax             Float                 @map("box_xmax")
+
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+
+  @@unique([manifestId, boxId])
+  @@index([manifestId, spatialOrder])
+  @@map("form_geometric_boxes")
+}
+
+// -----------------------------------------------------------------------------
+// 4. Sơ đồ Quy trình Hướng dẫn Điền (Form Workflow)
+// -----------------------------------------------------------------------------
+model FormWorkflow {
+  id              String         @id @default(cuid())
+  formTemplateId  String         @unique
+  formTemplate    FormTemplate   @relation(fields: [formTemplateId], references: [id], onDelete: Cascade)
+  
+  status          FormStatus     @default(DRAFT)
+  version         Int            @default(1)
+  
+  // Quan hệ danh sách các bước hướng dẫn (steps model)
+  steps           WorkflowStep[]
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@map("form_workflows")
+}
+
+// -----------------------------------------------------------------------------
+// 5. Chi tiết từng Bước Hướng dẫn Điền (Workflow Step Model)
+// -----------------------------------------------------------------------------
+model WorkflowStep {
+  id                          String        @id @default(cuid())
+  workflowId                  String
+  workflow                    FormWorkflow  @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  
+  stepIndex                   Int           // Thứ tự bước: 1, 2, 3...
+  boxId                       String        // Khớp với boxId của OpenCV
+  sectionName                 String        // Phân mục hành chính: "Mục I - Thông tin người nộp thuế"
+  label                       String        // Nhãn trường chuẩn: "Họ và tên người nộp thuế"
+  
+  // Hỗ trợ Người cao tuổi & Công dân
+  voiceGuidance               String        // Lời thoại bình dân ấm áp đọc cho người già
+  audioUrl                    String?       // Đường dẫn file MP3 đã duyệt/sinh sẵn (tốc độ chậm 0.9x)
+  exampleRedText              String?       // Chữ mẫu màu đỏ đậm in hoa rõ nét (chuẩn WCAG AAA)
+  
+  // Tọa độ viền nhấp nháy trên màn hình
+  highlightYmin               Float?
+  highlightXmin               Float?
+  highlightYmax               Float?
+  highlightXmax               Float?
+
+  // Liên chứng từ tiên quyết (Sổ đỏ, CCCD, Biên bản phạt...)
+  requiresPrerequisiteDoc     Boolean       @default(false)
+  sourceFieldFromPrerequisite String?       // Ví dụ: "so_do.dien_tich"
+  
+  // Cảnh báo pháp lý & tài chính (FR-8)
+  legalWarningFlag            Boolean       @default(false)
+
+  // Danh sách các câu hỏi thường gặp FAQs cho bước này
+  faqs                        StepFaq[]
+
+  createdAt                   DateTime      @default(now())
+  updatedAt                   DateTime      @updatedAt
+
+  @@unique([workflowId, stepIndex])
+  @@index([workflowId, stepIndex])
+  @@map("workflow_steps")
+}
+
+// -----------------------------------------------------------------------------
+// 6. Câu hỏi Thắc mắc thường gặp theo từng Bước (Step FAQ Model)
+// Nút bấm gợi ý giải đáp thắc mắc khi quầy tiếp dân bị ồn
+// -----------------------------------------------------------------------------
+model StepFaq {
+  id             String        @id @default(cuid())
+  stepId         String
+  step           WorkflowStep  @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  
+  question       String        // Câu hỏi người dân hay thắc mắc tại ô này
+  answer         String        // Câu trả lời ngắn gọn, dễ hiểu (2-3 câu)
+  order          Int           @default(0)
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@map("step_faqs")
+}
+
+// -----------------------------------------------------------------------------
+// 7. Danh mục Giấy tờ Tiên quyết liên chứng từ (Prerequisite Documents)
+// -----------------------------------------------------------------------------
+model PrerequisiteDocument {
+  id                String         @id @default(cuid())
+  docCode           String         @unique // Ví dụ: "SO_DO", "CCCD", "BIEN_BAN_PHAT"
+  docName           String         // Tên chứng từ
+  description       String?
+  sampleImageUrl    String?        // Ảnh mẫu minh họa vị trí các trường
+  extractableFields Json?          // Danh sách trường có thể ánh xạ (vd: ["dien_tich", "so_thua"])
+
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  @@map("prerequisite_documents")
+}
+
+// -----------------------------------------------------------------------------
+// 8. Bộ nhớ đệm Giọng nói TTS (Voice Audio Cache)
+// Tránh gọi lặp Google Cloud TTS, giảm chi phí và chống cháy Quota
+// -----------------------------------------------------------------------------
+model VoiceCache {
+  id             String         @id @default(cuid())
+  cacheKey       String         @unique // Hash SHA-256 từ nội dung văn bản + cấu hình giọng
+  rawText        String         // Văn bản tiếng Việt đã đọc
+  audioUrl       String         // URL file MP3 tương ứng
+  voiceName      String         @default("vi-VN-Neural2-A")
+  speakingRate   Float          @default(0.9)
+  
+  createdAt      DateTime       @default(now())
+
+  @@map("voice_cache")
+}
+
+// -----------------------------------------------------------------------------
+// 9. Nhật ký Phê duyệt & Kiểm định Biểu mẫu (Audit Logs)
+// -----------------------------------------------------------------------------
+model FormAuditLog {
+  id             String         @id @default(cuid())
+  formTemplateId String
+  formTemplate   FormTemplate   @relation(fields: [formTemplateId], references: [id], onDelete: Cascade)
+  
+  action         String         // "CREATE", "UPDATE_WORKFLOW", "APPROVE", "REJECT", "PUBLISH"
+  performedBy    String?        // Tên hoặc tài khoản cán bộ thực hiện
+  note           String?        // Ghi chú lý do phê duyệt / từ chối
+  metadata       Json?          // Snapshot dữ liệu thay đổi
+  
+  createdAt      DateTime       @default(now())
+
+  @@map("form_audit_logs")
+}
