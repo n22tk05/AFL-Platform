@@ -27,6 +27,7 @@ Toàn bộ tài liệu quan trọng nhất đã được tổng hợp, phân lo�
 | **07** | [ACTION-PLAN-VOICE-QA.md](ACTION-PLAN-VOICE-QA.md) | **Kế hoạch Tác chiến Sprint 1 (Voice & QA):** Kế hoạch hành động 7 ngày chi tiết của Người 4, ma trận I/O và tiêu chuẩn nghiệm thu 11 FR. | **Người 4 (Chiến)** |
 | **08** | [HANDOFF-INTEGRATION-VOICE-QA.md](HANDOFF-INTEGRATION-VOICE-QA.md) | **Báo Cáo Tiến Độ & Ma Trận Khớp Nối (Handoff & P2P Integration):** Tổng hợp những gì đã làm được, ma trận I/O chi tiết cho từng người (Tech Lead, Frontend, OpenCV) và hướng dẫn đấu nối. | **Cả 4 thành viên** |
 | **09** | [SSML-TIMEPOINTS-UPGRADE-REPORT.md](SSML-TIMEPOINTS-UPGRADE-REPORT.md) | **Báo Cáo Nâng Cấp Mốc Thời Gian Karaoke (SSML Timepointing):** Đánh giá hạn chế thuật toán heuristic cũ, triển khai cơ chế SSML Marks chính xác mili-giây từ Google TTS Neural2. | **Cả 4 thành viên** |
+| **10** | [CACHE-KEY-SHA256-UPGRADE-REPORT.md](CACHE-KEY-SHA256-UPGRADE-REPORT.md) | **Báo Cáo Nâng Cấp Khóa Băm Cache (SHA-256 & Canonicalization):** Triệt tiêu rủi ro đụng độ mã băm, khử nhạy thứ tự thuộc tính, đồng bộ kiến trúc với bảng `voice_cache` trong Prisma CSDL. | **Người 1 & Người 4** |
 
 ---
 

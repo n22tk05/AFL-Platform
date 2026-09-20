@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 
 /**
  * Local Cache Service - Quota & Rate Limit Vaccine
@@ -15,17 +16,33 @@ export class LocalCacheService {
   }
 
   /**
-   * Tạo khóa hash đơn giản từ đầu vào
+   * Chuẩn hóa đối tượng đệ quy với các khóa được sắp xếp theo thứ tự bảng chữ cái (A -> Z)
+   * Đảm bảo tính nhất quán (Canonicalization): { a: 1, b: 2 } và { b: 2, a: 1 } luôn sinh ra cùng 1 mã băm
    */
-  private generateKey(input: any): string {
-    const serialized = typeof input === 'string' ? input : JSON.stringify(input);
-    let hash = 0;
-    for (let i = 0; i < serialized.length; i++) {
-      const char = serialized.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash |= 0; // Convert to 32bit integer
+  private canonicalize(val: any): any {
+    if (val === null || typeof val !== 'object') {
+      return val;
     }
-    return `key_${Math.abs(hash)}`;
+    if (Array.isArray(val)) {
+      return val.map(item => this.canonicalize(item));
+    }
+    const sortedKeys = Object.keys(val).sort();
+    const result: Record<string, any> = {};
+    for (const k of sortedKeys) {
+      result[k] = this.canonicalize(val[k]);
+    }
+    return result;
+  }
+
+  /**
+   * Tạo khóa băm SHA-256 (256-bit) chuẩn công nghiệp, triệt tiêu 100% rủi ro đụng độ (Collision-free)
+   * Hoàn toàn tương thích và đồng bộ với kiến trúc trường cacheKey của bảng voice_cache trong Prisma PostgreSQL
+   */
+  public generateKey(input: any): string {
+    const canonicalData = this.canonicalize(input);
+    const serialized = typeof canonicalData === 'string' ? canonicalData : JSON.stringify(canonicalData);
+    const hash = crypto.createHash('sha256').update(serialized, 'utf-8').digest('hex');
+    return `cache_${hash}`;
   }
 
   /**
