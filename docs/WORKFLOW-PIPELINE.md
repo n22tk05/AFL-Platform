@@ -72,8 +72,8 @@ flowchart TD
 
 ### CHI TIẾT TRÁCH NHIỆM NGƯỜI 1 (TECH LEAD & DB ARCHITECT)
 * **Trách nhiệm nòng cốt:** Thiết kế kiến trúc, làm chủ file `contracts.ts` (Hiến pháp bất khả xâm phạm), thiết kế cơ sở dữ liệu PostgreSQL Prisma, viết sẵn Custom Hook `useStepAudio(stepId)` chuẩn Half-Duplex, cấu hình Service Worker Offline Pre-cache, điều phối tích hợp P2P và gộp code vào `main`.
-* **FR-11 (Quản lý Thư viện, Sinh Mã QR & Mã Rút Gọn 3 Số, Hạn Hiệu Lực):**
-  * Viết API CRUD quản lý danh mục form (`form_templates`), bổ sung trường `short_code` (Mã 3 số) và `valid_until` (Hạn hiệu lực văn bản).
+* **FR-11 (Quản lý Thư viện, Sinh Mã QR & Hạn Hiệu Lực):**
+  * Viết API CRUD quản lý danh mục form (`form_templates`), bổ sung trường `valid_until` (Hạn hiệu lực văn bản).
   * Tích hợp thư viện tạo mã QR SVG liên kết thẳng đến biểu mẫu và xuất mẫu in A5/A4 mica dán tại bàn tiếp dân.
 * **Hỗ trợ FR-6 (Bảo mật Session RAM theo Nghị định 13/2023/NĐ-CP):**
   * Xây dựng middleware lưu tạm hình ảnh CCCD và biên bản phạt trong biến bộ nhớ RAM, kích hoạt cơ chế tự hủy hoàn toàn sau 15 phút hoặc khi người dùng bấm nút [Kết thúc & Xóa sạch phiên].
@@ -82,7 +82,7 @@ flowchart TD
 
 ### CHI TIẾT TRÁCH NHIỆM CỦA NGƯỜI 2 (UI MOBILE & ADMIN)
 * **Vị trí cốt lõi:** Làm chủ toàn bộ phần "Nhìn" và trải nghiệm trực quan của dự án (cả phía Dân lẫn Cán bộ).
-* **FR-1 & FR-11 (Mã Rút Gọn & Camera):** Ô nhập mã số 3 chữ số to đùng ($\ge 24$pt) ngay trang chủ (cho cụ tay run / cam mờ) song song với khung camera chụp scan.
+* **FR-1 & FR-11 (Camera & QR Access):** Khung camera chụp scan trực tiếp biểu mẫu giấy nắn phẳng ngay trang chủ, kích hoạt mượt mà sau khi quét mã QR tại quầy.
 * **FR-2 (Visual Twin & Normalized Highlighter):** Nhận tọa độ tỉ lệ chuẩn hóa $0.0 \to 1.0$, nhân ma trận viewport SVG vẽ đèn nháy chính xác 100% trên mọi dòng máy, không lệch pixel.
 * **FR-3 (Phụ Đề Karaoke Chữ Chạy & Nút Nghe Lại):** Hiển thị chữ chạy to $\ge 20$pt đồng bộ theo giọng nói; nút [Nghe lại dòng này] $\ge 56\text{ dp}$ cố định ở thanh điều hướng.
 * **FR-4 (Nút Chạm Câu Hỏi Nhanh - Touch-to-Ask):** Dựng 2-3 nút chip câu hỏi thường gặp dưới mỗi ô điền để cụ chạm 1 chạm là nghe giải đáp ngay, không bắt buộc thu âm.

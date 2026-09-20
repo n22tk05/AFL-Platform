@@ -88,20 +88,19 @@ Việt Nam đang đẩy mạnh chuyển đổi số trong các dịch vụ công
 
 ### 4.1 Phân hệ 1: Trợ lý Hướng dẫn Điền Form (Ứng dụng Web Di động cho Người cao tuổi)
 
-#### Yêu cầu FR-1: Nhận diện Biểu mẫu Giấy qua Camera & Mã Rút gọn (Form Identification & Short-Code Fallback)
-* **Mô tả:** Người dùng mở ứng dụng bằng cách quét mã QR trên bàn viết, chụp ảnh tờ khai giấy, hoặc **nhập mã định danh rút gọn 3-4 chữ số (Short-Code, ví dụ: `#102`)** được in to rõ ràng tại quầy. Hệ thống tải quy trình hướng dẫn tương ứng từ thư viện.
+#### Yêu cầu FR-1: Nhận diện Biểu mẫu Giấy qua Camera (Form Identification via Camera)
+* **Mô tả:** Người dùng mở ứng dụng bằng cách quét mã QR dán trên bàn viết Một cửa và chụp ảnh tờ khai giấy đang cầm trên tay. Hệ thống phân tích, nắn thẳng và tải quy trình hướng dẫn tương ứng từ thư viện.
 * **Tiêu chí nghiệm thu:**
   * Nhận diện chính xác biểu mẫu qua ảnh chụp trong thời gian $\le 3$ giây với độ chính xác $\ge 95\%$.
-  * Cung cấp ô nhập mã số rút gọn 3-4 chữ số cỡ lớn ($\ge 24\text{pt}$) ngay tại màn hình đón tiếp; người dùng gõ số là chuyển thẳng vào quy trình mà không cần mở camera nếu tay run hoặc camera mờ.
+  * Tự động phát hiện góc mép giấy và nắn thẳng góc phối cảnh (Perspective Transform) ngay trên ảnh vừa chụp.
   * Nếu biểu mẫu chưa có trong hệ thống, phát giọng nói thông báo thân thiện và gợi ý nhờ cán bộ hỗ trợ tải mẫu lên.
 * **Sơ đồ Quy trình FR-1:**
 ```mermaid
 flowchart LR
-    A["Dân Tiếp Cận"] --> B{"Chọn Cách Mở"}
-    B -- Quét QR / Chụp Ảnh --> C["Camera & Nắn Phẳng"]
-    B -- Tay Run / Cam Mờ --> D["Gõ Mã 3 Số (Ví dụ: 102)"]
-    C --> E{"Đã có trong Thư viện?"}
-    D --> E
+    A["Dân Tiếp Cận Bàn Một Cửa"] --> B["Quét Mã QR Mở Web App"]
+    B --> C["Chụp Ảnh Tờ Khai Giấy Đang Cầm"]
+    C --> D["Camera AI Nắn Phẳng & Nhận Diện Form"]
+    D --> E{"Đã có trong Thư viện?"}
     E -- Có --> F["Tải Kịch Bản Đã Duyệt"]
     E -- Chưa --> G["Phát Thoại Báo Cán Bộ Hỗ Trợ"]
 ```
@@ -274,19 +273,19 @@ flowchart LR
     D --> E["Lưu Cấu Hình Vào Trường workflow_steps (JSONB)"]
 ```
 
-#### Yêu cầu FR-11: Quản lý Thư viện, Sinh Mã QR, Mã Rút Gọn 3 Số & Hạn Hiệu Lực (Form Library, QR, Short-Code & Expiration Guard)
-* **Mô tả:** Quản lý vòng đời biểu mẫu (Bản nháp, Đang hoạt động, Hết hiệu lực, Đã lưu trữ). Tự động sinh mã QR và **Mã số truy cập nhanh 3-4 chữ số (Short-Code)** liên kết trực tiếp vào biểu mẫu đó trên Web di động để in dán tại bàn tiếp dân, kèm cơ chế kiểm soát hạn hiệu lực văn bản pháp lý.
+#### Yêu cầu FR-11: Quản lý Thư viện, Sinh Mã QR & Hạn Hiệu Lực (Form Library, QR Code & Expiration Guard)
+* **Mô tả:** Quản lý vòng đời biểu mẫu (Bản nháp, Đang hoạt động, Hết hiệu lực, Đã lưu trữ). Tự động sinh mã QR liên kết trực tiếp vào biểu mẫu đó trên Web di động để in dán tại bàn tiếp dân, kèm cơ chế kiểm soát hạn hiệu lực văn bản pháp lý.
 * **Tiêu chí nghiệm thu:**
-  * Mỗi biểu mẫu sau khi xuất bản được cấp một mã số duy nhất gồm 3 hoặc 4 chữ số (ví dụ: `#101`, `#102`).
-  * **Cơ chế Hạn Hiệu Lực Văn Bản (`valid_until`):** Mỗi biểu mẫu gắn với ngày hết hiệu lực theo quy định pháp luật. Khi văn bản hết hiệu lực hoặc bị thay thế bằng mẫu mới, mã QR và mã số 3 số tự động hiển thị biển báo cảnh báo: *"Biểu mẫu này đã hết hiệu lực, xin vui lòng liên hệ cán bộ để nhận mẫu mới"*, ngăn chặn tuyệt đối tình trạng công dân nộp nhầm mẫu cũ.
-  * **Quy chuẩn Bảng Hướng Dẫn Vật Lý Chống Tráo QR:** Cung cấp mẫu in chuẩn A5/A4 đóng khung mica cố định tại bàn tiếp dân: Hiển thị tên miền chính thống của cơ quan nhà nước, Mã QR chính thức, và dòng chữ cỡ lớn: *"HOẶC TRUY CẬP [TÊN MIỀN] VÀ NHẬP MÃ SỐ [ 1 0 2 ]"* để triệt tiêu nguy cơ dán đè mã QR lừa đảo (QR Phishing).
+  * Mỗi biểu mẫu sau khi xuất bản được cấp một mã QR chuẩn vector (SVG) liên kết trực tiếp vào kịch bản hướng dẫn.
+  * **Cơ chế Hạn Hiệu Lực Văn Bản (`valid_until`):** Mỗi biểu mẫu gắn với ngày hết hiệu lực theo quy định pháp luật. Khi văn bản hết hiệu lực hoặc bị thay thế bằng mẫu mới, mã QR tự động hiển thị biển báo cảnh báo: *"Biểu mẫu này đã hết hiệu lực, xin vui lòng liên hệ cán bộ để nhận mẫu mới"*, ngăn chặn tuyệt đối tình trạng công dân nộp nhầm mẫu cũ.
+  * **Quy chuẩn Bảng Hướng Dẫn Vật Lý Chống Tráo QR:** Cung cấp mẫu in chuẩn A5/A4 đóng khung mica cố định tại bàn tiếp dân: Hiển thị tên miền chính thống của cơ quan nhà nước, Mã QR chính thức được bảo vệ chống dán đè (QR Phishing).
 * **Sơ đồ Quy trình FR-11:**
 ```mermaid
 stateDiagram-v2
     [*] --> Draft: Tạo mới / Bóc tách AI
     Draft --> Active: Chuyên viên Phê duyệt & Đặt Ngày Hết Hạn
-    Active --> PublishAssets: Tự động sinh Mã QR + Mã Số 3 Chữ Số (#102)
-    PublishAssets --> Print: In bảng hướng dẫn song ngữ (QR + Tên miền + Mã Số) dán bàn tiếp dân
+    Active --> PublishAssets: Tự động sinh Mã QR Biểu Mẫu
+    PublishAssets --> Print: In bảng hướng dẫn có mã QR dán bàn tiếp dân
     Active --> Expired: Quá ngày valid_until / Có thông tư thay thế
     Expired --> Alert: Hiển thị cảnh báo ngưng tiếp nhận & chỉ dẫn mẫu mới
     Expired --> Archived: Chuyển vào kho lưu trữ
@@ -356,4 +355,4 @@ stateDiagram-v2
 * `[GIẢ ĐỊNH 1]`: Điện thoại thông minh của người cao tuổi hoặc người thân đi cùng có kết nối mạng di động (4G/Wifi) ổn định tại trụ sở hành chính.
 * `[GIẢ ĐỊNH 2]`: Camera điện thoại có độ phân giải tối thiểu 8MP và có khả năng chụp rõ nét văn bản ở khoảng cách 30-40cm.
 * `[GIẢ ĐỊNH 3]`: Cơ quan hành chính cho phép công dân đặt điện thoại trên bàn viết để hỗ trợ tra cứu trong quá trình điền hồ sơ.
-* `[GIẢ ĐỊNH 4]`: Thiết bị của người cao tuổi có thể là điện thoại đời cũ, cấu hình thấp hoặc dung lượng RAM hạn chế ($\le 2\text{GB}$) $\rightarrow$ Ứng dụng Web di động phải được tối ưu hóa siêu nhẹ, tuyệt đối không rò rỉ bộ nhớ (Memory Leak) và hỗ trợ chế độ nhập mã 3 chữ số thay cho camera khi cần thiết.
+* `[GIẢ ĐỊNH 4]`: Thiết bị của người cao tuổi có thể là điện thoại đời cũ, cấu hình thấp hoặc dung lượng RAM hạn chế ($\le 2\text{GB}$) $\rightarrow$ Ứng dụng Web di động phải được tối ưu hóa siêu nhẹ, tuyệt đối không rò rỉ bộ nhớ (Memory Leak), sử dụng CSS Keyframes thuần túy thay vì Canvas nặng nề để đảm bảo độ mượt mà.
