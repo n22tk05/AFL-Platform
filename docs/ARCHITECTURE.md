@@ -164,7 +164,7 @@ interface FormGeometricManifest {
 | Hạng mục | Quy ước Chuẩn |
 |---|---|
 | **Đặt tên Mã Biểu mẫu** | Dùng mã hiệu hành chính viết hoa: `MAU_01_LPTB_NHA_DAT`, `MAU_BIEN_BAN_PHAT_GT`. |
-| **Định dạng Tọa độ Highlight** | Mảng 4 số nguyên `[ymin, xmin, ymax, xmax]` tương ứng tỉ lệ $[0, 1000]$ của ảnh scan chuẩn. |
+| **Định dạng Tọa độ Highlight** | Mảng 4 số nguyên `[ymin, xmin, ymax, xmax]` tương ứng tỉ lệ $[0.0, 1.0]$ của ảnh scan chuẩn. |
 | **Định dạng Thời gian** | Chuẩn ISO 8601 theo múi giờ Việt Nam: `YYYY-MM-DDTHH:mm:ss+07:00`. |
 | **Quy chuẩn Font & Màu sắc** | Chữ mẫu đỏ hiển thị cho người già bắt buộc dùng mã màu `#D32F2F`, font Sans-serif nét dày (Bold), cỡ chữ $\ge 18\text{pt}$. |
 | **Xử lý Lỗi (Error Envelope)** | Định dạng JSON chuẩn: `{ success: boolean, error?: { code: string, message_vi: string } }`. |
