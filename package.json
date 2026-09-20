@@ -13,7 +13,7 @@
     "test:tts": "tsx src/modules/voice-ai/tests/test-tts-api.ts",
     "test:stt": "tsx src/modules/voice-ai/tests/test-stt.ts",
     "generate:audio": "tsx src/modules/voice-ai/tests/generate-full-audio.ts",
-    "postinstall": "prisma skills sync || exit 0"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^7.1.0",

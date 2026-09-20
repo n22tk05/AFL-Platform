@@ -2,7 +2,7 @@
   "formId": "form_01_lptb",
   "formTitle": "Tờ khai lệ phí trước bạ (nhà, đất)",
   "formCode": "Mẫu số: 01/LPTB",
-  "generatedAt": "2026-09-19T02:43:21.926Z",
+  "generatedAt": "2026-09-20T12:27:38.005Z",
   "voiceRegion": "NORTH",
   "voiceName": "vi-VN-Neural2-A",
   "speakingRate": 0.9,
@@ -18,172 +18,172 @@
       "fileSizeBytes": 81984,
       "fileSizeKB": "80.1 KB",
       "wordCount": 33,
-      "durationEstimateMs": 9015,
+      "durationEstimateMs": 9487,
       "wordTimestamps": [
         {
           "word": "BÁC",
-          "startMs": 0,
-          "endMs": 260
+          "startMs": 15,
+          "endMs": 285
         },
         {
           "word": "NHÌN",
-          "startMs": 260,
-          "endMs": 560
+          "startMs": 285,
+          "endMs": 606
         },
         {
           "word": "VÀO",
-          "startMs": 560,
-          "endMs": 820
+          "startMs": 606,
+          "endMs": 786
         },
         {
           "word": "MỤC",
-          "startMs": 820,
-          "endMs": 1080
+          "startMs": 786,
+          "endMs": 1016
         },
         {
           "word": "1,",
-          "startMs": 1080,
-          "endMs": 1340
+          "startMs": 1016,
+          "endMs": 1568
         },
         {
           "word": "DÒNG",
-          "startMs": 1340,
-          "endMs": 1640
+          "startMs": 1568,
+          "endMs": 1838
         },
         {
           "word": "SỐ",
-          "startMs": 1640,
-          "endMs": 1900
+          "startMs": 1838,
+          "endMs": 2093
         },
         {
           "word": "1.",
-          "startMs": 1900,
-          "endMs": 2160
+          "startMs": 2093,
+          "endMs": 2829
         },
         {
           "word": "BÁC",
-          "startMs": 2160,
-          "endMs": 2420
+          "startMs": 2829,
+          "endMs": 3099
         },
         {
           "word": "LẤY",
-          "startMs": 2420,
-          "endMs": 2680
+          "startMs": 3099,
+          "endMs": 3280
         },
         {
           "word": "BÚT",
-          "startMs": 2680,
-          "endMs": 2940
+          "startMs": 3280,
+          "endMs": 3575
         },
         {
           "word": "GHI",
-          "startMs": 2940,
-          "endMs": 3200
+          "startMs": 3575,
+          "endMs": 3745
         },
         {
           "word": "HỌ",
-          "startMs": 3200,
-          "endMs": 3460
+          "startMs": 3745,
+          "endMs": 4001
         },
         {
           "word": "VÀ",
-          "startMs": 3460,
-          "endMs": 3720
+          "startMs": 4001,
+          "endMs": 4176
         },
         {
           "word": "TÊN",
-          "startMs": 3720,
-          "endMs": 3980
+          "startMs": 4176,
+          "endMs": 4477
         },
         {
           "word": "CỦA",
-          "startMs": 3980,
-          "endMs": 4240
+          "startMs": 4477,
+          "endMs": 4607
         },
         {
           "word": "MÌNH",
-          "startMs": 4240,
-          "endMs": 4540
+          "startMs": 4607,
+          "endMs": 4847
         },
         {
           "word": "BẰNG",
-          "startMs": 4540,
-          "endMs": 4840
+          "startMs": 4847,
+          "endMs": 5087
         },
         {
           "word": "CHỮ",
-          "startMs": 4840,
-          "endMs": 5100
+          "startMs": 5087,
+          "endMs": 5336
         },
         {
           "word": "IN",
-          "startMs": 5100,
-          "endMs": 5360
+          "startMs": 5336,
+          "endMs": 5546
         },
         {
           "word": "HOA",
-          "startMs": 5360,
-          "endMs": 5620
+          "startMs": 5546,
+          "endMs": 5862
         },
         {
           "word": "CÓ",
-          "startMs": 5620,
-          "endMs": 5880
+          "startMs": 5862,
+          "endMs": 6036
         },
         {
           "word": "DẤU,",
-          "startMs": 5880,
-          "endMs": 6180
+          "startMs": 6036,
+          "endMs": 6783
         },
         {
           "word": "GIỐNG",
-          "startMs": 6180,
-          "endMs": 6555
+          "startMs": 6783,
+          "endMs": 7119
         },
         {
           "word": "NHƯ",
-          "startMs": 6555,
-          "endMs": 6815
+          "startMs": 7119,
+          "endMs": 7354
         },
         {
           "word": "CHỮ",
-          "startMs": 6815,
-          "endMs": 7075
+          "startMs": 7354,
+          "endMs": 7615
         },
         {
           "word": "MẪU",
-          "startMs": 7075,
-          "endMs": 7335
+          "startMs": 7615,
+          "endMs": 7876
         },
         {
           "word": "MÀU",
-          "startMs": 7335,
-          "endMs": 7595
+          "startMs": 7876,
+          "endMs": 8146
         },
         {
           "word": "ĐỎ",
-          "startMs": 7595,
-          "endMs": 7855
+          "startMs": 8146,
+          "endMs": 8426
         },
         {
           "word": "TRÊN",
-          "startMs": 7855,
-          "endMs": 8155
+          "startMs": 8426,
+          "endMs": 8732
         },
         {
           "word": "MÀN",
-          "startMs": 8155,
-          "endMs": 8415
+          "startMs": 8732,
+          "endMs": 8937
         },
         {
           "word": "HÌNH",
-          "startMs": 8415,
-          "endMs": 8715
+          "startMs": 8937,
+          "endMs": 9137
         },
         {
           "word": "NHÉ.",
-          "startMs": 8715,
-          "endMs": 9015
+          "startMs": 9137,
+          "endMs": 9487
         }
       ]
     },
@@ -195,192 +195,192 @@
       "fileSizeBytes": 97152,
       "fileSizeKB": "94.9 KB",
       "wordCount": 37,
-      "durationEstimateMs": 10395,
+      "durationEstimateMs": 11380,
       "wordTimestamps": [
         {
           "word": "DÒNG",
-          "startMs": 0,
-          "endMs": 300
+          "startMs": 15,
+          "endMs": 345
         },
         {
           "word": "SỐ",
-          "startMs": 300,
-          "endMs": 560
+          "startMs": 345,
+          "endMs": 562
         },
         {
           "word": "2",
-          "startMs": 560,
-          "endMs": 820
+          "startMs": 562,
+          "endMs": 928
         },
         {
           "word": "LÀ",
-          "startMs": 820,
-          "endMs": 1080
+          "startMs": 928,
+          "endMs": 1088
         },
         {
           "word": "MÃ",
-          "startMs": 1080,
-          "endMs": 1340
+          "startMs": 1088,
+          "endMs": 1358
         },
         {
           "word": "SỐ",
-          "startMs": 1340,
-          "endMs": 1600
+          "startMs": 1358,
+          "endMs": 1589
         },
         {
           "word": "THUẾ.",
-          "startMs": 1600,
-          "endMs": 1975
+          "startMs": 1589,
+          "endMs": 2436
         },
         {
           "word": "BÁC",
-          "startMs": 1975,
-          "endMs": 2235
+          "startMs": 2436,
+          "endMs": 2741
         },
         {
           "word": "GHI",
-          "startMs": 2235,
-          "endMs": 2495
+          "startMs": 2741,
+          "endMs": 2972
         },
         {
           "word": "10",
-          "startMs": 2495,
-          "endMs": 2755
+          "startMs": 2972,
+          "endMs": 3237
         },
         {
           "word": "CHỮ",
-          "startMs": 2755,
-          "endMs": 3015
+          "startMs": 3237,
+          "endMs": 3432
         },
         {
           "word": "SỐ",
-          "startMs": 3015,
-          "endMs": 3275
+          "startMs": 3432,
+          "endMs": 3768
         },
         {
           "word": "MÃ",
-          "startMs": 3275,
-          "endMs": 3535
+          "startMs": 3768,
+          "endMs": 4043
         },
         {
           "word": "SỐ",
-          "startMs": 3535,
-          "endMs": 3795
+          "startMs": 4043,
+          "endMs": 4288
         },
         {
           "word": "THUẾ",
-          "startMs": 3795,
-          "endMs": 4095
+          "startMs": 4288,
+          "endMs": 4544
         },
         {
           "word": "CÁ",
-          "startMs": 4095,
-          "endMs": 4355
+          "startMs": 4544,
+          "endMs": 4734
         },
         {
           "word": "NHÂN",
-          "startMs": 4355,
-          "endMs": 4655
+          "startMs": 4734,
+          "endMs": 5095
         },
         {
           "word": "VÀO",
-          "startMs": 4655,
-          "endMs": 4915
+          "startMs": 5095,
+          "endMs": 5335
         },
         {
           "word": "10",
-          "startMs": 4915,
-          "endMs": 5175
+          "startMs": 5335,
+          "endMs": 5590
         },
         {
           "word": "Ô",
-          "startMs": 5175,
-          "endMs": 5435
+          "startMs": 5590,
+          "endMs": 5800
         },
         {
           "word": "VUÔNG",
-          "startMs": 5435,
-          "endMs": 5810
+          "startMs": 5800,
+          "endMs": 6066
         },
         {
           "word": "NHỎ.",
-          "startMs": 5810,
-          "endMs": 6110
+          "startMs": 6066,
+          "endMs": 7184
         },
         {
           "word": "NẾU",
-          "startMs": 6110,
-          "endMs": 6370
+          "startMs": 7184,
+          "endMs": 7404
         },
         {
           "word": "BÁC",
-          "startMs": 6370,
-          "endMs": 6630
+          "startMs": 7404,
+          "endMs": 7701
         },
         {
           "word": "KHÔNG",
-          "startMs": 6630,
-          "endMs": 7005
+          "startMs": 7701,
+          "endMs": 7926
         },
         {
           "word": "CÓ",
-          "startMs": 7005,
-          "endMs": 7265
+          "startMs": 7926,
+          "endMs": 8046
         },
         {
           "word": "MÃ",
-          "startMs": 7265,
-          "endMs": 7525
+          "startMs": 8046,
+          "endMs": 8375
         },
         {
           "word": "SỐ",
-          "startMs": 7525,
-          "endMs": 7785
+          "startMs": 8375,
+          "endMs": 8610
         },
         {
           "word": "THUẾ,",
-          "startMs": 7785,
-          "endMs": 8160
+          "startMs": 8610,
+          "endMs": 9357
         },
         {
           "word": "BÁC",
-          "startMs": 8160,
-          "endMs": 8420
+          "startMs": 9357,
+          "endMs": 9714
         },
         {
           "word": "CÓ",
-          "startMs": 8420,
-          "endMs": 8680
+          "startMs": 9714,
+          "endMs": 9854
         },
         {
           "word": "THỂ",
-          "startMs": 8680,
-          "endMs": 8940
+          "startMs": 9854,
+          "endMs": 10049
         },
         {
           "word": "ĐỂ",
-          "startMs": 8940,
-          "endMs": 9200
+          "startMs": 10049,
+          "endMs": 10244
         },
         {
           "word": "TRỐNG",
-          "startMs": 9200,
-          "endMs": 9575
+          "startMs": 10244,
+          "endMs": 10596
         },
         {
           "word": "Ô",
-          "startMs": 9575,
-          "endMs": 9835
+          "startMs": 10596,
+          "endMs": 10810
         },
         {
           "word": "NÀY",
-          "startMs": 9835,
-          "endMs": 10095
+          "startMs": 10810,
+          "endMs": 11030
         },
         {
           "word": "NHÉ.",
-          "startMs": 10095,
-          "endMs": 10395
+          "startMs": 11030,
+          "endMs": 11380
         }
       ]
     },
@@ -392,122 +392,122 @@
       "fileSizeBytes": 67776,
       "fileSizeKB": "66.2 KB",
       "wordCount": 23,
-      "durationEstimateMs": 6790,
+      "durationEstimateMs": 7715,
       "wordTimestamps": [
         {
           "word": "DÒNG",
-          "startMs": 0,
-          "endMs": 300
+          "startMs": 15,
+          "endMs": 365
         },
         {
           "word": "SỐ",
-          "startMs": 300,
-          "endMs": 560
+          "startMs": 365,
+          "endMs": 573
         },
         {
           "word": "3",
-          "startMs": 560,
-          "endMs": 820
+          "startMs": 573,
+          "endMs": 908
         },
         {
           "word": "LÀ",
-          "startMs": 820,
-          "endMs": 1080
+          "startMs": 908,
+          "endMs": 1079
         },
         {
           "word": "ĐỊA",
-          "startMs": 1080,
-          "endMs": 1340
+          "startMs": 1079,
+          "endMs": 1268
         },
         {
           "word": "CHỈ.",
-          "startMs": 1340,
-          "endMs": 1640
+          "startMs": 1268,
+          "endMs": 2080
         },
         {
           "word": "BÁC",
-          "startMs": 1640,
-          "endMs": 1900
+          "startMs": 2080,
+          "endMs": 2365
         },
         {
           "word": "GHI",
-          "startMs": 1900,
-          "endMs": 2160
+          "startMs": 2365,
+          "endMs": 2551
         },
         {
           "word": "RÕ",
-          "startMs": 2160,
-          "endMs": 2420
+          "startMs": 2551,
+          "endMs": 2860
         },
         {
           "word": "SỐ",
-          "startMs": 2420,
-          "endMs": 2680
+          "startMs": 2860,
+          "endMs": 3115
         },
         {
           "word": "NHÀ,",
-          "startMs": 2680,
-          "endMs": 2980
+          "startMs": 3115,
+          "endMs": 3836
         },
         {
           "word": "NGÕ,",
-          "startMs": 2980,
-          "endMs": 3280
+          "startMs": 3836,
+          "endMs": 4477
         },
         {
           "word": "TÊN",
-          "startMs": 3280,
-          "endMs": 3540
+          "startMs": 4477,
+          "endMs": 4722
         },
         {
           "word": "ĐƯỜNG,",
-          "startMs": 3540,
-          "endMs": 3990
+          "startMs": 4722,
+          "endMs": 5378
         },
         {
           "word": "PHƯỜNG",
-          "startMs": 3990,
-          "endMs": 4440
+          "startMs": 5378,
+          "endMs": 5643
         },
         {
           "word": "XÃ",
-          "startMs": 4440,
-          "endMs": 4700
+          "startMs": 5643,
+          "endMs": 5923
         },
         {
           "word": "NƠI",
-          "startMs": 4700,
-          "endMs": 4960
+          "startMs": 5923,
+          "endMs": 6154
         },
         {
           "word": "BÁC",
-          "startMs": 4960,
-          "endMs": 5220
+          "startMs": 6154,
+          "endMs": 6431
         },
         {
           "word": "ĐANG",
-          "startMs": 5220,
-          "endMs": 5520
+          "startMs": 6431,
+          "endMs": 6661
         },
         {
           "word": "Ở",
-          "startMs": 5520,
-          "endMs": 5780
+          "startMs": 6661,
+          "endMs": 6801
         },
         {
           "word": "THƯỜNG",
-          "startMs": 5780,
-          "endMs": 6230
+          "startMs": 6801,
+          "endMs": 7061
         },
         {
           "word": "TRÚ",
-          "startMs": 6230,
-          "endMs": 6490
+          "startMs": 7061,
+          "endMs": 7365
         },
         {
           "word": "NHÉ.",
-          "startMs": 6490,
-          "endMs": 6790
+          "startMs": 7365,
+          "endMs": 7715
         }
       ]
     },
@@ -519,132 +519,132 @@
       "fileSizeBytes": 64512,
       "fileSizeKB": "63.0 KB",
       "wordCount": 25,
-      "durationEstimateMs": 7205,
+      "durationEstimateMs": 7156,
       "wordTimestamps": [
         {
           "word": "DÒNG",
-          "startMs": 0,
-          "endMs": 300
+          "startMs": 15,
+          "endMs": 345
         },
         {
           "word": "SỐ",
-          "startMs": 300,
-          "endMs": 560
+          "startMs": 345,
+          "endMs": 568
         },
         {
           "word": "4,",
-          "startMs": 560,
-          "endMs": 820
+          "startMs": 568,
+          "endMs": 1229
         },
         {
           "word": "BÁC",
-          "startMs": 820,
-          "endMs": 1080
+          "startMs": 1229,
+          "endMs": 1499
         },
         {
           "word": "GHI",
-          "startMs": 1080,
-          "endMs": 1340
+          "startMs": 1499,
+          "endMs": 1685
         },
         {
           "word": "SỐ",
-          "startMs": 1340,
-          "endMs": 1600
+          "startMs": 1685,
+          "endMs": 1880
         },
         {
           "word": "ĐIỆN",
-          "startMs": 1600,
-          "endMs": 1900
+          "startMs": 1880,
+          "endMs": 2067
         },
         {
           "word": "THOẠI",
-          "startMs": 1900,
-          "endMs": 2275
+          "startMs": 2067,
+          "endMs": 2367
         },
         {
           "word": "DI",
-          "startMs": 2275,
-          "endMs": 2535
+          "startMs": 2367,
+          "endMs": 2542
         },
         {
           "word": "ĐỘNG",
-          "startMs": 2535,
-          "endMs": 2835
+          "startMs": 2542,
+          "endMs": 2817
         },
         {
           "word": "CỦA",
-          "startMs": 2835,
-          "endMs": 3095
+          "startMs": 2817,
+          "endMs": 3007
         },
         {
           "word": "BÁC",
-          "startMs": 3095,
-          "endMs": 3355
+          "startMs": 3007,
+          "endMs": 3418
         },
         {
           "word": "HOẶC",
-          "startMs": 3355,
-          "endMs": 3655
+          "startMs": 3418,
+          "endMs": 3718
         },
         {
           "word": "CON",
-          "startMs": 3655,
-          "endMs": 3915
+          "startMs": 3718,
+          "endMs": 3929
         },
         {
           "word": "CHÁU",
-          "startMs": 3915,
-          "endMs": 4215
+          "startMs": 3929,
+          "endMs": 4371
         },
         {
           "word": "ĐỂ",
-          "startMs": 4215,
-          "endMs": 4475
+          "startMs": 4371,
+          "endMs": 4606
         },
         {
           "word": "CƠ",
-          "startMs": 4475,
-          "endMs": 4735
+          "startMs": 4606,
+          "endMs": 4806
         },
         {
           "word": "QUAN",
-          "startMs": 4735,
-          "endMs": 5035
+          "startMs": 4806,
+          "endMs": 5146
         },
         {
           "word": "THUẾ",
-          "startMs": 5035,
-          "endMs": 5335
+          "startMs": 5146,
+          "endMs": 5401
         },
         {
           "word": "NHẮN",
-          "startMs": 5335,
-          "endMs": 5635
+          "startMs": 5401,
+          "endMs": 5731
         },
         {
           "word": "TIN",
-          "startMs": 5635,
-          "endMs": 5895
+          "startMs": 5731,
+          "endMs": 6006
         },
         {
           "word": "THÔNG",
-          "startMs": 5895,
-          "endMs": 6270
+          "startMs": 6006,
+          "endMs": 6242
         },
         {
           "word": "BÁO",
-          "startMs": 6270,
-          "endMs": 6530
+          "startMs": 6242,
+          "endMs": 6492
         },
         {
           "word": "TIỀN",
-          "startMs": 6530,
-          "endMs": 6830
+          "startMs": 6492,
+          "endMs": 6806
         },
         {
           "word": "THUẾ.",
-          "startMs": 6830,
-          "endMs": 7205
+          "startMs": 6806,
+          "endMs": 7156
         }
       ]
     },
@@ -656,132 +656,132 @@
       "fileSizeBytes": 72384,
       "fileSizeKB": "70.7 KB",
       "wordCount": 25,
-      "durationEstimateMs": 6930,
+      "durationEstimateMs": 8264,
       "wordTimestamps": [
         {
           "word": "SANG",
-          "startMs": 0,
-          "endMs": 300
+          "startMs": 15,
+          "endMs": 345
         },
         {
           "word": "MỤC",
-          "startMs": 300,
-          "endMs": 560
+          "startMs": 345,
+          "endMs": 545
         },
         {
           "word": "2,",
-          "startMs": 560,
-          "endMs": 820
+          "startMs": 545,
+          "endMs": 1202
         },
         {
           "word": "BÁC",
-          "startMs": 820,
-          "endMs": 1080
+          "startMs": 1202,
+          "endMs": 1467
         },
         {
           "word": "MỞ",
-          "startMs": 1080,
-          "endMs": 1340
+          "startMs": 1467,
+          "endMs": 1707
         },
         {
           "word": "TRANG",
-          "startMs": 1340,
-          "endMs": 1715
+          "startMs": 1707,
+          "endMs": 1963
         },
         {
           "word": "2",
-          "startMs": 1715,
-          "endMs": 1975
+          "startMs": 1963,
+          "endMs": 2293
         },
         {
           "word": "CỦA",
-          "startMs": 1975,
-          "endMs": 2235
+          "startMs": 2293,
+          "endMs": 2470
         },
         {
           "word": "CUỐN",
-          "startMs": 2235,
-          "endMs": 2535
+          "startMs": 2470,
+          "endMs": 2685
         },
         {
           "word": "SỔ",
-          "startMs": 2535,
-          "endMs": 2795
+          "startMs": 2685,
+          "endMs": 2930
         },
         {
           "word": "ĐỎ",
-          "startMs": 2795,
-          "endMs": 3055
+          "startMs": 2930,
+          "endMs": 3200
         },
         {
           "word": "RA.",
-          "startMs": 3055,
-          "endMs": 3315
+          "startMs": 3200,
+          "endMs": 4373
         },
         {
           "word": "TÌM",
-          "startMs": 3315,
-          "endMs": 3575
+          "startMs": 4373,
+          "endMs": 4673
         },
         {
           "word": "DÒNG",
-          "startMs": 3575,
-          "endMs": 3875
+          "startMs": 4673,
+          "endMs": 4993
         },
         {
           "word": "'THỬA",
-          "startMs": 3875,
-          "endMs": 4250
+          "startMs": 4993,
+          "endMs": 5377
         },
         {
           "word": "ĐẤT",
-          "startMs": 4250,
-          "endMs": 4510
+          "startMs": 5377,
+          "endMs": 5583
         },
         {
           "word": "SỐ'",
-          "startMs": 4510,
-          "endMs": 4770
+          "startMs": 5583,
+          "endMs": 6318
         },
         {
           "word": "VÀ",
-          "startMs": 4770,
-          "endMs": 5030
+          "startMs": 6318,
+          "endMs": 6448
         },
         {
           "word": "CHÉP",
-          "startMs": 5030,
-          "endMs": 5330
+          "startMs": 6448,
+          "endMs": 6693
         },
         {
           "word": "SỐ",
-          "startMs": 5330,
-          "endMs": 5590
+          "startMs": 6693,
+          "endMs": 6893
         },
         {
           "word": "ĐÓ",
-          "startMs": 5590,
-          "endMs": 5850
+          "startMs": 6893,
+          "endMs": 7273
         },
         {
           "word": "VÀO",
-          "startMs": 5850,
-          "endMs": 6110
+          "startMs": 7273,
+          "endMs": 7484
         },
         {
           "word": "Ô",
-          "startMs": 6110,
-          "endMs": 6370
+          "startMs": 7484,
+          "endMs": 7709
         },
         {
           "word": "NÀY",
-          "startMs": 6370,
-          "endMs": 6630
+          "startMs": 7709,
+          "endMs": 7914
         },
         {
           "word": "NHÉ.",
-          "startMs": 6630,
-          "endMs": 6930
+          "startMs": 7914,
+          "endMs": 8264
         }
       ]
     },
@@ -793,117 +793,117 @@
       "fileSizeBytes": 58752,
       "fileSizeKB": "57.4 KB",
       "wordCount": 22,
-      "durationEstimateMs": 6040,
+      "durationEstimateMs": 6524,
       "wordTimestamps": [
         {
           "word": "BÊN",
-          "startMs": 0,
+          "startMs": 15,
           "endMs": 260
         },
         {
           "word": "CẠNH",
           "startMs": 260,
-          "endMs": 560
+          "endMs": 515
         },
         {
           "word": "SỐ",
-          "startMs": 560,
-          "endMs": 820
+          "startMs": 515,
+          "endMs": 755
         },
         {
           "word": "THỬA",
-          "startMs": 820,
-          "endMs": 1120
+          "startMs": 755,
+          "endMs": 1115
         },
         {
           "word": "LÀ",
-          "startMs": 1120,
-          "endMs": 1380
+          "startMs": 1115,
+          "endMs": 1475
         },
         {
           "word": "'TỜ",
-          "startMs": 1380,
-          "endMs": 1640
+          "startMs": 1475,
+          "endMs": 1801
         },
         {
           "word": "BẢN",
-          "startMs": 1640,
-          "endMs": 1900
+          "startMs": 1801,
+          "endMs": 2036
         },
         {
           "word": "ĐỒ",
-          "startMs": 1900,
-          "endMs": 2160
+          "startMs": 2036,
+          "endMs": 2241
         },
         {
           "word": "SỐ'.",
-          "startMs": 2160,
-          "endMs": 2460
+          "startMs": 2241,
+          "endMs": 3107
         },
         {
           "word": "BÁC",
-          "startMs": 2460,
-          "endMs": 2720
+          "startMs": 3107,
+          "endMs": 3447
         },
         {
           "word": "CŨNG",
-          "startMs": 2720,
-          "endMs": 3020
+          "startMs": 3447,
+          "endMs": 3641
         },
         {
           "word": "NHÌN",
-          "startMs": 3020,
-          "endMs": 3320
+          "startMs": 3641,
+          "endMs": 3956
         },
         {
           "word": "TRÊN",
-          "startMs": 3320,
-          "endMs": 3620
+          "startMs": 3956,
+          "endMs": 4176
         },
         {
           "word": "SỔ",
-          "startMs": 3620,
-          "endMs": 3880
+          "startMs": 4176,
+          "endMs": 4403
         },
         {
           "word": "ĐỎ",
-          "startMs": 3880,
-          "endMs": 4140
+          "startMs": 4403,
+          "endMs": 4673
         },
         {
           "word": "DÒNG",
-          "startMs": 4140,
-          "endMs": 4440
+          "startMs": 4673,
+          "endMs": 4958
         },
         {
           "word": "ĐÓ",
-          "startMs": 4440,
-          "endMs": 4700
+          "startMs": 4958,
+          "endMs": 5303
         },
         {
           "word": "VÀ",
-          "startMs": 4700,
-          "endMs": 4960
+          "startMs": 5303,
+          "endMs": 5518
         },
         {
           "word": "GHI",
-          "startMs": 4960,
-          "endMs": 5220
+          "startMs": 5518,
+          "endMs": 5703
         },
         {
           "word": "VÀO",
-          "startMs": 5220,
-          "endMs": 5480
+          "startMs": 5703,
+          "endMs": 5954
         },
         {
           "word": "Ô",
-          "startMs": 5480,
-          "endMs": 5740
+          "startMs": 5954,
+          "endMs": 6174
         },
         {
           "word": "NÀY.",
-          "startMs": 5740,
-          "endMs": 6040
+          "startMs": 6174,
+          "endMs": 6524
         }
       ]
     },
@@ -915,142 +915,142 @@
       "fileSizeBytes": 66432,
       "fileSizeKB": "64.9 KB",
       "wordCount": 27,
-      "durationEstimateMs": 7805,
+      "durationEstimateMs": 7486,
       "wordTimestamps": [
         {
           "word": "DÒNG",
-          "startMs": 0,
-          "endMs": 300
+          "startMs": 15,
+          "endMs": 355
         },
         {
           "word": "TIẾP",
-          "startMs": 300,
-          "endMs": 600
+          "startMs": 355,
+          "endMs": 568
         },
         {
           "word": "THEO",
-          "startMs": 600,
-          "endMs": 900
+          "startMs": 568,
+          "endMs": 879
         },
         {
           "word": "LÀ",
-          "startMs": 900,
-          "endMs": 1160
+          "startMs": 879,
+          "endMs": 1029
         },
         {
           "word": "DIỆN",
-          "startMs": 1160,
-          "endMs": 1460
+          "startMs": 1029,
+          "endMs": 1264
         },
         {
           "word": "TÍCH",
-          "startMs": 1460,
-          "endMs": 1760
+          "startMs": 1264,
+          "endMs": 1469
         },
         {
           "word": "ĐẤT.",
-          "startMs": 1760,
-          "endMs": 2060
+          "startMs": 1469,
+          "endMs": 2091
         },
         {
           "word": "BÁC",
-          "startMs": 2060,
-          "endMs": 2320
+          "startMs": 2091,
+          "endMs": 2401
         },
         {
           "word": "GHI",
-          "startMs": 2320,
-          "endMs": 2580
+          "startMs": 2401,
+          "endMs": 2618
         },
         {
           "word": "DIỆN",
-          "startMs": 2580,
-          "endMs": 2880
+          "startMs": 2618,
+          "endMs": 2843
         },
         {
           "word": "TÍCH",
-          "startMs": 2880,
-          "endMs": 3180
+          "startMs": 2843,
+          "endMs": 3078
         },
         {
           "word": "BẰNG",
-          "startMs": 3180,
-          "endMs": 3480
+          "startMs": 3078,
+          "endMs": 3358
         },
         {
           "word": "MÉT",
-          "startMs": 3480,
-          "endMs": 3740
+          "startMs": 3358,
+          "endMs": 3588
         },
         {
           "word": "VUÔNG",
-          "startMs": 3740,
-          "endMs": 4115
+          "startMs": 3588,
+          "endMs": 3889
         },
         {
           "word": "GHI",
-          "startMs": 4115,
-          "endMs": 4375
+          "startMs": 3889,
+          "endMs": 4110
         },
         {
           "word": "TRÊN",
-          "startMs": 4375,
-          "endMs": 4675
+          "startMs": 4110,
+          "endMs": 4330
         },
         {
           "word": "SỔ",
-          "startMs": 4675,
-          "endMs": 4935
+          "startMs": 4330,
+          "endMs": 4573
         },
         {
           "word": "ĐỎ,",
-          "startMs": 4935,
-          "endMs": 5195
+          "startMs": 4573,
+          "endMs": 5235
         },
         {
           "word": "VÍ",
-          "startMs": 5195,
-          "endMs": 5455
+          "startMs": 5235,
+          "endMs": 5425
         },
         {
           "word": "DỤ",
-          "startMs": 5455,
-          "endMs": 5715
+          "startMs": 5425,
+          "endMs": 5726
         },
         {
           "word": "TÁM",
-          "startMs": 5715,
-          "endMs": 5975
+          "startMs": 5726,
+          "endMs": 6026
         },
         {
           "word": "MƯƠI",
-          "startMs": 5975,
-          "endMs": 6275
+          "startMs": 6026,
+          "endMs": 6181
         },
         {
           "word": "LĂM",
-          "startMs": 6275,
-          "endMs": 6535
+          "startMs": 6181,
+          "endMs": 6417
         },
         {
           "word": "PHẨY",
-          "startMs": 6535,
-          "endMs": 6835
+          "startMs": 6417,
+          "endMs": 6652
         },
         {
           "word": "NĂM",
-          "startMs": 6835,
-          "endMs": 7095
+          "startMs": 6652,
+          "endMs": 6872
         },
         {
           "word": "MÉT",
-          "startMs": 7095,
-          "endMs": 7355
+          "startMs": 6872,
+          "endMs": 7136
         },
         {
           "word": "VUÔNG.",
-          "startMs": 7355,
-          "endMs": 7805
+          "startMs": 7136,
+          "endMs": 7486
         }
       ]
     },
@@ -1062,137 +1062,137 @@
       "fileSizeBytes": 70848,
       "fileSizeKB": "69.2 KB",
       "wordCount": 26,
-      "durationEstimateMs": 8105,
+      "durationEstimateMs": 8076,
       "wordTimestamps": [
         {
           "word": "DÒNG",
-          "startMs": 0,
-          "endMs": 300
+          "startMs": 15,
+          "endMs": 430
         },
         {
           "word": "NGUỒN",
-          "startMs": 300,
-          "endMs": 675
+          "startMs": 430,
+          "endMs": 710
         },
         {
           "word": "GỐC",
-          "startMs": 675,
-          "endMs": 935
+          "startMs": 710,
+          "endMs": 976
         },
         {
           "word": "NHÀ",
-          "startMs": 935,
-          "endMs": 1195
+          "startMs": 976,
+          "endMs": 1236
         },
         {
           "word": "ĐẤT.",
-          "startMs": 1195,
-          "endMs": 1495
+          "startMs": 1236,
+          "endMs": 1881
         },
         {
           "word": "NẾU",
-          "startMs": 1495,
-          "endMs": 1755
+          "startMs": 1881,
+          "endMs": 2156
         },
         {
           "word": "BÁC",
-          "startMs": 1755,
-          "endMs": 2015
+          "startMs": 2156,
+          "endMs": 2408
         },
         {
           "word": "MUA",
-          "startMs": 2015,
-          "endMs": 2275
+          "startMs": 2408,
+          "endMs": 2588
         },
         {
           "word": "LẠI",
-          "startMs": 2275,
-          "endMs": 2535
+          "startMs": 2588,
+          "endMs": 2878
         },
         {
           "word": "CỦA",
-          "startMs": 2535,
-          "endMs": 2795
+          "startMs": 2878,
+          "endMs": 3038
         },
         {
           "word": "NGƯỜI",
-          "startMs": 2795,
-          "endMs": 3170
+          "startMs": 3038,
+          "endMs": 3243
         },
         {
           "word": "KHÁC,",
-          "startMs": 3170,
-          "endMs": 3545
+          "startMs": 3243,
+          "endMs": 3931
         },
         {
           "word": "BÁC",
-          "startMs": 3545,
-          "endMs": 3805
+          "startMs": 3931,
+          "endMs": 4171
         },
         {
           "word": "TÍCH",
-          "startMs": 3805,
-          "endMs": 4105
+          "startMs": 4171,
+          "endMs": 4421
         },
         {
           "word": "DẤU",
-          "startMs": 4105,
-          "endMs": 4365
+          "startMs": 4421,
+          "endMs": 4631
         },
         {
           "word": "NHÂN",
-          "startMs": 4365,
-          "endMs": 4665
+          "startMs": 4631,
+          "endMs": 4921
         },
         {
           "word": "VÀO",
-          "startMs": 4665,
-          "endMs": 4925
+          "startMs": 4921,
+          "endMs": 5131
         },
         {
           "word": "Ô",
-          "startMs": 4925,
-          "endMs": 5185
+          "startMs": 5131,
+          "endMs": 5357
         },
         {
           "word": "'NHẬN",
-          "startMs": 5185,
-          "endMs": 5560
+          "startMs": 5357,
+          "endMs": 5923
         },
         {
           "word": "CHUYỂN",
-          "startMs": 5560,
-          "endMs": 6010
+          "startMs": 5923,
+          "endMs": 6193
         },
         {
           "word": "NHƯỢNG'",
-          "startMs": 6010,
-          "endMs": 6535
+          "startMs": 6193,
+          "endMs": 6735
         },
         {
           "word": "GIỐNG",
-          "startMs": 6535,
-          "endMs": 6910
+          "startMs": 6735,
+          "endMs": 7030
         },
         {
           "word": "NHƯ",
-          "startMs": 6910,
-          "endMs": 7170
+          "startMs": 7030,
+          "endMs": 7240
         },
         {
           "word": "TRÊN",
-          "startMs": 7170,
-          "endMs": 7470
+          "startMs": 7240,
+          "endMs": 7536
         },
         {
           "word": "MÀN",
-          "startMs": 7470,
-          "endMs": 7730
+          "startMs": 7536,
+          "endMs": 7726
         },
         {
           "word": "HÌNH.",
-          "startMs": 7730,
-          "endMs": 8105
+          "startMs": 7726,
+          "endMs": 8076
         }
       ]
     },
@@ -1204,132 +1204,132 @@
       "fileSizeBytes": 65472,
       "fileSizeKB": "63.9 KB",
       "wordCount": 25,
-      "durationEstimateMs": 7045,
+      "durationEstimateMs": 7764,
       "wordTimestamps": [
         {
           "word": "MỤC",
-          "startMs": 0,
-          "endMs": 260
+          "startMs": 15,
+          "endMs": 270
         },
         {
           "word": "3,",
-          "startMs": 260,
-          "endMs": 520
+          "startMs": 270,
+          "endMs": 905
         },
         {
           "word": "BÁC",
-          "startMs": 520,
-          "endMs": 780
+          "startMs": 905,
+          "endMs": 1188
         },
         {
           "word": "GHI",
-          "startMs": 780,
-          "endMs": 1040
+          "startMs": 1188,
+          "endMs": 1388
         },
         {
           "word": "SỐ",
-          "startMs": 1040,
-          "endMs": 1300
+          "startMs": 1388,
+          "endMs": 1568
         },
         {
           "word": "TIỀN",
-          "startMs": 1300,
-          "endMs": 1600
+          "startMs": 1568,
+          "endMs": 1823
         },
         {
           "word": "MUA",
-          "startMs": 1600,
-          "endMs": 1860
+          "startMs": 1823,
+          "endMs": 1979
         },
         {
           "word": "BÁN",
-          "startMs": 1860,
-          "endMs": 2120
+          "startMs": 1979,
+          "endMs": 2304
         },
         {
           "word": "GHI",
-          "startMs": 2120,
-          "endMs": 2380
+          "startMs": 2304,
+          "endMs": 2596
         },
         {
           "word": "TRONG",
-          "startMs": 2380,
-          "endMs": 2755
+          "startMs": 2596,
+          "endMs": 2904
         },
         {
           "word": "HỢP",
-          "startMs": 2755,
-          "endMs": 3015
+          "startMs": 2904,
+          "endMs": 3129
         },
         {
           "word": "ĐỒNG",
-          "startMs": 3015,
-          "endMs": 3315
+          "startMs": 3129,
+          "endMs": 3379
         },
         {
           "word": "CÔNG",
-          "startMs": 3315,
-          "endMs": 3615
+          "startMs": 3379,
+          "endMs": 3630
         },
         {
           "word": "CHỨNG.",
-          "startMs": 3615,
-          "endMs": 4065
+          "startMs": 3630,
+          "endMs": 4813
         },
         {
           "word": "BÁC",
-          "startMs": 4065,
-          "endMs": 4325
+          "startMs": 4813,
+          "endMs": 5088
         },
         {
           "word": "GHI",
-          "startMs": 4325,
-          "endMs": 4585
+          "startMs": 5088,
+          "endMs": 5272
         },
         {
           "word": "RÕ",
-          "startMs": 4585,
-          "endMs": 4845
+          "startMs": 5272,
+          "endMs": 5583
         },
         {
           "word": "SỐ",
-          "startMs": 4845,
-          "endMs": 5105
+          "startMs": 5583,
+          "endMs": 5793
         },
         {
           "word": "TIỀN",
-          "startMs": 5105,
-          "endMs": 5405
+          "startMs": 5793,
+          "endMs": 6099
         },
         {
           "word": "BẰNG",
-          "startMs": 5405,
-          "endMs": 5705
+          "startMs": 6099,
+          "endMs": 6344
         },
         {
           "word": "CHỮ",
-          "startMs": 5705,
-          "endMs": 5965
+          "startMs": 6344,
+          "endMs": 6514
         },
         {
           "word": "SỐ",
-          "startMs": 5965,
-          "endMs": 6225
+          "startMs": 6514,
+          "endMs": 6909
         },
         {
           "word": "VÀO",
-          "startMs": 6225,
-          "endMs": 6485
+          "startMs": 6909,
+          "endMs": 7199
         },
         {
           "word": "Ô",
-          "startMs": 6485,
-          "endMs": 6745
+          "startMs": 7199,
+          "endMs": 7414
         },
         {
           "word": "NÀY.",
-          "startMs": 6745,
-          "endMs": 7045
+          "startMs": 7414,
+          "endMs": 7764
         }
       ]
     }
