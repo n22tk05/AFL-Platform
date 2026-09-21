@@ -234,7 +234,7 @@ timeline
 
 Dưới đây là thiết kế chi tiết mẫu mã nguồn để áp dụng Mô hình Lai (Kịch bản 2) khi nhóm bước vào giai đoạn đấu nối:
 
-### 1. Schema Định nghĩa bằng Zod cho Kịch bản Biểu mẫu ([`src/shared/schemas.ts`](../src/shared/contracts.ts))
+### 1. Schema Định nghĩa bằng Zod cho Kịch bản Biểu mẫu ([`src/shared/schemas.ts`](../../../../src/shared/contracts.ts))
 
 ```typescript
 import { z } from 'zod';
@@ -259,7 +259,7 @@ export const FormWorkflowZodSchema = z.object({
 });
 ```
 
-### 2. Route API Hỏi đáp Streaming Thời gian thực ([`src/app/api/llm/qa/route.ts`](../src/app/api/llm/qa/route.ts))
+### 2. Route API Hỏi đáp Streaming Thời gian thực ([`src/app/api/llm/qa/route.ts`](../../../../src/app/api/llm/qa/route.ts))
 
 ```typescript
 import { streamText } from 'ai';

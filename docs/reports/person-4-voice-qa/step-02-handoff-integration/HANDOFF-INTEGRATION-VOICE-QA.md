@@ -12,7 +12,7 @@
 | **Thành viên báo cáo** | Nguyễn Thanh Chiến (Kỹ sư Voice AI & Trưởng nhóm QA) |
 | **Phạm vi hoàn tất** | Giai đoạn 0 (Nền tảng), Giai đoạn 1A (FR-8), Giai đoạn 1B (FR-3), Giai đoạn 1C (FR-4) |
 | **Trạng thái hiện tại** | **100% Pha Xây dựng Lõi Độc lập** $\rightarrow$ Sẵn sàng bước vào **Pha 2: Khớp nối Trực tiếp (P2P Wiring)** |
-| **Tài liệu tham chiếu** | [PRD.md](./PRD.md), [ARCHITECTURE.md](./ARCHITECTURE.md), [contracts.ts](../src/shared/contracts.ts), [ACTION-PLAN-VOICE-QA.md](./ACTION-PLAN-VOICE-QA.md) |
+| **Tài liệu tham chiếu** | [PRD.md](../../../PRD.md), [ARCHITECTURE.md](../../../ARCHITECTURE.md), [contracts.ts](../../../../src/shared/contracts.ts), [ACTION-PLAN-VOICE-QA.md](../step-01-action-plan/ACTION-PLAN-VOICE-QA.md) |
 
 ---
 

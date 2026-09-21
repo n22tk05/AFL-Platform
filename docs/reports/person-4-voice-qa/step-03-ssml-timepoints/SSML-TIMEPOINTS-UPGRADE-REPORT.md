@@ -8,8 +8,8 @@
 | :--- | :--- |
 | **Dự án** | AFL Platform (Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh cho Người cao tuổi) |
 | **Yêu cầu liên quan** | **FR-3** (Trợ lý Giọng nói Đọc Hướng dẫn Từng Dòng 0.9x & Phụ đề Karaoke Live Captions $\ge 20$pt) |
-| **Tệp tin nâng cấp lõi** | [`src/modules/voice-ai/tts-service.ts`](../src/modules/voice-ai/tts-service.ts) |
-| **Tệp tin dữ liệu đầu ra** | [`public/audio/timestamps.json`](../public/audio/timestamps.json) & [`public/audio/step_01.mp3` $\to$ `step_09.mp3`](../public/audio/) |
+| **Tệp tin nâng cấp lõi** | [`src/modules/voice-ai/tts-service.ts`](../../../../src/modules/voice-ai/tts-service.ts) |
+| **Tệp tin dữ liệu đầu ra** | [`public/audio/timestamps.json`](../../../../public/audio/timestamps.json) & [`public/audio/step_01.mp3` $\to$ `step_09.mp3`](../../../../public/audio/) |
 | **Trạng thái thực thi** | **ĐÃ HOÀN TẤT & ĐO KIỂM THỰC NGHIỆM 100% PASS** 💎 |
 
 ---

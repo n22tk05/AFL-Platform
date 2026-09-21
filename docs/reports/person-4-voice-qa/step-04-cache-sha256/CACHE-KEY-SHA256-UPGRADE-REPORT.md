@@ -3,7 +3,7 @@
 > **Người thực hiện:** Nguyễn Thanh Chiến (Người 4 — Voice AI & QA Lead)  
 > **Module liên quan:** `src/modules/voice-ai/local-cache.ts`  
 > **Kiểm thử liên quan:** `src/modules/voice-ai/tests/test-cache.ts` (`npm run test:cache`)  
-> **Cơ sở dữ liệu tương ứng:** Bảng `voice_cache` trong [`prisma/schema.prisma`](../prisma/schema.prisma#L203-L214)  
+> **Cơ sở dữ liệu tương ứng:** Bảng `voice_cache` trong [`prisma/schema.prisma`](../../../../prisma/schema.prisma#L203-L214)  
 > **Ngày hoàn thành:** 20/09/2026  
 
 ---
@@ -34,7 +34,7 @@ private generateKey(input: any): string {
 2. **Nhạy cảm với thứ tự thuộc tính trong Object (Non-deterministic Key Ordering)**:
    - Sử dụng `JSON.stringify(input)` trực tiếp. Hai đối tượng có cùng dữ liệu nhưng thứ tự thuộc tính khác nhau (`{ a: 1, b: 2 }` và `{ b: 2, a: 1 }`) sẽ sinh ra 2 chuỗi khác nhau, làm mất tác dụng của cache (cache miss giả).
 3. **Lệch pha với CSDL quan hệ Prisma PostgreSQL**:
-   - Trong [`prisma/schema.prisma`](../prisma/schema.prisma#L205), model `VoiceCache` do Tech Lead thiết kế có trường:
+   - Trong [`prisma/schema.prisma`](../../../../prisma/schema.prisma#L205), model `VoiceCache` do Tech Lead thiết kế có trường:
      ```prisma
      model VoiceCache {
        id        String   @id @default(cuid())
@@ -86,7 +86,7 @@ public generateKey(input: any): string {
 
 ## 3. BẰNG CHỨNG KIỂM THỬ (VERIFICATION EVIDENCE)
 
-Đã xây dựng bộ kiểm thử đơn vị tại [`src/modules/voice-ai/tests/test-cache.ts`](../src/modules/voice-ai/tests/test-cache.ts) bao phủ 5 phần:
+Đã xây dựng bộ kiểm thử đơn vị tại [`src/modules/voice-ai/tests/test-cache.ts`](../../../../src/modules/voice-ai/tests/test-cache.ts) bao phủ 5 phần:
 
 1. **Định dạng cấu trúc:** Khóa bắt đầu bằng `cache_`, phần hex đúng 64 ký tự `[0-9a-f]`.
 2. **Tính tất định & Kháng đụng độ:** Cùng đầu vào sinh cùng khóa; đầu vào khác nhau sinh khóa độc lập.
