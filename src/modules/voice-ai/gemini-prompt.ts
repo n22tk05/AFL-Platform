@@ -1,8 +1,12 @@
 import { GoogleGenAI } from '@google/genai';
 import path from 'path';
 import fs from 'fs';
+import dotenv from 'dotenv';
 import { FormGeometricManifest, FormWorkflow, WorkflowStep } from '../../shared/contracts';
 import { localCache } from './local-cache';
+
+// Nạp biến môi trường từ .env
+dotenv.config();
 
 /**
  * Danh sách từ khóa nhạy cảm cần bật cờ kiểm duyệt pháp lý (Legal Warning Flag)
@@ -25,10 +29,30 @@ export class GeminiPromptService {
   private apiKey: string | undefined;
 
   constructor() {
+    this.refreshClient();
+  }
+
+  /**
+   * Khởi tạo hoặc làm mới client từ GEMINI_API_KEY trong file .env
+   */
+  public refreshClient(): GoogleGenAI | null {
     this.apiKey = process.env.GEMINI_API_KEY;
     if (this.apiKey) {
       this.client = new GoogleGenAI({ apiKey: this.apiKey });
+    } else {
+      this.client = null;
     }
+    return this.client;
+  }
+
+  /**
+   * Lấy client Gemini, tự động nạp lại nếu biến môi trường được cập nhật
+   */
+  public getClient(): GoogleGenAI | null {
+    if (!this.client || this.apiKey !== process.env.GEMINI_API_KEY) {
+      return this.refreshClient();
+    }
+    return this.client;
   }
 
   /**
@@ -44,7 +68,8 @@ export class GeminiPromptService {
     }
 
     // 2. Nếu chưa có API Key hoặc đang chạy Offline, fallback về dữ liệu mẫu có sẵn
-    if (!this.client || !this.apiKey) {
+    const client = this.getClient();
+    if (!client || !this.apiKey) {
       return this.getOfflineFallback(manifest);
     }
 
@@ -85,7 +110,7 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
 ]
 `;
 
-      const response = await this.client.models.generateContent({
+      const response = await client.models.generateContent({
         model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
         contents: prompt,
         config: {

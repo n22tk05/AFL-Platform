@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:voice": "tsx src/modules/voice-ai/tests/test-voice.ts",
+    "test:cache": "tsx src/modules/voice-ai/tests/test-cache.ts",
     "test:qa": "tsx src/modules/voice-ai/tests/qa-suite.ts",
     "test:tts": "tsx src/modules/voice-ai/tests/test-tts-api.ts",
     "test:stt": "tsx src/modules/voice-ai/tests/test-stt.ts",

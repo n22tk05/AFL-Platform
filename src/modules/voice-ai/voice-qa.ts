@@ -1,6 +1,10 @@
 import { GoogleGenAI } from '@google/genai';
+import dotenv from 'dotenv';
 import { WorkflowStep } from '../../shared/contracts';
 import { localCache } from './local-cache';
+
+// Nạp biến môi trường từ .env
+dotenv.config();
 
 export interface QARequest {
   currentStep: WorkflowStep;
@@ -87,12 +91,34 @@ export class VoiceQAService {
   private client: GoogleGenAI | null = null;
   public halfDuplex: HalfDuplexController;
 
+  private apiKey: string | undefined;
+
   constructor() {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (apiKey) {
-      this.client = new GoogleGenAI({ apiKey });
-    }
+    this.refreshClient();
     this.halfDuplex = new HalfDuplexController();
+  }
+
+  /**
+   * Khởi tạo hoặc làm mới client từ GEMINI_API_KEY trong .env
+   */
+  public refreshClient(): GoogleGenAI | null {
+    this.apiKey = process.env.GEMINI_API_KEY;
+    if (this.apiKey) {
+      this.client = new GoogleGenAI({ apiKey: this.apiKey });
+    } else {
+      this.client = null;
+    }
+    return this.client;
+  }
+
+  /**
+   * Lấy client Gemini, tự động nạp lại nếu biến môi trường được cập nhật
+   */
+  public getClient(): GoogleGenAI | null {
+    if (!this.client || this.apiKey !== process.env.GEMINI_API_KEY) {
+      return this.refreshClient();
+    }
+    return this.client;
   }
 
   /**
@@ -130,7 +156,8 @@ export class VoiceQAService {
     }
 
     // 3. Nếu không có client đám mây -> Fallback nghiệp vụ an toàn
-    if (!this.client) {
+    const client = this.getClient();
+    if (!client) {
       return this.getSafeFallbackResponse(currentStep, startTime);
     }
 
@@ -145,7 +172,7 @@ Hãy trả lời bác:
 - Tuyệt đối không trích dẫn số hiệu điều luật dài dòng.
 `;
 
-      const response = await this.client.models.generateContent({
+      const response = await client.models.generateContent({
         model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
         contents: prompt,
         config: {
