@@ -13,6 +13,8 @@
     "test:qa": "tsx src/modules/voice-ai/tests/qa-suite.ts",
     "test:tts": "tsx src/modules/voice-ai/tests/test-tts-api.ts",
     "test:stt": "tsx src/modules/voice-ai/tests/test-stt.ts",
+    "test:persistence": "tsx src/modules/voice-ai/tests/test-persistence.ts",
+    "test:qa:stress": "tsx src/modules/voice-ai/tests/adversarial-qa-stress-test.ts",
     "generate:audio": "tsx src/modules/voice-ai/tests/generate-full-audio.ts",
     "postinstall": "prisma generate"
   },
