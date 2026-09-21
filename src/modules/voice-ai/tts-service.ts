@@ -43,7 +43,34 @@ export class TTSService {
   }
 
   /**
-   * Tính toán mốc thời gian ước tính cho từng từ (tốc độ đọc 0.9x ~ 320ms/từ)
+   * Thoát ký tự đặc biệt theo chuẩn XML/SSML
+   */
+  private escapeXml(unsafe: string): string {
+    return unsafe
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+
+  /**
+   * Bọc văn bản bằng thẻ đánh dấu SSML Marks (<mark name="w_i"/>) trước từng từ
+   * Giúp Google Cloud TTS Neural2 trả về mốc thời gian phát âm chính xác tuyệt đối (Timepoints)
+   */
+  public formatSSMLWithMarks(text: string): { ssml: string; words: string[] } {
+    const rawWords = text.trim().split(/\s+/).filter(Boolean);
+    const ssmlMarks = rawWords
+      .map((word, index) => `<mark name="w_${index}"/>${this.escapeXml(word)}`)
+      .join(' ');
+    return {
+      ssml: `<speak>${ssmlMarks}</speak>`,
+      words: rawWords
+    };
+  }
+
+  /**
+   * Tính toán mốc thời gian ước tính dự phòng khi offline / lỗi mạng (Fallback Heuristic)
    */
   private calculateTimestamps(text: string): WordTimestamp[] {
     const words = text.split(/\s+/);
@@ -61,7 +88,7 @@ export class TTSService {
   }
 
   /**
-   * Tổng hợp giọng nói tiếng Việt tốc độ 0.9x và trích xuất Word Timestamps (FR-3)
+   * Tổng hợp giọng nói tiếng Việt tốc độ 0.9x và trích xuất Word Timestamps chuẩn xác từng mili-giây (FR-3)
    */
   public async synthesizeSpeech(
     text: string,
@@ -72,8 +99,8 @@ export class TTSService {
     const filePath = path.join(this.outputDir, fileName);
     const audioUrl = `/audio/${fileName}`;
 
-    // 1. Kiểm tra cache cục bộ
-    const cacheKey = { text, stepIndex, region };
+    // 1. Kiểm tra cache cục bộ (phân biệt engine v2_ssml mốc mili-giây chuẩn xác)
+    const cacheKey = { text, stepIndex, region, engine: 'google_ssml_v2' };
     const cached = localCache.get<SynthesisResult>(cacheKey);
     if (cached && fs.existsSync(filePath) && fs.statSync(filePath).size > 1000) {
       return {
@@ -86,12 +113,13 @@ export class TTSService {
     const voiceName = region === 'NORTH' ? 'vi-VN-Neural2-A' : 'vi-VN-Neural2-D';
     const apiKey = process.env.GOOGLE_TTS_API_KEY;
 
-    // 3. Phương thức 1: Gọi qua REST API nếu có GOOGLE_TTS_API_KEY (Nhanh, nhẹ < 500ms)
+    // 3. Phương thức 1: Gọi qua Google Cloud TTS REST API v1beta1 với SSML_MARK timepointing
     if (apiKey) {
       try {
-        const synthUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`;
+        const synthUrl = `https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=${apiKey}`;
+        const { ssml, words } = this.formatSSMLWithMarks(text);
         const payload = {
-          input: { text },
+          input: { ssml },
           voice: {
             languageCode: 'vi-VN',
             name: voiceName
@@ -99,7 +127,8 @@ export class TTSService {
           audioConfig: {
             audioEncoding: 'MP3',
             speakingRate: 0.9 // Tốc độ 0.9x chuẩn PRD
-          }
+          },
+          enableTimePointing: ['SSML_MARK']
         };
 
         const response = await fetch(synthUrl, {
@@ -113,7 +142,30 @@ export class TTSService {
           const audioBuffer = Buffer.from(data.audioContent, 'base64');
           fs.writeFileSync(filePath, audioBuffer);
 
-          const wordTimestamps = this.calculateTimestamps(text);
+          let wordTimestamps: WordTimestamp[] = [];
+
+          // Trích xuất Timepoints mili-giây chuẩn xác do Neural2 sinh ra
+          if (data.timepoints && Array.isArray(data.timepoints) && data.timepoints.length > 0) {
+            const timepoints: Array<{ markName: string; timeSeconds: number }> = data.timepoints;
+
+            for (let i = 0; i < timepoints.length; i++) {
+              const tp = timepoints[i];
+              const nextTp = timepoints[i + 1];
+              const startMs = Math.round((tp.timeSeconds || 0) * 1000);
+              const endMs = nextTp ? Math.round((nextTp.timeSeconds || 0) * 1000) : startMs + 350;
+              const wordText = (words[i] || tp.markName || '').toUpperCase();
+
+              wordTimestamps.push({
+                word: wordText,
+                startMs,
+                endMs
+              });
+            }
+          } else {
+            // Dự phòng Fallback Heuristic nếu API không trả về timepoints
+            wordTimestamps = this.calculateTimestamps(text);
+          }
+
           const result: SynthesisResult = {
             audioBuffer,
             audioUrl,
