@@ -14,7 +14,7 @@ Toàn bộ tài liệu quan trọng nhất đã được tổng hợp, phân lo�
 
 ---
 
-## MỤC LỤC TÀI LIỆU CỐT LÕI
+## MỤC LỤC TÀI LIỆU CỐT LÕI (CORE ARCHITECTURE & SPECS)
 
 | STT | Tài Liệu | Mô Tả & Nội Dung Trọng Tâm | Dành Cho Ai? |
 | :---: | :--- | :--- | :--- |
@@ -24,11 +24,23 @@ Toàn bộ tài liệu quan trọng nhất đã được tổng hợp, phân lo�
 | **04** | [WORKFLOW-PIPELINE.md](WORKFLOW-PIPELINE.md) | **Kế hoạch Phân công & Action Sheets:** Tờ lệnh nhiệm vụ chi tiết của 4 người, quy tắc "Nền móng là số 1", phân tách 2 dòng chảy, lộ trình Sprint 7 ngày. | **Cả 4 thành viên** |
 | **05** | [MOCK-DATA.md](MOCK-DATA.md) | **Hợp đồng Dữ liệu & Hướng dẫn Mock:** Chi tiết file `contracts.ts`, `mock-manifest.json` (OpenCV) và `mock-workflow.json` (Gemini & UI). | **Cả 4 thành viên** |
 | **06** | [PRE-MORTEM.md](PRE-MORTEM.md) | **Sổ tay Phòng ngừa Rủi ro (Pre-Mortem Playbook):** 8 kịch bản xấu có thể làm đổ vỡ dự án và phương án phòng thủ (Vaccine). | **Cả 4 thành viên** |
-| **07** | [ACTION-PLAN-VOICE-QA.md](ACTION-PLAN-VOICE-QA.md) | **Kế hoạch Tác chiến Sprint 1 (Voice & QA):** Kế hoạch hành động 7 ngày chi tiết của Người 4, ma trận I/O và tiêu chuẩn nghiệm thu 11 FR. | **Người 4 (Chiến)** |
-| **08** | [HANDOFF-INTEGRATION-VOICE-QA.md](HANDOFF-INTEGRATION-VOICE-QA.md) | **Báo Cáo Tiến Độ & Ma Trận Khớp Nối (Handoff & P2P Integration):** Tổng hợp những gì đã làm được, ma trận I/O chi tiết cho từng người (Tech Lead, Frontend, OpenCV) và hướng dẫn đấu nối. | **Cả 4 thành viên** |
-| **09** | [SSML-TIMEPOINTS-UPGRADE-REPORT.md](SSML-TIMEPOINTS-UPGRADE-REPORT.md) | **Báo Cáo Nâng Cấp Mốc Thời Gian Karaoke (SSML Timepointing):** Đánh giá hạn chế thuật toán heuristic cũ, triển khai cơ chế SSML Marks chính xác mili-giây từ Google TTS Neural2. | **Cả 4 thành viên** |
-| **10** | [CACHE-KEY-SHA256-UPGRADE-REPORT.md](CACHE-KEY-SHA256-UPGRADE-REPORT.md) | **Báo Cáo Nâng Cấp Khóa Băm Cache (SHA-256 & Canonicalization):** Triệt tiêu rủi ro đụng độ mã băm, khử nhạy thứ tự thuộc tính, đồng bộ kiến trúc với bảng `voice_cache` trong Prisma CSDL. | **Người 1 & Người 4** |
-| **11** | [SDK-COMPARISON-DEEP-RESEARCH.md](SDK-COMPARISON-DEEP-RESEARCH.md) | **Nghiên Cứu Sâu So Sánh Google SDK vs Vercel AI SDK:** Phân tích kiến trúc nội tại, tác động đến 4 vai trò, khả năng streaming thời gian thực, chủ quyền dữ liệu và lộ trình mô hình lai (Hybrid). | **Cả 4 thành viên** |
+
+---
+
+## 📊 TRUNG TÂM BÁO CÁO TIẾN ĐỘ TỪNG THÀNH VIÊN (MEMBER REPORTS HUB)
+
+👉 **Xem Bảng Điều Khiển Tổng Hợp 4 Thành Viên:** [`docs/reports/README.md`](reports/README.md)
+
+| STT | Thành Viên / Bước | Tài Liệu Báo Cáo Chi Tiết | Mô Tả Trọng Tâm | Trạng Thái |
+| :---: | :--- | :--- | :--- | :---: |
+| **07** | **Người 4 (Bước 1)** | [ACTION-PLAN-VOICE-QA.md](reports/person-4-voice-qa/step-01-action-plan/ACTION-PLAN-VOICE-QA.md) | **Kế hoạch Tác chiến Sprint 1:** Kế hoạch hành động 7 ngày chi tiết của Người 4, ma trận I/O và tiêu chuẩn nghiệm thu 11 FRs. | ✅ Hoàn tất |
+| **08** | **Người 4 (Bước 2)** | [HANDOFF-INTEGRATION-VOICE-QA.md](reports/person-4-voice-qa/step-02-handoff-integration/HANDOFF-INTEGRATION-VOICE-QA.md) | **Báo Cáo Bàn Giao & Ma Trận Đấu Nối P2P:** Hướng dẫn cắm giắc Voice Assistant cho Frontend (Người 2), CSDL (Người 1), OpenCV (Người 3). | ✅ Hoàn tất |
+| **09** | **Người 4 (Bước 3)** | [SSML-TIMEPOINTS-UPGRADE-REPORT.md](reports/person-4-voice-qa/step-03-ssml-timepoints/SSML-TIMEPOINTS-UPGRADE-REPORT.md) | **Nâng Cấp Mốc Thời Gian Karaoke:** Triển khai cơ chế SSML Marks chính xác mili-giây từ Google TTS Neural2 (PR #2). | ✅ Mở PR #2 |
+| **10** | **Người 4 (Bước 4)** | [CACHE-KEY-SHA256-UPGRADE-REPORT.md](reports/person-4-voice-qa/step-04-cache-sha256/CACHE-KEY-SHA256-UPGRADE-REPORT.md) | **Nâng Cấp Khóa Băm Cache SHA-256:** Triệt tiêu đụng độ mã băm, chuẩn hóa đệ quy $A \to Z$, đồng bộ CSDL `voice_cache` (PR #3). | ✅ Mở PR #3 |
+| **11** | **Người 4 (Bước 5)** | [SDK-COMPARISON-DEEP-RESEARCH.md](reports/person-4-voice-qa/step-05-sdk-deep-research/SDK-COMPARISON-DEEP-RESEARCH.md) | **Nghiên Cứu Sâu Google SDK vs Vercel AI SDK:** Phân tích streaming UI, Zod schema, chủ quyền dữ liệu và lộ trình mô hình lai (Hybrid). | ✅ Hoàn tất |
+| **12** | **Người 1 (Tech Lead)**| [person-1-tech-lead/README.md](reports/person-1-tech-lead/README.md) | **Theo Dõi Tiến Độ Tech Lead:** CSDL PostgreSQL Prisma ORM, Server API routes, PR review & merge. | 🟢 Đang triển khai |
+| **13** | **Người 2 (Frontend)** | [person-2-frontend/README.md](reports/person-2-frontend/README.md) | **Theo Dõi Tiến Độ Frontend:** Giao diện Mobile Touch-first người già, WCAG AAA, cắm hook `useVoiceAssistant`. | 🟢 Đang triển khai |
+| **14** | **Người 3 (OpenCV)**   | [person-3-opencv/README.md](reports/person-3-opencv/README.md) | **Theo Dõi Tiến Độ OpenCV:** Nhận diện 4 góc phôi giấy, nắn phối cảnh WASM, bóc tách tọa độ chuẩn hóa $[0.0 - 1.0]$. | 🟢 Đang triển khai |
 
 ---
 
