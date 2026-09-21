@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { geminiPromptService } from '@/modules/voice-ai/gemini-prompt';
+import { formPersistenceService } from '@/modules/forms/form-persistence';
 import { FormGeometricManifest } from '@/shared/contracts';
 
 /**
@@ -27,9 +28,17 @@ export async function POST(req: NextRequest) {
 
     const workflow = await geminiPromptService.generateWorkflow(manifest);
 
+    // Tự động đồng bộ vào CSDL PostgreSQL qua Prisma
+    await formPersistenceService.saveGeometricManifest(manifest);
+    const persistResult = await formPersistenceService.saveWorkflow(workflow);
+
     return NextResponse.json({
       success: true,
-      data: workflow
+      data: workflow,
+      meta: {
+        persisted: persistResult.success,
+        source: persistResult.source,
+      }
     });
   } catch (error: any) {
     console.error('[API /api/llm/prompt] Lỗi xử lý:', error);

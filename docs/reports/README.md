@@ -34,8 +34,10 @@ docs/reports/
     │   └── SSML-TIMEPOINTS-UPGRADE-REPORT.md <-- [Bước 3] Nâng cấp Google TTS SSML Marks chính xác mili-giây
     ├── step-04-cache-sha256/
     │   └── CACHE-KEY-SHA256-UPGRADE-REPORT.md<-- [Bước 4] Nâng cấp hàm băm SHA-256 & Canonicalization đệ quy
-    └── step-05-sdk-deep-research/
-        └── SDK-COMPARISON-DEEP-RESEARCH.md   <-- [Bước 5] Nghiên cứu sâu Google SDK vs Vercel AI SDK & Lộ trình
+    ├── step-05-sdk-deep-research/
+    │   └── SDK-COMPARISON-DEEP-RESEARCH.md   <-- [Bước 5] Nghiên cứu sâu Google SDK vs Vercel AI SDK & Lộ trình
+    └── step-06-prisma-database-integration/
+        └── PRISMA-POSTGRES-INTEGRATION-REPORT.md <-- [Bước 6] Tích hợp CSDL Prisma, ACID Transactions, Cache Đa Tầng & QA
 ```
 
 ---
@@ -47,7 +49,7 @@ docs/reports/
 | **Người 1: Nguyễn Tuấn Khánh**<br>*(Tech Lead & PM)* | • Kiến trúc hệ thống tổng thể<br>• CSDL PostgreSQL & Prisma<br>• Phê duyệt Pull Requests | • Thiết kế 9 models Prisma quan hệ<br>• Đồng bộ hóa môi trường `.env`<br>• Cấu hình lệnh `prisma generate` | Rà soát & Merge PR #2 và PR #3 vào `main`; chuẩn bị API lưu CSDL. | 🟢 Đúng tiến độ | [`person-1-tech-lead/`](person-1-tech-lead/README.md) |
 | **Người 2: Võ Quốc Anh**<br>*(Frontend Specialist)* | • Giao diện Mobile Touch-first<br>• Tiêu chuẩn WCAG 2.1 AAA<br>• Đồng bộ Karaoke Audio UI | • Khung layout Mobile chuẩn WCAG<br>• Tích hợp dữ liệu giả lập `mock-workflow`<br>• Khung hiển thị chữ đỏ in hoa | Cắm hook `useVoiceAssistant` và đọc file `timestamps.json` để làm sáng viền ô. | 🟢 Đúng tiến độ | [`person-2-frontend/`](person-2-frontend/README.md) |
 | **Người 3: Nguyễn Thế Anh**<br>*(Algorithm / OpenCV)* | • Nhận diện 4 góc phôi giấy<br>• Nắn góc xiên (Perspective)<br>• Tọa độ chuẩn hóa $[0.0 - 1.0]$ | • Chuẩn hóa hợp đồng `contracts.ts`<br>• Xuất file mẫu `mock-manifest.json`<br>• Tích hợp module `@techstark/opencv-js` | Tinh chỉnh bộ lọc Canny & `approxPolyDP` chạy mượt trên WebAssembly (WASM). | 🟢 Đúng tiến độ | [`person-3-opencv/`](person-3-opencv/README.md) |
-| **Người 4: Nguyễn Thanh Chiến**<br>*(AI Voice & QA Lead)* | • Kịch bản Gemini Prompt (FR-8)<br>• Giọng đọc 0.9x & Karaoke (FR-3)<br>• Hỏi đáp Bán song công (FR-4)<br>• Kiểm toán QA 11 FRs | • Bóc tách kịch bản 9 bước tự động<br>• Nâng cấp SSML Marks mili-giây (PR #2)<br>• Nâng cấp hàm băm SHA-256 (PR #3)<br>• Nghiên cứu sâu Google SDK vs Vercel | **100% Hoàn thành Sprint 1**<br>• Voice test: 16/16 PASS<br>• Cache test: 13/13 PASS<br>• QA audit: 11/11 PASS | 💎 Hoàn tất (Sẵn sàng đấu nối) | [`person-4-voice-qa/`](person-4-voice-qa/README.md) |
+| **Người 4: Nguyễn Thanh Chiến**<br>*(AI Voice & QA Lead)* | • Kịch bản Gemini Prompt (FR-8)<br>• Giọng đọc 0.9x & Karaoke (FR-3)<br>• Hỏi đáp Bán song công (FR-4)<br>• Kiểm toán QA 11 FRs & CSDL | • Bóc tách kịch bản 9 bước tự động<br>• Nâng cấp SSML Marks mili-giây (PR #2)<br>• Nâng cấp hàm băm SHA-256 (PR #3)<br>• Nghiên cứu sâu Google SDK vs Vercel<br>• Tích hợp CSDL Prisma & Cache Đa tầng | **Hoàn thành Bước 6**<br>• Persistence test: 16/16 PASS<br>• QA Stress test: 6/6 PASS<br>• Voice test: 16/16 PASS<br>• Cache test: 13/13 PASS<br>• QA audit: 11/11 PASS | 💎 Hoàn tất (Sẵn sàng đấu nối CSDL) | [`person-4-voice-qa/`](person-4-voice-qa/README.md) |
 
 ---
 

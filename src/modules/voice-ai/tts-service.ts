@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { localCache } from './local-cache';
+import { formPersistenceService } from '@/modules/forms/form-persistence';
 
 dotenv.config()
 export type VietnameseVoiceRegion = 'NORTH' | 'SOUTH';
@@ -87,6 +88,9 @@ export class TTSService {
     });
   }
 
+  // Singleflight Pattern: Bảng băm khử trùng lặp các yêu cầu TTS đang chạy đồng thời (Thundering Herd Protection)
+  private static inFlightRequests = new Map<string, Promise<SynthesisResult>>();
+
   /**
    * Tổng hợp giọng nói tiếng Việt tốc độ 0.9x và trích xuất Word Timestamps chuẩn xác từng mili-giây (FR-3)
    */
@@ -99,7 +103,7 @@ export class TTSService {
     const filePath = path.join(this.outputDir, fileName);
     const audioUrl = `/audio/${fileName}`;
 
-    // 1. Kiểm tra cache cục bộ (phân biệt engine v2_ssml mốc mili-giây chuẩn xác)
+    // 1. Kiểm tra cache L1 cục bộ (phân biệt engine v2_ssml mốc mili-giây chuẩn xác)
     const cacheKey = { text, stepIndex, region, engine: 'google_ssml_v2' };
     const cached = localCache.get<SynthesisResult>(cacheKey);
     if (cached && fs.existsSync(filePath) && fs.statSync(filePath).size > 1000) {
@@ -107,6 +111,68 @@ export class TTSService {
         ...cached,
         audioBuffer: fs.readFileSync(filePath)
       };
+    }
+
+    const hashKey = localCache.generateKey(cacheKey);
+
+    // Singleflight Pattern: Tái sử dụng Promise nếu cùng một câu thoại đang được tổng hợp song song
+    if (TTSService.inFlightRequests.has(hashKey)) {
+      return await TTSService.inFlightRequests.get(hashKey)!;
+    }
+
+    const synthesisTask = this.executeSynthesisPipeline(
+      text,
+      stepIndex,
+      region,
+      filePath,
+      audioUrl,
+      cacheKey,
+      hashKey
+    );
+
+    // Bọc Timeout bảo vệ 10s ngăn chặn deadlock vĩnh viễn (QA-BUG-05)
+    const timeoutPromise = new Promise<SynthesisResult>((_, reject) => {
+      setTimeout(() => reject(new Error('TTS_SYNTHESIS_TIMEOUT')), 10000);
+    });
+
+    const guardedTask = Promise.race([synthesisTask, timeoutPromise]).catch((err) => {
+      console.warn(`[TTSService] Timeout hoặc lỗi xử lý, tự động chuyển sang mô phỏng ngoại tuyến:`, err.message);
+      return this.simulateSynthesis(text, stepIndex, audioUrl, filePath, cacheKey, hashKey);
+    });
+
+    TTSService.inFlightRequests.set(hashKey, guardedTask);
+
+    try {
+      return await guardedTask;
+    } finally {
+      TTSService.inFlightRequests.delete(hashKey);
+    }
+  }
+
+  /**
+   * Đường ống tổng hợp âm thanh thực thi qua L2 CSDL -> L3 Cloud TTS -> Mock Fallback
+   */
+  private async executeSynthesisPipeline(
+    text: string,
+    stepIndex: number,
+    region: VietnameseVoiceRegion,
+    filePath: string,
+    audioUrl: string,
+    cacheKey: any,
+    hashKey: string
+  ): Promise<SynthesisResult> {
+    // 1b. Kiểm tra cache L2 CSDL PostgreSQL qua Prisma (Chống cháy Quota đa người dùng)
+    const dbCached = await formPersistenceService.getVoiceCache(hashKey);
+    if (dbCached && fs.existsSync(filePath) && fs.statSync(filePath).size > 1000) {
+      const timestamps = this.loadStoredTimestamps(stepIndex, text);
+      const result: SynthesisResult = {
+        audioUrl: dbCached.audioUrl,
+        audioBuffer: fs.readFileSync(filePath),
+        wordTimestamps: timestamps
+      };
+      // Tự động làm ấm (warm) L1 cache
+      localCache.set(cacheKey, { audioUrl: dbCached.audioUrl, wordTimestamps: timestamps });
+      return result;
     }
 
     // 2. Chọn mã voice Neural2 theo vùng miền
@@ -134,7 +200,8 @@ export class TTSService {
         const response = await fetch(synthUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(8000) // 8 giây timeout bảo vệ chống treo socket (QA-BUG-05)
         });
 
         const data = await response.json();
@@ -173,6 +240,15 @@ export class TTSService {
           };
 
           localCache.set(cacheKey, { audioUrl, wordTimestamps });
+          // Đồng bộ vào L2 CSDL PostgreSQL
+          formPersistenceService.saveVoiceCache({
+            cacheKey: hashKey,
+            rawText: text,
+            audioUrl,
+            voiceName,
+            speakingRate: 0.9
+          }).catch(() => {});
+
           return result;
         } else if (data.error) {
           console.warn('[TTSService] Lỗi Google TTS API:', data.error.message);
@@ -226,6 +302,15 @@ export class TTSService {
         };
 
         localCache.set(cacheKey, { audioUrl, wordTimestamps });
+        // Đồng bộ vào L2 CSDL PostgreSQL
+        formPersistenceService.saveVoiceCache({
+          cacheKey: hashKey,
+          rawText: text,
+          audioUrl,
+          voiceName,
+          speakingRate: 0.9
+        }).catch(() => {});
+
         return result;
       } catch (error) {
         console.warn('[TTSService] Lỗi khi gọi SDK TTS:', error);
@@ -233,7 +318,26 @@ export class TTSService {
     }
 
     // 5. Phương thức 3: Fallback mô phỏng ngoại tuyến nếu không có mạng/key
-    return this.simulateSynthesis(text, stepIndex, audioUrl, filePath, cacheKey);
+    return this.simulateSynthesis(text, stepIndex, audioUrl, filePath, cacheKey, hashKey);
+  }
+
+  /**
+   * Đọc mốc thời gian từ tệp timestamps.json nếu có sẵn
+   */
+  private loadStoredTimestamps(stepIndex: number, text: string): WordTimestamp[] {
+    try {
+      const timestampsFile = path.join(this.outputDir, 'timestamps.json');
+      if (fs.existsSync(timestampsFile)) {
+        const content = JSON.parse(fs.readFileSync(timestampsFile, 'utf-8'));
+        const stepKey = `step_${String(stepIndex).padStart(2, '0')}`;
+        if (content[stepKey] && Array.isArray(content[stepKey])) {
+          return content[stepKey];
+        }
+      }
+    } catch {
+      // bỏ qua
+    }
+    return this.calculateTimestamps(text);
   }
 
   /**
@@ -244,7 +348,8 @@ export class TTSService {
     stepIndex: number,
     audioUrl: string,
     filePath: string,
-    cacheKey: any
+    cacheKey: any,
+    hashKey?: string
   ): SynthesisResult {
     if (!fs.existsSync(filePath)) {
       try {
@@ -262,6 +367,14 @@ export class TTSService {
     };
 
     localCache.set(cacheKey, { audioUrl, wordTimestamps });
+    if (hashKey) {
+      formPersistenceService.saveVoiceCache({
+        cacheKey: hashKey,
+        rawText: text,
+        audioUrl,
+        speakingRate: 0.9
+      }).catch(() => {});
+    }
     return result;
   }
 }
