@@ -3,9 +3,12 @@ import {
   type PreprocessConfig,
 } from "./config";
 import { detectLines, type LineDetectionResult } from "./line-detector";
+import { detectContourCandidates } from "./contour-detector";
+import { sortCandidatesGeometrically } from "./geometric-sort";
 import { loadOpenCv } from "./loader";
 import { preprocessToBinary } from "./preprocess";
 import type { CvMat, CvRuntime } from "./types";
+import type { ContourDetectionConfig, FieldCandidate } from "./field-types";
 
 interface CanvasCvRuntime extends CvRuntime {
   imread(canvas: HTMLCanvasElement): CvMat;
@@ -19,8 +22,10 @@ export interface DebugPipelineOptions {
   horizontalCanvas: HTMLCanvasElement;
   verticalCanvas: HTMLCanvasElement;
   combinedCanvas: HTMLCanvasElement;
+  candidateOverlayCanvas: HTMLCanvasElement;
   preprocessConfig?: Partial<PreprocessConfig>;
   lineConfig?: Partial<LineDetectionConfig>;
+  contourConfig?: Partial<ContourDetectionConfig>;
   /** Invoked immediately after the shared OpenCV runtime is ready. */
   onOpenCvReady?: () => void;
 }
@@ -33,12 +38,14 @@ export interface DebugPipelineResult {
   grayscaleTimeMs: number;
   binaryTimeMs: number;
   lineDetectionTimeMs: number;
+  contourDetectionTimeMs: number;
+  candidates: FieldCandidate[];
 }
 
 /**
  * Run the Phase 1/2 image-debug pipeline and draw its intermediate results.
  * Input is read once from `inputCanvas`; output canvases receive grayscale, binary,
- * horizontal, vertical, and combined masks. No Mat escapes this function: all Mats,
+ * horizontal, vertical, combined masks, and a Canvas 2D candidate overlay. No Mat escapes this function: all Mats,
  * including source and algorithm outputs, are deleted before the promise resolves.
  * Configuration defaults are starting points and should be tuned using real forms.
  */
@@ -83,6 +90,10 @@ export async function runLineDetectionDebug(
     cv.imshow(options.verticalCanvas, lines.vertical);
     cv.imshow(options.combinedCanvas, lines.combined);
     const lineDetectionTimeMs = elapsedSince(lineDetectionStartedAt);
+    const contourDetectionStartedAt = performance.now();
+    const candidates = sortCandidatesGeometrically(detectContourCandidates(cv, lines.combined, options.contourConfig));
+    drawCandidateOverlay(options.inputCanvas, options.candidateOverlayCanvas, candidates);
+    const contourDetectionTimeMs = elapsedSince(contourDetectionStartedAt);
 
     return {
       width: source.cols,
@@ -92,6 +103,8 @@ export async function runLineDetectionDebug(
       grayscaleTimeMs,
       binaryTimeMs,
       lineDetectionTimeMs,
+      contourDetectionTimeMs,
+      candidates,
     };
   } finally {
     lines?.horizontal.delete();
@@ -111,6 +124,7 @@ function validateCanvases(options: DebugPipelineOptions): void {
     options.horizontalCanvas,
     options.verticalCanvas,
     options.combinedCanvas,
+    options.candidateOverlayCanvas,
   ];
 
   if (canvases.some((canvas) => !(canvas instanceof HTMLCanvasElement))) {
@@ -119,6 +133,24 @@ function validateCanvases(options: DebugPipelineOptions): void {
   if (options.inputCanvas.width <= 0 || options.inputCanvas.height <= 0) {
     throw new Error("inputCanvas dimensions must be greater than zero.");
   }
+}
+
+function drawCandidateOverlay(source: HTMLCanvasElement, overlay: HTMLCanvasElement, candidates: readonly FieldCandidate[]): void {
+  overlay.width = source.width;
+  overlay.height = source.height;
+  const context = overlay.getContext("2d");
+  if (!context) throw new Error("candidateOverlayCanvas does not provide a 2D context.");
+  context.drawImage(source, 0, 0);
+  context.strokeStyle = "#ef4444";
+  context.fillStyle = "#ef4444";
+  context.lineWidth = Math.max(1, Math.round(Math.min(source.width, source.height) / 700));
+  context.font = `${Math.max(10, Math.round(Math.min(source.width, source.height) / 75))}px sans-serif`;
+  candidates.forEach((candidate, index) => {
+    const { x, y, width, height } = candidate.rect;
+    context.strokeRect(x, y, width, height);
+    // Limit labels, not rectangles, so dense images remain readable.
+    if (index < 75) context.fillText(candidate.candidateId, x + 3, Math.max(12, y - 3));
+  });
 }
 
 function elapsedSince(startedAt: number): number {

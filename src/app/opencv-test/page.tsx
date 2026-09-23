@@ -44,12 +44,13 @@ export default function OpenCvTestPage() {
   const horizontalCanvasRef = useRef<HTMLCanvasElement>(null);
   const verticalCanvasRef = useRef<HTMLCanvasElement>(null);
   const combinedCanvasRef = useRef<HTMLCanvasElement>(null);
+  const candidateOverlayCanvasRef = useRef<HTMLCanvasElement>(null);
   const activeUrlRef = useRef<string | null>(null);
   const selectionIdRef = useRef(0);
   const runningRef = useRef(false);
 
   const clearOutputCanvases = useCallback(() => {
-    [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef].forEach((canvasRef) => {
+    [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef, candidateOverlayCanvasRef].forEach((canvasRef) => {
       const canvas = canvasRef.current;
       const context = canvas?.getContext('2d');
       if (canvas && context) context.clearRect(0, 0, canvas.width, canvas.height);
@@ -115,7 +116,7 @@ export default function OpenCvTestPage() {
       inputCanvas.height = height;
       context.clearRect(0, 0, width, height);
       context.drawImage(image, 0, 0, width, height);
-      [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef].forEach((canvasRef) => {
+      [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef, candidateOverlayCanvasRef].forEach((canvasRef) => {
         if (canvasRef.current) {
           canvasRef.current.width = width;
           canvasRef.current.height = height;
@@ -144,7 +145,8 @@ export default function OpenCvTestPage() {
     const horizontalCanvas = horizontalCanvasRef.current;
     const verticalCanvas = verticalCanvasRef.current;
     const combinedCanvas = combinedCanvasRef.current;
-    if (!inputCanvas || !grayscaleCanvas || !binaryCanvas || !horizontalCanvas || !verticalCanvas || !combinedCanvas) return;
+    const candidateOverlayCanvas = candidateOverlayCanvasRef.current;
+    if (!inputCanvas || !grayscaleCanvas || !binaryCanvas || !horizontalCanvas || !verticalCanvas || !combinedCanvas || !candidateOverlayCanvas) return;
 
     runningRef.current = true;
     setErrorMessage(null);
@@ -160,6 +162,7 @@ export default function OpenCvTestPage() {
         horizontalCanvas,
         verticalCanvas,
         combinedCanvas,
+        candidateOverlayCanvas,
         preprocessConfig: DEFAULT_PREPROCESS_CONFIG,
         lineConfig: DEFAULT_LINE_DETECTION_CONFIG,
         onOpenCvReady: () => setStatus('processing'),
@@ -199,7 +202,7 @@ export default function OpenCvTestPage() {
 
       {imageInfo && <p style={infoStyle}>{imageInfo}</p>}
       {errorMessage && <p role="alert" style={errorStyle}>{errorMessage}</p>}
-      {result && <section style={timingStyle}><strong>Hoàn tất trong {result.totalProcessingTimeMs} ms</strong><span>OpenCV: {result.openCvLoadTimeMs} ms · Grayscale: {result.grayscaleTimeMs} ms · Binary: {result.binaryTimeMs} ms · Lines: {result.lineDetectionTimeMs} ms</span></section>}
+      {result && <section style={timingStyle}><strong>Hoàn tất trong {result.totalProcessingTimeMs} ms · {result.candidates.length} candidates</strong><span>OpenCV: {result.openCvLoadTimeMs} ms · Grayscale: {result.grayscaleTimeMs} ms · Binary: {result.binaryTimeMs} ms · Lines: {result.lineDetectionTimeMs} ms · Contours: {result.contourDetectionTimeMs} ms</span></section>}
 
       <section style={configStyle}>
         <strong>Debug config</strong>
@@ -214,8 +217,27 @@ export default function OpenCvTestPage() {
         <CanvasPanel label="4. Horizontal lines" canvasRef={horizontalCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
         <CanvasPanel label="5. Vertical lines" canvasRef={verticalCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
         <CanvasPanel label="6. Combined mask" canvasRef={combinedCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
+        <CanvasPanel label="7. Field candidates" canvasRef={candidateOverlayCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
       </section>
+      {result && <CandidateTable result={result} />}
     </main>
+  );
+}
+
+function CandidateTable({ result }: { result: DebugPipelineResult }) {
+  return (
+    <section style={{ marginTop: 22 }}>
+      <h2 style={{ fontSize: 18 }}>Field candidates ({result.candidates.length})</h2>
+      <div style={{ border: '1px solid #e2e8f0', borderRadius: 8, maxHeight: 360, overflow: 'auto' }}>
+        <table style={{ borderCollapse: 'collapse', fontSize: 12, minWidth: 900, width: '100%' }}>
+          <thead><tr>{['ID', 'x', 'y', 'width', 'height', 'areaRatio', 'aspectRatio', 'rectangularity', 'parentIndex', 'childIndex'].map((label) => <th key={label} style={tableHeaderStyle}>{label}</th>)}</tr></thead>
+          <tbody>{result.candidates.map((candidate) => <tr key={candidate.candidateId}>
+            <td style={tableCellStyle}>{candidate.candidateId}</td><td style={tableCellStyle}>{candidate.rect.x}</td><td style={tableCellStyle}>{candidate.rect.y}</td><td style={tableCellStyle}>{candidate.rect.width}</td><td style={tableCellStyle}>{candidate.rect.height}</td>
+            <td style={tableCellStyle}>{candidate.areaRatio.toFixed(4)}</td><td style={tableCellStyle}>{candidate.aspectRatio.toFixed(3)}</td><td style={tableCellStyle}>{candidate.rectangularity.toFixed(3)}</td><td style={tableCellStyle}>{candidate.parentIndex}</td><td style={tableCellStyle}>{candidate.childIndex}</td>
+          </tr>)}</tbody>
+        </table>
+      </div>
+    </section>
   );
 }
 
@@ -237,4 +259,6 @@ const infoStyle: CSSProperties = { background: '#f1f5f9', borderRadius: 6, color
 const errorStyle: CSSProperties = { background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, color: '#991b1b', margin: '0 0 12px', padding: '10px 12px' };
 const timingStyle: CSSProperties = { background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: 6, color: '#065f46', display: 'grid', fontSize: 14, gap: 4, marginBottom: 12, padding: '10px 12px' };
 const configStyle: CSSProperties = { alignItems: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, display: 'flex', flexWrap: 'wrap', fontFamily: 'ui-monospace, monospace', fontSize: 12, gap: '8px 14px', marginBottom: 18, padding: '10px 12px' };
+const tableHeaderStyle: CSSProperties = { background: '#f8fafc', borderBottom: '1px solid #e2e8f0', padding: '8px 10px', position: 'sticky', textAlign: 'left', top: 0, whiteSpace: 'nowrap' };
+const tableCellStyle: CSSProperties = { borderBottom: '1px solid #f1f5f9', padding: '7px 10px', whiteSpace: 'nowrap' };
 function buttonStyle(disabled: boolean): CSSProperties { return { background: disabled ? '#94a3b8' : '#2563eb', border: 0, borderRadius: 6, color: 'white', cursor: disabled ? 'not-allowed' : 'pointer', fontSize: 14, fontWeight: 650, padding: '10px 15px' }; }
