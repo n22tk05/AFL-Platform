@@ -1,409 +1,240 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { convertToGrayscale } from '@/modules/opencv/grayscale';
-
-type ProcessingStatus =
-  | 'chưa chọn ảnh'
-  | 'ảnh đã sẵn sàng'
-  | 'đang khởi tạo OpenCV'
-  | 'xử lý thành công'
-  | 'xử lý thất bại';
+import { useCallback, useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type RefObject } from 'react';
+import {
+  DEFAULT_LINE_DETECTION_CONFIG,
+  DEFAULT_PREPROCESS_CONFIG,
+  runLineDetectionDebug,
+  type DebugPipelineResult,
+} from '@/modules/opencv';
 
 const MAX_LONG_SIDE = 1600;
+type Status = 'idle' | 'decoding' | 'ready' | 'loading' | 'processing' | 'success' | 'error';
+
+interface CanvasPanelProps {
+  label: string;
+  canvasRef: RefObject<HTMLCanvasElement>;
+  visible: boolean;
+  emptyMessage: string;
+}
+
+function CanvasPanel({ label, canvasRef, visible, emptyMessage }: CanvasPanelProps) {
+  return (
+    <article style={panelStyle}>
+      <h2 style={{ fontSize: 16, fontWeight: 650, margin: '0 0 12px' }}>{label}</h2>
+      <div style={canvasFrameStyle}>
+        <canvas ref={canvasRef} style={{ ...canvasStyle, display: visible ? 'block' : 'none' }} />
+        {!visible && <span style={{ color: '#6b7280', fontSize: 14, textAlign: 'center' }}>{emptyMessage}</span>}
+      </div>
+    </article>
+  );
+}
 
 export default function OpenCvTestPage() {
-  const [status, setStatus] = useState<ProcessingStatus>('chưa chọn ảnh');
+  const [status, setStatus] = useState<Status>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [hasImage, setHasImage] = useState<boolean>(false);
   const [imageInfo, setImageInfo] = useState<string | null>(null);
+  const [imageReady, setImageReady] = useState(false);
+  const [hasResults, setHasResults] = useState(false);
+  const [result, setResult] = useState<DebugPipelineResult | null>(null);
 
-  const inputCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const outputCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const inputCanvasRef = useRef<HTMLCanvasElement>(null);
+  const grayscaleCanvasRef = useRef<HTMLCanvasElement>(null);
+  const binaryCanvasRef = useRef<HTMLCanvasElement>(null);
+  const horizontalCanvasRef = useRef<HTMLCanvasElement>(null);
+  const verticalCanvasRef = useRef<HTMLCanvasElement>(null);
+  const combinedCanvasRef = useRef<HTMLCanvasElement>(null);
   const activeUrlRef = useRef<string | null>(null);
+  const selectionIdRef = useRef(0);
+  const runningRef = useRef(false);
 
-  // Cleanup pending object URL on unmount
-  useEffect(() => {
-    return () => {
-      if (activeUrlRef.current) {
-        URL.revokeObjectURL(activeUrlRef.current);
-        activeUrlRef.current = null;
-      }
-    };
+  const clearOutputCanvases = useCallback(() => {
+    [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef].forEach((canvasRef) => {
+      const canvas = canvasRef.current;
+      const context = canvas?.getContext('2d');
+      if (canvas && context) context.clearRect(0, 0, canvas.width, canvas.height);
+    });
   }, []);
 
-  const handleFileChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      setErrorMessage(null);
+  useEffect(() => () => {
+    if (activeUrlRef.current) URL.revokeObjectURL(activeUrlRef.current);
+  }, []);
 
-      // Revoke any previously allocated object URL
-      if (activeUrlRef.current) {
-        URL.revokeObjectURL(activeUrlRef.current);
-        activeUrlRef.current = null;
-      }
+  const handleFileChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    const selectionId = ++selectionIdRef.current;
+    setErrorMessage(null);
+    setHasResults(false);
+    setResult(null);
+    setImageReady(false);
+    clearOutputCanvases();
 
-      if (!file) {
-        setHasImage(false);
-        setImageInfo(null);
-        setStatus('chưa chọn ảnh');
-        return;
-      }
-
-      // Validate MIME type - strictly JPEG and PNG
-      const validTypes = ['image/jpeg', 'image/png'];
-      if (!validTypes.includes(file.type)) {
-        setHasImage(false);
-        setImageInfo(null);
-        setStatus('xử lý thất bại');
-        setErrorMessage(
-          `Định dạng file "${file.type || 'không xác định'}" không hợp lệ. Vui lòng chọn ảnh JPEG hoặc PNG.`
-        );
-        return;
-      }
-
-      const objectUrl = URL.createObjectURL(file);
-      activeUrlRef.current = objectUrl;
-
-      const img = new Image();
-      img.onload = () => {
-        // Revoke URL immediately after image load
-        URL.revokeObjectURL(objectUrl);
-        if (activeUrlRef.current === objectUrl) {
-          activeUrlRef.current = null;
-        }
-
-        const naturalWidth = img.naturalWidth;
-        const naturalHeight = img.naturalHeight;
-
-        if (naturalWidth === 0 || naturalHeight === 0) {
-          setHasImage(false);
-          setImageInfo(null);
-          setStatus('xử lý thất bại');
-          setErrorMessage('Kích thước ảnh không hợp lệ (0x0).');
-          return;
-        }
-
-        // Calculate dimensions: resize if long side exceeds MAX_LONG_SIDE, maintain aspect ratio
-        let targetWidth = naturalWidth;
-        let targetHeight = naturalHeight;
-        const maxDimension = Math.max(naturalWidth, naturalHeight);
-
-        if (maxDimension > MAX_LONG_SIDE) {
-          const scale = MAX_LONG_SIDE / maxDimension;
-          targetWidth = Math.round(naturalWidth * scale);
-          targetHeight = Math.round(naturalHeight * scale);
-        }
-
-        // Render to input canvas
-        const inputCanvas = inputCanvasRef.current;
-        if (inputCanvas) {
-          inputCanvas.width = targetWidth;
-          inputCanvas.height = targetHeight;
-          const ctx = inputCanvas.getContext('2d');
-          if (ctx) {
-            ctx.clearRect(0, 0, targetWidth, targetHeight);
-            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-          }
-        }
-
-        // Clear output canvas
-        const outputCanvas = outputCanvasRef.current;
-        if (outputCanvas) {
-          outputCanvas.width = targetWidth;
-          outputCanvas.height = targetHeight;
-          const outCtx = outputCanvas.getContext('2d');
-          if (outCtx) {
-            outCtx.clearRect(0, 0, targetWidth, targetHeight);
-          }
-        }
-
-        setImageInfo(
-          `Ảnh gốc: ${naturalWidth}x${naturalHeight}px | Kích thước xử lý: ${targetWidth}x${targetHeight}px (${file.name})`
-        );
-        setHasImage(true);
-        setStatus('ảnh đã sẵn sàng');
-      };
-
-      img.onerror = () => {
-        URL.revokeObjectURL(objectUrl);
-        if (activeUrlRef.current === objectUrl) {
-          activeUrlRef.current = null;
-        }
-        setHasImage(false);
-        setImageInfo(null);
-        setStatus('xử lý thất bại');
-        setErrorMessage('Không thể đọc file ảnh đã chọn. File có thể bị hỏng.');
-      };
-
-      img.src = objectUrl;
-    },
-    []
-  );
-
-  const handleConvertToGrayscale = async () => {
-    const inputCanvas = inputCanvasRef.current;
-    const outputCanvas = outputCanvasRef.current;
-
-    if (!inputCanvas || !outputCanvas || !hasImage) {
+    if (activeUrlRef.current) {
+      URL.revokeObjectURL(activeUrlRef.current);
+      activeUrlRef.current = null;
+    }
+    if (!file) {
+      setImageInfo(null);
+      setStatus('idle');
+      return;
+    }
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+      setImageInfo(null);
+      setStatus('error');
+      setErrorMessage(`File "${file.type || 'không xác định'}" không phải JPEG hoặc PNG.`);
       return;
     }
 
+    setStatus('decoding');
+    const objectUrl = URL.createObjectURL(file);
+    activeUrlRef.current = objectUrl;
+    const image = new Image();
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      if (activeUrlRef.current === objectUrl) activeUrlRef.current = null;
+      if (selectionId !== selectionIdRef.current) return;
+
+      const longestSide = Math.max(image.naturalWidth, image.naturalHeight);
+      if (image.naturalWidth <= 0 || image.naturalHeight <= 0 || longestSide <= 0) {
+        setStatus('error');
+        setErrorMessage('Ảnh có kích thước không hợp lệ.');
+        return;
+      }
+      const scale = longestSide > MAX_LONG_SIDE ? MAX_LONG_SIDE / longestSide : 1;
+      const width = Math.round(image.naturalWidth * scale);
+      const height = Math.round(image.naturalHeight * scale);
+      const inputCanvas = inputCanvasRef.current;
+      const context = inputCanvas?.getContext('2d');
+      if (!inputCanvas || !context) {
+        setStatus('error');
+        setErrorMessage('Không thể khởi tạo canvas ảnh gốc.');
+        return;
+      }
+
+      inputCanvas.width = width;
+      inputCanvas.height = height;
+      context.clearRect(0, 0, width, height);
+      context.drawImage(image, 0, 0, width, height);
+      [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef].forEach((canvasRef) => {
+        if (canvasRef.current) {
+          canvasRef.current.width = width;
+          canvasRef.current.height = height;
+        }
+      });
+      setImageInfo(`Gốc: ${image.naturalWidth}×${image.naturalHeight}px · Xử lý: ${width}×${height}px · ${file.name}`);
+      setImageReady(true);
+      setStatus('ready');
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      if (activeUrlRef.current === objectUrl) activeUrlRef.current = null;
+      if (selectionId !== selectionIdRef.current) return;
+      setImageInfo(null);
+      setStatus('error');
+      setErrorMessage('Không thể giải mã ảnh đã chọn.');
+    };
+    image.src = objectUrl;
+  }, [clearOutputCanvases]);
+
+  const runPipeline = useCallback(async () => {
+    if (runningRef.current || !imageReady) return;
+    const inputCanvas = inputCanvasRef.current;
+    const grayscaleCanvas = grayscaleCanvasRef.current;
+    const binaryCanvas = binaryCanvasRef.current;
+    const horizontalCanvas = horizontalCanvasRef.current;
+    const verticalCanvas = verticalCanvasRef.current;
+    const combinedCanvas = combinedCanvasRef.current;
+    if (!inputCanvas || !grayscaleCanvas || !binaryCanvas || !horizontalCanvas || !verticalCanvas || !combinedCanvas) return;
+
+    runningRef.current = true;
     setErrorMessage(null);
-    setStatus('đang khởi tạo OpenCV');
-
+    setHasResults(false);
+    setResult(null);
+    clearOutputCanvases();
+    setStatus('loading');
     try {
-      await convertToGrayscale(inputCanvas, outputCanvas);
-      setStatus('xử lý thành công');
-    } catch (err: unknown) {
-      const errorMsg =
-        err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định khi xử lý ảnh.';
-      console.error('Lỗi kỹ thuật khi xử lý OpenCV:', err);
-      setErrorMessage(errorMsg);
-      setStatus('xử lý thất bại');
+      const pipelineResult = await runLineDetectionDebug({
+        inputCanvas,
+        grayscaleCanvas,
+        binaryCanvas,
+        horizontalCanvas,
+        verticalCanvas,
+        combinedCanvas,
+        preprocessConfig: DEFAULT_PREPROCESS_CONFIG,
+        lineConfig: DEFAULT_LINE_DETECTION_CONFIG,
+        onOpenCvReady: () => setStatus('processing'),
+      });
+      setResult(pipelineResult);
+      setHasResults(true);
+      setStatus('success');
+    } catch (error: unknown) {
+      setStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Lỗi OpenCV không xác định.');
+    } finally {
+      runningRef.current = false;
     }
-  };
+  }, [clearOutputCanvases, imageReady]);
 
-  const isProcessing = status === 'đang khởi tạo OpenCV';
-  const isButtonDisabled = !hasImage || isProcessing;
-
-  const getStatusBadgeStyle = (): React.CSSProperties => {
-    switch (status) {
-      case 'ảnh đã sẵn sàng':
-        return { backgroundColor: '#e0f2fe', color: '#0369a1', borderColor: '#bae6fd' };
-      case 'đang khởi tạo OpenCV':
-        return { backgroundColor: '#fef3c7', color: '#b45309', borderColor: '#fde68a' };
-      case 'xử lý thành công':
-        return { backgroundColor: '#dcfce7', color: '#15803d', borderColor: '#bbf7d0' };
-      case 'xử lý thất bại':
-        return { backgroundColor: '#fee2e2', color: '#b91c1c', borderColor: '#fecaca' };
-      default:
-        return { backgroundColor: '#f3f4f6', color: '#4b5563', borderColor: '#e5e7eb' };
-    }
-  };
+  const isBusy = status === 'loading' || status === 'processing';
+  const buttonDisabled = !imageReady || isBusy;
 
   return (
-    <main
-      style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '24px 16px',
-        fontFamily: 'system-ui, -apple-system, sans-serif',
-        color: '#1f2937',
-      }}
-    >
-      <header style={{ marginBottom: '24px', borderBottom: '1px solid #e5e7eb', paddingBottom: '16px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
-          OpenCV WASM Smoke Test
-        </h1>
-        <p style={{ margin: 0, color: '#6b7280', fontSize: '14px' }}>
-          Kiểm thử nạp runtime OpenCV WebAssembly và chuyển đổi ảnh màu sang Grayscale trên trình duyệt.
-        </p>
+    <main style={mainStyle}>
+      <header style={{ marginBottom: 24 }}>
+        <p style={{ color: '#2563eb', fontWeight: 700, fontSize: 13, margin: '0 0 6px' }}>AFL PLATFORM · OPENCV DEBUG</p>
+        <h1 style={{ fontSize: 28, margin: '0 0 8px' }}>Pipeline phát hiện đường biểu mẫu</h1>
+        <p style={{ color: '#4b5563', margin: 0 }}>Tải JPEG/PNG để xem grayscale, threshold và mask đường ngang/dọc.</p>
       </header>
 
-      {/* Control Panel */}
-      <section
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '16px',
-          alignItems: 'center',
-          padding: '16px',
-          backgroundColor: '#f9fafb',
-          borderRadius: '8px',
-          border: '1px solid #e5e7eb',
-          marginBottom: '20px',
-        }}
-      >
-        <div>
-          <label
-            htmlFor="image-upload"
-            style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}
-          >
-            Chọn ảnh (JPEG / PNG):
-          </label>
-          <input
-            id="image-upload"
-            type="file"
-            accept="image/jpeg,image/png"
-            onChange={handleFileChange}
-            disabled={isProcessing}
-            style={{
-              display: 'block',
-              fontSize: '14px',
-              cursor: isProcessing ? 'not-allowed' : 'pointer',
-            }}
-          />
-        </div>
-
-        <div>
-          <button
-            type="button"
-            onClick={handleConvertToGrayscale}
-            disabled={isButtonDisabled}
-            style={{
-              padding: '10px 20px',
-              fontSize: '14px',
-              fontWeight: 600,
-              color: '#ffffff',
-              backgroundColor: isButtonDisabled ? '#9ca3af' : '#2563eb',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: isButtonDisabled ? 'not-allowed' : 'pointer',
-              transition: 'background-color 0.2s',
-              marginTop: '18px',
-            }}
-          >
-            {isProcessing ? 'Đang xử lý...' : 'Chuyển sang ảnh xám'}
-          </button>
-        </div>
-
-        {/* Status display */}
-        <div style={{ marginTop: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '13px', fontWeight: 500, color: '#4b5563' }}>Trạng thái:</span>
-          <span
-            style={{
-              display: 'inline-block',
-              padding: '4px 10px',
-              fontSize: '13px',
-              fontWeight: 600,
-              borderRadius: '9999px',
-              border: '1px solid',
-              ...getStatusBadgeStyle(),
-            }}
-          >
-            {status}
-          </span>
-        </div>
+      <section style={controlsStyle}>
+        <label style={{ display: 'grid', gap: 6, fontWeight: 600, fontSize: 14 }}>
+          Chọn ảnh JPEG hoặc PNG
+          <input type="file" accept="image/jpeg,image/png" onChange={handleFileChange} disabled={isBusy} />
+        </label>
+        <button type="button" onClick={runPipeline} disabled={buttonDisabled} style={buttonStyle(buttonDisabled)}>
+          {status === 'loading' ? 'Đang tải OpenCV…' : status === 'processing' ? 'Đang xử lý…' : 'Chạy pipeline phát hiện đường'}
+        </button>
+        <span style={statusStyle(status)}>{statusText(status)}</span>
       </section>
 
-      {/* Image metadata */}
-      {imageInfo && (
-        <div
-          style={{
-            fontSize: '13px',
-            color: '#4b5563',
-            marginBottom: '16px',
-            padding: '8px 12px',
-            backgroundColor: '#f3f4f6',
-            borderRadius: '6px',
-          }}
-        >
-          {imageInfo}
-        </div>
-      )}
+      {imageInfo && <p style={infoStyle}>{imageInfo}</p>}
+      {errorMessage && <p role="alert" style={errorStyle}>{errorMessage}</p>}
+      {result && <section style={timingStyle}><strong>Hoàn tất trong {result.totalProcessingTimeMs} ms</strong><span>OpenCV: {result.openCvLoadTimeMs} ms · Grayscale: {result.grayscaleTimeMs} ms · Binary: {result.binaryTimeMs} ms · Lines: {result.lineDetectionTimeMs} ms</span></section>}
 
-      {/* Error alert */}
-      {errorMessage && (
-        <div
-          role="alert"
-          style={{
-            padding: '12px 16px',
-            backgroundColor: '#fef2f2',
-            border: '1px solid #f87171',
-            borderRadius: '6px',
-            color: '#991b1b',
-            marginBottom: '20px',
-            fontSize: '14px',
-          }}
-        >
-          <strong>Lỗi: </strong>
-          <span>{errorMessage}</span>
-        </div>
-      )}
+      <section style={configStyle}>
+        <strong>Debug config</strong>
+        <span>adaptiveBlockSize={DEFAULT_PREPROCESS_CONFIG.adaptiveBlockSize}</span><span>adaptiveC={DEFAULT_PREPROCESS_CONFIG.adaptiveC}</span><span>blurKernelSize={DEFAULT_PREPROCESS_CONFIG.blurKernelSize}</span>
+        <span>horizontalKernelDivisor={DEFAULT_LINE_DETECTION_CONFIG.horizontalKernelDivisor}</span><span>verticalKernelDivisor={DEFAULT_LINE_DETECTION_CONFIG.verticalKernelDivisor}</span><span>closeGapSize={DEFAULT_LINE_DETECTION_CONFIG.closeGapSize}</span>
+      </section>
 
-      {/* Visual Canvas Area */}
-      <section
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '24px',
-        }}
-      >
-        {/* Original Image Canvas */}
-        <div
-          style={{
-            border: '1px solid #e5e7eb',
-            borderRadius: '8px',
-            padding: '16px',
-            backgroundColor: '#ffffff',
-          }}
-        >
-          <h2 style={{ fontSize: '16px', fontWeight: 600, marginTop: 0, marginBottom: '12px' }}>
-            Vùng ảnh gốc
-          </h2>
-          <div
-            style={{
-              width: '100%',
-              minHeight: '260px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#f9fafb',
-              borderRadius: '6px',
-              overflow: 'hidden',
-              border: '1px dashed #d1d5db',
-            }}
-          >
-            <canvas
-              ref={inputCanvasRef}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '500px',
-                height: 'auto',
-                display: hasImage ? 'block' : 'none',
-                objectFit: 'contain',
-              }}
-            />
-            {!hasImage && (
-              <span style={{ color: '#9ca3af', fontSize: '14px' }}>Chưa chọn ảnh để hiển thị</span>
-            )}
-          </div>
-        </div>
-
-        {/* Grayscale Image Canvas */}
-        <div
-          style={{
-            border: '1px solid #e5e7eb',
-            borderRadius: '8px',
-            padding: '16px',
-            backgroundColor: '#ffffff',
-          }}
-        >
-          <h2 style={{ fontSize: '16px', fontWeight: 600, marginTop: 0, marginBottom: '12px' }}>
-            Vùng ảnh grayscale
-          </h2>
-          <div
-            style={{
-              width: '100%',
-              minHeight: '260px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#f9fafb',
-              borderRadius: '6px',
-              overflow: 'hidden',
-              border: '1px dashed #d1d5db',
-            }}
-          >
-            <canvas
-              ref={outputCanvasRef}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '500px',
-                height: 'auto',
-                display: status === 'xử lý thành công' ? 'block' : 'none',
-                objectFit: 'contain',
-              }}
-            />
-            {status !== 'xử lý thành công' && (
-              <span style={{ color: '#9ca3af', fontSize: '14px' }}>
-                Ảnh grayscale sẽ xuất hiện ở đây sau khi chuyển đổi
-              </span>
-            )}
-          </div>
-        </div>
+      <section style={gridStyle}>
+        <CanvasPanel label="1. Ảnh gốc" canvasRef={inputCanvasRef} visible={imageReady} emptyMessage="Chọn ảnh để bắt đầu" />
+        <CanvasPanel label="2. Grayscale" canvasRef={grayscaleCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
+        <CanvasPanel label="3. Binary" canvasRef={binaryCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
+        <CanvasPanel label="4. Horizontal lines" canvasRef={horizontalCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
+        <CanvasPanel label="5. Vertical lines" canvasRef={verticalCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
+        <CanvasPanel label="6. Combined mask" canvasRef={combinedCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
       </section>
     </main>
   );
 }
+
+function statusText(status: Status): string {
+  return { idle: 'Chưa chọn ảnh', decoding: 'Đang giải mã ảnh', ready: 'Ảnh sẵn sàng', loading: 'Đang tải OpenCV', processing: 'Đang xử lý pipeline', success: 'Xử lý thành công', error: 'Xử lý thất bại' }[status];
+}
+function statusStyle(status: Status): CSSProperties {
+  const colors: Record<Status, [string, string]> = { idle: ['#f3f4f6', '#4b5563'], decoding: ['#fef3c7', '#92400e'], ready: ['#dbeafe', '#1d4ed8'], loading: ['#fef3c7', '#92400e'], processing: ['#fef3c7', '#92400e'], success: ['#dcfce7', '#166534'], error: ['#fee2e2', '#b91c1c'] };
+  const [backgroundColor, color] = colors[status];
+  return { backgroundColor, color, borderRadius: 999, fontSize: 13, fontWeight: 650, padding: '7px 10px' };
+}
+const mainStyle: CSSProperties = { maxWidth: 1440, margin: '0 auto', padding: '28px 18px 48px', color: '#1f2937', fontFamily: 'system-ui, sans-serif' };
+const controlsStyle: CSSProperties = { alignItems: 'end', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 14, padding: 16 };
+const panelStyle: CSSProperties = { background: 'white', border: '1px solid #e5e7eb', borderRadius: 10, padding: 14 };
+const canvasFrameStyle: CSSProperties = { alignItems: 'center', background: '#f8fafc', border: '1px dashed #cbd5e1', borderRadius: 6, display: 'flex', justifyContent: 'center', minHeight: 240, overflow: 'auto', padding: 8 };
+const canvasStyle: CSSProperties = { height: 'auto', maxHeight: 480, maxWidth: '100%', objectFit: 'contain' };
+const gridStyle: CSSProperties = { display: 'grid', gap: 18, gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' };
+const infoStyle: CSSProperties = { background: '#f1f5f9', borderRadius: 6, color: '#475569', fontSize: 14, margin: '0 0 12px', padding: '10px 12px' };
+const errorStyle: CSSProperties = { background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, color: '#991b1b', margin: '0 0 12px', padding: '10px 12px' };
+const timingStyle: CSSProperties = { background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: 6, color: '#065f46', display: 'grid', fontSize: 14, gap: 4, marginBottom: 12, padding: '10px 12px' };
+const configStyle: CSSProperties = { alignItems: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, display: 'flex', flexWrap: 'wrap', fontFamily: 'ui-monospace, monospace', fontSize: 12, gap: '8px 14px', marginBottom: 18, padding: '10px 12px' };
+function buttonStyle(disabled: boolean): CSSProperties { return { background: disabled ? '#94a3b8' : '#2563eb', border: 0, borderRadius: 6, color: 'white', cursor: disabled ? 'not-allowed' : 'pointer', fontSize: 14, fontWeight: 650, padding: '10px 15px' }; }
