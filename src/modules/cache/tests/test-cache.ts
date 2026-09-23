@@ -1,4 +1,4 @@
-import { LocalCacheService } from '../local-cache';
+import { LocalCacheService } from '@/modules/cache';
 import fs from 'fs';
 import path from 'path';
 
@@ -21,7 +21,7 @@ async function runCacheUnitTests() {
   }
 
   const testCacheFileName = 'test-temp-cache.json';
-  const testCachePath = path.join(process.cwd(), 'src', 'modules', 'voice-ai', testCacheFileName);
+  const testCachePath = path.join(process.cwd(), 'src', 'modules', 'cache', testCacheFileName);
   
   // Dọn dẹp cache test cũ nếu có
   if (fs.existsSync(testCachePath)) {

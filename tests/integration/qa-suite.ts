@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { FormGeometricManifest, FormWorkflow } from '../../../shared/contracts';
+import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
 
 /**
  * QA SUITE — BỘ KIỂM TRA ĐẢM BẢO CHẤT LƯỢNG 11 YÊU CẦU CHỨC NĂNG (FR-1 ĐẾN FR-11)

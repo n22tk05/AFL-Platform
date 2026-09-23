@@ -1,7 +1,7 @@
-import { formPersistenceService } from '@/modules/forms/form-persistence';
+import { formPersistenceService } from '@/modules/forms';
 import { checkDatabaseConnection, markDatabaseOffline } from '@/lib/prisma';
-import { localCache } from '@/modules/voice-ai/local-cache';
-import { ttsService } from '@/modules/voice-ai/tts-service';
+import { localCache } from '@/modules/cache';
+import { ttsService } from '@/modules/voice-ai';
 import { FormWorkflow } from '@/shared/contracts';
 
 /**

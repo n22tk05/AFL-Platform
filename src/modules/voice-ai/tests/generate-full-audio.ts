@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { TTSService, WordTimestamp } from '../tts-service';
+import { ttsService, WordTimestamp } from '@/modules/voice-ai';
 interface TimestampsManifest {
   formId: string;
   formTitle: string;
@@ -44,7 +44,6 @@ async function generateFullAudio() {
   console.log(`📋 Đang xử lý biểu mẫu: ${workflow.formTitle} (${workflow.formCode})`);
   console.log(`🔢 Tổng số bước cần tổng hợp âm thanh: ${steps.length} bước\n`);
 
-  const ttsService = new TTSService();
   const outputAudioDir = path.join(process.cwd(), 'public', 'audio');
   if (!fs.existsSync(outputAudioDir)) {
     fs.mkdirSync(outputAudioDir, { recursive: true });

@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
-import { FormGeometricManifest } from '../../../shared/contracts';
-import { geminiPromptService } from '../gemini-prompt';
+import { FormGeometricManifest } from '@/shared/contracts';
+import { geminiPromptService } from '@/modules/voice-ai';
 
 dotenv.config();
 

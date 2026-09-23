@@ -64,6 +64,7 @@ Toàn bộ tài liệu quy chuẩn kỹ thuật và kế hoạch thực thi đã
 
 | STT | Tài Liệu Quy Chuẩn | Đường Dẫn Trực Tiếp | Nội Dung Trọng Tâm |
 | :---: | :--- | :--- | :--- |
+| **00** | **Quy Tắc Tổ Chức Thư Mục** | [docs/PROJECT-STRUCTURE.md](docs/PROJECT-STRUCTURE.md) | Nguồn quy chuẩn về vị trí file, cấu trúc module, hướng dependency, naming và checklist Pull Request cho cả nhóm. |
 | **01** | **Yêu Cầu Sản Phẩm (PRD)** | [docs/PRD.md](docs/PRD.md) | 11 Yêu cầu Chức năng (FR-1 đến FR-11) kèm 11 sơ đồ Mermaid trực quan, NFRs, WCAG AAA. |
 | **02** | **Kiến Trúc Kỹ Thuật** | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Kiến trúc hệ thống, pipeline OpenCV WASM, PostgreSQL JSONB, Session RAM tự hủy (NĐ 13). |
 | **03** | **Phân Rã Epics & Stories** | [docs/AFL.md](docs/AFL.md) | 4 Epics lớn và 17 User Stories chi tiết với tiêu chuẩn nghiệm thu Given-When-Then. |

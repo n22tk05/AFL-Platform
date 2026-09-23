@@ -1,30 +1,22 @@
 import { TextToSpeechClient } from '@google-cloud/text-to-speech';
 import fs from 'fs';
 import path from 'path';
-import dotenv from 'dotenv';
-import { localCache } from './local-cache';
-import { formPersistenceService } from '@/modules/forms/form-persistence';
-
-dotenv.config()
-export type VietnameseVoiceRegion = 'NORTH' | 'SOUTH';
-
-export interface WordTimestamp {
-  word: string;
-  startMs: number;
-  endMs: number;
-}
-
-export interface SynthesisResult {
-  audioBuffer: Buffer;
-  audioUrl: string;
-  wordTimestamps: WordTimestamp[];
-}
+import type { LocalCacheService } from '@/modules/cache';
+import type { VoiceCacheRepository } from '@/modules/voice-ai/repositories/voice-cache.repository';
+import {
+  SynthesisResult,
+  VietnameseVoiceRegion,
+  WordTimestamp,
+} from '@/modules/voice-ai/types/voice-ai.types';
 
 export class TTSService {
   private client: TextToSpeechClient | null = null;
   private outputDir: string;
 
-  constructor() {
+  constructor(
+    private readonly cache: LocalCacheService,
+    private readonly voiceCacheRepository: VoiceCacheRepository
+  ) {
     this.outputDir = path.join(process.cwd(), 'public', 'audio');
     if (!fs.existsSync(this.outputDir)) {
       try {
@@ -105,7 +97,7 @@ export class TTSService {
 
     // 1. Kiểm tra cache L1 cục bộ (phân biệt engine v2_ssml mốc mili-giây chuẩn xác)
     const cacheKey = { text, stepIndex, region, engine: 'google_ssml_v2' };
-    const cached = localCache.get<SynthesisResult>(cacheKey);
+    const cached = this.cache.get<SynthesisResult>(cacheKey);
     if (cached && fs.existsSync(filePath) && fs.statSync(filePath).size > 1000) {
       return {
         ...cached,
@@ -113,7 +105,7 @@ export class TTSService {
       };
     }
 
-    const hashKey = localCache.generateKey(cacheKey);
+    const hashKey = this.cache.generateKey(cacheKey);
 
     // Singleflight Pattern: Tái sử dụng Promise nếu cùng một câu thoại đang được tổng hợp song song
     if (TTSService.inFlightRequests.has(hashKey)) {
@@ -162,7 +154,7 @@ export class TTSService {
     hashKey: string
   ): Promise<SynthesisResult> {
     // 1b. Kiểm tra cache L2 CSDL PostgreSQL qua Prisma (Chống cháy Quota đa người dùng)
-    const dbCached = await formPersistenceService.getVoiceCache(hashKey);
+    const dbCached = await this.voiceCacheRepository.getByCacheKey(hashKey);
     if (dbCached && fs.existsSync(filePath) && fs.statSync(filePath).size > 1000) {
       const timestamps = this.loadStoredTimestamps(stepIndex, text);
       const result: SynthesisResult = {
@@ -171,7 +163,7 @@ export class TTSService {
         wordTimestamps: timestamps
       };
       // Tự động làm ấm (warm) L1 cache
-      localCache.set(cacheKey, { audioUrl: dbCached.audioUrl, wordTimestamps: timestamps });
+      this.cache.set(cacheKey, { audioUrl: dbCached.audioUrl, wordTimestamps: timestamps });
       return result;
     }
 
@@ -239,9 +231,9 @@ export class TTSService {
             wordTimestamps
           };
 
-          localCache.set(cacheKey, { audioUrl, wordTimestamps });
+          this.cache.set(cacheKey, { audioUrl, wordTimestamps });
           // Đồng bộ vào L2 CSDL PostgreSQL
-          formPersistenceService.saveVoiceCache({
+          this.voiceCacheRepository.save({
             cacheKey: hashKey,
             rawText: text,
             audioUrl,
@@ -301,9 +293,9 @@ export class TTSService {
           wordTimestamps: wordTimestamps.length > 0 ? wordTimestamps : this.calculateTimestamps(text)
         };
 
-        localCache.set(cacheKey, { audioUrl, wordTimestamps });
+        this.cache.set(cacheKey, { audioUrl, wordTimestamps });
         // Đồng bộ vào L2 CSDL PostgreSQL
-        formPersistenceService.saveVoiceCache({
+        this.voiceCacheRepository.save({
           cacheKey: hashKey,
           rawText: text,
           audioUrl,
@@ -366,9 +358,9 @@ export class TTSService {
       wordTimestamps
     };
 
-    localCache.set(cacheKey, { audioUrl, wordTimestamps });
+    this.cache.set(cacheKey, { audioUrl, wordTimestamps });
     if (hashKey) {
-      formPersistenceService.saveVoiceCache({
+      this.voiceCacheRepository.save({
         cacheKey: hashKey,
         rawText: text,
         audioUrl,
@@ -378,5 +370,3 @@ export class TTSService {
     return result;
   }
 }
-
-export const ttsService = new TTSService();

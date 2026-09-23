@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { HalfDuplexController } from './voice-qa';
-import { WebSpeechSTT } from './stt-service';
-import { WorkflowStep, StepFaqItem } from '../../shared/contracts';
+import { HalfDuplexController } from '@/modules/voice-ai/services/voice-qa.service';
+import { WebSpeechSTT } from '@/modules/voice-ai/services/stt.service';
+import { WorkflowStep, StepFaqItem } from '@/shared/contracts';
 
 export interface UseVoiceAssistantOptions {
   onTranscriptUpdate?: (transcript: string, isFinal: boolean) => void;

@@ -1,21 +1,9 @@
 import { GoogleGenAI } from '@google/genai';
-import dotenv from 'dotenv';
-import { WorkflowStep } from '../../shared/contracts';
-import { localCache } from './local-cache';
+import { WorkflowStep } from '@/shared/contracts';
+import type { LocalCacheService } from '@/modules/cache';
+import { QARequest, QAResponse } from '@/modules/voice-ai/types/voice-ai.types';
 
 // Nạp biến môi trường từ .env
-dotenv.config();
-
-export interface QARequest {
-  currentStep: WorkflowStep;
-  userQuestion: string;
-}
-
-export interface QAResponse {
-  answerText: string;
-  latencyMs: number;
-  source: 'gemini' | 'faq_match' | 'fallback';
-}
 
 /**
  * Bộ điều khiển Bán Song Công (Half-Duplex Controller)
@@ -83,7 +71,6 @@ export class HalfDuplexController {
     return (Date.now() - this.lastSpokenAt) >= this.ECHO_GUARD_DELAY_MS;
   }
 }
-
 /**
  * Dịch vụ Hỏi đáp Ngữ cảnh Tức thì (FR-4)
  */
@@ -93,7 +80,7 @@ export class VoiceQAService {
 
   private apiKey: string | undefined;
 
-  constructor() {
+  constructor(private readonly cache: LocalCacheService) {
     this.refreshClient();
     this.halfDuplex = new HalfDuplexController();
   }
@@ -146,7 +133,7 @@ export class VoiceQAService {
 
     // 2. Kiểm tra Cache
     const cacheKey = { stepId: currentStep.boxId, query: normalizedQuery };
-    const cachedAnswer = localCache.get<string>(cacheKey);
+    const cachedAnswer = this.cache.get<string>(cacheKey);
     if (cachedAnswer) {
       return {
         answerText: cachedAnswer,
@@ -182,7 +169,7 @@ Hãy trả lời bác:
       });
 
       const answerText = response.text?.trim() || 'Dạ bác nhìn vào chữ mẫu màu đỏ trên màn hình và chép lại giúp cháu nhé!';
-      localCache.set(cacheKey, answerText);
+      this.cache.set(cacheKey, answerText);
 
       return {
         answerText,
@@ -208,5 +195,3 @@ Hãy trả lời bác:
     };
   }
 }
-
-export const voiceQAService = new VoiceQAService();
