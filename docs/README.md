@@ -18,6 +18,7 @@ Toàn bộ tài liệu quan trọng nhất đã được tổng hợp, phân lo�
 
 | STT | Tài Liệu | Mô Tả & Nội Dung Trọng Tâm | Dành Cho Ai? |
 | :---: | :--- | :--- | :--- |
+| **00** | [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md) | **Quy tắc Tổ chức Thư mục:** Nguồn quy chuẩn bắt buộc về vị trí file, cấu trúc module, hướng dependency, naming và checklist Pull Request. | **Cả 4 thành viên** |
 | **01** | [PRD.md](PRD.md) | **Tài liệu Yêu cầu Sản phẩm (PRD):** Toàn bộ 11 Yêu cầu Chức năng (FR-1 đến FR-11) kèm 11 sơ đồ Mermaid trực quan, tiêu chuẩn WCAG AAA, Nghị định 13/2023/NĐ-CP. | **Cả 4 thành viên** |
 | **02** | [ARCHITECTURE.md](ARCHITECTURE.md) | **Kiến trúc Kỹ thuật (Architecture Spine):** Pipeline tuần tự OpenCV WASM $\rightarrow$ Gemini 1.5 Flash (Pure Text LLM), CSDL PostgreSQL JSONB, Session RAM. | **Người 1 & Người 3** |
 | **03** | [AFL.md](AFL.md) | **Phân rã Công việc (Epics & Stories):** 4 Epics lớn và 17 User Stories chi tiết với tiêu chuẩn nghiệm thu Given-When-Then. | **Cả 4 thành viên** |
