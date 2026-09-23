@@ -1,12 +1,10 @@
 import { GoogleGenAI } from '@google/genai';
 import path from 'path';
 import fs from 'fs';
-import dotenv from 'dotenv';
-import { FormGeometricManifest, FormWorkflow, WorkflowStep } from '../../shared/contracts';
-import { localCache } from './local-cache';
+import { FormGeometricManifest, FormWorkflow, WorkflowStep } from '@/shared/contracts';
+import type { LocalCacheService } from '@/modules/cache';
 
 // Nạp biến môi trường từ .env
-dotenv.config();
 
 /**
  * Danh sách từ khóa nhạy cảm cần bật cờ kiểm duyệt pháp lý (Legal Warning Flag)
@@ -28,7 +26,7 @@ export class GeminiPromptService {
   private client: GoogleGenAI | null = null;
   private apiKey: string | undefined;
 
-  constructor() {
+  constructor(private readonly cache: LocalCacheService) {
     this.refreshClient();
   }
 
@@ -61,7 +59,7 @@ export class GeminiPromptService {
   public async generateWorkflow(manifest: FormGeometricManifest, forceRefresh: boolean = false): Promise<FormWorkflow> {
     // 1. Kiểm tra cache cục bộ nếu không bắt buộc làm mới (Vaccine chống cháy Quota)
     if (!forceRefresh) {
-      const cached = localCache.get<FormWorkflow>(manifest);
+      const cached = this.cache.get<FormWorkflow>(manifest);
       if (cached) {
         return cached;
       }
@@ -151,7 +149,7 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
       };
 
       // Lưu vào cache
-      localCache.set(manifest, result);
+      this.cache.set(manifest, result);
       return result;
 
     } catch (error) {
@@ -212,5 +210,3 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
     };
   }
 }
-
-export const geminiPromptService = new GeminiPromptService();

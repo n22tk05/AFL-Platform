@@ -1,22 +1,10 @@
+import { STTCallbacks, STTConfig } from '@/modules/voice-ai/types/voice-ai.types';
+
 /**
  * AFL Platform - Web Speech API STT Service (FR-4)
  * Bộ nhận diện giọng nói tiếng Việt on-device cho công dân cao tuổi.
  * Chạy trực tiếp trên trình duyệt thiết bị (Zero network latency for STT).
  */
-
-export interface STTConfig {
-  lang?: string;
-  continuous?: boolean;
-  interimResults?: boolean;
-  maxAlternatives?: number;
-}
-
-export interface STTCallbacks {
-  onStart?: () => void;
-  onResult?: (transcript: string, isFinal: boolean) => void;
-  onError?: (errorMessage: string, rawError?: any) => void;
-  onEnd?: () => void;
-}
 
 export class WebSpeechSTT {
   private recognition: any = null;

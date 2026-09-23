@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import { formPersistenceService } from '../../forms/form-persistence';
-import { FormGeometricManifest, FormWorkflow } from '../../../shared/contracts';
-import { ttsService } from '../tts-service';
-import { checkDatabaseConnection } from '../../../lib/prisma';
+import { formPersistenceService } from '@/modules/forms';
+import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
+import { ttsService, voiceCacheRepository } from '@/modules/voice-ai';
+import { checkDatabaseConnection } from '@/lib/prisma';
 
 async function runPersistenceTestSuite() {
   console.log('===============================================================');
@@ -78,7 +78,7 @@ async function runPersistenceTestSuite() {
     voiceName: 'vi-VN-Neural2-A',
     speakingRate: 0.9
   };
-  await formPersistenceService.saveVoiceCache(testVoiceEntry);
+  await voiceCacheRepository.save(testVoiceEntry);
   assert(true, 'Gọi lưu L2 Voice Cache thành công (không gây lỗi nếu DB offline)');
 
   const ttsRes = await ttsService.synthesizeSpeech(mockWorkflow.steps[0].voiceGuidance, 1, 'NORTH');

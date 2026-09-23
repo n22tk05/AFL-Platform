@@ -1,9 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { FormGeometricManifest } from '../../../shared/contracts';
-import { geminiPromptService } from '../gemini-prompt';
-import { ttsService } from '../tts-service';
-import { voiceQAService } from '../voice-qa';
+import { FormGeometricManifest } from '@/shared/contracts';
+import { geminiPromptService, ttsService, voiceQAService } from '@/modules/voice-ai';
 
 async function runVoiceAITestSuite() {
   console.log('===============================================================');

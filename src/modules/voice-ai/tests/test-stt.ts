@@ -1,5 +1,4 @@
-import { WebSpeechSTT } from '../stt-service';
-import { HalfDuplexController } from '../voice-qa';
+import { HalfDuplexController, WebSpeechSTT } from '@/modules/voice-ai';
 
 async function runSTTTests() {
   console.log('===============================================================');
