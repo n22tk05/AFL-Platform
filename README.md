@@ -37,7 +37,7 @@ Thay vì ép người già phải học cách thao tác bàn phím cảm ứng p
 ### 4. Cổng Quản Trị Quy Trình Dành Cho Cán Bộ Một Cửa (Admin Portal CRM)
 * **Quy trình Bóc tách Form Tuần tự Đột phá (FR-7):** 
   * *Tầng 1 (OpenCV WASM cục bộ):* Quét các đường kẻ ngang dọc và khung ô trên giấy trắng mực đen trong <= 100ms với độ chính xác pixel >= 98%, xuất ra khung dữ liệu hình học đã chuẩn hóa tọa độ.
-  * *Tầng 2 (Gemini 1.5 Flash Text LLM):* Tiếp nhận dữ liệu text, đọc hiểu ngữ nghĩa nhãn trường và điều kiện rẽ nhánh (hoàn toàn không cần Vision API), tự động sinh câu thoại hướng dẫn bình dân.
+  * *Tầng 2 (Gemini 3.6 Text LLM):* Tiếp nhận dữ liệu text, đọc hiểu ngữ nghĩa nhãn trường và điều kiện rẽ nhánh (hoàn toàn không cần Vision API), tự động sinh câu thoại hướng dẫn bình dân.
   * *Cơ chế Fallback tức thì:* Nếu Cloud AI mất mạng, khung ô OpenCV vẫn hiển thị sẵn sàng trên giao diện để cán bộ gán nhãn thủ công không gián đoạn.
 * **Cổng Kiểm duyệt Chia đôi Màn hình (Split-Screen Review Gate - FR-9):** Bên trái hiển thị file PDF/scan gốc, bên phải hiển thị kịch bản các bước do AI tạo. Cán bộ nghe thử audio, tinh chỉnh câu chữ theo đặc thù địa phương và bấm [Phê duyệt & Xuất bản].
 * **Cấu hình Liên chứng từ Kéo-thả (React Flow - FR-10):** Sơ đồ trực quan cho phép cán bộ nối thông tin từ Biên bản phạt / Sổ đỏ vào tờ khai nộp tiền.
@@ -64,12 +64,14 @@ Toàn bộ tài liệu quy chuẩn kỹ thuật và kế hoạch thực thi đã
 
 | STT | Tài Liệu Quy Chuẩn | Đường Dẫn Trực Tiếp | Nội Dung Trọng Tâm |
 | :---: | :--- | :--- | :--- |
-| **01** | **Yêu Cầu Sản Phẩm (PRD)** | [docs/PRD.md](docs/PRD.md) | 11 Yêu cầu Chức năng (FR-1 đến FR-11) kèm 11 sơ đồ Mermaid trực quan, NFRs, WCAG AAA. |
-| **02** | **Kiến Trúc Kỹ Thuật** | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Kiến trúc hệ thống, pipeline OpenCV WASM, PostgreSQL JSONB, Session RAM tự hủy (NĐ 13). |
+| **00** | **Báo Cáo Đề Tài Dự Thi AI FOR LIFE** | [docs/PROJECT-OUTLINE-AI-FOR-LIFE.md](docs/PROJECT-OUTLINE-AI-FOR-LIFE.md) &nbsp; [[.docx](docs/PROJECT-OUTLINE-AI-FOR-LIFE.docx)] | Đề cương tổng thể toàn diện dự thi giải pháp AFL Platform cho người cao tuổi. |
+| **01** | **Yêu Cầu Sản Phẩm (PRD)** | [docs/PRD.md](docs/PRD.md) &nbsp; [[.docx](docs/PRD.docx)] | 11 Yêu cầu Chức năng (FR-1 đến FR-11) kèm 11 sơ đồ Mermaid trực quan, NFRs, WCAG AAA. |
+| **02** | **Kiến Trúc Kỹ Thuật** | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) &nbsp; [[.docx](docs/ARCHITECTURE.docx)] | Kiến trúc hệ thống, pipeline OpenCV WASM, PostgreSQL JSONB, Session RAM tự hủy (NĐ 13). |
 | **03** | **Phân Rã Epics & Stories** | [docs/AFL.md](docs/AFL.md) | 4 Epics lớn và 17 User Stories chi tiết với tiêu chuẩn nghiệm thu Given-When-Then. |
-| **04** | **Kế Hoạch Phân Công 4 Người** | [docs/WORKFLOW-PIPELINE.md](docs/WORKFLOW-PIPELINE.md) | Tờ lệnh nhiệm vụ của 4 thành viên, quy tắc "Nền móng số 1", phân tách 2 dòng chảy, lộ trình Sprint 7 ngày. |
+| **04** | **Kế Hoạch Phân Công 4 Người** | [docs/WORKFLOW-PIPELINE.md](docs/WORKFLOW-PIPELINE.md) &nbsp; [[.docx](docs/WORKFLOW-PIPELINE.docx)] | Tờ lệnh nhiệm vụ của 4 thành viên, quy tắc "Nền móng số 1", phân tách 2 dòng chảy, lộ trình Sprint 7 ngày. |
 | **05** | **Hợp Đồng Dữ Liệu & Mock Data** | [docs/MOCK-DATA.md](docs/MOCK-DATA.md) | Hướng dẫn sử dụng `contracts.ts`, `mock-manifest.json` (OpenCV) và `mock-workflow.json` (Gemini & UI). |
 | **06** | **Sổ Tay Phòng Ngừa Rủi Ro** | [docs/PRE-MORTEM.md](docs/PRE-MORTEM.md) | 8 kịch bản xấu (lệch tọa độ, vỡ layout, cháy quota API, ồn quầy tiếp dân...) và phương án phòng thủ. |
+| **07** | **Nghiên Cứu Sâu & Căn Cứ Khoa Học** | [docs/DEEP-RESEARCH.md](docs/DEEP-RESEARCH.md) &nbsp; [[.docx](docs/DEEP-RESEARCH.docx)] | Ma trận phân định dữ liệu, khảo sát nhân khẩu 14,2 triệu người già, cơ sở pháp lý và tiêu chuẩn. |
 
 ---
 
