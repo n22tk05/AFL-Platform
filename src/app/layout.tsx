@@ -1,9 +1,16 @@
-import type { Metadata } from 'next';
-import React from 'react';
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'AFL Platform',
-  description: 'Hệ thống Hỗ trợ Điền Biểu mẫu & Quản trị Quy trình',
+  title: "AFL Platform - Trợ lý Điền Biểu mẫu Cho Người Cao Tuổi",
+  description: "Hệ thống hỗ trợ điền biểu mẫu hành chính thông minh bằng AI cho người cao tuổi tại Việt Nam",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -13,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body>{children}</body>
+      <body className="antialiased min-h-screen">{children}</body>
     </html>
   );
 }
