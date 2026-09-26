@@ -1,34 +1,35 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import Image from "next/image";
-import { NormalizedBoundingBox } from "@/shared/contracts";
+import { NormalizedBoundingBox, FormPageMetadata } from "@/shared/contracts";
 
 interface VisualTwinProps {
-  scannedImageUrl?: string;
+  pages: FormPageMetadata[];
+  currentPageNumber: number;
   highlightCoords: NormalizedBoundingBox;
   fieldLabel: string;
-  stepNumber: number;
+  stepNumber?: number;
 }
 
 export function VisualTwin({
-  scannedImageUrl,
+  pages = [],
+  currentPageNumber = 1,
   highlightCoords,
   fieldLabel,
-  stepNumber,
+  stepNumber: _stepNumber,
 }: VisualTwinProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const highlightBoxRef = useRef<HTMLDivElement>(null);
 
+  const activePage = pages.find((p) => p.pageNumber === currentPageNumber) || pages[0];
   const [ymin, xmin, ymax, xmax] = highlightCoords;
 
-  // Tính toán vị trí phần trăm chuẩn hóa
   const boxTop = `${ymin * 100}%`;
   const boxLeft = `${xmin * 100}%`;
   const boxHeight = `${(ymax - ymin) * 100}%`;
   const boxWidth = `${(xmax - xmin) * 100}%`;
 
-  // Tự động cuộn nhẹ đến vùng đang điền khi chuyển bước
+  // Tự động căn chỉnh mượt mà để ô cần điền luôn nằm ở vị trí dễ nhìn nhất
   useEffect(() => {
     if (highlightBoxRef.current && containerRef.current) {
       const container = containerRef.current;
@@ -41,36 +42,36 @@ export function VisualTwin({
         behavior: "smooth",
       });
     }
-  }, [highlightCoords]);
+  }, [highlightCoords, currentPageNumber]);
 
   return (
-    <div className="w-full bg-slate-800 rounded-2xl overflow-hidden shadow-lg border-2 border-slate-700 flex flex-col">
-      {/* Thanh trạng thái Bản sao thị giác */}
-      <div className="bg-slate-900 px-4 py-2 flex items-center justify-between text-xs font-semibold text-slate-300 border-b border-slate-800">
+    <div className="w-full bg-white rounded-2xl overflow-hidden shadow-md border-2 border-slate-300 flex flex-col">
+      {/* Thanh trạng thái tối giản */}
+      <div className="bg-afl-green px-4 py-2 flex items-center justify-between text-xs font-bold text-white">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-          <span>VỊ TRÍ Ô CẦN VIẾT TRÊN GIẤY</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#D32F2F] animate-ping" />
+          <span className="tracking-wide uppercase">VỊ TRÍ Ô CẦN VIẾT TRÊN GIẤY</span>
         </div>
-        <span className="text-emerald-400 font-mono">Ô số {stepNumber}</span>
+        <span className="bg-white/15 px-2 py-0.5 rounded font-mono text-[11px] text-slate-200">
+          TRANG {currentPageNumber} / {pages.length || 1}
+        </span>
       </div>
 
-      {/* Khung cuộn hiển thị tờ khai */}
+      {/* Khung cuộn ẩn thanh trượt chứa ảnh tĩnh tờ khai */}
       <div
         ref={containerRef}
-        className="relative w-full max-h-[290px] overflow-y-auto overflow-x-hidden bg-slate-900/60 scroll-smooth"
+        className="relative w-full max-h-[310px] overflow-y-auto overflow-x-hidden bg-slate-100 no-scrollbar select-none"
       >
-        <div className="relative w-full aspect-[1200/1700]">
-          {/* Ảnh scan phôi tờ khai gốc */}
-          <Image
-            src={scannedImageUrl || "/assets/test-form.svg"}
-            alt="Bản sao thị giác tờ khai giấy"
-            className="object-contain select-none pointer-events-none"
-            fill
-            priority
-            sizes="(max-width: 448px) 100vw, 448px"
+        <div className="relative w-full">
+          {/* Ảnh scan tĩnh tự nhiên, không bị méo tỉ lệ hay letterbox */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={activePage?.imageUrl || "/assets/forms/01-lptb/page-1.jpg"}
+            alt={`Tờ khai trang ${currentPageNumber}`}
+            className="w-full h-auto block select-none pointer-events-none"
           />
 
-          {/* Vòng viền phát sáng nhấp nháy dẫn đường (Pulsing Highlighter) */}
+          {/* VÙNG KHUNG MÀU ĐỎ NHẤP NHÁY VÀ NHÃN NẰM TRÊN CẠNH TRÊN */}
           <div
             ref={highlightBoxRef}
             style={{
@@ -79,13 +80,15 @@ export function VisualTwin({
               height: boxHeight,
               width: boxWidth,
             }}
-            className="absolute pulse-border-active rounded-md bg-emerald-500/15 pointer-events-none transition-all duration-300 z-20"
-            aria-label={`Vùng đang hướng dẫn: ${fieldLabel}`}
+            className="absolute pulse-border-red rounded bg-[#D32F2F]/10 pointer-events-none transition-all duration-200 z-20"
+            aria-label={`Vị trí ô: ${fieldLabel}`}
           >
-            {/* Nhãn gắn trực tiếp vào góc ô */}
-            <span className="absolute -top-3.5 left-1 bg-afl-green text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded shadow-sm">
-              ĐIỀN VÀO ĐÂY
-            </span>
+            {/* Nhãn chú thích đặt nổi hẳn lên phía trên mép khung, không đè nội dung */}
+            <div className="absolute bottom-full mb-1.5 left-0 z-30 pointer-events-none whitespace-nowrap">
+              <span className="bg-[#D32F2F] text-white text-[10px] sm:text-[11px] font-black px-2 py-0.5 rounded shadow-md tracking-wider uppercase inline-flex items-center gap-1">
+                VIẾT VÀO Ô NÀY
+              </span>
+            </div>
           </div>
         </div>
       </div>

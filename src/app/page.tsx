@@ -28,7 +28,6 @@ export default function HomePage() {
                 <div className="text-xs text-emerald-700 font-bold">Chụp ảnh hoặc chọn biểu mẫu có sẵn</div>
               </div>
             </div>
-            <Sparkles className="w-6 h-6 text-afl-green group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <Link className="w-full p-4 bg-slate-50 hover:bg-slate-100 border-2 border-slate-300 rounded-2xl flex items-center justify-between text-slate-800 transition-all group shadow-sm active:scale-98" href="/admin/library">
@@ -41,13 +40,12 @@ export default function HomePage() {
                 <div className="text-xs text-slate-500 font-medium">Dành cho Chuyên viên Một cửa</div>
               </div>
             </div>
-            <QrCode className="w-5 h-5 text-slate-400 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
         {/* Footer */}
         <div className="text-center text-xs text-slate-400 border-t border-slate-100 pt-4">
-          AFL Prototype • WCAG 2.1 AAA Compliant
+          AFL Prototype
         </div>
       </div>
     </div>

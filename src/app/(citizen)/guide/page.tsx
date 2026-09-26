@@ -1,20 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { ChevronLeft, ChevronRight, CheckCircle, Volume2 } from "lucide-react";
-import mockWorkflowData from "../../../../assets/mock-data/mock-workflow.json";
-import { FormWorkflow, WorkflowStep } from "@/shared/contracts";
+import React, { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import { WorkflowStep } from "@/shared/contracts";
+import { getMockWorkflow } from "@/config/app.config";
 import { VisualTwin } from "@/components/mobile/VisualTwin";
 import { RedTextExample } from "@/components/mobile/RedTextExample";
 import { StepHeader } from "@/components/mobile/StepHeader";
+import { VoiceAssistantPanel } from "@/components/mobile/VoiceAssistantPanel";
 
-export default function GuidePage() {
-  const workflow = mockWorkflowData as unknown as FormWorkflow;
+function GuideContent() {
+  const searchParams = useSearchParams();
+  const templateId = searchParams?.get("templateId") || "tpl_01_lptb";
+
+  // Lựa chọn kịch bản dựa vào templateId thông qua Mock Switcher Registry
+  const workflow = useMemo(() => {
+    return getMockWorkflow(templateId);
+  }, [templateId]);
+
   const steps: WorkflowStep[] = workflow.steps || [];
   const totalSteps = steps.length;
 
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+
+  // Tự động reset về bước 0 khi chuyển biểu mẫu
+  useEffect(() => {
+    setCurrentStepIndex(0);
+  }, [templateId]);
 
   const currentStep = steps[currentStepIndex];
 
@@ -28,23 +41,25 @@ export default function GuidePage() {
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      alert("Chúc mừng bác đã hoàn thành toàn bộ tờ khai!");
+      alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow.formTitleVi || workflow.formTitle || "tờ khai"}!`);
     }
   };
 
   if (!currentStep) {
     return (
       <div className="p-6 text-center text-slate-700">
-        Không tìm thấy dữ liệu quy trình. Vui lòng kiểm tra lại mock-workflow.json.
+        Không tìm thấy dữ liệu quy trình biểu mẫu. Vui lòng kiểm tra lại.
       </div>
     );
   }
 
+  const currentPageNumber = currentStep.pageNumber || 1;
+
   return (
-    <div className="flex flex-col flex-1 pb-24">
+    <div className="flex flex-col flex-1 pb-24 no-scrollbar">
       {/* Khung nội dung cuộn */}
       <div className="p-4 flex flex-col gap-4">
-        {/* 1. Tiêu đề bước & Tiến trình */}
+        {/* 1. Tiêu đề bước & Thanh tiến trình */}
         <StepHeader
           currentIndex={currentStepIndex}
           totalSteps={totalSteps}
@@ -54,28 +69,21 @@ export default function GuidePage() {
           legalWarningFlag={currentStep.legalWarningFlag}
         />
 
-        {/* 2. Bản sao thị giác & Viền sáng nhấp nháy (FR-2) */}
+        {/* 2. Bản sao thị giác đa trang & Viền sáng nhấp nháy (FR-2) */}
         <VisualTwin
-          scannedImageUrl={(workflow as any).scannedImageUrl || "/assets/test-form.svg"}
+          pages={workflow.pages || []}
+          currentPageNumber={currentPageNumber}
           highlightCoords={currentStep.highlightCoords}
           fieldLabel={currentStep.label}
           stepNumber={currentStepIndex + 1}
         />
 
-        {/* 3. Lời thoại hướng dẫn mộc mạc (Đang chuẩn bị cho Audio ở Bước 3) */}
-        <div className="w-full bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 flex items-start gap-3 shadow-sm">
-          <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 mt-0.5">
-            <Volume2 className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xs font-bold text-amber-800 uppercase tracking-wide">
-              Lời khuyên của Trợ lý:
-            </div>
-            <p className="text-base sm:text-lg font-bold text-amber-950 mt-0.5 leading-snug">
-              &ldquo;{currentStep.voiceGuidance}&rdquo;
-            </p>
-          </div>
-        </div>
+        {/* 3. Bộ điều khiển Trợ lý Giọng nói (Loa 0.9x + Micro Push-to-Talk + FAQ Chips) */}
+        <VoiceAssistantPanel
+          voiceGuidance={currentStep.voiceGuidance}
+          audioUrl={currentStep.audioUrl}
+          faqs={currentStep.faqs}
+        />
 
         {/* 4. Chữ mẫu in hoa màu đỏ tương phản cao #D32F2F (FR-5) */}
         <RedTextExample
@@ -98,16 +106,21 @@ export default function GuidePage() {
           <span className="hidden sm:inline">Dòng trước</span>
         </button>
 
-        {/* Hiển thị số bước nhanh */}
-        <div className="text-center font-black text-sm text-slate-600">
-          {currentStepIndex + 1} / {totalSteps}
+        {/* Hiển thị số bước & trang nhanh */}
+        <div className="text-center">
+          <div className="font-black text-sm text-slate-800">
+            Dòng {currentStepIndex + 1} / {totalSteps}
+          </div>
+          <div className="text-[11px] font-bold text-slate-500">
+            Trang {currentPageNumber}
+          </div>
         </div>
 
         {/* Nút Dòng tiếp theo / Hoàn thành */}
         <button
           type="button"
           onClick={handleNextStep}
-          className="min-h-touch-lg flex-1 px-5 bg-afl-green hover:bg-emerald-800 text-white border-2 border-emerald-900 rounded-xl font-black text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md"
+          className="min-h-touch-lg bg-afl-green flex-1 px-5 hover:bg-afl-green-dark text-white border-2 border-afl-green rounded-xl font-black text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md"
           aria-label={
             currentStepIndex === totalSteps - 1
               ? "Hoàn tất biểu mẫu"
@@ -128,5 +141,13 @@ export default function GuidePage() {
         </button>
       </footer>
     </div>
+  );
+}
+
+export default function GuidePage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-center text-slate-600 font-bold">Đang tải hướng dẫn...</div>}>
+      <GuideContent />
+    </Suspense>
   );
 }

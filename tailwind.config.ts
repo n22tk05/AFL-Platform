@@ -21,19 +21,19 @@ const config: Config = {
         },
       },
       keyframes: {
-        "pulse-green": {
+        "pulse-red": {
           "0%, 100%": {
-            boxShadow: "0 0 0 3px rgba(46, 125, 50, 0.4), inset 0 0 0 2px rgba(46, 125, 50, 0.8)",
-            borderColor: "#2E7D32",
+            boxShadow: "0 0 0 3px rgba(211, 47, 47, 0.4), inset 0 0 0 1.5px rgba(211, 47, 47, 0.8)",
+            borderColor: "#D32F2F",
           },
           "50%": {
-            boxShadow: "0 0 0 8px rgba(46, 125, 50, 0.1), inset 0 0 0 3px rgba(46, 125, 50, 1)",
-            borderColor: "#1B5E20",
+            boxShadow: "0 0 0 7px rgba(211, 47, 47, 0.15), inset 0 0 0 2px rgba(211, 47, 47, 1)",
+            borderColor: "#B71C1C",
           },
         },
       },
       animation: {
-        "pulse-green": "pulse-green 1.4s ease-in-out infinite",
+        "pulse-red": "pulse-red 1.4s ease-in-out infinite",
       },
       minHeight: {
         touch: "48px",

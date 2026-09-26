@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { 
   Camera, 
   FileText, 
   ChevronRight, 
-  Sparkles, 
   AlertCircle, 
-  CheckCircle2,
   ShieldCheck,
   ScanLine
 } from "lucide-react";
+import { CameraScannerModal } from "@/components/mobile/CameraScannerModal";
 
 interface FormOption {
   id: string;
@@ -43,7 +42,7 @@ const AVAILABLE_FORMS: FormOption[] = [
     id: "tpl_03_khai_sinh",
     code: "Mẫu Khai Sinh",
     title: "Tờ Khai Đăng Ký Khai Sinh",
-    description: "Dùng đăng ký khai sinh cho con, cháu tại xã/phường",
+    description: "Dùng để đăng ký khai sinh khi",
     badge: "Thường gặp",
     badgeColor: "bg-amber-100 text-amber-800 border-amber-300",
   },
@@ -51,27 +50,23 @@ const AVAILABLE_FORMS: FormOption[] = [
 
 export default function CitizenScanPage() {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isScanning, setIsScanning] = useState(false);
-  const [scanMessage, setScanMessage] = useState("");
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
-  // Giả lập quét ảnh hoặc nhận ảnh từ camera
-  const triggerScanProcess = () => {
-    setIsScanning(true);
-    setScanMessage("Đang căn chỉnh góc và nắn phẳng tờ giấy...");
-    
-    setTimeout(() => {
-      setScanMessage("Đã nhận diện: Tờ khai Lệ phí Trước bạ 01/LPTB!");
-    }, 1000);
-
-    setTimeout(() => {
-      router.push("/guide?templateId=tpl_01_lptb");
-    }, 2000);
+  // Mở Camera
+  const handleOpenCamera = () => {
+    setIsCameraOpen(true);
   };
 
-  const handleCaptureCamera = () => {
-    // Kích hoạt mô phỏng quét form
-    triggerScanProcess();
+  // Đóng Camera
+  const handleCloseCamera = () => {
+    setIsCameraOpen(false);
+  };
+
+  // Khi chụp và đồng ý sử dụng ảnh
+  const handleCaptureComplete = (_imageDataUrl: string) => {
+    setIsCameraOpen(false);
+    // Chuyển tiếp ngay vào giao diện dẫn dắt từng dòng
+    router.push("/guide?templateId=tpl_01_lptb");
   };
 
   const handleSelectForm = (formId: string) => {
@@ -80,7 +75,14 @@ export default function CitizenScanPage() {
 
   return (
     <div className="flex flex-col flex-1 p-4 pb-12 gap-5 relative">
-      {/* 1. Tiêu đề tiếp đón thân mật */}
+      {/* Component Camera toàn màn hình */}
+      <CameraScannerModal 
+        isOpen={isCameraOpen} 
+        onCaptureComplete={handleCaptureComplete} 
+        onClose={handleCloseCamera}
+      />
+
+      {/* 1. Lời chào tiếp đón */}
       <div className="bg-white rounded-2xl p-4 border-2 border-slate-200 shadow-sm">
         <div className="flex items-center gap-2 text-afl-green font-bold text-xs uppercase tracking-wide mb-1">
           <ShieldCheck className="w-4 h-4" />
@@ -94,22 +96,11 @@ export default function CitizenScanPage() {
         </p>
       </div>
 
-      {/* Input camera ẩn để hỗ trợ mở native camera nếu muốn */}
-      <input 
-        type="file" 
-        accept="image/*" 
-        capture="environment" 
-        ref={fileInputRef} 
-        className="hidden" 
-        onChange={triggerScanProcess}
-      />
-
       {/* 2. Nút chụp ảnh siêu lớn (Hero Button >= 64dp) */}
       <div className="flex flex-col gap-2">
         <button
           type="button"
-          onClick={handleCaptureCamera}
-          disabled={isScanning}
+          onClick={handleOpenCamera}
           className="w-full min-h-[96px] bg-afl-green hover:bg-emerald-800 active:scale-98 text-white rounded-2xl p-4 flex items-center justify-between shadow-xl border-4 border-emerald-900 transition-all group"
           aria-label="Chụp ảnh tờ khai trên bàn"
         >
@@ -142,14 +133,13 @@ export default function CitizenScanPage() {
         <div className="border-t-2 border-slate-300 w-full" />
       </div>
 
-      {/* 4. Danh sách các biểu mẫu có sẵn để chạm nhanh */}
+      {/* 4. Danh sách các biểu mẫu có sẵn */}
       <div className="flex flex-col gap-3">
         {AVAILABLE_FORMS.map((form) => (
           <button
             key={form.id}
             type="button"
             onClick={() => handleSelectForm(form.id)}
-            disabled={isScanning}
             className="w-full min-h-[76px] bg-white hover:bg-slate-50 active:bg-slate-100 text-left p-4 rounded-2xl border-2 border-slate-300 shadow-md flex items-center justify-between gap-3 active:scale-98 transition-all hover:border-afl-green"
           >
             <div className="flex items-start gap-3.5 flex-1">
@@ -190,24 +180,6 @@ export default function CitizenScanPage() {
           Nếu bác không tìm thấy tên giấy tờ mình cần, bác hãy nhờ cán bộ tại quầy hướng dẫn thêm nhé.
         </span>
       </div>
-
-      {/* Màn hình lớp phủ mô phỏng AI Scanning khi bấm chụp */}
-      {isScanning && (
-        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 text-center text-white">
-          <div className="relative w-24 h-24 mb-6">
-            <div className="absolute inset-0 rounded-full border-4 border-emerald-400/30 animate-ping" />
-            <div className="w-full h-full rounded-full border-4 border-t-emerald-400 border-slate-700 animate-spin flex items-center justify-center">
-              <Camera className="w-10 h-10 text-emerald-400" />
-            </div>
-          </div>
-          <h3 className="text-2xl font-black text-white mb-2">
-            Đang nhận diện tờ khai...
-          </h3>
-          <p className="text-base text-emerald-200 font-medium max-w-xs animate-pulse">
-            {scanMessage}
-          </p>
-        </div>
-      )}
     </div>
   );
 }

@@ -38,24 +38,38 @@ export interface StepFaqItem {
 }
 
 export interface WorkflowStep {
-  stepIndex: number;                 // Thứ tự bước: 1, 2, 3...
+  stepIndex: number;                 // Thứ tự bước: 0, 1, 2, 3...
   boxId: string;                     // Khớp với boxId của OpenCV
-  sectionName: string;               // Phân mục hành chính: "Mục I - Thông tin người nộp thuế"
-  label: string;                     // Nhãn trường chuẩn: "Họ và tên người nộp thuế"
-  voiceGuidance: string;             // Lời thoại bình dân ấm áp đọc cho người già
-  audioUrl: string;                  // Đường dẫn file MP3 (tốc độ đọc chậm 0.9x)
-  exampleRedText: string;            // Chữ mẫu màu đỏ đậm in hoa rõ nét (WCAG AAA)
-  highlightCoords: NormalizedBoundingBox; // Tọa độ để vẽ viền nhấp nháy trên màn hình
+  pageNumber?: number;               // 1 hoặc 2 (Trang chứa ô này)
+  sectionName: string;               // Phân mục hành chính: "I. THÔNG TIN NGƯỜI NỘP THUẾ", "II. ĐẶC ĐIỂM NHÀ ĐẤT"
+  label: string;                     // Nhãn trường chuẩn: "Mục [04]: Tên người nộp thuế"
+  voiceGuidance: string;             // Lời thoại bình dân ấm áp đọc cho người già (tốc độ 0.9x)
+  audioUrl: string;                  // Đường dẫn file MP3
+  exampleRedText: string;            // Chữ mẫu in hoa màu đỏ đậm #D32F2F (WCAG AAA)
+  highlightCoords: NormalizedBoundingBox; // Tọa độ chuẩn hóa trên trang tương ứng
   requiresPrerequisiteDoc?: boolean; // Ô này có cần lấy thông tin từ Sổ đỏ/Biên bản phạt không?
   sourceFieldFromPrerequisite?: string; // Tên trường nguồn (ví dụ: "so_do.dien_tich")
   legalWarningFlag?: boolean;        // Cờ cảnh báo ô nhạy cảm tài chính/pháp lý cần cán bộ đối soát kỹ (FR-8)
-  faqs: StepFaqItem[];               // Nút bấm gợi ý câu hỏi khi quầy tiếp dân bị ồn (Fallback)
+  faqs?: StepFaqItem[];              // Nút bấm gợi ý câu hỏi khi quầy tiếp dân bị ồn (Fallback)
+}
+
+export interface FormPageMetadata {
+  pageNumber: number;
+  imageUrl: string;
+  width: number;
+  height: number;
 }
 
 export interface FormWorkflow {
-  formId: string;
-  formTitle: string;
+  templateId?: string;
+  formId?: string;
   formCode: string;
-  status: 'draft' | 'pending_review' | 'active' | 'archived';
+  formTitle: string;
+  formTitleVi?: string;
+  circularInfo?: string;             // "Mẫu số 01/LPTB kèm theo Thông tư số 89/2026/TT-BTC"
+  totalPages?: number;
+  pages?: FormPageMetadata[];
+  totalSteps?: number;
+  status?: 'draft' | 'pending_review' | 'active' | 'archived';
   steps: WorkflowStep[];
 }

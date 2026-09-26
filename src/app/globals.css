@@ -2,23 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+}
+
 :root {
   --font-size-base: 18px;
 }
 
-/* Chuẩn trợ năng: Font chữ tối thiểu 18px, chống nhảy dòng */
 body {
   font-size: var(--font-size-base);
-  background-color: #f1f5f9;
-  color: #1a1a1a;
+  background-color: #F1F5F9;
+  color: #0F172A;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   user-select: none;
 }
 
-/* Hiệu ứng viền CSS keyframes thuần túy - mượt mà cho thiết bị RAM <= 2GB */
+/* Hiệu ứng viền ĐỎ nhấp nháy dẫn đường chuẩn WCAG AAA */
+@keyframes pulse-red-active {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.4), inset 0 0 0 1.5px rgba(211, 47, 47, 0.8);
+    border-color: #D32F2F;
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(211, 47, 47, 0.15), inset 0 0 0 2px rgba(211, 47, 47, 1);
+    border-color: #B71C1C;
+  }
+}
+
+.pulse-border-red,
 .pulse-border-active {
-  animation: pulse-green 1.4s ease-in-out infinite;
-  border-width: 3px;
+  animation: pulse-red-active 1.4s ease-in-out infinite;
+  border-width: 2.5px;
   border-style: solid;
 }
