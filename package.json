@@ -11,6 +11,8 @@
     "test:voice": "tsx src/modules/voice-ai/tests/test-voice.ts",
     "test:cache": "tsx src/modules/cache/tests/test-cache.ts",
     "test:qa": "tsx tests/integration/qa-suite.ts",
+    "test:api-integrity": "tsx tests/integration/api-integrity.test.ts",
+    "test:local": "npm run test:qa && npm run test:api-integrity",
     "test:tts": "tsx src/modules/voice-ai/tests/test-tts-api.ts",
     "test:stt": "tsx src/modules/voice-ai/tests/test-stt.ts",
     "test:persistence": "tsx src/modules/forms/tests/test-persistence.ts",

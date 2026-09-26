@@ -191,7 +191,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   /**
    * Gửi câu hỏi thắc mắc tới API /api/llm/qa (FR-4)
    */
-  const askQuestion = useCallback(async (currentStep: WorkflowStep, questionText: string) => {
+  const askQuestion = useCallback(async (formCode: string, stepIndex: number, questionText: string) => {
     if (!questionText.trim()) return;
 
     setIsAnswering(true);
@@ -202,7 +202,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
       const res = await fetch('/api/llm/qa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ currentStep, userQuestion: questionText })
+        body: JSON.stringify({ formCode, stepIndex, userQuestion: questionText })
       });
 
       const json = await res.json();
