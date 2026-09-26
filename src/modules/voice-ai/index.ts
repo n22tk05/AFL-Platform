@@ -1,5 +1,5 @@
 import { localCache } from '@/modules/cache';
-import { formPersistenceService } from '@/modules/forms';
+import { adminAuthorizationService, formPersistenceService } from '@/modules/forms';
 import { PromptController } from '@/modules/voice-ai/controllers/prompt.controller';
 import { TTSController } from '@/modules/voice-ai/controllers/tts.controller';
 import { VoiceQAController } from '@/modules/voice-ai/controllers/voice-qa.controller';
@@ -11,11 +11,11 @@ import { VoiceQAService } from '@/modules/voice-ai/services/voice-qa.service';
 export const voiceCacheRepository = new PrismaVoiceCacheRepository();
 export const geminiPromptService = new GeminiPromptService(localCache);
 export const ttsService = new TTSService(localCache, voiceCacheRepository);
-export const voiceQAService = new VoiceQAService(localCache);
+export const voiceQAService = new VoiceQAService();
 
-export const promptController = new PromptController(geminiPromptService, formPersistenceService);
-export const ttsController = new TTSController(ttsService);
-export const voiceQAController = new VoiceQAController(voiceQAService);
+export const promptController = new PromptController(geminiPromptService, formPersistenceService, adminAuthorizationService);
+export const ttsController = new TTSController(ttsService, adminAuthorizationService);
+export const voiceQAController = new VoiceQAController(voiceQAService, formPersistenceService);
 
 export { useVoiceAssistant } from '@/modules/voice-ai/hooks/use-voice-assistant';
 export { PromptController } from '@/modules/voice-ai/controllers/prompt.controller';

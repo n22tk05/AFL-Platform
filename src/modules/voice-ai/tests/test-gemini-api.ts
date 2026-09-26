@@ -39,7 +39,7 @@ async function verifyGeminiAndGenerate() {
   workflow.steps.forEach(step => {
     console.log(`📍 [Bước ${step.stepIndex}] ${step.label} (${step.boxId})`);
     console.log(`   • Lời thoại hướng dẫn (0.9x): "${step.voiceGuidance}"`);
-    console.log(`   • Chữ mẫu đỏ (WCAG AAA):    "${step.exampleRedText}"`);
+    console.log(`   • Chữ mẫu đỏ (chưa đo tương phản): "${step.exampleRedText}"`);
     console.log(`   • Tọa độ highlight:         [${step.highlightCoords.join(', ')}]`);
     console.log(`   • Cờ kiểm duyệt pháp lý:    ${step.legalWarningFlag ? '🚩 CẦN ĐỐI SOÁT (Nhạy cảm)' : '🟢 An toàn'}`);
     if (step.faqs && step.faqs.length > 0) {

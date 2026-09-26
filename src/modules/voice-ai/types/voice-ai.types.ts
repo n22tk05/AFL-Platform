@@ -15,6 +15,7 @@ export interface SynthesisResult {
 }
 
 export interface QARequest {
+  formCode: string;
   currentStep: WorkflowStep;
   userQuestion: string;
 }
@@ -41,15 +42,20 @@ export interface STTCallbacks {
 
 export interface PromptControllerDto {
   manifest?: unknown;
+  authorization?: string | null;
+  adminKey?: string | null;
 }
 
 export interface TTSControllerDto {
   text?: unknown;
   stepIndex?: unknown;
   region?: unknown;
+  authorization?: string | null;
+  adminKey?: string | null;
 }
 
 export interface VoiceQAControllerDto {
-  currentStep?: unknown;
+  formCode?: unknown;
+  stepIndex?: unknown;
   userQuestion?: unknown;
 }
