@@ -30,7 +30,7 @@ Hệ thống tuân thủ mô hình **Kiến trúc Lục giác (Hexagonal Archite
 * **Adapters (Hạ tầng công nghệ cụ thể):**
   * *Scanner Adapter:* Google ML Kit Document Scanner (qua Capacitor) với fallback Web Camera.
   * *Geometric CV Adapter:* OpenCV (`@techstark/opencv-js` / OpenCV WASM) trích xuất tọa độ bounding box hình học pixel-perfect và vùng văn bản.
-  * *LLM Semantic Adapter:* Google Gemini 1.5 Flash (Text API với Structured JSON Schema - không dùng Vision) kèm Fallback Manual Assignment khi quá tải/mất mạng.
+  * *LLM Semantic Adapter:* Google Gemini 3.6 (Text API với Structured JSON Schema - không dùng Vision) kèm Fallback Manual Assignment khi quá tải/mất mạng.
   * *Voice Adapter:* Google Cloud TTS Neural2 vi-VN (kèm cache) + Web Speech API on-device.
   * *Persistence Adapter:* PostgreSQL (JSONB) kết hợp Prisma ORM / Supabase.
 
@@ -54,7 +54,7 @@ flowchart TD
     subgraph Adapters["Tầng Adapter Xử Lý Hình Học & Dịch Vụ Ngoài"]
         MLKitAdapter["Google ML Kit Scanner Plugin"]
         OpenCVAdapter["OpenCV WASM Engine (Quét Tọa Độ Hình Học & Khung Ô Cục Bộ)"]
-        GeminiAdapter["Gemini 1.5 Flash Text LLM (Đọc Ngữ Nghĩa & Sinh Thoại Dạng Text)"]
+        GeminiAdapter["Gemini 3.6 Text LLM (Đọc Ngữ Nghĩa & Sinh Thoại Dạng Text)"]
         TTSAdapter["Google Cloud TTS Neural2 (Cache Engine)"]
         DBAdapter["PostgreSQL Database (JSONB)"]
     end
@@ -91,7 +91,7 @@ sequenceDiagram
     participant Portal as Admin Portal (Next.js)
     participant OpenCV as OpenCV WASM (Tầng Hình Học Cục Bộ)
     participant Preprocessor as Bộ Xử Lý Trung Gian (Geometric Manifest)
-    participant Gemini as Gemini 1.5 Flash (Text & LLM Engine)
+    participant Gemini as Gemini 3.6 (Text & LLM Engine)
     participant DB as PostgreSQL (JSONB)
 
     Admin->>Portal: 1. Tải file PDF/ảnh biểu mẫu trắng đen
@@ -131,7 +131,7 @@ interface FormGeometricManifest {
 * **Quy tắc Kỹ thuật (Rules):**
   1. **Tầng 1 - Định vị hình học & trích xuất text cục bộ (OpenCV First):** OpenCV WASM thực thi trước tiên. Sử dụng toán tử hình thái học lọc đường kẻ bảng và ô vuông, trích xuất bounding boxes chuẩn xác pixel ($\ge 98\%$) kèm nhãn văn bản thô, gán định danh duy nhất `box_01`, `box_02`,...
   2. **Tầng 2 - Đóng gói Payload Trung gian Dạng Text:** Hệ thống đóng gói danh sách Box IDs kèm văn bản nhãn thô thành Payload JSON thuần Text gửi sang Gemini (hoàn toàn không gửi file ảnh, không gọi Vision API).
-  3. **Tầng 3 - Đọc hiểu ngữ nghĩa & Sinh thoại (Gemini Text LLM Mapping):** Gemini 1.5 Flash hoạt động ở chế độ Text LLM, phân tích ngữ nghĩa các trường hành chính, suy ra kiểu dữ liệu và tự động sinh câu thoại hướng dẫn bình dân cùng chữ mẫu đỏ (`#D32F2F`) với thời gian phản hồi siêu tốc ($< 500\text{ms}$).
+  3. **Tầng 3 - Đọc hiểu ngữ nghĩa & Sinh thoại (Gemini Text LLM Mapping):** Gemini 3.6 hoạt động ở chế độ Text LLM, phân tích ngữ nghĩa các trường hành chính, suy ra kiểu dữ liệu và tự động sinh câu thoại hướng dẫn bình dân cùng chữ mẫu đỏ (`#D32F2F`) với thời gian phản hồi siêu tốc ($< 500\text{ms}$).
   4. **Cơ chế Dự phòng Hoàn hảo (Instant Fallback):** Do OpenCV đã sinh xong toàn bộ Bounding Boxes ở Tầng 1, nếu Tầng 3 (Gemini) thất bại sau 2 lần retry, hệ thống chuyển sang chế độ gán nhãn thủ công ngay tức khắc trên khung ô đã vẽ sẵn mà không làm gián đoạn bất kỳ thao tác nào của chuyên viên.
 
 ### AD-3: Kiến trúc Giọng nói Hai Tầng (Hybrid Voice Pipeline)
@@ -178,7 +178,7 @@ interface FormGeometricManifest {
 | **Nền tảng Fullstack** | Next.js (App Router) + TypeScript | `^14.2.x` | Xây dựng Mobile Web, Admin Portal và Backend API trong Monorepo. |
 | **Vỏ bọc Ứng dụng Di động** | Capacitor | `^6.x` | Đóng gói Web thành Native Android App và kết nối phần cứng. |
 | **Máy quét Biểu mẫu** | Google ML Kit Document Scanner Plugin | `@capacitor-community/mlkit-document-scanner` | Tự động căn góc, nắn thẳng phối cảnh và lọc bóng tờ khai giấy. |
-| **Trí tuệ Nhân tạo Ngôn ngữ** | Google Gemini 1.5 Flash (Text & LLM Engine) | API v1beta | Đọc hiểu ngữ nghĩa nhãn trường, phân tích logic rẽ nhánh và tự động sinh câu thoại bình dân từ dữ liệu text (không dùng Vision). |
+| **Trí tuệ Nhân tạo Ngôn ngữ** | Google Gemini 3.6 (Text & LLM Engine) | API v1beta | Đọc hiểu ngữ nghĩa nhãn trường, phân tích logic rẽ nhánh và tự động sinh câu thoại bình dân từ dữ liệu text (không dùng Vision). |
 | **Xử lý Ảnh Hình học (Computer Vision)** | OpenCV (`@techstark/opencv-js` / OpenCV WASM) | `^4.9.x` | Quét đường kẻ ngang dọc, khung bảng, ô vuông và trích xuất text nhãn cục bộ bằng Morphological Operations. |
 | **Hạ tầng Giọng nói TTS** | Google Cloud Text-to-Speech | Neural2 Engine | Sinh file MP3 giọng đọc tiếng Việt ấm áp (giọng Bắc `vi-VN-Neural2-A`, Nam `vi-VN-Neural2-D`). |
 | **Cơ sở Dữ liệu** | PostgreSQL + Prisma ORM | `PostgreSQL 16` / `Prisma 5.x` | Lưu trữ Thư viện Biểu mẫu và Sơ đồ Quy trình dạng JSONB. |
@@ -212,7 +212,7 @@ afl-platform/
 │   │   │   └── library/       # Quản lý thư viện biểu mẫu & xuất mã QR (FR-11)
 │   │   └── api/               # Tuyến API trung gian kết nối AI & CSDL
 │   │       ├── ingest/        # Bóc tách biểu mẫu mới (FR-7)
-│   │       ├── llm/           # Gọi Gemini 1.5 Flash sinh kịch bản & hỏi đáp (FR-4, FR-8)
+│   │       ├── llm/           # Gọi Gemini 3.6 sinh kịch bản & hỏi đáp (FR-4, FR-8)
 │   │       │   ├── prompt/
 │   │       │   └── qa/
 │   │       ├── tts/           # Google Cloud TTS sinh audio hướng dẫn 0.9x (FR-3)
@@ -226,7 +226,7 @@ afl-platform/
 │   │   └── dependency.ts      # Xử lý quy tắc liên chứng từ (FR-6, FR-10)
 │   ├── modules/
 │   │   ├── opencv/            # NGƯỜI 3: Thuật toán OpenCV WASM (FR-1, FR-7)
-│   │   └── voice-ai/          # NGƯỜI 4: Prompt Gemini & Trợ lý Giọng nói (FR-3, FR-4, FR-8)
+│   │   └── voice-ai/          # NGƯỜI 4: Prompt Gemini 3.6 & Trợ lý Giọng nói (FR-3, FR-4, FR-8)
 │   ├── config/
 │   │   └── app.config.ts      # Công tắc Mock Switcher (useMockData = true)
 │   └── shared/
@@ -245,11 +245,11 @@ afl-platform/
 | **FR-1: Nhận diện biểu mẫu** | `src/app/(citizen)/scan/` & `src/modules/opencv/` | Google ML Kit Plugin + OpenCV WASM nắn thẳng |
 | **FR-2: Bản sao thị giác & Highlight** | `src/components/mobile/` | Tọa độ `bounding_box` chuẩn hóa vẽ viền nhấp nháy trên canvas/SVG |
 | **FR-3: Trợ lý giọng nói từng dòng** | `src/modules/voice-ai/` & `src/app/api/tts/` | Google Cloud TTS Neural2 0.9x + Audio cache |
-| **FR-4: Hỏi đáp ngữ cảnh** | `src/modules/voice-ai/` & `src/app/api/llm/qa/` | Web Speech API on-device + Gemini 1.5 Flash Text Q&A |
+| **FR-4: Hỏi đáp ngữ cảnh** | `src/modules/voice-ai/` & `src/app/api/llm/qa/` | Web Speech API on-device + Gemini 3.6 Text Q&A |
 | **FR-5: Chữ mẫu đỏ tương phản cao** | `src/components/mobile/` & `src/app/(citizen)/guide/` | Chữ mẫu đỏ `#D32F2F`, cỡ chữ $\ge 18\text{pt}$ |
 | **FR-6: Quét chứng từ tiên quyết** | `src/core/dependency.ts` & `src/modules/opencv/` | Luồng bóc tách dữ liệu gốc trước khi chạy workflow chính |
 | **FR-7: Bóc tách biểu mẫu mới** | `src/modules/opencv/` & `src/app/api/ingest/` | OpenCV WASM (Hình học & nhãn thô) |
-| **FR-8: Tự sinh kịch bản tiếng Việt** | `src/modules/voice-ai/` & `src/app/api/llm/prompt/` | Prompt Gemini 1.5 Flash sinh câu thoại bình dân & chữ đỏ |
+| **FR-8: Tự sinh kịch bản tiếng Việt** | `src/modules/voice-ai/` & `src/app/api/llm/prompt/` | Prompt Gemini 3.6 sinh câu thoại bình dân & chữ đỏ |
 | **FR-9: Cổng kiểm duyệt chia đôi** | `src/components/admin/` & `src/app/(admin)/review/` | Split-Screen Editor + Vẽ box thủ công |
 | **FR-10: Cấu hình liên chứng từ** | `src/components/admin/` & `src/core/dependency.ts` | Node-based Dependency Editor (React Flow) + PostgreSQL JSONB |
 | **FR-11: Quản lý thư viện & Mã QR** | `src/app/(admin)/library/` & `src/app/api/workflows/` | CRUD Biểu mẫu + QRCode Generator |

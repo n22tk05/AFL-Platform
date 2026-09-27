@@ -21,9 +21,9 @@ Tài liệu này xác định toàn bộ các yêu cầu sản phẩm (Product R
 ## 1. Tầm nhìn Sản phẩm
 Việt Nam đang đẩy mạnh chuyển đổi số trong các dịch vụ công ích và thủ tục hành chính (ứng dụng VNeID, Cổng Dịch vụ công Quốc gia, Bảo hiểm Y tế điện tử, nộp phạt vi phạm hành chính trực tuyến...). Tuy nhiên, hàng triệu người cao tuổi (từ 60 tuổi trở lên) đang gặp phải rào cản rất lớn do thị lực suy giảm, tay run, xa lạ với bàn phím cảm ứng và bối rối trước các thuật ngữ pháp lý phức tạp.
 
-**Tầm nhìn sản phẩm:** Trở thành **"Người đồng hành số kiên nhẫn và tin cậy"** túc trực bên cạnh người cao tuổi ngay tại bàn viết của các cơ quan Một cửa. Hệ thống ứng dụng **Mô hình Kết hợp Tối ưu (OpenCV WASM Geometric Extraction + Gemini 1.5 Flash Text Engine)**:
+**Tầm nhìn sản phẩm:** Trở thành **"Người đồng hành số kiên nhẫn và tin cậy"** túc trực bên cạnh người cao tuổi ngay tại bàn viết của các cơ quan Một cửa. Hệ thống ứng dụng **Mô hình Kết hợp Tối ưu (OpenCV WASM Geometric Extraction + Gemini 3.6 Text Engine)**:
 1. **Thuật toán Xử lý Ảnh Hình học Cục bộ (OpenCV Line & Contour Detection):** Xử lý trực tiếp trên máy, quét các đường kẻ ngang dọc, khung bảng và ô vuông trên giấy trắng mực đen với tốc độ mili-giây, trích xuất tọa độ pixel chính xác tuyệt đối ($\ge 98\%$) và bóc tách các vùng nhãn văn bản cục bộ.
-2. **Trí tuệ Nhân tạo Ngôn ngữ (Google Gemini 1.5 Flash Text & LLM Engine):** Tiếp nhận dữ liệu dạng Text/JSON từ OpenCV đã chuẩn hóa (hoàn toàn không cần gửi ảnh qua Vision API), tập trung đọc hiểu ngữ nghĩa nhãn trường hành chính phức tạp, phân tích điều kiện rẽ nhánh và tự động sinh câu thoại hướng dẫn bình dân cùng chữ mẫu đỏ.
+2. **Trí tuệ Nhân tạo Ngôn ngữ (Google Gemini 3.6 Text & LLM Engine):** Tiếp nhận dữ liệu dạng Text/JSON từ OpenCV đã chuẩn hóa (hoàn toàn không cần gửi ảnh qua Vision API), tập trung đọc hiểu ngữ nghĩa nhãn trường hành chính phức tạp, phân tích điều kiện rẽ nhánh và tự động sinh câu thoại hướng dẫn bình dân cùng chữ mẫu đỏ.
 3. **Nền tảng Quản trị & Trợ lý Giọng nói (CRM Workflow & Human-in-the-loop):** Trợ lý giọng nói tiếng Việt hướng dẫn từng dòng và cổng đối soát kiểm duyệt của cán bộ trước khi xuất bản, đảm bảo 100% tính chính xác pháp lý.
 
 ---
@@ -57,7 +57,7 @@ Việt Nam đang đẩy mạnh chuyển đổi số trong các dịch vụ công
 * **Bối cảnh & Điểm bắt đầu:** Chuyên viên Tuấn đăng nhập vào Cổng Quản trị (Web Portal) trên máy tính cơ quan. Phường vừa nhận văn bản quy định thủ tục trợ cấp xã hội mới bằng file PDF.
 * **Các bước diễn ra:**
   1. Tuấn kéo thả file PDF biểu mẫu vào ô **[Thêm biểu mẫu mới]**.
-  2. Hệ thống bóc tách tự động: Thuật toán xử lý ảnh hình học OpenCV quét nhanh các đường kẻ ngang dọc/khung bảng trên giấy trắng mực đen để tính toán chính xác 100% tọa độ ô trong vài mili-giây ($\ge 98\%$ độ chính xác pixel) và trích xuất dữ liệu khung ô dạng Text/JSON; sau đó Gemini 1.5 Flash (Text Engine) tiếp nhận dữ liệu text để đọc hiểu nhãn trường, điều kiện rẽ nhánh và tự động sinh kịch bản hướng dẫn bình dân mà không cần gửi ảnh. (Nếu Cloud AI quá tải/mất mạng, hệ thống tự động fallback hiển thị khung ô do OpenCV vẽ sẵn để Tuấn gán nhãn thủ công không bị gián đoạn).
+  2. Hệ thống bóc tách tự động: Thuật toán xử lý ảnh hình học OpenCV quét nhanh các đường kẻ ngang dọc/khung bảng trên giấy trắng mực đen để tính toán chính xác 100% tọa độ ô trong vài mili-giây ($\ge 98\%$ độ chính xác pixel) và trích xuất dữ liệu khung ô dạng Text/JSON; sau đó Gemini 3.6 (Text Engine) tiếp nhận dữ liệu text để đọc hiểu nhãn trường, điều kiện rẽ nhánh và tự động sinh kịch bản hướng dẫn bình dân mà không cần gửi ảnh. (Nếu Cloud AI quá tải/mất mạng, hệ thống tự động fallback hiển thị khung ô do OpenCV vẽ sẵn để Tuấn gán nhãn thủ công không bị gián đoạn).
   3. AI tự động sinh kịch bản hướng dẫn từng bước bằng tiếng Việt đời thường, dễ hiểu cho người cao tuổi.
   4. Giao diện đối soát chia đôi màn hình (Split-screen): Bên trái là file gốc, bên phải là quy trình AI tạo. Tuấn tinh chỉnh lại 1 câu giải thích cho sát địa phương rồi bấm **[Phê duyệt & Xuất bản]**.
 * **Khoảnh khắc mang lại giá trị:** Quy trình hướng dẫn biểu mẫu lập tức sẵn sàng phục vụ người dân, đi kèm mã QR để in dán tại bàn tiếp dân.
@@ -157,7 +157,7 @@ flowchart TD
     Choice -- Giọng Nói (Push-to-Talk) --> Mic["Bấm Giữ Mic Hỏi"]
     Mic --> STT["On-device STT Chuyển Thành Văn Bản"]
     Choice -- Tiếng Ồn / Giọng Địa Phương Nặng --> QuickChips["Chạm Nhanh Chip Gợi Ý ('Lấy số ở đâu?', 'Để trống được không?')"]
-    STT --> LLM["Gemini 1.5 Flash (Strict Grounding: Không Suy Diễn)"]
+    STT --> LLM["Gemini 3.6 (Strict Grounding: Không Suy Diễn)"]
     QuickChips --> LLM
     LLM --> TTS["Phát Giọng Đọc Giải Đáp Ngắn Gọn 2-3 Câu (≤ 1.5s)"]
 ```
@@ -202,11 +202,11 @@ sequenceDiagram
 ### 4.2 Phân hệ 2: Cổng Quản trị Quy trình & Bóc tách Form AI (Cổng Thông tin Web trên Máy tính cho Chuyên viên)
 
 #### Yêu cầu FR-7: Tự động Bóc tách Biểu mẫu Mới (OpenCV Normalized Geometric First & Manual Override)
-* **Mô tả:** Quản trị viên tải lên file PDF hoặc ảnh chụp biểu mẫu trắng. Hệ thống vận hành theo quy trình tuần tự hai tầng: (1) Thuật toán OpenCV WASM xử lý hình học trước tiên để bắt trọn tọa độ các đường kẻ, khung bảng và ô vuông với độ chính xác pixel tuyệt đối ($\ge 98\%$), chuẩn hóa thành **hệ tọa độ tỉ lệ `[ymin, xmin, ymax, xmax]` ($0.0 \to 1.0$)**, trích xuất văn bản nhãn trường cục bộ và xuất ra bộ khung dữ liệu hình học (Geometric Manifest Skeleton) gồm danh sách các `box_01`, `box_02`,... đã đánh số; (2) Gemini 1.5 Flash (Text & LLM Engine) tiếp nhận bộ khung dữ liệu dạng Text/JSON để đọc hiểu nhãn trường, xác định điều kiện rẽ nhánh và ánh xạ 1-1 vào từng Box ID (hoàn toàn xử lý dạng Text, không cần gọi Vision API); (3) **Cơ chế Can thiệp & Vẽ ô Thủ công (Manual Bounding Box Override):** Cho phép chuyên viên click & drag trực tiếp trên giao diện để bổ sung ô bị thiếu, xóa ô thừa, hoặc kéo chỉnh kích thước box độc lập không phụ thuộc thuật toán.
+* **Mô tả:** Quản trị viên tải lên file PDF hoặc ảnh chụp biểu mẫu trắng. Hệ thống vận hành theo quy trình tuần tự hai tầng: (1) Thuật toán OpenCV WASM xử lý hình học trước tiên để bắt trọn tọa độ các đường kẻ, khung bảng và ô vuông với độ chính xác pixel tuyệt đối ($\ge 98\%$), chuẩn hóa thành **hệ tọa độ tỉ lệ `[ymin, xmin, ymax, xmax]` ($0.0 \to 1.0$)**, trích xuất văn bản nhãn trường cục bộ và xuất ra bộ khung dữ liệu hình học (Geometric Manifest Skeleton) gồm danh sách các `box_01`, `box_02`,... đã đánh số; (2) Gemini 3.6 (Text & LLM Engine) tiếp nhận bộ khung dữ liệu dạng Text/JSON để đọc hiểu nhãn trường, xác định điều kiện rẽ nhánh và ánh xạ 1-1 vào từng Box ID (hoàn toàn xử lý dạng Text, không cần gọi Vision API); (3) **Cơ chế Can thiệp & Vẽ ô Thủ công (Manual Bounding Box Override):** Cho phép chuyên viên click & drag trực tiếp trên giao diện để bổ sung ô bị thiếu, xóa ô thừa, hoặc kéo chỉnh kích thước box độc lập không phụ thuộc thuật toán.
 * **Tiêu chí nghiệm thu:**
   * Thuật toán OpenCV quét và xuất bộ khung Bounding Box Skeleton chuẩn hóa ($0.0 \to 1.0$) đạt độ chính xác tọa độ $\ge 98\%$ trong thời gian $\le 100\text{ms}$.
   * Cung cấp bộ công cụ vẽ/chỉnh Bounding Box thủ công mượt mà trên Canvas/SVG của Cổng Quản trị.
-  * Gemini nhận diện chính xác nhãn ngữ nghĩa tương ứng với từng Box ID với tỷ lệ $\ge 90\%$.
+  * Gemini 3.6 nhận diện chính xác nhãn ngữ nghĩa tương ứng với từng Box ID với tỷ lệ $\ge 90\%$.
   * Tự động sắp xếp thứ tự điền logic (từ trên xuống dưới, từ thông tin nhân thân đến chi tiết vụ việc).
   * Hỗ trợ chế độ dự phòng Offline/Fallback tức thì: hiển thị toàn bộ khung ô do OpenCV vẽ sẵn khi ngắt kết nối Cloud AI.
 * **Sơ đồ Quy trình FR-7:**
@@ -216,7 +216,7 @@ flowchart TD
     B --> C["Bóc Tách Tọa Độ Chuẩn Hóa [0.0 - 1.0] & Text Nhãn Thô"]
     C --> D["Xuất Geometric Manifest Skeleton (box_01, box_02...)"]
     D --> E{"Cloud AI Khả Dụng?"}
-    E -- Có --> F["Gemini 1.5 Flash (Text LLM) Đọc Ngữ Nghĩa & Map 1-1"]
+    E -- Có --> F["Gemini 3.6 (Text LLM) Đọc Ngữ Nghĩa & Map 1-1"]
     E -- Lỗi / Mất mạng --> G["FALLBACK: Nạp Khung Ô Lên UI"]
     F --> H["Chuyên Viên Rà Soát & Vẽ Thêm / Chỉnh Box Thủ Công (Nếu cần)"]
     G --> H
@@ -232,7 +232,7 @@ flowchart TD
 ```mermaid
 flowchart LR
     A["Nhãn Hành Chính Thô"] --> B["Bộ Quy Tắc Prompt Engineering"]
-    B --> C["Gemini 1.5 Flash Sinh 3 Thành Phần"]
+    B --> C["Gemini 3.6 Sinh 3 Thành Phần"]
     C --> D["1. Tọa Độ Highlight [0.0 - 1.0]"]
     C --> E["2. Câu Thoại Bình Dân"]
     C --> F["3. Chữ Mẫu Đỏ In Hoa"]
@@ -335,7 +335,7 @@ stateDiagram-v2
   * Toàn bộ dữ liệu tạm thời tự động hủy hoàn toàn sau khi bấm [Kết thúc] hoặc sau 15 phút không tương tác (Tuân thủ Nghị định 13/2023/NĐ-CP).
   * Toàn bộ dữ liệu truyền tải giữa Client và Server bắt buộc mã hóa qua giao thức TLS 1.3.
 * **NFR-4 (Độ tin cậy & Cơ chế Dự phòng Toàn diện - Multi-Tier Fallback):**
-  * *Dự phòng Bóc tách Biểu mẫu (Ingestion Fallback):* Nếu Cloud AI (Gemini 1.5 Flash Text API) gặp sự cố kết nối, quá tải hoặc gián đoạn mạng, hệ thống tự động fallback tức thì: sử dụng ngay toàn bộ khung ô do OpenCV WASM quét sẵn trên giấy trắng mực đen, cho phép chuyên viên gán nhãn và vẽ Bounding Box thủ công (Manual Box Override) mà không bị tắc nghẽn công việc.
+  * *Dự phòng Bóc tách Biểu mẫu (Ingestion Fallback):* Nếu Cloud AI (Gemini 3.6 Text API) gặp sự cố kết nối, quá tải hoặc gián đoạn mạng, hệ thống tự động fallback tức thì: sử dụng ngay toàn bộ khung ô do OpenCV WASM quét sẵn trên giấy trắng mực đen, cho phép chuyên viên gán nhãn và vẽ Bounding Box thủ công (Manual Box Override) mà không bị tắc nghẽn công việc.
   * *Dự phòng Âm thanh (Voice Fallback & Half-Duplex):* Nếu AI không nghe rõ giọng nói của người dùng (do tiếng ồn tại trụ sở), màn hình tự động hiển thị phóng to nút bấm điều hướng và chữ mẫu màu đỏ để người dùng tiếp tục thao tác bằng mắt và tay mà không bị gián đoạn. Luôn đảm bảo cơ chế ngắt mic khi loa phát để tránh echo loop.
   * *Khả năng tương thích Thiết bị Yếu (Low-End Hardware Resilience):* Render đồ họa Visual Twin bằng vector SVG nhẹ nhàng, giới hạn kích thước nén ảnh camera $\le 1600\text{px}$ để đảm bảo trình duyệt trên các dòng máy Android đời cũ không bị tràn bộ nhớ RAM dẫn đến sập ứng dụng (OOM Crash).
 

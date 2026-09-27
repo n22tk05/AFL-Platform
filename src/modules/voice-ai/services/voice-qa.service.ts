@@ -1,6 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
 import { WorkflowStep } from '@/shared/contracts';
-import type { LocalCacheService } from '@/modules/cache';
 import { QARequest, QAResponse } from '@/modules/voice-ai/types/voice-ai.types';
 
 // Nạp biến môi trường từ .env
@@ -76,11 +75,13 @@ export class HalfDuplexController {
  */
 export class VoiceQAService {
   private client: GoogleGenAI | null = null;
+  private activeGeminiCalls = 0;
+  private readonly maxGeminiCalls = 3;
   public halfDuplex: HalfDuplexController;
 
   private apiKey: string | undefined;
 
-  constructor(private readonly cache: LocalCacheService) {
+  constructor() {
     this.refreshClient();
     this.halfDuplex = new HalfDuplexController();
   }
@@ -131,20 +132,9 @@ export class VoiceQAService {
       }
     }
 
-    // 2. Kiểm tra Cache
-    const cacheKey = { stepId: currentStep.boxId, query: normalizedQuery };
-    const cachedAnswer = this.cache.get<string>(cacheKey);
-    if (cachedAnswer) {
-      return {
-        answerText: cachedAnswer,
-        latencyMs: Date.now() - startTime,
-        source: 'gemini'
-      };
-    }
-
-    // 3. Nếu không có client đám mây -> Fallback nghiệp vụ an toàn
+    // 2. Nếu không có client đám mây -> Fallback nghiệp vụ an toàn
     const client = this.getClient();
-    if (!client) {
+    if (!client || this.activeGeminiCalls >= this.maxGeminiCalls) {
       return this.getSafeFallbackResponse(currentStep, startTime);
     }
 
@@ -159,17 +149,18 @@ Hãy trả lời bác:
 - Tuyệt đối không trích dẫn số hiệu điều luật dài dòng.
 `;
 
+      this.activeGeminiCalls++;
       const response = await client.models.generateContent({
         model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
         contents: prompt,
         config: {
           maxOutputTokens: 100,
           temperature: 0.2, // Nhiệt độ thấp để trả lời nhất quán, không sáng tạo tùy tiện
+          abortSignal: AbortSignal.timeout(5000),
         }
       });
 
       const answerText = response.text?.trim() || 'Dạ bác nhìn vào chữ mẫu màu đỏ trên màn hình và chép lại giúp cháu nhé!';
-      this.cache.set(cacheKey, answerText);
 
       return {
         answerText,
@@ -180,6 +171,8 @@ Hãy trả lời bác:
     } catch (err) {
       console.warn('[VoiceQAService] Lỗi khi gọi Gemini QA:', err);
       return this.getSafeFallbackResponse(currentStep, startTime);
+    } finally {
+      this.activeGeminiCalls--;
     }
   }
 

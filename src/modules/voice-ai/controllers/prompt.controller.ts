@@ -3,17 +3,24 @@ import { ControllerResult } from '@/modules/shared/types/controller-result';
 import type { GeminiPromptService } from '@/modules/voice-ai/services/gemini-prompt.service';
 import { PromptControllerDto } from '@/modules/voice-ai/types/voice-ai.types';
 import { FormGeometricManifest } from '@/shared/contracts';
+import { validateManifest } from '@/modules/forms/services/form-validation.service';
+import type { AdminAuthorizationService } from '@/modules/forms/services/admin-authorization.service';
 
 export class PromptController {
   constructor(
     private readonly geminiPromptService: GeminiPromptService,
-    private readonly formPersistenceService: FormPersistenceService
+    private readonly formPersistenceService: FormPersistenceService,
+    private readonly authorizationService: AdminAuthorizationService
   ) {}
 
   public async generate(dto: PromptControllerDto): Promise<ControllerResult<unknown>> {
+    const authStatus = this.authorizationService.authorize(dto.authorization, dto.adminKey);
+    if (authStatus !== 200) return { status: authStatus, body: { success: false, error: { code: authStatus === 503 ? 'ADMIN_KEY_UNCONFIGURED' : 'UNAUTHORIZED' } } };
     try {
-      const manifest = dto.manifest as FormGeometricManifest | undefined;
-      if (!manifest || !manifest.boxes || manifest.boxes.length === 0) {
+      let manifest: FormGeometricManifest;
+      try {
+        manifest = validateManifest(dto.manifest);
+      } catch {
         return {
           status: 400,
           body: {
@@ -27,8 +34,7 @@ export class PromptController {
       }
 
       const workflow = await this.geminiPromptService.generateWorkflow(manifest);
-      await this.formPersistenceService.saveGeometricManifest(manifest);
-      const persistResult = await this.formPersistenceService.saveWorkflow(workflow);
+      const persistResult = await this.formPersistenceService.saveDraft(manifest, workflow);
 
       return {
         status: 200,
@@ -36,20 +42,21 @@ export class PromptController {
           success: true,
           data: workflow,
           meta: {
-            persisted: persistResult.success,
-            source: persistResult.source,
+            persisted: Boolean(persistResult.workflowId),
+            source: 'database',
           },
         },
       };
     } catch (error) {
       console.error('[PromptController] Lỗi xử lý:', error);
+      const code = error instanceof Error ? error.message : '';
       return {
-        status: 500,
+        status: code === 'FORM_ACTIVE' ? 409 : code === 'DATABASE_UNAVAILABLE' ? 503 : 502,
         body: {
           success: false,
           error: {
-            code: 'PROMPT_GENERATION_FAILED',
-            message_vi: 'Không thể sinh kịch bản biểu mẫu từ AI. Hệ thống đang kích hoạt chế độ dự phòng.',
+            code: code === 'FORM_ACTIVE' ? 'FORM_ACTIVE' : code === 'DATABASE_UNAVAILABLE' ? 'DATABASE_UNAVAILABLE' : 'PROMPT_GENERATION_FAILED',
+            message_vi: 'Không thể tạo và lưu kịch bản biểu mẫu.',
           },
         },
       };

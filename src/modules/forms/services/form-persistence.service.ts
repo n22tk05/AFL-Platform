@@ -1,4 +1,3 @@
-import type { LocalCacheService } from '@/modules/cache';
 import type { FormRepository } from '@/modules/forms/repositories/form.repository';
 import {
   ApproveWorkflowResult,
@@ -6,6 +5,7 @@ import {
   SaveWorkflowResult,
 } from '@/modules/forms/types/form.types';
 import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
+import { validateWorkflow } from '@/modules/forms/services/form-validation.service';
 
 export interface DatabaseHealth {
   check(): Promise<boolean>;
@@ -15,15 +15,24 @@ export interface DatabaseHealth {
 export class FormPersistenceService {
   constructor(
     private readonly repository: FormRepository,
-    private readonly cache: LocalCacheService,
     private readonly databaseHealth: DatabaseHealth
   ) {}
 
+  public async saveDraft(manifest: FormGeometricManifest, workflow: FormWorkflow) {
+    validateWorkflow(manifest, workflow);
+    if (!await this.databaseHealth.check()) throw new Error('DATABASE_UNAVAILABLE');
+    try {
+      return await this.repository.saveDraft(manifest, workflow);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'FORM_ACTIVE') throw error;
+      this.databaseHealth.markOffline();
+      throw new Error('DATABASE_UNAVAILABLE');
+    }
+  }
+
   public async saveGeometricManifest(manifest: FormGeometricManifest): Promise<SaveManifestResult> {
     if (!await this.databaseHealth.check()) {
-      console.warn('[FormPersistence] PostgreSQL offline, lưu tạm Manifest vào Local Cache.');
-      this.cache.set(`manifest_${manifest.formCode}`, manifest);
-      return { success: true, source: 'local_fallback' };
+      throw new Error('DATABASE_UNAVAILABLE');
     }
 
     try {
@@ -31,9 +40,9 @@ export class FormPersistenceService {
       return { success: true, ...result, source: 'database' };
     } catch (error) {
       console.error('[FormPersistence] Lỗi khi lưu Geometric Manifest vào CSDL:', error);
+      if (error instanceof Error && error.message === 'FORM_ACTIVE') throw error;
       this.databaseHealth.markOffline();
-      this.cache.set(`manifest_${manifest.formCode}`, manifest);
-      return { success: true, source: 'local_fallback' };
+      throw new Error('DATABASE_UNAVAILABLE');
     }
   }
 
@@ -45,15 +54,8 @@ export class FormPersistenceService {
     }
 
     const isDatabaseOnline = await this.databaseHealth.check();
-    this.cache.set(`workflow_${workflow.formCode}`, workflow);
-
     if (!isDatabaseOnline) {
-      console.warn('[FormPersistence] PostgreSQL offline, kịch bản đã được bảo toàn trong L1 Cache.');
-      return {
-        success: true,
-        stepCount: workflow.steps.length,
-        source: 'local_fallback',
-      };
+      throw new Error('DATABASE_UNAVAILABLE');
     }
 
     try {
@@ -61,47 +63,34 @@ export class FormPersistenceService {
       return { success: true, ...result, source: 'database' };
     } catch (error) {
       console.error('[FormPersistence] Lỗi khi lưu FormWorkflow vào CSDL:', error);
+      if (error instanceof Error && error.message === 'FORM_ACTIVE') throw error;
       this.databaseHealth.markOffline();
-      return {
-        success: true,
-        stepCount: workflow.steps.length,
-        source: 'local_fallback',
-      };
+      throw new Error('DATABASE_UNAVAILABLE');
     }
   }
 
   public async getWorkflowByFormCode(formCode: string): Promise<FormWorkflow | null> {
-    if (await this.databaseHealth.check()) {
-      try {
-        const workflow = await this.repository.getWorkflowByFormCode(formCode);
-        if (workflow) {
-          this.cache.set(`workflow_${formCode}`, workflow);
-          return workflow;
-        }
-      } catch (error) {
-        console.warn('[FormPersistence] Không thể đọc từ CSDL, fallback sang Local Cache:', error);
-      }
+    if (!await this.databaseHealth.check()) throw new Error('DATABASE_UNAVAILABLE');
+    try {
+      return await this.repository.getWorkflowByFormCode(formCode);
+    } catch {
+      this.databaseHealth.markOffline();
+      throw new Error('DATABASE_UNAVAILABLE');
     }
-
-    return this.cache.get<FormWorkflow>(`workflow_${formCode}`);
   }
 
   public async approveWorkflow(
     formCode: string,
     performedBy = 'Cán bộ Một cửa',
-    note?: string
+    note?: string,
+    reviewerName?: string
   ): Promise<ApproveWorkflowResult> {
     if (!await this.databaseHealth.check()) {
-      console.warn('[FormPersistence] PostgreSQL offline, cập nhật trạng thái trong Local Cache.');
-      const workflow = this.cache.get<FormWorkflow>(`workflow_${formCode}`);
-      if (!workflow) return { success: false, newStatus: 'NOT_FOUND' };
-      workflow.status = 'active';
-      this.cache.set(`workflow_${formCode}`, workflow);
-      return { success: true, newStatus: 'ACTIVE' };
+      return { success: false, newStatus: 'DATABASE_UNAVAILABLE' };
     }
 
     try {
-      await this.repository.approveWorkflow(formCode, performedBy, note);
+      await this.repository.approveWorkflow(formCode, 'shared_admin_key', note, reviewerName);
       return { success: true, newStatus: 'ACTIVE' };
     } catch (error: unknown) {
       console.error('[FormPersistence] Lỗi khi phê duyệt kịch bản:', error);
@@ -112,8 +101,9 @@ export class FormPersistenceService {
       if (message === 'NOT_FOUND' || code === 'P2025') {
         return { success: false, newStatus: 'NOT_FOUND' };
       }
+      if (message === 'REVIEW_CONFLICT') return { success: false, newStatus: 'REVIEW_CONFLICT' };
       this.databaseHealth.markOffline();
-      return { success: false, newStatus: 'ERROR' };
+      return { success: false, newStatus: 'DATABASE_UNAVAILABLE' };
     }
   }
 }

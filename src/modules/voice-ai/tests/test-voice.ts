@@ -38,7 +38,7 @@ async function runVoiceAITestSuite() {
   const firstStep = workflow.steps[0];
   assert(firstStep.stepIndex === 1, 'Bước đầu tiên có stepIndex = 1');
   assert(typeof firstStep.voiceGuidance === 'string' && firstStep.voiceGuidance.length > 10, 'Có câu thoại hướng dẫn bình dân');
-  assert(firstStep.exampleRedText === firstStep.exampleRedText.toUpperCase(), 'Chữ mẫu đỏ bắt buộc IN HOA (WCAG AAA)');
+  assert(firstStep.exampleRedText === firstStep.exampleRedText.toUpperCase(), 'Chữ mẫu fixture IN HOA; chưa kiểm chứng tương phản');
   assert(Array.isArray(firstStep.faqs) && firstStep.faqs.length >= 1, 'Có nút câu hỏi nhanh Touch-to-Ask Chips (Fallback)');
 
   // Kiểm tra tọa độ chuẩn hóa [0.0 - 1.0]
@@ -51,7 +51,7 @@ async function runVoiceAITestSuite() {
   // TEST 3: Kiểm thử FR-3 (TTS & Karaoke Timestamps)
   console.log('\n--- PHẦN 3: KIỂM THỬ FR-3 (GIỌNG ĐỌC 0.9x & MỐC THỜI GIAN KARAOKE) ---');
   const ttsResult = await ttsService.synthesizeSpeech(firstStep.voiceGuidance, 1, 'NORTH');
-  assert(ttsResult.audioUrl === '/audio/step_01.mp3', 'Đường dẫn audio chuẩn xác: /audio/step_01.mp3');
+  assert(/^\/audio\/[a-f0-9]{64}\.mp3$/.test(ttsResult.audioUrl), 'Đường dẫn audio theo hash nội dung và giọng đọc');
   assert(ttsResult.wordTimestamps.length > 0, 'Trích xuất thành công mảng mốc thời gian từ vựng Karaoke', `Số từ: ${ttsResult.wordTimestamps.length}`);
   
   const firstWord = ttsResult.wordTimestamps[0];
@@ -60,6 +60,7 @@ async function runVoiceAITestSuite() {
   // TEST 4: Kiểm thử FR-4 (Voice Q&A & Half-Duplex Safeguard)
   console.log('\n--- PHẦN 4: KIỂM THỬ FR-4 (HỎI ĐÁP NGỮ CẢNH & CHỐNG DỘI ÂM ECHO) ---');
   const qaRes = await voiceQAService.answerQuestion({
+    formCode: manifest.formCode,
     currentStep: firstStep,
     userQuestion: 'Viết chữ in thường được không?'
   });

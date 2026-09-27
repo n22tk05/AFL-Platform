@@ -1,8 +1,10 @@
 import { GoogleGenAI } from '@google/genai';
 import path from 'path';
 import fs from 'fs';
+import { isDeepStrictEqual } from 'node:util';
 import { FormGeometricManifest, FormWorkflow, WorkflowStep } from '@/shared/contracts';
 import type { LocalCacheService } from '@/modules/cache';
+import { validateWorkflow } from '@/modules/forms/services/form-validation.service';
 
 // Nạp biến môi trường từ .env
 
@@ -57,18 +59,18 @@ export class GeminiPromptService {
    * Tự động sinh kịch bản hướng dẫn bình dân và chữ mẫu đỏ từ FormGeometricManifest (FR-8)
    */
   public async generateWorkflow(manifest: FormGeometricManifest, forceRefresh: boolean = false): Promise<FormWorkflow> {
+    const client = this.getClient();
+    if (!client || !this.apiKey) {
+      return this.getOfflineFallback(manifest);
+    }
+
     // 1. Kiểm tra cache cục bộ nếu không bắt buộc làm mới (Vaccine chống cháy Quota)
     if (!forceRefresh) {
       const cached = this.cache.get<FormWorkflow>(manifest);
       if (cached) {
-        return cached;
+        validateWorkflow(manifest, cached);
+        return { ...cached, status: 'pending_review' };
       }
-    }
-
-    // 2. Nếu chưa có API Key hoặc đang chạy Offline, fallback về dữ liệu mẫu có sẵn
-    const client = this.getClient();
-    if (!client || !this.apiKey) {
-      return this.getOfflineFallback(manifest);
     }
 
     try {
@@ -123,19 +125,24 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
       }
 
       const generatedSteps: WorkflowStep[] = JSON.parse(text);
+      if (!Array.isArray(generatedSteps) || generatedSteps.length !== manifest.boxes.length ||
+          new Set(generatedSteps.map(step => step?.boxId)).size !== manifest.boxes.length ||
+          generatedSteps.some(step => !manifest.boxes.some(box => box.boxId === step?.boxId))) {
+        throw new Error('INVALID_GEMINI_WORKFLOW');
+      }
 
       // Chuẩn hóa tọa độ và bổ sung cờ kiểm duyệt pháp lý
       const normalizedSteps = generatedSteps.map((step, idx) => {
-        const matchingBox = manifest.boxes.find(b => b.boxId === step.boxId) || manifest.boxes[idx];
+        const matchingBox = manifest.boxes.find(b => b.boxId === step.boxId)!;
         const isSensitive = shouldFlagLegalCheck(matchingBox?.rawText || '', step.label);
 
         return {
           ...step,
           stepIndex: idx + 1,
-          boxId: matchingBox?.boxId || `box_${String(idx + 1).padStart(2, '0')}`,
-          highlightCoords: matchingBox?.normalizedCoords || step.highlightCoords || [0, 0, 0, 0],
-          audioUrl: `/audio/step_${String(idx + 1).padStart(2, '0')}.mp3`,
-          exampleRedText: (step.exampleRedText || '').toUpperCase(),
+          boxId: matchingBox.boxId,
+          highlightCoords: matchingBox.normalizedCoords,
+          audioUrl: '',
+          exampleRedText: typeof step.exampleRedText === 'string' ? step.exampleRedText.toUpperCase() : '',
           legalWarningFlag: isSensitive
         };
       });
@@ -147,6 +154,8 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
         status: 'pending_review',
         steps: normalizedSteps
       };
+
+      validateWorkflow(manifest, result);
 
       // Lưu vào cache
       this.cache.set(manifest, result);
@@ -163,50 +172,33 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
    */
   private getOfflineFallback(manifest: FormGeometricManifest): FormWorkflow {
     try {
+      const manifestPath = path.join(process.cwd(), 'assets', 'mock-data', 'mock-manifest.json');
       const mockPath = path.join(process.cwd(), 'assets', 'mock-data', 'mock-workflow.json');
-      if (fs.existsSync(mockPath)) {
+      if (fs.existsSync(mockPath) && fs.existsSync(manifestPath)) {
+        const sampleManifest: FormGeometricManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+        if (!isDeepStrictEqual(manifest, sampleManifest)) throw new Error('AI_UNAVAILABLE');
         const content = fs.readFileSync(mockPath, 'utf-8');
         const fallbackWorkflow: FormWorkflow = JSON.parse(content);
-        return {
+        const result: FormWorkflow = {
           ...fallbackWorkflow,
-          formId: manifest.formId || fallbackWorkflow.formId,
-          formTitle: manifest.formTitle || fallbackWorkflow.formTitle,
-          formCode: manifest.formCode || fallbackWorkflow.formCode,
-          steps: fallbackWorkflow.steps.map((step, idx) => {
-            const matchingBox = manifest.boxes.find(b => b.boxId === step.boxId) || manifest.boxes[idx];
+          formId: manifest.formId,
+          formTitle: manifest.formTitle,
+          formCode: manifest.formCode,
+          status: 'pending_review',
+          steps: fallbackWorkflow.steps.map(step => {
+            const matchingBox = manifest.boxes.find(b => b.boxId === step.boxId);
             return {
               ...step,
               legalWarningFlag: shouldFlagLegalCheck(matchingBox?.rawText || '', step.label)
             };
           })
         };
+        validateWorkflow(manifest, result);
+        return result;
       }
-    } catch {
-      // Bỏ qua lỗi đọc file mock
+    } catch (error) {
+      if (error instanceof Error && error.message === 'AI_UNAVAILABLE') throw error;
     }
-
-    // Fallback cơ bản nếu không tìm thấy file mock
-    return {
-      formId: manifest.formId,
-      formTitle: manifest.formTitle,
-      formCode: manifest.formCode,
-      status: 'pending_review',
-      steps: manifest.boxes.map((b, i) => ({
-        stepIndex: i + 1,
-        boxId: b.boxId,
-        sectionName: 'Mục khai báo',
-        label: b.rawText.replace(/\[\d+\]|\.+/g, '').trim() || `Trường số ${i + 1}`,
-        voiceGuidance: `Bác nhìn vào ô số ${i + 1}. Bác lấy bút ghi thông tin theo chữ mẫu màu đỏ nhé.`,
-        audioUrl: `/audio/step_${String(i + 1).padStart(2, '0')}.mp3`,
-        exampleRedText: 'THÔNG TIN MẪU',
-        highlightCoords: b.normalizedCoords,
-        faqs: [
-          {
-            question: 'Viết chữ thường được không?',
-            answer: 'Dạ bác nên viết chữ in hoa rõ ràng để cán bộ tiếp nhận dễ đọc ạ.'
-          }
-        ]
-      }))
-    };
+    throw new Error('AI_UNAVAILABLE');
   }
 }

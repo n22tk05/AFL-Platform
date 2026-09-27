@@ -3,21 +3,25 @@ import { ApprovalInput } from '@/modules/forms/types/form.types';
 export class AdminAuthorizationService {
   constructor(private readonly getSecret = () => process.env.ADMIN_SECRET_KEY) {}
 
-  public isAuthorized(authorization?: string | null, adminKey?: string | null): boolean {
+  public authorize(authorization?: string | null, adminKey?: string | null): 200 | 401 | 503 {
     const secret = this.getSecret();
-    if (!secret) return true;
+    if (!secret?.trim()) return 503;
     const token = authorization?.startsWith('Bearer ')
       ? authorization.substring(7)
       : adminKey;
-    return Boolean(token && token === secret);
+    return token === secret ? 200 : 401;
+  }
+
+  public isAuthorized(authorization?: string | null, adminKey?: string | null): boolean {
+    return this.authorize(authorization, adminKey) === 200;
   }
 
   public sanitizeApproval(body: unknown): ApprovalInput {
     const value = body && typeof body === 'object' ? body as Record<string, unknown> : {};
     return {
-      performedBy: this.sanitizeText(value.performedBy || 'Cán bộ Một cửa', 100),
+      performedBy: this.sanitizeText(value.performedBy || '', 100),
       note: this.sanitizeText(
-        value.note || 'Đã đối soát tọa độ hình học và nội dung chữ mẫu đỏ đạt chuẩn WCAG AAA.',
+        value.note || 'Đã xác nhận kiểm duyệt kịch bản và tọa độ hình học.',
         500
       ),
     };

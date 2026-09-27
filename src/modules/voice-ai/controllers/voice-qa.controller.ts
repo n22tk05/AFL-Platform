@@ -1,35 +1,41 @@
 import { ControllerResult } from '@/modules/shared/types/controller-result';
 import type { VoiceQAService } from '@/modules/voice-ai/services/voice-qa.service';
 import { VoiceQAControllerDto } from '@/modules/voice-ai/types/voice-ai.types';
-import { WorkflowStep } from '@/shared/contracts';
+import type { FormPersistenceService } from '@/modules/forms/services/form-persistence.service';
 
 export class VoiceQAController {
-  constructor(private readonly voiceQAService: VoiceQAService) {}
+  constructor(private readonly voiceQAService: VoiceQAService, private readonly formPersistenceService: FormPersistenceService) {}
 
   public async answer(dto: VoiceQAControllerDto): Promise<ControllerResult<unknown>> {
     try {
-      const currentStep = dto.currentStep as WorkflowStep;
-      const userQuestion = dto.userQuestion as string;
+      const formCode = dto.formCode;
+      const stepIndex = dto.stepIndex;
+      const userQuestion = dto.userQuestion;
 
-      if (!currentStep || !userQuestion) {
+      if (typeof formCode !== 'string' || !formCode.trim() || formCode.length > 200 ||
+          !Number.isSafeInteger(stepIndex) || (stepIndex as number) < 1 ||
+          typeof userQuestion !== 'string' || !userQuestion.trim() || userQuestion.length > 500) {
         return {
           status: 400,
           body: {
             success: false,
             error: {
               code: 'INVALID_QA_REQUEST',
-              message_vi: 'Thiếu thông tin bước hiện tại hoặc câu hỏi của công dân.',
+              message_vi: 'Mã biểu mẫu, bước hoặc câu hỏi không hợp lệ.',
             },
           },
         };
       }
 
-      const result = await this.voiceQAService.answerQuestion({ currentStep, userQuestion });
+      const workflow = await this.formPersistenceService.getWorkflowByFormCode(formCode);
+      const currentStep = workflow?.steps.find(step => step.stepIndex === stepIndex);
+      if (!currentStep) return { status: 404, body: { success: false, error: { code: 'ACTIVE_STEP_NOT_FOUND' } } };
+      const result = await this.voiceQAService.answerQuestion({ formCode, currentStep, userQuestion });
       return { status: 200, body: { success: true, data: result } };
     } catch (error) {
       console.error('[VoiceQAController] Lỗi xử lý:', error);
       return {
-        status: 500,
+        status: error instanceof Error && error.message === 'DATABASE_UNAVAILABLE' ? 503 : 500,
         body: {
           success: false,
           error: {

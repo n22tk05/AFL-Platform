@@ -39,7 +39,7 @@ async function runPersistenceTestSuite() {
   console.log('\n--- PHẦN 2: KIỂM THỬ LƯU BỘ KHUNG HÌNH HỌC (OPENCV MANIFEST) ---');
   const manifestRes = await formPersistenceService.saveGeometricManifest(manifest);
   assert(manifestRes.success === true, 'Lưu thành công FormGeometricManifest (Database hoặc Local Fallback)');
-  assert(manifestRes.source === 'database' || manifestRes.source === 'local_fallback', `Nguồn lưu trữ chuẩn xác (${manifestRes.source})`);
+  assert(manifestRes.source === 'database', `Manifest được lưu trong CSDL (${manifestRes.source})`);
 
   // 4. Kiểm thử lưu Kịch bản Workflow 9 bước (Gemini AI)
   console.log('\n--- PHẦN 3: KIỂM THỬ GIAO DỊCH NGUYÊN TỬ LƯU WORKFLOW & FAQS ---');
@@ -55,7 +55,7 @@ async function runPersistenceTestSuite() {
   assert(retrievedWf?.steps.length === 9, 'Đầy đủ 9 bước hướng dẫn cho người cao tuổi');
 
   const firstStep = retrievedWf?.steps[0];
-  assert(firstStep?.exampleRedText === firstStep?.exampleRedText.toUpperCase(), 'Chữ mẫu đỏ in hoa đạt chuẩn WCAG AAA');
+  assert(firstStep?.exampleRedText === firstStep?.exampleRedText.toUpperCase(), 'Fixture chữ mẫu đỏ in hoa; chưa kiểm chứng tương phản');
   assert(firstStep?.highlightCoords.length === 4, 'Tọa độ highlight đủ 4 trục chuẩn hóa [0.0 - 1.0]');
   assert(Array.isArray(firstStep?.faqs) && firstStep?.faqs.length >= 1, 'Mỗi bước có ít nhất 1 câu hỏi nhanh Touch-to-Ask');
 
@@ -64,7 +64,7 @@ async function runPersistenceTestSuite() {
   const approveRes = await formPersistenceService.approveWorkflow(
     mockWorkflow.formCode,
     'Nguyễn Tuấn Khánh (Tech Lead)',
-    'Đã đối soát đạt chuẩn nghiệm thu 11 FRs'
+    'Đã đối soát dữ liệu thử nghiệm'
   );
   assert(approveRes.success === true, 'Phê duyệt kịch bản thành công');
   assert(approveRes.newStatus === 'ACTIVE', 'Trạng thái biểu mẫu chuyển sang ACTIVE');
@@ -79,7 +79,12 @@ async function runPersistenceTestSuite() {
     speakingRate: 0.9
   };
   await voiceCacheRepository.save(testVoiceEntry);
-  assert(true, 'Gọi lưu L2 Voice Cache thành công (không gây lỗi nếu DB offline)');
+  if (isDbOnline) {
+    const stored = await voiceCacheRepository.getByCacheKey(testVoiceEntry.cacheKey);
+    assert(stored?.audioUrl === testVoiceEntry.audioUrl, 'L2 Voice Cache đọc lại đúng URL đã lưu');
+  } else {
+    console.log('  SKIP L2 Voice Cache: chưa có DB thử nghiệm.');
+  }
 
   const ttsRes = await ttsService.synthesizeSpeech(mockWorkflow.steps[0].voiceGuidance, 1, 'NORTH');
   assert(ttsRes.audioUrl.length > 0, 'Dịch vụ TTS tích hợp L1/L2 cache mượt mà');
@@ -87,11 +92,11 @@ async function runPersistenceTestSuite() {
 
   // TỔNG KẾT
   console.log('\n===============================================================');
-  console.log(`🏁 KẾT QUẢ KIỂM THỬ: ${passedTests}/${totalTests} TESTS ĐẠT CHUẨN (100%)`);
+  console.log(`🏁 KẾT QUẢ KIỂM TRA TÍCH HỢP: ${passedTests}/${totalTests}`);
   console.log('===============================================================');
 
   if (passedTests === totalTests) {
-    console.log('✨ Tầng dịch vụ lưu trữ CSDL Prisma & Bộ nhớ đệm 2 tầng đạt chuẩn sẵn sàng sản xuất!\n');
+    console.log('Kiểm tra tích hợp cục bộ hoàn tất; chưa phải nghiệm thu sản xuất.\n');
     process.exit(0);
   } else {
     console.error('⚠️ Phát hiện lỗi trong kiểm thử tầng lưu trữ.\n');

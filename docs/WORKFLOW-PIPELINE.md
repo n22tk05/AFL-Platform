@@ -106,7 +106,7 @@ flowchart TD
 
 ### CHI TIẾT TRÁCH NHIỆM CỦA NGƯỜI 4 (AI PROMPT, AUDIO & QA LEAD)
 * **Vị trí cốt lõi:** Làm chủ "Bộ não ngôn ngữ, Giọng nói hai chiều & Thẩm định chất lượng".
-* **FR-8 (Tự Động Sinh Kịch Bản Bình Dân & Chốt Chặn Pháp Lý):** Viết Prompt kỹ thuật (Structured JSON Mode) cho Gemini 1.5 Flash dịch nhãn hành chính thành câu thoại bình dân, tạo chữ mẫu đỏ in hoa, và sinh sẵn nội dung cho 3 nút Touch-to-Ask Chips. Đặt cờ `DRAFT_PENDING_LEGAL_CHECK`. Strict Grounding tuyệt đối không suy diễn pháp lý.
+* **FR-8 (Tự Động Sinh Kịch Bản Bình Dân & Chốt Chặn Pháp Lý):** Viết Prompt kỹ thuật (Structured JSON Mode) cho Gemini 3.6 dịch nhãn hành chính thành câu thoại bình dân, tạo chữ mẫu đỏ in hoa, và sinh sẵn nội dung cho 3 nút Touch-to-Ask Chips. Đặt cờ `DRAFT_PENDING_LEGAL_CHECK`. Strict Grounding tuyệt đối không suy diễn pháp lý.
 * **FR-3 (Trợ Lý Giọng Nói Đọc Hướng Dẫn 0.9x & Timestamp Karaoke):** Tích hợp Google Cloud TTS (Neural2 vi-VN) sinh file MP3 tốc độ chậm 0.9x (Bắc / Nam), xuất kèm mảng timestamp từ vựng để Người 2 chạy hiệu ứng Karaoke; đóng gói audio bundle $\le 1.5\text{MB}$ cho Service Worker cache ngoại tuyến.
 * **FR-4 (Hỏi Đáp Ngữ Cảnh Bằng Giọng Nói):** Kết nối Web Speech STT on-device $\rightarrow$ Gemini Text API $\rightarrow$ TTS trả lời ngắn gọn trong $\le 1.5$s.
 * **Tổng chỉ huy QA Toàn diện 11 FR:** Kiểm tra độ tương phản màu sắc, cỡ chữ, kiểm thử Web Wake Lock trên điện thoại thật, test chế độ tắt 4G xem offline cache có hoạt động trơn tru không.

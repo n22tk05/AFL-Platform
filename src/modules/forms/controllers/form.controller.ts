@@ -37,12 +37,12 @@ export class FormController {
     } catch (error) {
       console.error('[FormController.getWorkflow] Lỗi:', error);
       return {
-        status: 500,
+        status: 503,
         body: {
           success: false,
           error: {
-            code: 'INTERNAL_SERVER_ERROR',
-            message_vi: 'Lỗi máy chủ khi truy xuất kịch bản biểu mẫu.',
+            code: 'DATABASE_UNAVAILABLE',
+            message_vi: 'Cơ sở dữ liệu tạm thời không khả dụng.',
           },
         },
       };
@@ -51,14 +51,15 @@ export class FormController {
 
   public async approveWorkflow(dto: ApproveWorkflowDto): Promise<ControllerResult<unknown>> {
     try {
-      if (!this.authorizationService.isAuthorized(dto.authorization, dto.adminKey)) {
+      const authStatus = this.authorizationService.authorize(dto.authorization, dto.adminKey);
+      if (authStatus !== 200) {
         return {
-          status: 401,
+          status: authStatus,
           body: {
             success: false,
             error: {
-              code: 'UNAUTHORIZED',
-              message_vi: 'Từ chối truy cập: Thiếu hoặc sai khóa xác thực Cán bộ Quản trị.',
+              code: authStatus === 503 ? 'ADMIN_KEY_UNCONFIGURED' : 'UNAUTHORIZED',
+              message_vi: authStatus === 503 ? 'Chưa cấu hình khóa quản trị.' : 'Khóa quản trị không hợp lệ.',
             },
           },
         };
@@ -69,11 +70,15 @@ export class FormController {
       }
 
       const formCode = decodeURIComponent(dto.rawFormCode);
+      if (!dto.body || typeof dto.body !== 'object' || (dto.body as Record<string, unknown>).reviewConfirmed !== true) {
+        return { status: 409, body: { success: false, error: { code: 'REVIEW_NOT_CONFIRMED' } } };
+      }
       const approval = this.authorizationService.sanitizeApproval(dto.body);
       const result = await this.persistenceService.approveWorkflow(
         formCode,
-        approval.performedBy,
-        approval.note
+        'shared_admin_key',
+        approval.note,
+        approval.performedBy
       );
 
       if (!result.success && result.newStatus === 'NOT_FOUND') {
@@ -90,12 +95,15 @@ export class FormController {
       }
 
       if (!result.success) {
+        if (result.newStatus === 'REVIEW_CONFLICT') {
+          return { status: 409, body: { success: false, error: { code: 'REVIEW_CONFLICT' } } };
+        }
         return {
-          status: 500,
+          status: 503,
           body: {
             success: false,
             error: {
-              code: 'APPROVAL_FAILED',
+              code: 'DATABASE_UNAVAILABLE',
               message_vi: `Không thể phê duyệt biểu mẫu ${formCode}.`,
             },
           },
@@ -109,7 +117,8 @@ export class FormController {
           data: {
             formCode,
             status: result.newStatus,
-            approvedBy: approval.performedBy,
+            approvedBy: 'shared_admin_key',
+            reviewerName: approval.performedBy,
             approvedAt: new Date().toISOString(),
           },
         },

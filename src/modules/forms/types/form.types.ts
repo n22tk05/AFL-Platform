@@ -2,14 +2,14 @@ export interface SaveManifestResult {
   success: boolean;
   templateId?: string;
   manifestId?: string;
-  source: 'database' | 'local_fallback';
+  source: 'database';
 }
 
 export interface SaveWorkflowResult {
   success: boolean;
   workflowId?: string;
   stepCount?: number;
-  source: 'database' | 'local_fallback';
+  source: 'database';
 }
 
 export interface ApproveWorkflowResult {

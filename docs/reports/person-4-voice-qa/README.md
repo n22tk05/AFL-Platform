@@ -14,6 +14,7 @@ Thư mục này lưu trữ toàn bộ các báo cáo kỹ thuật theo từng b�
 ```
 person-4-voice-qa/
 ├── README.md                                 <-- Bạn đang ở đây (Dashboard tổng hợp Người 4)
+├── SESSION-HANDOFF-SPRINT-01-COMPLETE.md     <-- [HOT] Biên bản bàn giao tiến độ & khởi tạo session mới
 ├── step-01-action-plan/
 │   └── ACTION-PLAN-VOICE-QA.md               <-- Kế hoạch tác chiến Sprint 1, Ma trận I/O, 11 FRs
 ├── step-02-handoff-integration/
@@ -24,8 +25,10 @@ person-4-voice-qa/
 │   └── CACHE-KEY-SHA256-UPGRADE-REPORT.md    <-- Nâng cấp hàm băm SHA-256 & Canonicalization đệ quy
 ├── step-05-sdk-deep-research/
 │   └── SDK-COMPARISON-DEEP-RESEARCH.md       <-- Nghiên cứu sâu Google SDK vs Vercel AI SDK & Lộ trình
-└── step-06-prisma-database-integration/
-    └── PRISMA-POSTGRES-INTEGRATION-REPORT.md <-- [Bước 6] Tích hợp CSDL Prisma, ACID Transactions, Cache Đa Tầng & QA
+├── step-06-prisma-database-integration/
+│   └── PRISMA-POSTGRES-INTEGRATION-REPORT.md <-- [Bước 6] Tích hợp CSDL Prisma, ACID Transactions, Cache Đa Tầng & QA
+└── step-07-api-integrity/
+    └── API-INTEGRITY-AND-INTEGRATION-HANDOFF.md <-- [Bước 7] Toàn vẹn API, xác thực Admin, kiểm tra Manifest/Workflow & Audio Identity
 ```
 
 ---
@@ -40,6 +43,7 @@ person-4-voice-qa/
 | **04** | **Nâng cấp Hàm băm SHA-256 & Canonicalization** | Nâng cấp hàm `generateKey` từ 32-bit lên SHA-256, khử nhạy thứ tự key bằng đệ quy $A \to Z$, đồng bộ với bảng `VoiceCache.cacheKey` trong Prisma. | ✅ Đã mở PR #3 | [`step-04-cache-sha256/CACHE-KEY-SHA256-UPGRADE-REPORT.md`](step-04-cache-sha256/CACHE-KEY-SHA256-UPGRADE-REPORT.md) |
 | **05** | **Deep Research: Google SDK vs Vercel AI SDK** | Nghiên cứu so sánh kiến trúc, streaming UI, Zod schema, tuân thủ Nghị định 13/2023/NĐ-CP và đề xuất mô hình lai (Hybrid) cho Sprint 2. | ✅ Hoàn thành | [`step-05-sdk-deep-research/SDK-COMPARISON-DEEP-RESEARCH.md`](step-05-sdk-deep-research/SDK-COMPARISON-DEEP-RESEARCH.md) |
 | **06** | **Tích hợp Tầng Lưu trữ CSDL & Cache Đa Tầng** | Xây dựng `FormPersistenceService`, ACID transactions, Prisma Singleton Pool, RESTful endpoints (`/workflow`, `/approve`), RAM Cache L0 + L1/L2, vá 6 góc khuất QA. | ✅ Hoàn thành (16/16 PASS, 6/6 QA PASS) | [`step-06-prisma-database-integration/PRISMA-POSTGRES-INTEGRATION-REPORT.md`](step-06-prisma-database-integration/PRISMA-POSTGRES-INTEGRATION-REPORT.md) |
+| **07** | **Toàn vẹn API & Bàn giao Tích hợp** | Xác thực Admin Key, giới hạn kích thước payload (256KB/8KB/4KB), validate chặt chẽ Manifest/Workflow, định danh Audio hash & không tạo file giả, phân lập ngữ cảnh Q&A. | ✅ Hoàn thành (API Integrity PASS) | [`step-07-api-integrity/API-INTEGRITY-AND-INTEGRATION-HANDOFF.md`](step-07-api-integrity/API-INTEGRITY-AND-INTEGRATION-HANDOFF.md) |
 
 ---
 
