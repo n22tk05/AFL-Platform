@@ -49,7 +49,7 @@ export class PrismaFormRepository implements FormRepository {
           requiresPrerequisiteDoc: step.requiresPrerequisiteDoc ?? false,
           sourceFieldFromPrerequisite: step.sourceFieldFromPrerequisite ?? null,
           legalWarningFlag: step.legalWarningFlag ?? false,
-          faqs: { create: step.faqs.map((faq, index) => ({ question: faq.question, answer: faq.answer, order: index + 1 })) },
+          faqs: { create: (step.faqs || []).map((faq, index) => ({ question: faq.question, answer: faq.answer, order: index + 1 })) },
         } });
       }
       return { templateId: template.id, manifestId: geometricManifest.id, workflowId: formWorkflow.id, stepCount: workflow.steps.length };

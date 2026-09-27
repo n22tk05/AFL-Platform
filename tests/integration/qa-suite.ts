@@ -26,7 +26,7 @@ function run() {
   check('Fixture: một bước hợp lệ cho mỗi box', workflowValid);
   check('Fixture: mã form trùng manifest', workflow.formCode === manifest.formCode);
   check('Fixture: chữ mẫu viết hoa', workflow.steps.every(step => step.exampleRedText === step.exampleRedText.toUpperCase()));
-  check('Fixture: FAQ có nội dung', workflow.steps.every(step => step.faqs.length > 0 && step.faqs.every(faq => faq.question.trim() && faq.answer.trim())));
+  check('Fixture: FAQ có nội dung', workflow.steps.every(step => (step.faqs?.length ?? 0) > 0 && (step.faqs ?? []).every(faq => faq.question.trim() && faq.answer.trim())));
   check('Fixture: MP3 thật có header hợp lệ', workflow.steps.every(step => {
     if (!/^\/audio\/[A-Za-z0-9_-]+\.mp3$/.test(step.audioUrl)) return false;
     const audioPath = path.join(process.cwd(), 'public', step.audioUrl.substring(1));
