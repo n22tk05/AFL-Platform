@@ -6,6 +6,6 @@ delivery run.
 
 | Phase | Harness | Model | Effort |
 | --- | --- | --- | --- |
-| `implement` | Codex CLI | gpt-5.6-luna | low |
-| `review` | Codex CLI | gpt-5.6-sol | medium |
+| `implement` | Codex CLI | gpt-6-luna | medium |
+| `review` | Codex CLI | gpt-6-sol | high |
 <!-- dely:end -->
