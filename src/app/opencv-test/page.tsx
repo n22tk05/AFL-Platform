@@ -6,6 +6,10 @@ import {
   DEFAULT_PREPROCESS_CONFIG,
   runLineDetectionDebug,
   type DebugPipelineResult,
+  DocumentDetectionError,
+  type DocumentMode,
+  type DocumentQuality,
+  type DocumentQuad,
 } from '@/modules/opencv';
 
 const MAX_LONG_SIDE = 1600;
@@ -37,6 +41,8 @@ export default function OpenCvTestPage() {
   const [imageReady, setImageReady] = useState(false);
   const [hasResults, setHasResults] = useState(false);
   const [result, setResult] = useState<DebugPipelineResult | null>(null);
+  const [mode, setMode] = useState<DocumentMode>('camera-photo');
+  const [rejection, setRejection] = useState<{ quality: DocumentQuality; quad: DocumentQuad | null; timeMs: number } | null>(null);
 
   const inputCanvasRef = useRef<HTMLCanvasElement>(null);
   const grayscaleCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -44,12 +50,15 @@ export default function OpenCvTestPage() {
   const horizontalCanvasRef = useRef<HTMLCanvasElement>(null);
   const verticalCanvasRef = useRef<HTMLCanvasElement>(null);
   const combinedCanvasRef = useRef<HTMLCanvasElement>(null);
+  const candidateOverlayCanvasRef = useRef<HTMLCanvasElement>(null);
+  const documentOutlineCanvasRef = useRef<HTMLCanvasElement>(null);
+  const deskewedCanvasRef = useRef<HTMLCanvasElement>(null);
   const activeUrlRef = useRef<string | null>(null);
   const selectionIdRef = useRef(0);
   const runningRef = useRef(false);
 
   const clearOutputCanvases = useCallback(() => {
-    [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef].forEach((canvasRef) => {
+    [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef, candidateOverlayCanvasRef, documentOutlineCanvasRef, deskewedCanvasRef].forEach((canvasRef) => {
       const canvas = canvasRef.current;
       const context = canvas?.getContext('2d');
       if (canvas && context) context.clearRect(0, 0, canvas.width, canvas.height);
@@ -57,15 +66,19 @@ export default function OpenCvTestPage() {
   }, []);
 
   useEffect(() => () => {
+    selectionIdRef.current++;
     if (activeUrlRef.current) URL.revokeObjectURL(activeUrlRef.current);
   }, []);
 
   const handleFileChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    if (runningRef.current) return;
     const file = event.target.files?.[0];
     const selectionId = ++selectionIdRef.current;
     setErrorMessage(null);
     setHasResults(false);
     setResult(null);
+    setRejection(null);
+    setImageInfo(null);
     setImageReady(false);
     clearOutputCanvases();
 
@@ -101,8 +114,8 @@ export default function OpenCvTestPage() {
         return;
       }
       const scale = longestSide > MAX_LONG_SIDE ? MAX_LONG_SIDE / longestSide : 1;
-      const width = Math.round(image.naturalWidth * scale);
-      const height = Math.round(image.naturalHeight * scale);
+      const width = Math.max(1, Math.round(image.naturalWidth * scale));
+      const height = Math.max(1, Math.round(image.naturalHeight * scale));
       const inputCanvas = inputCanvasRef.current;
       const context = inputCanvas?.getContext('2d');
       if (!inputCanvas || !context) {
@@ -115,7 +128,7 @@ export default function OpenCvTestPage() {
       inputCanvas.height = height;
       context.clearRect(0, 0, width, height);
       context.drawImage(image, 0, 0, width, height);
-      [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef].forEach((canvasRef) => {
+      [grayscaleCanvasRef, binaryCanvasRef, horizontalCanvasRef, verticalCanvasRef, combinedCanvasRef, candidateOverlayCanvasRef].forEach((canvasRef) => {
         if (canvasRef.current) {
           canvasRef.current.width = width;
           canvasRef.current.height = height;
@@ -136,6 +149,17 @@ export default function OpenCvTestPage() {
     image.src = objectUrl;
   }, [clearOutputCanvases]);
 
+  const handleModeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    if (runningRef.current) return;
+    setMode(event.target.value as DocumentMode);
+    setErrorMessage(null);
+    setHasResults(false);
+    setResult(null);
+    setRejection(null);
+    clearOutputCanvases();
+    setStatus(imageReady ? 'ready' : status === 'decoding' ? 'decoding' : 'idle');
+  };
+
   const runPipeline = useCallback(async () => {
     if (runningRef.current || !imageReady) return;
     const inputCanvas = inputCanvasRef.current;
@@ -144,22 +168,30 @@ export default function OpenCvTestPage() {
     const horizontalCanvas = horizontalCanvasRef.current;
     const verticalCanvas = verticalCanvasRef.current;
     const combinedCanvas = combinedCanvasRef.current;
-    if (!inputCanvas || !grayscaleCanvas || !binaryCanvas || !horizontalCanvas || !verticalCanvas || !combinedCanvas) return;
+    const candidateOverlayCanvas = candidateOverlayCanvasRef.current;
+    const documentOutlineCanvas = documentOutlineCanvasRef.current;
+    const deskewedCanvas = deskewedCanvasRef.current;
+    if (!inputCanvas || !grayscaleCanvas || !binaryCanvas || !horizontalCanvas || !verticalCanvas || !combinedCanvas || !candidateOverlayCanvas || !documentOutlineCanvas || !deskewedCanvas) return;
 
     runningRef.current = true;
     setErrorMessage(null);
     setHasResults(false);
     setResult(null);
+    setRejection(null);
     clearOutputCanvases();
     setStatus('loading');
     try {
       const pipelineResult = await runLineDetectionDebug({
+        mode,
+        documentOutlineCanvas,
+        deskewedCanvas,
         inputCanvas,
         grayscaleCanvas,
         binaryCanvas,
         horizontalCanvas,
         verticalCanvas,
         combinedCanvas,
+        candidateOverlayCanvas,
         preprocessConfig: DEFAULT_PREPROCESS_CONFIG,
         lineConfig: DEFAULT_LINE_DETECTION_CONFIG,
         onOpenCvReady: () => setStatus('processing'),
@@ -168,12 +200,13 @@ export default function OpenCvTestPage() {
       setHasResults(true);
       setStatus('success');
     } catch (error: unknown) {
+      if (error instanceof DocumentDetectionError) setRejection({ quality: error.quality, quad: error.sourceQuad, timeMs: error.documentDetectionTimeMs });
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Lỗi OpenCV không xác định.');
     } finally {
       runningRef.current = false;
     }
-  }, [clearOutputCanvases, imageReady]);
+  }, [clearOutputCanvases, imageReady, mode]);
 
   const isBusy = status === 'loading' || status === 'processing';
   const buttonDisabled = !imageReady || isBusy;
@@ -187,6 +220,13 @@ export default function OpenCvTestPage() {
       </header>
 
       <section style={controlsStyle}>
+        <label style={{ display: 'grid', gap: 6 }}>
+          Chế độ xử lý
+          <select value={mode} onChange={handleModeChange} disabled={isBusy}>
+            <option value="camera-photo">Ảnh chụp từ camera</option>
+            <option value="clean-scan">Ảnh scan/PDF đã thẳng</option>
+          </select>
+        </label>
         <label style={{ display: 'grid', gap: 6, fontWeight: 600, fontSize: 14 }}>
           Chọn ảnh JPEG hoặc PNG
           <input type="file" accept="image/jpeg,image/png" onChange={handleFileChange} disabled={isBusy} />
@@ -199,7 +239,13 @@ export default function OpenCvTestPage() {
 
       {imageInfo && <p style={infoStyle}>{imageInfo}</p>}
       {errorMessage && <p role="alert" style={errorStyle}>{errorMessage}</p>}
-      {result && <section style={timingStyle}><strong>Hoàn tất trong {result.totalProcessingTimeMs} ms</strong><span>OpenCV: {result.openCvLoadTimeMs} ms · Grayscale: {result.grayscaleTimeMs} ms · Binary: {result.binaryTimeMs} ms · Lines: {result.lineDetectionTimeMs} ms</span></section>}
+      <p style={infoStyle}>{mode === 'camera-photo' ? 'Ảnh camera: tự tìm giấy, kiểm tra chất lượng và nắn phối cảnh trước khi phát hiện đường.' : 'Clean scan: dùng toàn ảnh làm trang; bỏ qua phát hiện giấy. Chọn JPEG/PNG (kể cả trang PDF đã xuất thành ảnh).'}</p>
+      {(result || rejection) && <section style={infoStyle}>
+        <p>Đầu ra: {result ? `${result.width} × ${result.height}px` : 'Không nắn: tài liệu bị từ chối'} · Detect: {result?.documentDetectionTimeMs ?? rejection?.timeMs} ms · Warp: {result?.perspectiveTransformTimeMs ?? 0} ms</p>
+        <DocumentQualityPanel quality={result?.quality ?? rejection?.quality ?? null} />
+        {(result?.detectedQuad || rejection?.quad) && <details><summary>Bốn góc trong ảnh đầu vào</summary><pre style={{ overflowX: 'auto' }}>{JSON.stringify(result?.detectedQuad ?? rejection?.quad, null, 2)}</pre></details>}
+      </section>}
+      {result && <section style={timingStyle}><strong>Hoàn tất trong {result.totalProcessingTimeMs} ms · {result.candidates.length} candidates</strong><span>OpenCV: {result.openCvLoadTimeMs} ms · Grayscale: {result.grayscaleTimeMs} ms · Binary: {result.binaryTimeMs} ms · Lines: {result.lineDetectionTimeMs} ms · Contours: {result.contourDetectionTimeMs} ms</span></section>}
 
       <section style={configStyle}>
         <strong>Debug config</strong>
@@ -209,13 +255,47 @@ export default function OpenCvTestPage() {
 
       <section style={gridStyle}>
         <CanvasPanel label="1. Ảnh gốc" canvasRef={inputCanvasRef} visible={imageReady} emptyMessage="Chọn ảnh để bắt đầu" />
+        <CanvasPanel label="Document outline" canvasRef={documentOutlineCanvasRef} visible={hasResults || rejection !== null} emptyMessage="Chưa phát hiện tài liệu" />
+        <CanvasPanel label="Deskewed document" canvasRef={deskewedCanvasRef} visible={hasResults} emptyMessage="Chưa có trang đã nắn" />
         <CanvasPanel label="2. Grayscale" canvasRef={grayscaleCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
         <CanvasPanel label="3. Binary" canvasRef={binaryCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
         <CanvasPanel label="4. Horizontal lines" canvasRef={horizontalCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
         <CanvasPanel label="5. Vertical lines" canvasRef={verticalCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
         <CanvasPanel label="6. Combined mask" canvasRef={combinedCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
+        <CanvasPanel label="7. Field candidates" canvasRef={candidateOverlayCanvasRef} visible={hasResults} emptyMessage="Chưa chạy pipeline" />
       </section>
+      {result && <CandidateTable result={result} />}
     </main>
+  );
+}
+
+function DocumentQualityPanel({ quality }: { quality: DocumentQuality | null }) {
+  if (!quality) return <p>Clean scan: không chấm điểm tự động.</p>;
+  const reasons: Record<string, string> = {
+    NO_QUADRILATERAL: 'Không thấy đủ bốn góc', AREA_TOO_SMALL: 'Giấy quá nhỏ trong ảnh', AREA_TOO_LARGE: 'Vùng nhận diện gần chiếm toàn ảnh',
+    DEGENERATE_QUAD: 'Bốn góc không hợp lệ hoặc cạnh quá ngắn', ASPECT_RATIO_OUT_OF_RANGE: 'Tỷ lệ giấy không phù hợp', OUTPUT_TOO_SMALL: 'Độ phân giải tài liệu quá thấp',
+    LOW_CONFIDENCE: 'Điểm tin cậy thấp', BORDER_TOO_CLOSE: 'Giấy sát viền ảnh; cần chụp đủ lề', LOW_RECTANGULARITY: 'Tứ giác bị méo quá nhiều', WEAK_EDGE_SUPPORT: 'Viền tài liệu không rõ', QUAD_OUTSIDE_IMAGE: 'Góc nằm ngoài ảnh',
+  };
+  return <>
+    <p>Heuristic score: {quality.confidence.toFixed(3)} / 1 (không phải xác suất) · Area ratio: {quality.areaRatio.toFixed(3)} · Rectangularity: {quality.rectangularity.toFixed(3)} · Border margin: {quality.borderMarginRatio.toFixed(3)} · Edge support: {quality.edgeSupport?.toFixed(3) ?? '—'}</p>
+    <p>{quality.accepted ? 'Đạt quality gate' : quality.rejectionReasons.map(reason => `${reasons[reason] ?? reason} (${reason})`).join('; ')}</p>
+  </>;
+}
+
+function CandidateTable({ result }: { result: DebugPipelineResult }) {
+  return (
+    <section style={{ marginTop: 22 }}>
+      <h2 style={{ fontSize: 18 }}>Field candidates ({result.candidates.length})</h2>
+      <div style={{ border: '1px solid #e2e8f0', borderRadius: 8, maxHeight: 360, overflow: 'auto' }}>
+        <table style={{ borderCollapse: 'collapse', fontSize: 12, minWidth: 900, width: '100%' }}>
+          <thead><tr>{['ID', 'x', 'y', 'width', 'height', 'areaRatio', 'aspectRatio', 'rectangularity', 'parentIndex', 'childIndex'].map((label) => <th key={label} style={tableHeaderStyle}>{label}</th>)}</tr></thead>
+          <tbody>{result.candidates.map((candidate) => <tr key={candidate.candidateId}>
+            <td style={tableCellStyle}>{candidate.candidateId}</td><td style={tableCellStyle}>{candidate.rect.x}</td><td style={tableCellStyle}>{candidate.rect.y}</td><td style={tableCellStyle}>{candidate.rect.width}</td><td style={tableCellStyle}>{candidate.rect.height}</td>
+            <td style={tableCellStyle}>{candidate.areaRatio.toFixed(4)}</td><td style={tableCellStyle}>{candidate.aspectRatio.toFixed(3)}</td><td style={tableCellStyle}>{candidate.rectangularity.toFixed(3)}</td><td style={tableCellStyle}>{candidate.parentIndex}</td><td style={tableCellStyle}>{candidate.childIndex}</td>
+          </tr>)}</tbody>
+        </table>
+      </div>
+    </section>
   );
 }
 
@@ -232,9 +312,11 @@ const controlsStyle: CSSProperties = { alignItems: 'end', background: '#f8fafc',
 const panelStyle: CSSProperties = { background: 'white', border: '1px solid #e5e7eb', borderRadius: 10, padding: 14 };
 const canvasFrameStyle: CSSProperties = { alignItems: 'center', background: '#f8fafc', border: '1px dashed #cbd5e1', borderRadius: 6, display: 'flex', justifyContent: 'center', minHeight: 240, overflow: 'auto', padding: 8 };
 const canvasStyle: CSSProperties = { height: 'auto', maxHeight: 480, maxWidth: '100%', objectFit: 'contain' };
-const gridStyle: CSSProperties = { display: 'grid', gap: 18, gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' };
+const gridStyle: CSSProperties = { display: 'grid', gap: 18, gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))' };
 const infoStyle: CSSProperties = { background: '#f1f5f9', borderRadius: 6, color: '#475569', fontSize: 14, margin: '0 0 12px', padding: '10px 12px' };
 const errorStyle: CSSProperties = { background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, color: '#991b1b', margin: '0 0 12px', padding: '10px 12px' };
 const timingStyle: CSSProperties = { background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: 6, color: '#065f46', display: 'grid', fontSize: 14, gap: 4, marginBottom: 12, padding: '10px 12px' };
 const configStyle: CSSProperties = { alignItems: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, display: 'flex', flexWrap: 'wrap', fontFamily: 'ui-monospace, monospace', fontSize: 12, gap: '8px 14px', marginBottom: 18, padding: '10px 12px' };
+const tableHeaderStyle: CSSProperties = { background: '#f8fafc', borderBottom: '1px solid #e2e8f0', padding: '8px 10px', position: 'sticky', textAlign: 'left', top: 0, whiteSpace: 'nowrap' };
+const tableCellStyle: CSSProperties = { borderBottom: '1px solid #f1f5f9', padding: '7px 10px', whiteSpace: 'nowrap' };
 function buttonStyle(disabled: boolean): CSSProperties { return { background: disabled ? '#94a3b8' : '#2563eb', border: 0, borderRadius: 6, color: 'white', cursor: disabled ? 'not-allowed' : 'pointer', fontSize: 14, fontWeight: 650, padding: '10px 15px' }; }
