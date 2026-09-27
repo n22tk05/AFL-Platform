@@ -19,9 +19,11 @@
     "test:persistence": "tsx src/modules/forms/tests/test-persistence.ts",
     "test:qa:stress": "tsx tests/integration/adversarial-qa-stress-test.ts",
     "generate:audio": "tsx src/modules/voice-ai/tests/generate-full-audio.ts",
+    "test:supervise": "npm run test:opencv && tsx --test src/modules/documents/tests/*.test.ts && npm run test:local && tsc --noEmit",
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@google-cloud/documentai": "^10.1.0",
     "@google-cloud/text-to-speech": "^7.1.0",
     "@google/genai": "^2.23.0",
     "@prisma/adapter-pg": "^7.10.0",
@@ -33,9 +35,11 @@
     "pg": "^8.23.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@prisma/config": "^7.10.0",
     "@types/node": "^20.19.43",
     "@types/pg": "^8.23.1",
@@ -43,6 +47,8 @@
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.6.1",
     "dotenv": "^18.0.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
     "postcss": "^8.5.28",
     "prisma": "^7.10.0",
     "tailwindcss": "^3.4.19",

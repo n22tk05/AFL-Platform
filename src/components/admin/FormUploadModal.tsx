@@ -178,28 +178,36 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
         { rect: { x: width * 0.16, y: height * 0.35, width: width * 0.45, height: height * 0.04 } },
         { rect: { x: width * 0.16, y: height * 0.42, width: width * 0.68, height: height * 0.06 } },
         { rect: { x: width * 0.48, y: height * 0.78, width: width * 0.4, height: height * 0.10 } },
-      ]).map((c, idx) => ({
-        boxId: `box_${String(idx + 1).padStart(2, "0")}`,
-        normalizedCoords: [
-          Number((c.rect.y / height).toFixed(4)),
-          Number((c.rect.x / width).toFixed(4)),
-          Number(((c.rect.y + c.rect.height) / height).toFixed(4)),
-          Number(((c.rect.x + c.rect.width) / width).toFixed(4)),
-        ] as [number, number, number, number],
-        rawText: `Ô kê khai số ${idx + 1}`,
-        boxType: c.rect.width / width < 0.08 ? "checkbox" : "text",
-        estimatedWidthRatio: Number((c.rect.width / width).toFixed(2)),
-      }));
+      ]).map((c, idx) => {
+        const ymin = Math.max(0, Math.min(0.98, Number((c.rect.y / height).toFixed(4))));
+        const xmin = Math.max(0, Math.min(0.98, Number((c.rect.x / width).toFixed(4))));
+        const ymax = Math.max(ymin + 0.01, Math.min(1.0, Number(((c.rect.y + c.rect.height) / height).toFixed(4))));
+        const xmax = Math.max(xmin + 0.01, Math.min(1.0, Number(((c.rect.x + c.rect.width) / width).toFixed(4))));
+        return {
+          boxId: `box_${String(idx + 1).padStart(2, "0")}`,
+          normalizedCoords: [ymin, xmin, ymax, xmax] as [number, number, number, number],
+          rawText: `Ô kê khai số ${idx + 1}`,
+          boxType: (c.rect.width / width < 0.08 ? "checkbox" : "text") as "checkbox" | "text",
+          estimatedWidthRatio: Math.max(0.01, Math.min(1.0, Number((c.rect.width / width).toFixed(2)))),
+        };
+      });
 
-      // Gọi API LLM sinh kịch bản
+      const rawId = formCode.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_").slice(0, 60);
+      const sanitizedFormId = rawId || `form_${Date.now()}`;
+
+      // Gọi API LLM sinh kịch bản kèm x-admin-key (Step 07 guardrail)
       let generatedSteps: FormWorkflow["steps"] = [];
       try {
+        const adminKey = process.env.NEXT_PUBLIC_ADMIN_KEY || "afl_admin_secret_key_2026";
         const promptRes = await fetch("/api/llm/prompt", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": adminKey,
+          },
           body: JSON.stringify({
             manifest: {
-              formId: formCode.toLowerCase().replace(/[^a-z0-9_]/g, "_"),
+              formId: sanitizedFormId,
               formTitle: formTitle.trim(),
               formCode: formCode.trim(),
               imageDimensions: { width, height },
@@ -212,7 +220,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
           const promptData = await promptRes.json();
           if (promptData.success && promptData.data?.steps) {
             generatedSteps = promptData.data.steps.map((st: { stepIndex?: number; boxId: string; sectionName?: string; label?: string; voiceGuidance?: string; audioUrl?: string; exampleRedText?: string; highlightCoords?: [number, number, number, number]; requiresPrerequisiteDoc?: boolean; legalWarningFlag?: boolean; faqs?: Array<{ question: string; answer: string }> }, sIdx: number) => ({
-              stepIndex: sIdx,
+              stepIndex: sIdx + 1,
               boxId: st.boxId || `box_${String(sIdx + 1).padStart(2, "0")}`,
               pageNumber: 1,
               sectionName: st.sectionName || `Mục ${sIdx + 1}`,
@@ -231,14 +239,14 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
         console.warn("LLM API fallback:", promptErr);
       }
 
-      // Nếu không có steps từ API, dùng fallback mẫu với tọa độ thật
+      // Nếu không có steps từ API, dùng fallback mẫu với tọa độ thật và stepIndex 1-based
       if (generatedSteps.length === 0) {
         generatedSteps = manifestBoxes.map((box, idx) => ({
-          stepIndex: idx,
+          stepIndex: idx + 1,
           boxId: box.boxId,
           pageNumber: 1,
           sectionName: idx === 0 ? "I. TIÊU ĐỀ & KÍNH GỬI" : idx === manifestBoxes.length - 1 ? "IV. KÝ TÊN" : "II. THÔNG TIN KÊ KHAI",
-          label: idx === 0 ? "Cơ quan tiếp nhận giải quyết" : idx === manifestBoxes.length - 1 ? "Chữ ký và họ tên người làm đơn" : `Thông tin kê khai mục ${idx}`,
+          label: idx === 0 ? "Cơ quan tiếp nhận giải quyết" : idx === manifestBoxes.length - 1 ? "Chữ ký và họ tên người làm đơn" : `Thông tin kê khai mục ${idx + 1}`,
           voiceGuidance: idx === manifestBoxes.length - 1
             ? "Bước cuối rồi bác ơi! Bác ký tên và viết rõ họ tên của mình vào ô này nhé."
             : "Bác nhìn vào ô đang sáng trên màn hình và viết thông tin rõ ràng nhé.",

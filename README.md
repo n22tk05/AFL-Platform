@@ -1,6 +1,8 @@
 ![AFL Platform](assets/banner.jpg)
 
 # AFL Platform — AI-Assisted Form-Filling CRM for Elderly Citizens
+
+**FR-6 hiện tại:** `/scan-document` dùng OpenCV deskew → Google Document AI OCR → Gemini text theo schema → kiểm chứng bằng chứng → người dùng duyệt → Session RAM. Chưa có benchmark độ chính xác trên ảnh thật. Xem [cấu hình, audit và kiểm thử](docs/DOCUMENT-EXTRACTION.md).
 ## Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh & Quản trị Quy trình cho Người cao tuổi tại Việt Nam
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)

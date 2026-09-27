@@ -1,25 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Volume2, RotateCcw, Mic, HelpCircle } from "lucide-react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Volume2, RotateCcw, Mic, HelpCircle, Loader2 } from "lucide-react";
 import { StepFaqItem } from "@/shared/contracts";
+import { useVoiceAssistant } from "@/modules/voice-ai/hooks/use-voice-assistant";
 
 interface VoiceAssistantPanelProps {
   voiceGuidance: string;
   audioUrl?: string;
   faqs?: StepFaqItem[];
+  formCode?: string;
+  stepIndex?: number;
 }
 
 export function VoiceAssistantPanel({
   voiceGuidance,
   faqs = [],
+  formCode = "01/LPTB-PTP",
+  stepIndex = 1,
 }: VoiceAssistantPanelProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [faqAnswer, setFaqAnswer] = useState<string | null>(null);
+  const transcriptRef = useRef<string>("");
 
-  // Đọc câu thoại voiceGuidance bằng Web Speech Synthesis (tốc độ 0.9x)
-  const speakText = (text: string) => {
+  // Đọc câu thoại bằng Web Speech Synthesis (tốc độ 0.9x)
+  const speakText = useCallback((text: string) => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
@@ -30,7 +35,38 @@ export function VoiceAssistantPanel({
       utterance.onerror = () => setIsPlaying(false);
       window.speechSynthesis.speak(utterance);
     }
-  };
+  }, []);
+
+  const askQuestionRef = useRef<(code: string, idx: number, q: string) => Promise<void>>();
+
+  const {
+    isListening,
+    isPlaying: isAudioPlaying,
+    isAnswering,
+    transcript,
+    startListening,
+    stopListening,
+    askQuestion,
+    stopAudio,
+  } = useVoiceAssistant({
+    onTranscriptUpdate: (text, isFinal) => {
+      transcriptRef.current = text;
+      if (isFinal && text.trim()) {
+        askQuestionRef.current?.(formCode, stepIndex, text);
+      }
+    },
+    onAnswerReceived: (answerText) => {
+      setFaqAnswer(answerText);
+      speakText(answerText);
+    },
+  });
+
+  askQuestionRef.current = askQuestion;
+
+  const handleSendQuestion = useCallback((q: string) => {
+    if (!q.trim()) return;
+    askQuestion(formCode, stepIndex, q);
+  }, [formCode, stepIndex, askQuestion]);
 
   // Tự động phát khi chuyển bước
   useEffect(() => {
@@ -41,8 +77,9 @@ export function VoiceAssistantPanel({
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
+      stopAudio();
     };
-  }, [voiceGuidance]);
+  }, [voiceGuidance, speakText, stopAudio]);
 
   const handleReplay = () => {
     speakText(faqAnswer || voiceGuidance);
@@ -53,6 +90,26 @@ export function VoiceAssistantPanel({
     speakText(faq.answer);
   };
 
+  const handleMicDown = () => {
+    transcriptRef.current = "";
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    stopAudio();
+    startListening();
+  };
+
+  const handleMicUp = () => {
+    stopListening();
+    setTimeout(() => {
+      if (transcriptRef.current.trim()) {
+        handleSendQuestion(transcriptRef.current);
+      }
+    }, 300);
+  };
+
+  const activePlaying = isPlaying || isAudioPlaying;
+
   return (
     <div className="w-full flex flex-col gap-2.5">
       {/* Khung lời thoại hướng dẫn (Tối giản màu sắc) */}
@@ -61,7 +118,7 @@ export function VoiceAssistantPanel({
           <div className="flex items-start gap-3">
             <div
               className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-white ${
-                isPlaying ? "bg-[#D32F2F] animate-pulse" : "bg-slate-800"
+                activePlaying ? "bg-[#D32F2F] animate-pulse" : "bg-slate-800"
               }`}
             >
               <Volume2 className="w-5 h-5" />
@@ -87,7 +144,14 @@ export function VoiceAssistantPanel({
           </button>
         </div>
 
-        {faqAnswer && (
+        {isAnswering && (
+          <div className="mt-1 p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs sm:text-sm font-semibold text-amber-900 flex items-center gap-2">
+            <Loader2 className="w-4 h-4 animate-spin text-amber-700" />
+            <span>Cháu đang nghe và suy nghĩ câu trả lời cho bác, bác đợi xíu nhé...</span>
+          </div>
+        )}
+
+        {faqAnswer && !isAnswering && (
           <div className="mt-1 p-3 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-800">
             <span className="text-slate-500 font-bold block mb-0.5">Giải đáp:</span>
             {faqAnswer}
@@ -98,10 +162,10 @@ export function VoiceAssistantPanel({
       {/* Nút Nhấn Giữ Mic (Chuẩn bị cho Voice AI) */}
       <button
         type="button"
-        onMouseDown={() => setIsListening(true)}
-        onMouseUp={() => setIsListening(false)}
-        onTouchStart={() => setIsListening(true)}
-        onTouchEnd={() => setIsListening(false)}
+        onMouseDown={handleMicDown}
+        onMouseUp={handleMicUp}
+        onTouchStart={handleMicDown}
+        onTouchEnd={handleMicUp}
         className={`w-full min-h-[52px] rounded-xl border-2 flex items-center justify-center gap-2.5 font-bold text-sm select-none transition-all ${
           isListening
             ? "bg-[#D32F2F] text-white border-[#D32F2F] animate-pulse"
@@ -109,7 +173,13 @@ export function VoiceAssistantPanel({
         }`}
       >
         <Mic className="w-5 h-5" />
-        <span>{isListening ? "ĐANG LẮNG NGHE BÁC NÓI..." : "NHẤN GIỮ VÀO ĐÂY ĐỂ HỎI TRỢ LÝ"}</span>
+        <span>
+          {isListening
+            ? transcript
+              ? `BÁC ĐANG HỎI: "${transcript}"`
+              : "ĐANG LẮNG NGHE BÁC NÓI..."
+            : "NHẤN GIỮ VÀO ĐÂY ĐỂ HỎI TRỢ LÝ"}
+        </span>
       </button>
 
       {/* Gợi ý câu hỏi nhanh (nếu có) */}

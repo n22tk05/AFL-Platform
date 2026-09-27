@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect, Suspense } from "react";
+import { documentSession, prerequisiteValue } from "@/modules/documents/session";
 import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { WorkflowStep, FormWorkflow } from "@/shared/contracts";
@@ -15,22 +16,8 @@ function GuideContent() {
   const templateId = searchParams?.get("templateId") || "tpl_01_lptb";
 
   // Lựa chọn kịch bản: Ưu tiên nạp bản mới nhất từ localStorage do Admin vừa xuất bản
-  const [workflow, setWorkflow] = useState<FormWorkflow>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const savedData = localStorage.getItem(`afl_workflow_published_${templateId}`);
-        if (savedData) {
-          const parsed = JSON.parse(savedData) as FormWorkflow;
-          if (parsed && Array.isArray(parsed.steps) && parsed.steps.length > 0) {
-            return parsed;
-          }
-        }
-      } catch (e) {
-        console.warn("Lỗi đọc bản lưu localStorage:", e);
-      }
-    }
-    return getMockWorkflow(templateId);
-  });
+  // Match server rendering; the effect below loads browser-only published state.
+  const [workflow, setWorkflow] = useState<FormWorkflow>(() => getMockWorkflow(templateId));
 
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
 
@@ -76,38 +63,23 @@ function GuideContent() {
   const [prerequisiteFields, setPrerequisiteFields] = useState<Record<string, string> | null>(null);
 
   useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem("afl_prerequisite_document_data");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && parsed.fields) {
-          setPrerequisiteFields(parsed.fields);
-        }
-      }
-    } catch (e) {
-      console.warn("Lỗi đọc Session RAM chứng từ:", e);
-    }
+    try { sessionStorage.removeItem("afl_prerequisite_document_data"); } catch { /* Discard legacy data. */ }
+    const refresh = () => setPrerequisiteFields(documentSession.read());
+    refresh();
+    return documentSession.subscribe(refresh);
   }, []);
 
   const steps: WorkflowStep[] = workflow.steps || [];
   const totalSteps = steps.length;
   const currentStep = steps[currentStepIndex];
 
-  // Tính toán chữ mẫu đỏ: Ưu tiên lấy từ Session RAM nếu là bước liên chứng từ (FR-6)
   const effectiveExampleText = useMemo(() => {
     if (!currentStep) return "";
-    if (currentStep.requiresPrerequisiteDoc && prerequisiteFields) {
-      if ((currentStep.boxId === "box_05" || currentStep.label.toLowerCase().includes("tiền")) && prerequisiteFields.so_tien_phat) {
-        return prerequisiteFields.so_tien_phat.toUpperCase();
-      }
-      if ((currentStep.boxId === "box_02" || currentStep.label.toLowerCase().includes("biên bản")) && prerequisiteFields.so_bien_ban) {
-        return prerequisiteFields.so_bien_ban.toUpperCase();
-      }
-      if (prerequisiteFields.so_tien_phat) {
-        return prerequisiteFields.so_tien_phat.toUpperCase();
-      }
+    if (currentStep.requiresPrerequisiteDoc) {
+      const value = prerequisiteValue(prerequisiteFields, currentStep.sourceFieldFromPrerequisite);
+      return value?.toUpperCase() ?? "CHƯA CÓ DỮ LIỆU CHỨNG TỪ ĐÃ DUYỆT";
     }
-    return currentStep.exampleRedText;
+    return currentStep.exampleRedText || "";
   }, [currentStep, prerequisiteFields]);
 
   const handlePrevStep = () => {
@@ -120,6 +92,7 @@ function GuideContent() {
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
+      documentSession.clear();
       alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow.formTitleVi || workflow.formTitle || "tờ khai"}!`);
     }
   };
@@ -162,6 +135,8 @@ function GuideContent() {
           voiceGuidance={currentStep.voiceGuidance}
           audioUrl={currentStep.audioUrl}
           faqs={currentStep.faqs}
+          formCode={workflow.formCode}
+          stepIndex={currentStep.stepIndex || (currentStepIndex + 1)}
         />
 
         {/* 4. Chữ mẫu in hoa màu đỏ tương phản cao #D32F2F (FR-5) */}

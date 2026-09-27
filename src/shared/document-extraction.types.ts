@@ -1,49 +1,54 @@
-/**
- * Hợp đồng dữ liệu bóc tách văn bản toàn diện (Universal Document Extraction Contracts)
- * Phục vụ phân hệ Thị giác máy tính (OpenCV WASM) kết hợp Gemini Multimodal Vision.
- * Tuân thủ quy định bảo vệ dữ liệu cá nhân theo Nghị định 13/2023/NĐ-CP.
- */
-
-export type DocumentCategory = 
-  | 'identity'        // Thông tin nhân thân (Họ tên, CCCD, ngày sinh, quê quán...)
-  | 'legal_event'     // Sự việc pháp lý / Hành vi vi phạm (Lỗi, thời gian, địa điểm vi phạm...)
-  | 'financial'       // Thông tin tiền tệ / Tài chính (Số tiền phạt, tiền thuế, số tài khoản kho bạc...)
-  | 'property'        // Thông tin tài sản / Đất đai (Thửa đất số, tờ bản đồ, diện tích, biển số xe...)
-  | 'administrative'  // Thủ tục / Quy định (Cơ quan thụ lý, cán bộ lập, thời hạn nộp...)
-  | 'general';        // Thông tin chung khác
-
-export interface ExtractedField {
-  fieldKey: string;           // Mã định danh chuẩn hóa (vd: 'so_bien_ban', 'ho_va_ten', 'so_tien_phat')
-  fieldLabel: string;         // Nhãn tiếng Việt hiển thị trên văn bản (vd: 'Họ và tên người vi phạm')
-  fieldValue: string;         // Giá trị trích xuất thực tế (giữ nguyên tiếng Việt có dấu)
-  category: DocumentCategory; // Phân nhóm nghiệp vụ
-  confidence: number;         // Độ tin cậy từ 0.0 đến 1.0 (ví dụ 0.95 = 95%)
-  isSensitive: boolean;       // Cờ cảnh báo thông tin cá nhân/tài chính nhạy cảm (PII)
-  boundingBox?: [number, number, number, number]; // Tọa độ chuẩn hóa [ymin, xmin, ymax, xmax] trong khoảng [0.0 - 1.0]
+import type { NormalizedBoundingBox } from './contracts';
+export type { NormalizedBoundingBox } from './contracts';
+export interface DocumentOcrInput { bytes: Uint8Array; mimeType: 'image/jpeg' | 'image/png'; signal?: AbortSignal }
+export interface OcrToken {
+  id: string;
+  text: string;
+  confidence: number | null;
+  /** [ymin, xmin, ymax, xmax] relative to the processed page, never pixels. */
+  boundingBox: NormalizedBoundingBox;
+  page: number;
 }
-
-export interface ExtractedTable {
-  tableName?: string;         // Tên bảng (nếu có)
-  headers: string[];          // Danh sách tiêu đề cột
-  rows: string[][];           // Dữ liệu từng dòng
+export interface OcrLine extends OcrToken { tokenIds: string[] }
+export interface DocumentOcrResult {
+  provider: string;
+  fullText: string;
+  tokens: OcrToken[];
+  lines: OcrLine[];
+  pageCount: number;
+  warnings: string[];
 }
-
-export interface DocumentClassification {
-  documentType: string;       // Loại văn bản (vd: "Biên bản vi phạm hành chính", "Tờ khai lệ phí trước bạ")
-  documentTitle: string;      // Tiêu đề chính xác trên văn bản
-  formCode?: string;          // Số hiệu / Ký hiệu mẫu biểu (vd: "Mẫu số 01/LPTB", "Mẫu 02/BB-VPHC")
-  issuingAuthority?: string;  // Cơ quan ban hành / Đơn vị lập văn bản
-  issuedDate?: string;        // Ngày lập/ký văn bản (định dạng DD/MM/YYYY hoặc chuỗi gốc)
-  documentNumber?: string;    // Số hiệu văn bản / Số biên bản
+export interface DocumentOcrProvider { extract(input: DocumentOcrInput): Promise<DocumentOcrResult> }
+export type DocumentType = 'traffic_violation_record' | 'citizen_identity_card' | 'land_document' | 'unknown';
+export type ExtractedFieldStatus = 'accepted' | 'needs_review' | 'unreadable';
+export interface ExtractedField<T = unknown> {
+  key: string;
+  label: string;
+  value: T | null;
+  rawText: string | null;
+  confidence: number;
+  evidenceText: string | null;
+  sourceLineIds: string[];
+  sourceBoundingBoxes: NormalizedBoundingBox[];
+  status: ExtractedFieldStatus;
+  validationErrors: string[];
 }
-
-export interface DocumentExtractionResult {
-  success: boolean;
-  classification: DocumentClassification;
-  fields: ExtractedField[];
-  tables: ExtractedTable[];
-  fullText: string;           // Toàn văn tài liệu dạng Markdown có cấu trúc
+export interface StructuredDocumentResult {
+  documentType: DocumentType;
+  fields: Record<string, ExtractedField>;
+  fullText: string;
+  overallConfidence: number;
+  requiresReview: boolean;
+  warnings: string[];
+}
+/** Versioned migration of the old array contract; all in-repo consumers use v2. */
+export interface DocumentExtractionResult extends StructuredDocumentResult {
+  contractVersion: 2;
+  status: 'extracted' | 'manual_review_required';
   processingTimeMs: number;
-  warnings?: string[];
-  deskewApplied?: boolean;
+  deskewApplied: boolean;
+}
+export interface StructuredExtractionProvider {
+  classify(ocr: DocumentOcrResult, signal?: AbortSignal): Promise<DocumentType>;
+  extract(ocr: DocumentOcrResult, type: 'traffic_violation_record', signal?: AbortSignal): Promise<unknown>;
 }
