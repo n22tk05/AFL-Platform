@@ -93,11 +93,16 @@ export class FormPersistenceService {
 
   public async saveReviewWorkflow(formCode: string, workflow: FormWorkflow) {
     if (workflow.formCode !== formCode) throw new Error('FORM_CODE_MISMATCH');
-    if (!workflow.steps?.length) throw new Error('INVALID_WORKFLOW');
-    if (workflow.steps.some((step, index) => !step || step.stepIndex !== index + 1 ||
-      !step.boxId || !step.label?.trim() || !step.sectionName?.trim() || !step.voiceGuidance?.trim() ||
-      !step.exampleRedText?.trim() || !validCoords(step.highlightCoords) || !Array.isArray(step.faqs) || step.faqs.length === 0 ||
-      step.faqs.some(faq => !faq?.question?.trim() || !faq.answer?.trim()))) throw new Error('INVALID_WORKFLOW');
+    if (typeof workflow.formTitle !== 'string' || !workflow.formTitle.trim() || !Array.isArray(workflow.steps) || !workflow.steps.length) {
+      throw new Error('INVALID_WORKFLOW');
+    }
+    if (workflow.steps.some((step, index) => !step || !Number.isSafeInteger(step.stepIndex) || step.stepIndex !== index + 1 ||
+      typeof step.boxId !== 'string' || !step.boxId.trim() || typeof step.label !== 'string' || !step.label.trim() ||
+      typeof step.sectionName !== 'string' || !step.sectionName.trim() || typeof step.voiceGuidance !== 'string' || !step.voiceGuidance.trim() ||
+      typeof step.exampleRedText !== 'string' || !step.exampleRedText.trim() || !validCoords(step.highlightCoords) || !Array.isArray(step.faqs) || step.faqs.length === 0 ||
+      step.faqs.some(faq => !faq || typeof faq.question !== 'string' || !faq.question.trim() || typeof faq.answer !== 'string' || !faq.answer.trim()))) {
+      throw new Error('INVALID_WORKFLOW');
+    }
     if (!await this.databaseHealth.check()) throw new Error('DATABASE_UNAVAILABLE');
     try { return await this.repository.saveReviewWorkflow(formCode, workflow); }
     catch (error) {

@@ -32,7 +32,7 @@ function validWorkflow(value: unknown): value is FormWorkflow {
   if (workflow.pages !== undefined && (!Array.isArray(workflow.pages) || workflow.pages.some(page =>
     !page || !Number.isSafeInteger(page.pageNumber) || page.pageNumber < 1 || typeof page.imageUrl !== 'string' ||
     !Number.isFinite(page.width) || page.width <= 0 || !Number.isFinite(page.height) || page.height <= 0))) return false;
-  return workflow.steps.every(step => step && Number.isSafeInteger(step.stepIndex) && step.stepIndex >= 1 &&
+  return workflow.steps.every((step, index) => step && Number.isSafeInteger(step.stepIndex) && step.stepIndex === index + 1 &&
     typeof step.boxId === 'string' && !!step.boxId.trim() &&
     typeof step.sectionName === 'string' && !!step.sectionName.trim() &&
     typeof step.label === 'string' && !!step.label.trim() &&

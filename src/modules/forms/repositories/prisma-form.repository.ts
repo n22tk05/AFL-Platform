@@ -270,6 +270,7 @@ export class PrismaFormRepository implements FormRepository {
 
   public async saveReviewWorkflow(formCode: string, workflow: FormWorkflow) {
     if (workflow.formCode !== formCode) throw new Error('FORM_CODE_MISMATCH');
+    if (typeof workflow.formTitle !== 'string' || !workflow.formTitle.trim()) throw new Error('INVALID_WORKFLOW');
     try {
       return await this.database.$transaction(async tx => {
         const existing = await tx.formTemplate.findUnique({

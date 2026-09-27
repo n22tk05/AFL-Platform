@@ -77,6 +77,18 @@ async function run() {
   assert.equal(saved.status, 200);
   assert.equal(persisted.formTitle, 'Edited draft');
 
+  let healthChecksForInvalid = 0;
+  const invalidSaveService = new FormPersistenceService(repository, {
+    check: async () => { healthChecksForInvalid++; return true; }, markOffline() {},
+  });
+  const invalidSaveController = new FormController(invalidSaveService, new AdminAuthorizationService(() => 'test-key'));
+  const invalidLabel = await invalidSaveController.saveReviewWorkflow({
+    ...auth, rawFormCode: '01%2FLPTB', body: { ...draft, steps: [{ ...draft.steps[0], label: 42 }] },
+  });
+  assert.equal(invalidLabel.status, 400, 'malformed review field types return INVALID_WORKFLOW');
+  assert.equal((invalidLabel.body as any).error.code, 'INVALID_WORKFLOW');
+  assert.equal(healthChecksForInvalid, 0, 'invalid review fields are rejected before database health checks');
+
   assert.equal((await controller.saveReviewWorkflow({ ...auth, rawFormCode: '01%2FLPTB', body: { ...draft, formCode: 'other' } })).status, 400);
   assert.equal((await controller.listForms({ authorization: 'Bearer bad' })).status, 401);
   assert.equal((await new FormController(service, new AdminAuthorizationService(() => undefined)).listForms(auth)).status, 503);
@@ -102,6 +114,13 @@ async function run() {
     await assert.rejects(fake.repository.saveReviewWorkflow('01/LPTB', invalid), /INVALID_WORKFLOW/);
     assert.deepEqual(fake.effects, { guardedWrites: 0, stepDeletes: 0, stepCreates: 0, upserts: 0 },
       'invalid edits are rejected before persistence writes');
+  }
+
+  for (const formTitle of ['', ' \t ']) {
+    const fake = makePrismaFake();
+    await assert.rejects(fake.repository.saveReviewWorkflow('01/LPTB', { ...twoStepDraft, formTitle }), /INVALID_WORKFLOW/);
+    assert.deepEqual(fake.effects, { guardedWrites: 0, stepDeletes: 0, stepCreates: 0, upserts: 0 },
+      'blank form titles are rejected before any persistence writes');
   }
 
   const racedApproval = makePrismaFake('DRAFT', true);

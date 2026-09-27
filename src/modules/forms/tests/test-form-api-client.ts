@@ -43,6 +43,21 @@ async function run() {
   });
   assert.equal(fixture.formTitle, 'Fixture');
 
+  for (const invalidSteps of [
+    [{ ...workflow.steps[0], stepIndex: 2 }],
+    [{ ...workflow.steps[0] }, { ...workflow.steps[0], stepIndex: 1, boxId: 'box_2' }],
+    [{ ...workflow.steps[0] }, { ...workflow.steps[0], stepIndex: 3, boxId: 'box_3' }],
+  ]) {
+    const preserved = { ...workflow, formTitle: 'Preserved cache' };
+    storage.setItem(workflowStorageKey('01/LPTB'), JSON.stringify(preserved));
+    const result = await fetchWorkflow('01/LPTB', {
+      storage, fallback,
+      fetcher: async () => Response.json({ success: true, data: { ...workflow, steps: invalidSteps } }),
+    });
+    assert.equal(result.formTitle, 'Preserved cache', 'noncontiguous live steps fall back to the valid cache');
+    assert.equal(storage.getItem(workflowStorageKey('01/LPTB')), JSON.stringify(preserved), 'malformed live data does not replace the valid cache');
+  }
+
   storage.values.clear();
   const malformed = { ...workflow, steps: [{ stepIndex: 1, label: 'Missing required contract fields' }] } as unknown as FormWorkflow;
   const malformedFallback = await fetchWorkflow('01/LPTB', {
