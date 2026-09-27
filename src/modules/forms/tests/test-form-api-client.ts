@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { fetchWorkflow, workflowStorageKey } from '@/modules/forms/client';
 import type { FormWorkflow } from '@/shared/contracts';
+import bundledLptb from '../../../../assets/mock-data/mock-workflow-tpl_01_lptb.json';
+import { prepareWorkflowFixture } from '@/modules/forms/client';
 
 const workflow: FormWorkflow = {
   formCode: '01/LPTB', formTitle: 'Live', steps: [{
@@ -73,6 +75,18 @@ async function run() {
     fetcher: async () => { throw new Error('offline'); },
   });
   assert.equal(malformedCacheFallback.formTitle, 'Fixture', 'malformed cached workflows are rejected');
+
+  const preparedFixture = prepareWorkflowFixture(bundledLptb as unknown as FormWorkflow, 'Mẫu số: 01/LPTB', ['01/LPTB']);
+  assert.ok(preparedFixture, 'real LPTB bundled fixture matches its known alias');
+  assert.equal(preparedFixture.steps[0].stepIndex, 1, 'fixture copy is converted to one-based indices');
+  assert.equal(bundledLptb.steps[0].stepIndex, 0, 'imported fixture remains unchanged');
+  assert.equal(prepareWorkflowFixture(bundledLptb as unknown as FormWorkflow, 'OTHER_FORM', ['OTHER_FORM']), null,
+    'unrelated forms cannot consume LPTB fixture data');
+  const offlineFixture = await fetchWorkflow('Mẫu số: 01/LPTB', {
+    fallback: preparedFixture!, fetcher: async () => { throw new Error('offline'); },
+  });
+  assert.equal(offlineFixture.formCode, 'Mẫu số: 01/LPTB');
+  assert.equal(offlineFixture.steps[0].stepIndex, 1, 'valid prepared bundled fixture works as offline fallback');
 
   await assert.rejects(fetchWorkflow('01/LPTB', {
     fetcher: async () => Response.json({ success: true, data: { ...workflow, steps: [] } }),

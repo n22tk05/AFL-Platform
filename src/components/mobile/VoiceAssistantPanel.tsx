@@ -14,7 +14,7 @@ interface VoiceAssistantPanelProps {
 }
 
 export function VoiceAssistantPanel({ voiceGuidance, audioUrl, faqs = [], formCode, stepIndex }: VoiceAssistantPanelProps) {
-  const voice = useVoiceAssistant();
+  const voice = useVoiceAssistant({ formCode, stepIndex });
   useEffect(() => {
     voice.playGuidance(voiceGuidance, audioUrl);
     return () => voice.stopAudio();
@@ -26,7 +26,6 @@ export function VoiceAssistantPanel({ voiceGuidance, audioUrl, faqs = [], formCo
   };
   const stop = (event: React.PointerEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (!voice.isListening) return;
     voice.stopListening(formCode, stepIndex);
   };
   const replay = () => voice.answer ? voice.playAnswer(voice.answer, voice.answerAudioUrl) : voice.playGuidance(voiceGuidance, audioUrl);

@@ -4,26 +4,45 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 import type { WorkflowStep, FormWorkflow } from '@/shared/contracts';
-import { getMockWorkflow } from '@/config/app.config';
-import { fetchWorkflow, workflowStorageKey, WorkflowSource } from '@/modules/forms/client';
+import { MOCK_WORKFLOW_REGISTRY } from '@/config/app.config';
+import { canonicalFormCode, fetchWorkflow, prepareWorkflowFixture, WorkflowSource } from '@/modules/forms/client';
 import { VisualTwin } from '@/components/mobile/VisualTwin';
 import { RedTextExample } from '@/components/mobile/RedTextExample';
 import { StepHeader } from '@/components/mobile/StepHeader';
 import { VoiceAssistantPanel } from '@/components/mobile/VoiceAssistantPanel';
 
 const LIVE_FORM_CODE = 'Mẫu số: 01/LPTB';
-function resolveFormCode(alias: string): string {
+const aliases: Record<string, { formCode: string; fixtureId: string }> = {
+  tpl_01_lptb: { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
+  '01-lptb': { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
+  '01/lptb': { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
+  'mẫu số: 01/lptb': { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
+  tpl_03_khai_sinh: { formCode: 'KHAI_SINH_LAI', fixtureId: 'tpl_03_khai_sinh' },
+  khai_sinh_lai: { formCode: 'KHAI_SINH_LAI', fixtureId: 'tpl_03_khai_sinh' },
+};
+function resolveForm(alias: string): { formCode: string; fixtureId?: string } {
   const value = alias.trim().toLocaleLowerCase('vi');
-  return ['tpl_01_lptb', '01-lptb', '01/lptb', 'mẫu số: 01/lptb'].includes(value) ? LIVE_FORM_CODE : alias.trim();
+  return aliases[value] ?? { formCode: alias.trim() };
+}
+function fixtureFor(fixtureId: string | undefined, expectedCode: string): FormWorkflow | undefined {
+  if (!fixtureId) return undefined;
+  const fixture = MOCK_WORKFLOW_REGISTRY[fixtureId];
+  if (!fixture) return undefined;
+  const acceptedCodes = fixtureId === 'tpl_01_lptb' ? ['01/LPTB', 'Mẫu số: 01/LPTB'] : [fixture.formCode];
+  return prepareWorkflowFixture(fixture, expectedCode, acceptedCodes) ?? undefined;
 }
 function enrichPresentation(live: FormWorkflow, fixture: FormWorkflow): FormWorkflow {
-  const fixtureSteps = new Map(fixture.steps.map(step => [step.stepIndex, step]));
+  const lptbAliases = ['01/LPTB', 'Mẫu số: 01/LPTB'].map(canonicalFormCode);
+  const sameIdentity = canonicalFormCode(live.formCode) === canonicalFormCode(fixture.formCode) ||
+    (lptbAliases.includes(canonicalFormCode(live.formCode)) && lptbAliases.includes(canonicalFormCode(fixture.formCode)));
+  if (!sameIdentity) return live;
+  const fixtureSteps = new Map(fixture.steps.map(step => [step.boxId, step]));
   return {
     ...live,
     pages: live.pages?.length ? live.pages : fixture.pages,
     totalPages: live.totalPages ?? fixture.totalPages,
     steps: live.steps.map(step => {
-      const display = fixtureSteps.get(step.stepIndex);
+      const display = fixtureSteps.get(step.boxId);
       return { ...step, ...(step.pageNumber === undefined && display?.pageNumber ? { pageNumber: display.pageNumber } : {}) };
     }),
   };
@@ -32,7 +51,7 @@ function enrichPresentation(live: FormWorkflow, fixture: FormWorkflow): FormWork
 function GuideContent() {
   const searchParams = useSearchParams();
   const templateId = searchParams?.get('templateId') || 'tpl_01_lptb';
-  const formCode = resolveFormCode(templateId);
+  const { formCode, fixtureId } = resolveForm(templateId);
   const [workflow, setWorkflow] = useState<FormWorkflow | null>(null);
   const [source, setSource] = useState<WorkflowSource | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -41,14 +60,13 @@ function GuideContent() {
   useEffect(() => {
     let active = true;
     setWorkflow(null); setSource(null); setLoadError(null); setCurrentStepIndex(0);
-    const fixtureBase = getMockWorkflow(templateId);
-    const fixture = { ...fixtureBase, formCode: LIVE_FORM_CODE };
+    const fixture = fixtureFor(fixtureId, formCode);
     fetchWorkflow(formCode, {
       storage: window.localStorage,
       fallback: fixture,
       onSource: value => { if (active) setSource(value); },
     }).then(result => {
-      if (active) setWorkflow(enrichPresentation(result, fixture));
+      if (active) setWorkflow(fixture ? enrichPresentation(result, fixture) : result);
     }).catch(() => {
       if (active) setLoadError('Không tải được hướng dẫn. Vui lòng kiểm tra kết nối rồi thử lại.');
     });

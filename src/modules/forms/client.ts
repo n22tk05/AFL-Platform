@@ -51,6 +51,22 @@ function validWorkflow(value: unknown): value is FormWorkflow {
       typeof faq.answer === 'string' && !!faq.answer.trim()))));
 }
 
+/** Copy a compatible bundled fixture into the live one-based workflow contract. */
+export function prepareWorkflowFixture(
+  fixture: FormWorkflow,
+  expectedFormCode: string,
+  acceptedFixtureCodes: string[] = [expectedFormCode],
+): FormWorkflow | null {
+  const fixtureCode = canonicalFormCode(fixture.formCode);
+  if (!acceptedFixtureCodes.some(code => canonicalFormCode(code) === fixtureCode)) return null;
+  const prepared: FormWorkflow = {
+    ...fixture,
+    formCode: expectedFormCode,
+    steps: fixture.steps.map((step, index) => ({ ...step, stepIndex: index + 1 })),
+  };
+  return validWorkflow(prepared) ? prepared : null;
+}
+
 function cachedWorkflow(storage: WorkflowStorage | undefined, formCode: string): FormWorkflow | null {
   try {
     const raw = storage?.getItem(workflowStorageKey(formCode));
