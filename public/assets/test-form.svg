@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1700" width="1200" height="1700">
+  <defs>
+    <filter id="paper-shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Nền giấy trắng A4 scan giả lập -->
+  <rect width="1200" height="1700" fill="#FFFFFF"/>
+  <rect x="40" y="40" width="1120" height="1620" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
+
+  <!-- Quốc hiệu & Tiêu ngữ -->
+  <g font-family="system-ui, -apple-system, sans-serif" text-anchor="middle">
+    <text x="600" y="100" font-size="20" font-weight="bold" fill="#111827" letter-spacing="1">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</text>
+    <text x="600" y="130" font-size="18" font-weight="bold" fill="#1F2937">Độc lập - Tự do - Hạnh phúc</text>
+    <line x1="460" y1="145" x2="740" y2="145" stroke="#111827" stroke-width="1.5"/>
+
+    <!-- Tiêu đề tờ khai -->
+    <text x="600" y="210" font-size="28" font-weight="900" fill="#111827">TỜ KHAI LỆ PHÍ TRƯỚC BẠ</text>
+    <text x="600" y="245" font-size="18" font-style="italic" fill="#4B5563">(Áp dụng đối với nhà, đất)</text>
+  </g>
+
+  <!-- Ký hiệu mẫu form góc phải -->
+  <g font-family="system-ui, -apple-system, sans-serif" text-anchor="end" fill="#374151" font-size="14">
+    <text x="1100" y="100" font-weight="bold">Mẫu số: 01/LPTB</text>
+    <text x="1100" y="125" font-size="12">(Ban hành kèm theo Thông tư</text>
+    <text x="1100" y="145" font-size="12">số 80/2021/TT-BTC)</text>
+  </g>
+
+  <!-- PHẦN I: THÔNG TIN NGƯỜI NỘP THUẾ -->
+  <g font-family="system-ui, -apple-system, sans-serif" fill="#1F2937">
+    <text x="80" y="300" font-size="18" font-weight="bold">[01] Người nộp thuế:</text>
+    <!-- Ô nhập người nộp thuế -->
+    <rect x="290" y="278" width="810" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+    <text x="305" y="301" font-size="16" fill="#9CA3AF" font-style="italic">Họ và tên ghi bằng chữ in hoa</text>
+
+    <!-- [02] Mã số thuế: 10 ô vuông -->
+    <text x="80" y="360" font-size="18" font-weight="bold">[02] Mã số thuế:</text>
+    <g transform="translate(290, 335)">
+      <rect x="0" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="38" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="76" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="114" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="152" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="190" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="228" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="266" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="304" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+      <rect x="342" y="0" width="34" height="36" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="2"/>
+    </g>
+
+    <!-- [03] Địa chỉ cư trú -->
+    <text x="80" y="430" font-size="18" font-weight="bold">[03] Địa chỉ cư trú:</text>
+    <rect x="290" y="408" width="810" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+    <text x="305" y="431" font-size="16" fill="#9CA3AF" font-style="italic">Số nhà, phố, tổ dân phố / thôn, xã, phường, thị trấn...</text>
+
+    <!-- [04] Điện thoại & Email -->
+    <text x="80" y="495" font-size="18" font-weight="bold">[04] Số điện thoại:</text>
+    <rect x="290" y="473" width="350" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+    
+    <text x="670" y="495" font-size="18" font-weight="bold">[05] Email:</text>
+    <rect x="750" y="473" width="350" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+  </g>
+
+  <!-- ĐƯỜNG PHÂN CÁCH MỤC -->
+  <line x1="80" y1="540" x2="1100" y2="540" stroke="#CBD5E1" stroke-width="2"/>
+
+  <!-- PHẦN II: THÔNG TIN THỬA ĐẤT / NHÀ Ở -->
+  <g font-family="system-ui, -apple-system, sans-serif" fill="#1F2937">
+    <text x="80" y="585" font-size="20" font-weight="bold" fill="#0F172A">MỤC II. ĐẶC ĐIỂM THỬA ĐẤT, NHÀ Ở CHUYỂN NHƯỢNG</text>
+
+    <!-- [06] Địa chỉ thửa đất -->
+    <text x="80" y="640" font-size="18" font-weight="bold">[06] Địa chỉ đất/nhà:</text>
+    <rect x="290" y="618" width="810" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+
+    <!-- [07] Thửa đất số, Tờ bản đồ số -->
+    <text x="80" y="705" font-size="18" font-weight="bold">[07] Thửa đất số:</text>
+    <rect x="230" y="683" width="180" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+    
+    <text x="440" y="705" font-size="18" font-weight="bold">Tờ bản đồ số:</text>
+    <rect x="580" y="683" width="180" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+
+    <text x="790" y="705" font-size="18" font-weight="bold">Năm cấp GCN:</text>
+    <rect x="930" y="683" width="170" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+
+    <!-- [08] Diện tích đất -->
+    <text x="80" y="775" font-size="18" font-weight="bold">[08] Diện tích (m²):</text>
+    <rect x="230" y="753" width="220" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+    <text x="470" y="775" font-size="16" fill="#6B7280">(Sử dụng riêng: .............. m²; Chung: .............. m²)</text>
+
+    <!-- [09] Nguồn gốc nhà đất -->
+    <text x="80" y="845" font-size="18" font-weight="bold">[09] Nguồn gốc đất:</text>
+    <g transform="translate(260, 827)">
+      <rect x="0" y="2" width="20" height="20" fill="none" stroke="#6B7280" stroke-width="1.5" rx="2"/>
+      <text x="30" y="18" font-size="16">Nhà nước giao</text>
+
+      <rect x="180" y="2" width="20" height="20" fill="none" stroke="#6B7280" stroke-width="1.5" rx="2"/>
+      <text x="210" y="18" font-size="16">Nhận chuyển nhượng</text>
+
+      <rect x="420" y="2" width="20" height="20" fill="none" stroke="#6B7280" stroke-width="1.5" rx="2"/>
+      <text x="450" y="18" font-size="16">Thừa kế, tặng cho</text>
+    </g>
+
+    <!-- [10] Giá trị chuyển nhượng -->
+    <text x="80" y="915" font-size="18" font-weight="bold">[10] Giá trị HĐ (VNĐ):</text>
+    <rect x="290" y="893" width="810" height="34" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" rx="3"/>
+  </g>
+
+  <!-- ĐƯỜNG KẺ BẢNG GIẤY TỜ KÈM THEO -->
+  <line x1="80" y1="970" x2="1100" y2="970" stroke="#CBD5E1" stroke-width="2"/>
+
+  <!-- PHẦN III: TÀI LIỆU KÈM THEO & CAM KẾT -->
+  <g font-family="system-ui, -apple-system, sans-serif" fill="#1F2937">
+    <text x="80" y="1015" font-size="20" font-weight="bold" fill="#0F172A">MỤC III. GIẤY TỜ CHỨNG MINH KÈM THEO</text>
+    <text x="100" y="1055" font-size="16" fill="#4B5563">1. Bản sao Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà ở.</text>
+    <text x="100" y="1085" font-size="16" fill="#4B5563">2. Bản sao Hợp đồng chuyển nhượng / tặng cho đã công chứng.</text>
+    <text x="100" y="1115" font-size="16" fill="#4B5563">3. Bản sao Căn cước công dân của các bên tham gia giao dịch.</text>
+
+    <!-- Cam đoan -->
+    <text x="80" y="1180" font-size="16" font-style="italic" fill="#374151">Tôi cam đoan số liệu khai trên là hoàn toàn đúng sự thật và chịu trách nhiệm trước pháp luật.</text>
+  </g>
+
+  <!-- PHẦN CHỮ KÝ VÀ NGÀY THÁNG -->
+  <g font-family="system-ui, -apple-system, sans-serif" text-anchor="middle">
+    <text x="880" y="1260" font-size="16" font-style="italic" fill="#4B5563">......, ngày ...... tháng ...... năm 20....</text>
+    <text x="880" y="1295" font-size="18" font-weight="bold" fill="#111827">NGƯỜI NỘP THUẾ</text>
+    <text x="880" y="1320" font-size="15" font-style="italic" fill="#6B7280">(Ký, ghi rõ họ tên)</text>
+
+    <text x="320" y="1295" font-size="18" font-weight="bold" fill="#111827">CÁN BỘ TIẾP NHẬN</text>
+    <text x="320" y="1320" font-size="15" font-style="italic" fill="#6B7280">(Ký, ghi rõ họ tên)</text>
+  </g>
+
+  <!-- Footer đánh dấu tỉ lệ văn bản -->
+  <text x="600" y="1650" font-family="system-ui, sans-serif" font-size="13" fill="#9CA3AF" text-anchor="middle">Trang 1 / 1 - Bản sao thị giác mẫu chuẩn hóa AFL Platform (Tỉ lệ 1200 x 1700)</text>
+</svg>

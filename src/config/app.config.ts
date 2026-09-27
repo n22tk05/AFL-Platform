@@ -6,7 +6,9 @@
 
 import mockManifestJson from '../../assets/mock-data/mock-manifest.json';
 import mockWorkflowJson from '../../assets/mock-data/mock-workflow.json';
-import { FormGeometricManifest, FormWorkflow } from '../shared/contracts';
+import mockWorkflowLptb from '../../assets/mock-data/mock-workflow-01-lptb.json';
+import mockWorkflowKhaiSinh from '../../assets/mock-data/mock-workflow-khai-sinh.json';
+import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
 
 export interface AppConfig {
   /** Công tắc bật/tắt chế độ dữ liệu giả lập cho toàn bộ ứng dụng */
@@ -58,3 +60,18 @@ export const APP_CONFIG: AppConfig = {
     workflow: mockWorkflowJson as unknown as FormWorkflow,
   },
 };
+
+/**
+ * Registry quản lý tập trung các kịch bản biểu mẫu Mock (Mock Switcher Registry)
+ */
+export const MOCK_WORKFLOW_REGISTRY: Record<string, FormWorkflow> = {
+  tpl_01_lptb: mockWorkflowLptb as unknown as FormWorkflow,
+  tpl_03_khai_sinh: mockWorkflowKhaiSinh as unknown as FormWorkflow,
+};
+
+/**
+ * Trả về kịch bản theo mã templateId, mặc định rơi về tpl_01_lptb
+ */
+export function getMockWorkflow(templateId: string): FormWorkflow {
+  return MOCK_WORKFLOW_REGISTRY[templateId] || MOCK_WORKFLOW_REGISTRY['tpl_01_lptb'];
+}

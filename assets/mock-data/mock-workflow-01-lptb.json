@@ -1,0 +1,697 @@
+{
+  "templateId": "tpl_01_lptb",
+  "formId": "tpl_01_lptb",
+  "formCode": "01/LPTB",
+  "formTitle": "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
+  "formTitleVi": "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
+  "status": "active",
+  "circularInfo": "Mẫu số 01/LPTB kèm theo Thông tư số 89/2026/TT-BTC ngày 30/6/2026 của Bộ trưởng Bộ Tài chính",
+  "totalPages": 2,
+  "pages": [
+    {
+      "pageNumber": 1,
+      "imageUrl": "/assets/forms/01-lptb/page-1.jpg",
+      "width": 1200,
+      "height": 1700
+    },
+    {
+      "pageNumber": 2,
+      "imageUrl": "/assets/forms/01-lptb/page-2.jpg",
+      "width": 1200,
+      "height": 1700
+    }
+  ],
+  "totalSteps": 40,
+  "steps": [
+    {
+      "stepIndex": 0,
+      "boxId": "box_p1_01_ngay",
+      "pageNumber": 1,
+      "sectionName": "KỲ TÍNH THUẾ & LOẠI KÊ KHAI",
+      "label": "Mục [01]: Kỳ tính thuế phát sinh",
+      "voiceGuidance": "Bác ghi ngày, tháng, năm làm hợp đồng mua bán hoặc tặng cho nhà đất vào dòng này nhé.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "NGÀY 15 THÁNG 03 NĂM 2026",
+      "highlightCoords": [0.220, 0.220, 0.245, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Lấy ngày này ở đâu?",
+          "answer": "Bác xem ngày công chứng ghi trên Hợp đồng chuyển nhượng hoặc Văn bản thừa kế nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 1,
+      "boxId": "box_p1_02_landau",
+      "pageNumber": 1,
+      "sectionName": "KỲ TÍNH THUẾ & LOẠI KÊ KHAI",
+      "label": "Mục [02]: Kê khai lần đầu",
+      "voiceGuidance": "Nếu đây là lần đầu bác làm hồ sơ sang tên trước bạ thửa đất này, bác đánh dấu tích V vào ô này.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "ĐÁNH DẤU TÍCH [V] VÀO Ô: [02] LẦN ĐẦU",
+      "highlightCoords": [0.240, 0.300, 0.270, 0.460],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Khi nào thì tích vào ô này?",
+          "answer": "Đa số các trường hợp làm thủ tục sang tên, cấp mới đều đánh dấu vào ô Lần đầu ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 2,
+      "boxId": "box_p1_03_bosung",
+      "pageNumber": 1,
+      "sectionName": "KỲ TÍNH THUẾ & LOẠI KÊ KHAI",
+      "label": "Mục [03]: Bổ sung lần thứ",
+      "voiceGuidance": "Nếu bác đã nộp một lần mà cơ quan thuế yêu cầu khai lại, bác ghi số lần bổ sung, còn không thì để trống nhé.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "(ĐỂ TRỐNG Ô NÀY NẾU LÀ KHAI LẦN ĐẦU)",
+      "highlightCoords": [0.240, 0.500, 0.270, 0.750],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Khai lần đầu có cần gạch chéo không?",
+          "answer": "Dạ không cần, bác cứ để trống dòng này là được ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 3,
+      "boxId": "box_p1_uyquyen_chk",
+      "pageNumber": 1,
+      "sectionName": "KỲ TÍNH THUẾ & LOẠI KÊ KHAI",
+      "label": "Ô tick: Khai thay cho người nộp thuế",
+      "voiceGuidance": "Nếu bác được người khác làm giấy ủy quyền đi nộp thay, bác tích vào ô này. Nếu tự đi nộp thì bỏ qua.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "ĐỂ TRỐNG (NẾU BÁC LÀ CHỦ NHÀ ĐẤT TRỰC TIẾP ĐI KHAI)",
+      "highlightCoords": [0.270, 0.250, 0.300, 0.820],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Con đi nộp thay cho bố mẹ có tích ô này không?",
+          "answer": "Nếu có Hợp đồng ủy quyền công chứng thì tích vào ô này, nếu không thì để trống ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 4,
+      "boxId": "box_p1_04_hoten",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [04]: Người nộp thuế",
+      "voiceGuidance": "Bác ghi rõ họ và tên của bác bằng chữ in hoa, đúng theo Căn cước công dân gắn chip.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "NGUYỄN VĂN AN",
+      "highlightCoords": [0.320, 0.160, 0.345, 0.600],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Viết chữ in hoa hay chữ thường?",
+          "answer": "Bác viết toàn bộ bằng CHỮ IN HOA rõ ràng từng chữ bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 5,
+      "boxId": "box_p1_05_ngaysinh",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [05]: Ngày, tháng, năm sinh",
+      "voiceGuidance": "Bác ghi ngày tháng năm sinh của bác theo đúng thẻ Căn cước công dân.",
+      "audioUrl": "/audio/step_02.mp3",
+      "exampleRedText": "10/08/1956",
+      "highlightCoords": [0.345, 0.160, 0.370, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Chỉ có năm sinh trên giấy tờ thì ghi thế nào?",
+          "answer": "Bác ghi đúng theo Căn cước công dân, nếu chỉ có năm sinh thì ghi năm sinh ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 6,
+      "boxId": "box_p1_06_mst",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [06]: Mã số thuế cá nhân",
+      "voiceGuidance": "Nếu bác có mã số thuế cá nhân thì ghi vào đây. Nếu không nhớ hoặc chưa có thì để trống.",
+      "audioUrl": "/audio/step_02.mp3",
+      "exampleRedText": "8012345678",
+      "highlightCoords": [0.370, 0.160, 0.395, 0.550],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Không có mã số thuế có bị phạt không?",
+          "answer": "Dạ không, bác cứ để trống, cán bộ thuế sẽ tra cứu theo số CCCD của bác ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 7,
+      "boxId": "box_p1_07_cccd",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [07]: Số định danh cá nhân / Số hộ chiếu",
+      "voiceGuidance": "Bác nhìn vào mặt trước thẻ Căn cước công dân, chép đủ 12 chữ số vào dòng này.",
+      "audioUrl": "/audio/step_02.mp3",
+      "exampleRedText": "048056001234",
+      "highlightCoords": [0.395, 0.160, 0.420, 0.600],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Số định danh cá nhân có phải là số CCCD không?",
+          "answer": "Dạ đúng rồi bác, chính là dãy 12 số in trên thẻ Căn cước công dân của bác ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 8,
+      "boxId": "box_p1_08_diachi",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [08]: Địa chỉ nơi ở",
+      "voiceGuidance": "Bác ghi số nhà, tên ngõ, tên đường phố nơi bác đang ở thường trú.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "SỐ 45 ĐƯỜNG LÊ DUẨN",
+      "highlightCoords": [0.420, 0.160, 0.445, 0.450],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Ghi theo hộ khẩu hay nơi đang ở thực tế?",
+          "answer": "Bác ghi theo địa chỉ thường trú trên Căn cước công dân bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 9,
+      "boxId": "box_p1_09_xaphuong",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [09]: Xã/phường/đặc khu",
+      "voiceGuidance": "Bác ghi tên Phường hoặc Xã nơi bác đăng ký hộ khẩu thường trú.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "PHƯỜNG HẢI CHÂU 1",
+      "highlightCoords": [0.445, 0.160, 0.470, 0.450],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 10,
+      "boxId": "box_p1_10_tinhthanh",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [10]: Tỉnh/Thành phố",
+      "voiceGuidance": "Bác ghi tên Quận/Huyện và Tỉnh hoặc Thành phố nơi bác cư trú.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
+      "highlightCoords": [0.445, 0.450, 0.470, 0.750],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 11,
+      "boxId": "box_p1_11_13_lienlac",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [11] - [13]: Điện thoại, Fax, Email",
+      "voiceGuidance": "Bác ghi số điện thoại của bác vào mục 11. Mục Fax và Email nếu không có thì để trống nhé.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "ĐIỆN THOẠI: 0905123456 ; EMAIL: (ĐỂ TRỐNG)",
+      "highlightCoords": [0.470, 0.160, 0.495, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Không có Email có sao không?",
+          "answer": "Dạ không sao, quan trọng nhất là ghi đúng Số điện thoại để cơ quan thuế nhắn tin thông báo thuế ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 12,
+      "boxId": "box_p1_14_16_dailythue",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN NGƯỜI NỘP THUẾ",
+      "label": "Mục [14] - [16]: Đại lý thuế (nếu có)",
+      "voiceGuidance": "Mục này chỉ dành cho công ty dịch vụ thuế khai hộ. Bác tự đi nộp thì để trống cả 3 dòng này.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "(ĐỂ TRỐNG TOÀN BỘ MỤC 14, 15, 16)",
+      "highlightCoords": [0.495, 0.160, 0.580, 0.880],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Thuê văn phòng công chứng làm hồ sơ thì có ghi không?",
+          "answer": "Nếu bác chỉ thuê công chứng mà tự mình đi nộp thuế thì vẫn để trống mục này bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 13,
+      "boxId": "box_p1_dat_11_sothua",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.1: Thửa đất số (Số hiệu thửa đất)",
+      "voiceGuidance": "Bác mở trang 2 của Sổ đỏ, nhìn vào mục Thửa đất số mấy để chép số đó vào đây.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "128",
+      "highlightCoords": [0.615, 0.160, 0.645, 0.550],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Tìm số thửa đất ở đâu trên Sổ đỏ?",
+          "answer": "Bác mở trang 2 của Giấy chứng nhận, nhìn ngay mục 2 nhỏ 'Thửa đất' ở dòng đầu tiên ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 14,
+      "boxId": "box_p1_dat_11_tobando",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.1: Tờ bản đồ số",
+      "voiceGuidance": "Cạnh số thửa đất trên Sổ đỏ có chữ Tờ bản đồ số mấy, bác chép vào ô này.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "15",
+      "highlightCoords": [0.615, 0.550, 0.645, 0.800],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 15,
+      "boxId": "box_p1_dat_121_diachi",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.2.1: Số nhà, đường phố, ngõ hẻm thửa đất",
+      "voiceGuidance": "Bác chép địa chỉ cụ thể của thửa đất theo đúng dòng Địa chỉ ghi trên Sổ đỏ.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "SỐ 128 ĐƯỜNG TRẦN PHÚ, TỔ 12",
+      "highlightCoords": [0.660, 0.160, 0.705, 0.880],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Đất chưa có số nhà thì ghi thế nào?",
+          "answer": "Nếu chưa có số nhà, bác ghi tên Tổ dân phố hoặc Thôn, Xóm theo đúng sổ đỏ ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 16,
+      "boxId": "box_p1_dat_122_xaphuong",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.2.2: Xã/phường/đặc khu của đất",
+      "voiceGuidance": "Bác ghi tên Phường hoặc Xã nơi có thửa đất.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "PHƯỜNG THẠCH THANG",
+      "highlightCoords": [0.705, 0.160, 0.730, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 17,
+      "boxId": "box_p1_dat_123_tinhthanh",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.2.3: Tỉnh/thành phố của đất",
+      "voiceGuidance": "Bác ghi tên Quận/Huyện và Tỉnh hoặc Thành phố nơi có thửa đất.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
+      "highlightCoords": [0.730, 0.160, 0.755, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 18,
+      "boxId": "box_p1_dat_13_vitri",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.3: Vị trí thửa đất",
+      "voiceGuidance": "Bác ghi rõ đất của bác là đất mặt tiền đường phố hay nằm trong ngõ hẻm.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "ĐẤT MẶT TIỀN ĐƯỜNG PHỐ (HOẶC: ĐẤT NGÕ HẺM)",
+      "highlightCoords": [0.755, 0.160, 0.780, 0.700],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Nếu trong hẻm thì ghi hẻm mấy mét?",
+          "answer": "Bác có thể ghi 'Đất ngõ hẻm rộng 3m' để cơ quan thuế áp đúng hệ số giá đất ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 19,
+      "boxId": "box_p1_dat_14_mucdich",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.4: Mục đích sử dụng đất",
+      "voiceGuidance": "Bác chép đúng dòng Mục đích sử dụng trên Sổ đỏ, ví dụ Đất ở tại đô thị.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "ĐẤT Ở TẠI ĐÔ THỊ",
+      "highlightCoords": [0.780, 0.160, 0.805, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Đất ở nông thôn thì ghi thế nào?",
+          "answer": "Bác ghi 'Đất ở tại nông thôn' (ONT) đúng theo nguyên văn trên Sổ đỏ bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 20,
+      "boxId": "box_p1_dat_15_dientich",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.5: Diện tích đất (m2)",
+      "voiceGuidance": "Bác chép số diện tích đất trên Sổ đỏ, ghi số mét vuông rõ ràng.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "120,5 M2",
+      "highlightCoords": [0.805, 0.160, 0.830, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Ghi số lẻ thế nào?",
+          "answer": "Bác dùng dấu phẩy ví dụ 120,5 m2 đúng như trên giấy chứng nhận quyền sử dụng đất."
+        }
+      ]
+    },
+    {
+      "stepIndex": 21,
+      "boxId": "box_p1_dat_16_nguongoc",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.6: Nguồn gốc nhà đất",
+      "voiceGuidance": "Bác ghi nguồn gốc là Nhận chuyển nhượng hoặc Nhận tặng cho theo hợp đồng.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "NHẬN CHUYỂN NHƯỢNG (HOẶC: NHẬN TẶNG CHO / NHẬN THỪA KẾ)",
+      "highlightCoords": [0.830, 0.160, 0.865, 0.880],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 22,
+      "boxId": "box_p1_dat_16a_banchuyen",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.6.a: Tên người chuyển giao QSDĐ",
+      "voiceGuidance": "Bác ghi rõ họ tên in hoa của người chủ cũ hoặc bên đã bán/tặng đất cho bác.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "TRẦN VĂN BÌNH",
+      "highlightCoords": [0.870, 0.160, 0.900, 0.700],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Lấy tên người này ở đâu?",
+          "answer": "Bác nhìn vào Bên A (Bên chuyển nhượng/Bên bán) trên Hợp đồng mua bán công chứng ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 23,
+      "boxId": "box_p1_dat_16a_mst_cccd",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.6.a: MST và CCCD của người bán",
+      "voiceGuidance": "Bác chép số CCCD của người bán ghi trên Hợp đồng công chứng vào đây.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "CCCD SỐ: 048050005678",
+      "highlightCoords": [0.900, 0.160, 0.935, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 24,
+      "boxId": "box_p1_dat_16a_diachichucu",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.6.a: Địa chỉ người chuyển giao QSDĐ",
+      "voiceGuidance": "Bác chép địa chỉ của người bán theo thông tin ghi trên Hợp đồng mua bán.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "SỐ 12 ĐƯỜNG NGUYỄN DU, PHƯỜNG BẾN NGHÉ, QUẬN 1, TP HỒ CHÍ MINH",
+      "highlightCoords": [0.935, 0.160, 0.960, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 25,
+      "boxId": "box_p1_dat_16b_thoidiem",
+      "pageNumber": 1,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT",
+      "label": "Mục 1.6.b: Thời điểm làm giấy tờ chuyển giao",
+      "voiceGuidance": "Dòng cuối trang 1 rồi, bác ghi ngày tháng năm công chứng hợp đồng mua bán nhé.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "NGÀY 15 THÁNG 03 NĂM 2026",
+      "highlightCoords": [0.960, 0.160, 0.985, 0.850],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 26,
+      "boxId": "box_p2_17_giatridat",
+      "pageNumber": 2,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 1. ĐẤT (TRANG 2)",
+      "label": "Mục 1.7: Giá trị đất thực tế chuyển giao (đồng)",
+      "voiceGuidance": "Cháu đã lật sang trang 2. Bác ghi số tiền mua bán đất theo Hợp đồng công chứng. Nếu là tặng cho thì bỏ trống nhé.",
+      "audioUrl": "/audio/step_07.mp3",
+      "exampleRedText": "2.000.000.000 ĐỒNG (HOẶC ĐỂ TRỐNG NẾU NHẬN TẶNG CHO / THỪA KẾ)",
+      "highlightCoords": [0.065, 0.160, 0.090, 0.550],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": true,
+      "faqs": [
+        {
+          "question": "Nhận tặng cho từ bố mẹ thì có ghi số tiền không?",
+          "answer": "Theo hướng dẫn, nhận tặng cho hoặc thừa kế thì bác để trống dòng này ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 27,
+      "boxId": "box_p2_21_capnha",
+      "pageNumber": 2,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 2. NHÀ",
+      "label": "Mục 2.1: Cấp nhà, Loại nhà, Hạng nhà",
+      "voiceGuidance": "Nếu trên đất có nhà ở, bác ghi cấp nhà như Cấp 3 hoặc Cấp 4. Nếu chỉ có đất trống thì ghi KHÔNG.",
+      "audioUrl": "/audio/step_07.mp3",
+      "exampleRedText": "CẤP NHÀ: CẤP III ; LOẠI NHÀ: NHÀ Ở RIÊNG LẺ (HOẶC: KHÔNG CÓ NHÀ)",
+      "highlightCoords": [0.125, 0.160, 0.155, 0.750],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Chỉ mua đất trống không có nhà thì ghi gì?",
+          "answer": "Bác ghi chữ 'KHÔNG' hoặc gạch chéo phần Nhà này nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 28,
+      "boxId": "box_p2_21_chungcu",
+      "pageNumber": 2,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 2. NHÀ",
+      "label": "Mục 2.1: Nhà ở chung cư (nếu có)",
+      "voiceGuidance": "Nếu bác mua căn hộ chung cư thì ghi tên dự án, số tầng. Nếu là nhà mặt đất thì để trống.",
+      "audioUrl": "/audio/step_07.mp3",
+      "exampleRedText": "(ĐỂ TRỐNG NẾU LÀ NHÀ MẶT ĐẤT)",
+      "highlightCoords": [0.165, 0.160, 0.220, 0.800],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 29,
+      "boxId": "box_p2_21_dientich_sohuu",
+      "pageNumber": 2,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 2. NHÀ",
+      "label": "Mục 2.1: Diện tích sở hữu chung / riêng (m2)",
+      "voiceGuidance": "Bác ghi diện tích sở hữu riêng của nhà mình theo giấy chứng nhận.",
+      "audioUrl": "/audio/step_07.mp3",
+      "exampleRedText": "SỞ HỮU RIÊNG: 150 M2 ; SỞ HỮU CHUNG: 0 M2",
+      "highlightCoords": [0.220, 0.160, 0.245, 0.800],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 30,
+      "boxId": "box_p2_22_dientichnha",
+      "pageNumber": 2,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 2. NHÀ",
+      "label": "Mục 2.2: Diện tích xây dựng và Diện tích sàn (m2)",
+      "voiceGuidance": "Bác chép diện tích xây dựng tầng 1 và tổng diện tích sàn các tầng theo đúng Sổ đỏ.",
+      "audioUrl": "/audio/step_07.mp3",
+      "exampleRedText": "DT XÂY DỰNG: 80 M2 ; DT SÀN XÂY DỰNG: 160 M2",
+      "highlightCoords": [0.245, 0.160, 0.295, 0.600],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 31,
+      "boxId": "box_p2_23_nguongocnha",
+      "pageNumber": 2,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 2. NHÀ",
+      "label": "Mục 2.3: Nguồn gốc nhà (Tự xây hoặc Mua)",
+      "voiceGuidance": "Nếu nhà tự xây bác ghi năm hoàn thành. Nếu mua lại thì ghi ngày công chứng mua bán.",
+      "audioUrl": "/audio/step_08.mp3",
+      "exampleRedText": "MUA LẠI THEO HỢP ĐỒNG NGÀY 15/03/2026",
+      "highlightCoords": [0.315, 0.160, 0.395, 0.800],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 32,
+      "boxId": "box_p2_24_giatrinhà",
+      "pageNumber": 2,
+      "sectionName": "ĐẶC ĐIỂM NHÀ ĐẤT - 2. NHÀ",
+      "label": "Mục 2.4: Giá trị nhà (đồng)",
+      "voiceGuidance": "Bác ghi giá trị căn nhà theo thỏa thuận trên hợp đồng mua bán nếu có tách riêng.",
+      "audioUrl": "/audio/step_08.mp3",
+      "exampleRedText": "500.000.000 ĐỒNG",
+      "highlightCoords": [0.395, 0.160, 0.420, 0.400],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": true,
+      "faqs": []
+    },
+    {
+      "stepIndex": 33,
+      "boxId": "box_p2_3_loai_giaodich",
+      "pageNumber": 2,
+      "sectionName": "NGHĨA VỤ TÀI CHÍNH",
+      "label": "Mục 3: Đánh dấu loại hình nhận nhà đất",
+      "voiceGuidance": "Bác đánh dấu tích V vào 1 trong 3 ô: Nhận chuyển nhượng, hoặc Nhận thừa kế, hoặc Nhận tặng cho.",
+      "audioUrl": "/audio/step_08.mp3",
+      "exampleRedText": "ĐÁNH DẤU TÍCH [V] VÀO Ô: NHẬN CHUYỂN NHƯỢNG",
+      "highlightCoords": [0.425, 0.160, 0.450, 0.900],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 34,
+      "boxId": "box_p2_3_tong_giatri",
+      "pageNumber": 2,
+      "sectionName": "NGHĨA VỤ TÀI CHÍNH",
+      "label": "Mục 3: Tổng giá trị nhà, đất thực tế (đồng)",
+      "voiceGuidance": "Bác chép đúng tổng số tiền mua bán ghi trên hợp đồng công chứng. Nếu là tặng cho thì để trống nhé.",
+      "audioUrl": "/audio/step_08.mp3",
+      "exampleRedText": "2.500.000.000 ĐỒNG (HAI TỶ NĂM TRĂM TRIỆU ĐỒNG)",
+      "highlightCoords": [0.450, 0.160, 0.475, 0.400],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": true,
+      "faqs": [
+        {
+          "question": "Ghi số hay chữ?",
+          "answer": "Bác ghi số tiền bằng số, sau đó mở ngoặc ghi bằng chữ để tránh nhầm lẫn ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 35,
+      "boxId": "box_p2_4_mienthue",
+      "pageNumber": 2,
+      "sectionName": "NGHĨA VỤ TÀI CHÍNH",
+      "label": "Mục 4: Tài sản thuộc diện miễn lệ phí trước bạ",
+      "voiceGuidance": "Nếu là bố mẹ tặng cho con cái thì được miễn trước bạ, bác ghi lý do vào đây. Nếu mua bán thông thường thì để trống.",
+      "audioUrl": "/audio/step_08.mp3",
+      "exampleRedText": "MIỄN THEO KHOẢN 10 ĐIỀU 10 NGHỊ ĐỊNH 10/2022/NĐ-CP (HOẶC ĐỂ TRỐNG)",
+      "highlightCoords": [0.485, 0.160, 0.515, 0.750],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": true,
+      "faqs": [
+        {
+          "question": "Những ai được miễn lệ phí trước bạ?",
+          "answer": "Nhà đất chuyển nhượng, tặng cho giữa vợ với chồng; cha mẹ với con cái; ông bà với cháu được miễn lệ phí trước bạ ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 36,
+      "boxId": "box_p2_5_dongsohuu",
+      "pageNumber": 2,
+      "sectionName": "THÔNG TIN ĐỒNG CHỦ SỞ HỮU",
+      "label": "Mục 5: Thông tin đồng sở hữu nhà, đất (nếu có)",
+      "voiceGuidance": "Nếu cả 2 vợ chồng cùng đứng tên trên Sổ đỏ, bác ghi tên và CCCD của người phối ngẫu vào bảng này.",
+      "audioUrl": "/audio/step_09.mp3",
+      "exampleRedText": "STT 1: LÊ THỊ BÌNH - CCCD: 048158005678 - TỶ LỆ: 50% (HOẶC ĐỂ TRỐNG NẾU ĐỨNG TÊN 1 MÌNH)",
+      "highlightCoords": [0.530, 0.160, 0.630, 0.920],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 37,
+      "boxId": "box_p2_6_giayto",
+      "pageNumber": 2,
+      "sectionName": "GIẤY TỜ KÈM THEO",
+      "label": "Mục 6: Các giấy tờ có liên quan kèm theo",
+      "voiceGuidance": "Bác liệt kê các giấy tờ nộp kèm như Hợp đồng mua bán, Bản sao Sổ đỏ và Căn cước công dân.",
+      "audioUrl": "/audio/step_09.mp3",
+      "exampleRedText": "1. HỢP ĐỒNG CHUYỂN NHƯỢNG CÔNG CHỨNG ; 2. BẢN SAO GIẤY CHỨNG NHẬN QSDĐ ; 3. BẢN SAO CCCD",
+      "highlightCoords": [0.630, 0.160, 0.670, 0.600],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 38,
+      "boxId": "box_p2_ngayky",
+      "pageNumber": 2,
+      "sectionName": "CAM KẾT & KÝ TÊN",
+      "label": "Địa danh và Ngày tháng năm lập tờ khai",
+      "voiceGuidance": "Bác ghi địa phương nơi nộp thuế và ngày tháng năm hôm nay bác đi nộp.",
+      "audioUrl": "/audio/step_09.mp3",
+      "exampleRedText": "ĐÀ NẴNG, NGÀY 26 THÁNG 09 NĂM 2026",
+      "highlightCoords": [0.705, 0.500, 0.730, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 39,
+      "boxId": "box_p2_kyten",
+      "pageNumber": 2,
+      "sectionName": "CAM KẾT & KÝ TÊN",
+      "label": "Chữ ký và họ tên người nộp thuế",
+      "voiceGuidance": "Bước cuối cùng rồi bác ơi! Bác ký tên và viết rõ họ và tên của mình vào góc phải dưới cùng này nhé.",
+      "audioUrl": "/audio/step_09.mp3",
+      "exampleRedText": "KÝ VÀ GHI RÕ HỌ TÊN: NGUYỄN VĂN AN",
+      "highlightCoords": [0.730, 0.450, 0.850, 0.920],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Có cần điểm chỉ ngón tay không?",
+          "answer": "Bác chỉ cần ký và ghi rõ họ tên là được ạ. Nếu bác không quen ký chữ thì mới cần điểm chỉ ngón trỏ phải nhé."
+        }
+      ]
+    }
+  ]
+}

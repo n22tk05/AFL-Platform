@@ -1,0 +1,453 @@
+{
+  "templateId": "tpl_03_khai_sinh",
+  "formId": "tpl_03_khai_sinh",
+  "formCode": "KHAI_SINH_LAI",
+  "formTitle": "Tờ Khai Đăng Ký Lại Khai Sinh",
+  "formTitleVi": "Tờ Khai Đăng Ký Lại Khai Sinh",
+  "status": "active",
+  "circularInfo": "Theo mẫu quy định về đăng ký hộ tịch tại Việt Nam",
+  "totalPages": 1,
+  "pages": [
+    {
+      "pageNumber": 1,
+      "imageUrl": "/assets/forms/khai-sinh/page-1.png",
+      "width": 1000,
+      "height": 1414
+    }
+  ],
+  "totalSteps": 28,
+  "steps": [
+    {
+      "stepIndex": 0,
+      "boxId": "ks_01_kinhgui",
+      "pageNumber": 1,
+      "sectionName": "CƠ QUAN TIẾP NHẬN",
+      "label": "Kính gửi: Cơ quan đăng ký hộ tịch",
+      "voiceGuidance": "Bác nhìn vào dòng Kính gửi ở trên cùng, ghi tên Ủy ban nhân dân xã hoặc phường nơi bác nộp hồ sơ nhé.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "ỦY BAN NHÂN DÂN PHƯỜNG HẢI CHÂU 1, QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
+      "highlightCoords": [0.170, 0.220, 0.205, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Nộp ở UBND nơi thường trú hay nơi sinh?",
+          "answer": "Bác có thể nộp tại UBND xã/phường nơi bác đang thường trú hoặc nơi đã đăng ký khai sinh trước đây đều được ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 1,
+      "boxId": "ks_02_ten_nguoi_yeu_cau",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN NGƯỜI YÊU CẦU",
+      "label": "Họ, chữ đệm, tên người yêu cầu",
+      "voiceGuidance": "Bác ghi rõ họ và tên của người trực tiếp đi làm hồ sơ bằng chữ in hoa.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "NGUYỄN THỊ HOA",
+      "highlightCoords": [0.210, 0.380, 0.240, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Bố mẹ đi làm khai sinh lại cho con thì ghi tên ai?",
+          "answer": "Bố hoặc mẹ đi nộp thì ghi tên của bố hoặc mẹ vào ô Người yêu cầu này bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 2,
+      "boxId": "ks_03_giay_to_tuy_than",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN NGƯỜI YÊU CẦU",
+      "label": "Giấy tờ tùy thân người yêu cầu",
+      "voiceGuidance": "Bác chép số Căn cước công dân, nơi cấp và ngày cấp của người đi nộp hồ sơ vào dòng này.",
+      "audioUrl": "/audio/step_02.mp3",
+      "exampleRedText": "CĂN CƯỚC CÔNG DÂN SỐ: 048170001234 DO BỘ CÔNG AN CẤP NGÀY 15/02/2022",
+      "highlightCoords": [0.240, 0.240, 0.280, 0.920],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Dùng CMND 9 số cũ có được không?",
+          "answer": "Nếu CMND cũ còn hạn bác vẫn ghi được, nhưng tốt nhất bác ghi số CCCD 12 số mới nhất ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 3,
+      "boxId": "ks_04_noi_cu_tru_nguoi_yc",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN NGƯỜI YÊU CẦU",
+      "label": "Nơi cư trú người yêu cầu",
+      "voiceGuidance": "Bác ghi địa chỉ nơi ở hiện tại theo đúng Căn cước công dân hoặc sổ hộ khẩu.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "SỐ 123 ĐƯỜNG TRẦN PHÚ, PHƯỜNG HẢI CHÂU 1, QUẬN HẢI CHÂU, TP ĐÀ NẴNG",
+      "highlightCoords": [0.280, 0.180, 0.315, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 4,
+      "boxId": "ks_05_quan_he",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN NGƯỜI YÊU CẦU",
+      "label": "Quan hệ với người được khai sinh",
+      "voiceGuidance": "Nếu bác tự làm cho mình thì ghi Bản thân. Nếu làm cho con thì ghi là Mẹ hoặc Bố.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "BẢN THÂN (HOẶC: BỐ / MẸ / ÔNG / BÀ)",
+      "highlightCoords": [0.315, 0.380, 0.345, 0.700],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Ông bà đi làm thay cho cháu được không?",
+          "answer": "Được bác nhé, bác ghi quan hệ là 'Ông nội' hoặc 'Bà ngoại' ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 5,
+      "boxId": "ks_06_ten_nguoi_ks",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Họ, chữ đệm, tên người được khai sinh",
+      "voiceGuidance": "Bác viết họ và tên của người được cấp lại giấy khai sinh bằng CHỮ IN HOA rõ ràng.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "NGUYỄN THỊ HOA",
+      "highlightCoords": [0.365, 0.250, 0.395, 0.650],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 6,
+      "boxId": "ks_07_ngaysinh_so",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Ngày, tháng, năm sinh (ghi bằng số)",
+      "voiceGuidance": "Bác ghi ngày tháng năm sinh bằng số, theo đúng giấy tờ chứng minh trước đây.",
+      "audioUrl": "/audio/step_02.mp3",
+      "exampleRedText": "26/05/1991",
+      "highlightCoords": [0.395, 0.290, 0.420, 0.480],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 7,
+      "boxId": "ks_08_ngaysinh_chu",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Ngày, tháng, năm sinh (ghi bằng chữ)",
+      "voiceGuidance": "Bác viết ngày sinh bằng chữ cẩn thận, không viết tắt để tránh nhầm lẫn.",
+      "audioUrl": "/audio/step_02.mp3",
+      "exampleRedText": "NGÀY HAI MƯƠI SÁU THÁNG NĂM NĂM MỘT NGÀN CHÍN TRĂM CHÍN MƯƠI MỐT",
+      "highlightCoords": [0.415, 0.100, 0.445, 0.950],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 8,
+      "boxId": "ks_09_noisinh",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Nơi sinh cụ thể",
+      "voiceGuidance": "Bác ghi tên Bệnh viện hoặc Trạm y tế nơi sinh, kèm tên xã, huyện, tỉnh.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "BỆNH VIỆN PHỤ SẢN ĐÀ NẴNG, QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
+      "highlightCoords": [0.445, 0.160, 0.475, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Sinh tại nhà thì ghi thế nào?",
+          "answer": "Bác ghi 'Tại nhà' kèm theo địa chỉ thôn/xã nơi sinh lúc đó bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 9,
+      "boxId": "ks_10_gioitinh",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Giới tính",
+      "voiceGuidance": "Bác ghi rõ Nam hoặc Nữ vào ô Giới tính này.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "NỮ (HOẶC: NAM)",
+      "highlightCoords": [0.470, 0.150, 0.500, 0.280],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 10,
+      "boxId": "ks_11_dantoc",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Dân tộc",
+      "voiceGuidance": "Bác ghi tên dân tộc, ví dụ Kinh, Tày hoặc Nùng theo đúng giấy tờ cha mẹ.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "KINH",
+      "highlightCoords": [0.470, 0.360, 0.500, 0.550],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 11,
+      "boxId": "ks_12_quoctich",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Quốc tịch",
+      "voiceGuidance": "Bác ghi quốc tịch là Việt Nam.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "VIỆT NAM",
+      "highlightCoords": [0.470, 0.660, 0.500, 0.880],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 12,
+      "boxId": "ks_13_quequan",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI ĐƯỢC ĐĂNG KÝ LẠI KHAI SINH",
+      "label": "Quê quán",
+      "voiceGuidance": "Bác ghi quê quán theo quê quán của cha hoặc mẹ đúng theo sổ hộ khẩu.",
+      "audioUrl": "/audio/step_03.mp3",
+      "exampleRedText": "PHƯỜNG HẢI CHÂU 1, QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
+      "highlightCoords": [0.500, 0.170, 0.530, 0.700],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 13,
+      "boxId": "ks_14_ten_cha",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI CHA",
+      "label": "Họ, chữ đệm, tên người cha",
+      "voiceGuidance": "Bác viết họ tên của người cha bằng chữ in hoa. Nếu không có thông tin cha thì để trống.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "NGUYỄN XUÂN HÙNG",
+      "highlightCoords": [0.530, 0.280, 0.560, 0.750],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Cha đã mất thì có ghi không?",
+          "answer": "Vẫn ghi đầy đủ họ tên năm sinh của cha theo giấy tờ trước đây bác nhé."
+        }
+      ]
+    },
+    {
+      "stepIndex": 14,
+      "boxId": "ks_15_namsinh_cha",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI CHA",
+      "label": "Năm sinh của người cha",
+      "voiceGuidance": "Bác ghi năm sinh của người cha vào ô này.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "1960",
+      "highlightCoords": [0.555, 0.160, 0.585, 0.280],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 15,
+      "boxId": "ks_16_dantoc_cha",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI CHA",
+      "label": "Dân tộc của người cha",
+      "voiceGuidance": "Bác ghi dân tộc của người cha.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "KINH",
+      "highlightCoords": [0.555, 0.380, 0.585, 0.550],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 16,
+      "boxId": "ks_17_quoctich_cha",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI CHA",
+      "label": "Quốc tịch của người cha",
+      "voiceGuidance": "Bác ghi quốc tịch của người cha là Việt Nam.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "VIỆT NAM",
+      "highlightCoords": [0.555, 0.680, 0.585, 0.880],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 17,
+      "boxId": "ks_18_noicutru_cha",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI CHA",
+      "label": "Nơi cư trú của người cha",
+      "voiceGuidance": "Bác ghi địa chỉ nơi cư trú của cha. Nếu cha đã mất thì ghi nơi cư trú cuối cùng trước khi mất.",
+      "audioUrl": "/audio/step_04.mp3",
+      "exampleRedText": "SỐ 123 ĐƯỜNG TRẦN PHÚ, PHƯỜNG HẢI CHÂU 1, QUẬN HẢI CHÂU, TP ĐÀ NẴNG",
+      "highlightCoords": [0.580, 0.180, 0.610, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 18,
+      "boxId": "ks_19_ten_me",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI MẸ",
+      "label": "Họ, chữ đệm, tên người mẹ",
+      "voiceGuidance": "Bác viết họ tên của người mẹ bằng chữ in hoa rõ nét.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "TRẦN THỊ HOA",
+      "highlightCoords": [0.610, 0.280, 0.640, 0.750],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 19,
+      "boxId": "ks_20_namsinh_me",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI MẸ",
+      "label": "Năm sinh của người mẹ",
+      "voiceGuidance": "Bác ghi năm sinh của người mẹ vào ô này.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "1961",
+      "highlightCoords": [0.635, 0.160, 0.665, 0.280],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 20,
+      "boxId": "ks_21_dantoc_me",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI MẸ",
+      "label": "Dân tộc của người mẹ",
+      "voiceGuidance": "Bác ghi dân tộc của người mẹ.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "KINH",
+      "highlightCoords": [0.635, 0.380, 0.665, 0.550],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 21,
+      "boxId": "ks_22_quoctich_me",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI MẸ",
+      "label": "Quốc tịch của người mẹ",
+      "voiceGuidance": "Bác ghi quốc tịch của người mẹ là Việt Nam.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "VIỆT NAM",
+      "highlightCoords": [0.635, 0.680, 0.665, 0.880],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 22,
+      "boxId": "ks_23_noicutru_me",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN VỀ NGƯỜI MẸ",
+      "label": "Nơi cư trú của người mẹ",
+      "voiceGuidance": "Bác ghi địa chỉ nơi ở của mẹ theo sổ hộ khẩu hoặc CCCD.",
+      "audioUrl": "/audio/step_05.mp3",
+      "exampleRedText": "SỐ 123 ĐƯỜNG TRẦN PHÚ, PHƯỜNG HẢI CHÂU 1, QUẬN HẢI CHÂU, TP ĐÀ NẴNG",
+      "highlightCoords": [0.665, 0.180, 0.695, 0.850],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 23,
+      "boxId": "ks_24_noi_dk_cu",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN KHAI SINH TRƯỚC ĐÂY",
+      "label": "Đã đăng ký khai sinh tại đâu trước đây",
+      "voiceGuidance": "Bác ghi tên cơ quan nơi từng đăng ký khai sinh lần trước, ví dụ Ủy ban nhân dân xã hoặc phường nào.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "ỦY BAN NHÂN DÂN PHƯỜNG HẢI CHÂU 1, QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
+      "highlightCoords": [0.695, 0.280, 0.725, 0.880],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 24,
+      "boxId": "ks_25_so_quyen_cu",
+      "pageNumber": 1,
+      "sectionName": "THÔNG TIN KHAI SINH TRƯỚC ĐÂY",
+      "label": "Giấy khai sinh số, quyển số, ngày cấp cũ",
+      "voiceGuidance": "Nếu bác còn giữ bản sao hoặc nhớ số cũ thì chép vào, còn nếu mất hết thì bác ghi 'Không nhớ' nhé.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "SỐ: 123 , QUYỂN SỐ: 01/1991 , NGÀY: 27/05/1991 (HOẶC GHI: KHÔNG RÕ)",
+      "highlightCoords": [0.725, 0.220, 0.755, 0.880],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Mất hết sạch không nhớ số và quyển thì sao?",
+          "answer": "Bác ghi chữ 'Không nhớ' hoặc 'Thất lạc', cán bộ tư pháp sẽ tra cứu trong sổ bộ lưu trữ hộ tịch ạ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 25,
+      "boxId": "ks_26_lydo",
+      "pageNumber": 1,
+      "sectionName": "LÝ DO ĐĂNG KÝ LẠI",
+      "label": "Lý do xin đăng ký lại khai sinh",
+      "voiceGuidance": "Bác nêu lý do xin làm lại, ví dụ 'Bị mất giấy khai sinh gốc' hoặc 'Sổ hộ tịch cũ bị thất lạc'.",
+      "audioUrl": "/audio/step_06.mp3",
+      "exampleRedText": "BỊ MẤT BẢN CHÍNH GIẤY KHAI SINH VÀ SỔ HỘ TỊCH KHÔNG CÒN LƯU",
+      "highlightCoords": [0.755, 0.220, 0.785, 0.600],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 26,
+      "boxId": "ks_27_lamtai_ngay",
+      "pageNumber": 1,
+      "sectionName": "CAM ĐOAN & NGÀY THÁNG",
+      "label": "Làm tại đâu và Ngày tháng năm nộp tờ khai",
+      "voiceGuidance": "Bác ghi tên xã phường nộp hồ sơ và ngày tháng năm hôm nay bác đi làm thủ tục.",
+      "audioUrl": "/audio/step_09.mp3",
+      "exampleRedText": "HẢI CHÂU 1, NGÀY 26 THÁNG 09 NĂM 2026",
+      "highlightCoords": [0.825, 0.200, 0.855, 0.900],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 27,
+      "boxId": "ks_28_nguoi_yc_ky",
+      "pageNumber": 1,
+      "sectionName": "NGƯỜI YÊU CẦU KÝ TÊN",
+      "label": "Chữ ký và họ tên người yêu cầu",
+      "voiceGuidance": "Bước cuối cùng rồi bác ơi! Bác ký tên và viết rõ cả họ chữ đệm và tên của mình vào góc phải dưới cùng này nhé.",
+      "audioUrl": "/audio/step_09.mp3",
+      "exampleRedText": "KÝ VÀ GHI RÕ HỌ TÊN: NGUYỄN THỊ HOA",
+      "highlightCoords": [0.865, 0.500, 0.960, 0.880],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Khai thay có được ký thay không?",
+          "answer": "Người trực tiếp đi nộp và đứng tên ở Mục 1 Người yêu cầu sẽ ký tên tại ô này bác nhé."
+        }
+      ]
+    }
+  ]
+}
