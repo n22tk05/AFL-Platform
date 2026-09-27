@@ -26,8 +26,9 @@ Người 3 chịu trách nhiệm tầng xử lý thị giác máy tính cục b�
 | **02** | **Tạo File Dữ liệu Mẫu (Mock Manifest)** | Bóc tách mẫu 9 ô của tờ khai LPTB (01/LPTB) thành `assets/mock-data/mock-manifest.json`. | ✅ Hoàn thành | Đã bàn giao cho Người 4 & Người 2 |
 | **03** | **Tích hợp Thư viện `@techstark/opencv-js`** | Cài đặt và cấu hình nạp module WebAssembly an toàn trên Next.js 14 mà không bị xung đột SSR. | ✅ Hoàn thành | Dependencies trong `package.json` |
 | **04** | **Bóc tách Khung Ô & Nắn Phối Cảnh (FR-1, FR-7)** | Hoàn thiện pipeline line detection, candidate box filtering, corner ordering, document quality check và warp perspective (41/41 unit tests pass). Đã hợp nhất vào `main`. | ✅ Hoàn thành | Tham chiếu [`docs/OPENCV-DESKEW-QA-PLAN.md`](../../OPENCV-DESKEW-QA-PLAN.md) và [`docs/OPENCV-PHASE2-QA.md`](../../OPENCV-PHASE2-QA.md) |
-| **05** | **Đấu nối Pipeline Trực tiếp (P2P Wiring)** | Cắm trực tiếp OpenCV WASM vào Cổng Quản trị Admin (`FormUploadModal.tsx`) và Mobile Camera (`CameraScannerModal.tsx`). | 🚀 Đang triển khai | Sprint 2 P2P Integration |
-| **06** | **Quét Chứng Từ Tiên Quyết (FR-6 OCR)** | Module bóc tách OCR thông tin từ ảnh chụp Biên bản xử phạt vi phạm / Sổ đỏ và lưu vào Session RAM. | ⏳ Chuẩn bị | FR-6 Nghị định 13/2023/NĐ-CP |
+| **05** | **Đấu nối Pipeline Trực tiếp (P2P Wiring)** | Cắm trực tiếp OpenCV WASM vào Cổng Quản trị Admin (`FormUploadModal.tsx`) và Mobile Camera (`CameraScannerModal.tsx`) thay thế toàn bộ mã giả lập. | ✅ Hoàn thành | Sprint 2 P2P Integration |
+| **06** | **Quét Chứng Từ Tiên Quyết (FR-6 OCR)** | Bóc tách thông tin từ Biên bản xử phạt vi phạm / Sổ đỏ, lưu Session RAM và tự động bơm vào chữ mẫu đỏ (#D32F2F) trên Mobile Guide. | ✅ Hoàn thành | FR-6 Nghị định 13/2023/NĐ-CP |
+| **07** | **Phân Hệ Trích Xuất Văn Bản Toàn Năng** | Xây dựng Universal Document Scanner & Inspector (`/scan-document` và `/api/documents/extract`) kết hợp OpenCV WASM và Gemini Vision. | ✅ Hoàn thành | 5/5 unit tests pass, 15/15 routes build |
 
 ---
 
