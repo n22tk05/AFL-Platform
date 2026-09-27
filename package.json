@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test:opencv": "tsx --test src/modules/opencv/tests/box-filter.test.ts src/modules/opencv/tests/config.test.ts src/modules/opencv/tests/corner-ordering.test.ts src/modules/opencv/tests/document-quality.test.ts src/modules/opencv/tests/geometric-sort.test.ts src/modules/opencv/tests/perspective-geometry.test.ts",
     "test:voice": "tsx src/modules/voice-ai/tests/test-voice.ts",
     "test:cache": "tsx src/modules/cache/tests/test-cache.ts",
     "test:qa": "tsx tests/integration/qa-suite.ts",
