@@ -4,7 +4,7 @@ Decision record: `docs/decisions/2026-09-27-p2p-frontend-api-integration.md`
 
 ## Baseline
 
-To be bound after this approved design contract is committed.
+`e9d61ba035a5143cf810511528659308c6256735`
 
 ## Allowed scope
 
