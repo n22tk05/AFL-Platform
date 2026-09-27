@@ -72,9 +72,43 @@ function GuideContent() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [templateId]);
 
+  // Đọc dữ liệu chứng từ tiên quyết (Biên bản phạt / Sổ đỏ) từ Session RAM (Nghị định 13)
+  const [prerequisiteFields, setPrerequisiteFields] = useState<Record<string, string> | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("afl_prerequisite_document_data");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.fields) {
+          setPrerequisiteFields(parsed.fields);
+        }
+      }
+    } catch (e) {
+      console.warn("Lỗi đọc Session RAM chứng từ:", e);
+    }
+  }, []);
+
   const steps: WorkflowStep[] = workflow.steps || [];
   const totalSteps = steps.length;
   const currentStep = steps[currentStepIndex];
+
+  // Tính toán chữ mẫu đỏ: Ưu tiên lấy từ Session RAM nếu là bước liên chứng từ (FR-6)
+  const effectiveExampleText = useMemo(() => {
+    if (!currentStep) return "";
+    if (currentStep.requiresPrerequisiteDoc && prerequisiteFields) {
+      if ((currentStep.boxId === "box_05" || currentStep.label.toLowerCase().includes("tiền")) && prerequisiteFields.so_tien_phat) {
+        return prerequisiteFields.so_tien_phat.toUpperCase();
+      }
+      if ((currentStep.boxId === "box_02" || currentStep.label.toLowerCase().includes("biên bản")) && prerequisiteFields.so_bien_ban) {
+        return prerequisiteFields.so_bien_ban.toUpperCase();
+      }
+      if (prerequisiteFields.so_tien_phat) {
+        return prerequisiteFields.so_tien_phat.toUpperCase();
+      }
+    }
+    return currentStep.exampleRedText;
+  }, [currentStep, prerequisiteFields]);
 
   const handlePrevStep = () => {
     if (currentStepIndex > 0) {
@@ -132,8 +166,12 @@ function GuideContent() {
 
         {/* 4. Chữ mẫu in hoa màu đỏ tương phản cao #D32F2F (FR-5) */}
         <RedTextExample
-          exampleText={currentStep.exampleRedText}
-          fieldNote={currentStep.faqs?.[0]?.answer}
+          exampleText={effectiveExampleText}
+          fieldNote={
+            currentStep.requiresPrerequisiteDoc && prerequisiteFields
+              ? "✨ Đã tự động trích xuất thông tin từ Biên bản phạt của bác (Nghị định 13)!"
+              : currentStep.faqs?.[0]?.answer
+          }
         />
       </div>
 
