@@ -48,8 +48,8 @@ function validateReviewWorkflow(value: unknown, formCode: string): asserts value
     (step.requiresPrerequisiteDoc !== undefined && typeof step.requiresPrerequisiteDoc !== 'boolean') ||
     (step.sourceFieldFromPrerequisite !== undefined && typeof step.sourceFieldFromPrerequisite !== 'string') ||
     (step.legalWarningFlag !== undefined && typeof step.legalWarningFlag !== 'boolean') ||
-    (step.faqs !== undefined && (!Array.isArray(step.faqs) || step.faqs.length === 0 || step.faqs.some(faq =>
-      !isRecord(faq) || !nonBlankString(faq.question) || !nonBlankString(faq.answer)))))) {
+    (!Array.isArray(step.faqs) || step.faqs.length === 0 || step.faqs.some(faq =>
+      !isRecord(faq) || !nonBlankString(faq.question) || !nonBlankString(faq.answer))))) {
     throw new Error('INVALID_WORKFLOW');
   }
 }

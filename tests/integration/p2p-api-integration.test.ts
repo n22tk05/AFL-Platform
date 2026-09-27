@@ -98,6 +98,8 @@ async function run() {
     { ...draft, steps: [{ ...draft.steps[0], legalWarningFlag: 'yes' }] },
     { ...draft, steps: [{ ...draft.steps[0], pageNumber: Number.NaN }] },
     { ...draft, steps: [{ ...draft.steps[0], faqs: [null] }] },
+    { ...draft, steps: [{ ...draft.steps[0], faqs: undefined }] },
+    { ...draft, steps: [{ ...draft.steps[0], faqs: [] }] },
     { ...draft, pages: [{ pageNumber: 1, imageUrl: '/page.png', width: 100, height: '100' }] },
     { ...draft, totalPages: '1' },
   ];
@@ -111,7 +113,7 @@ async function run() {
     assert.equal(repositoryWritesForInvalid, 0, 'invalid review fields stop before repository writes');
   }
 
-  const omittedOptionals = { ...draft, formTitleVi: undefined, steps: [{ ...draft.steps[0], faqs: undefined }] };
+  const omittedOptionals = { ...draft, formTitleVi: undefined, steps: [{ ...draft.steps[0], pageNumber: undefined }] };
   const validOptionalSave = await invalidSaveController.saveReviewWorkflow({
     ...auth, rawFormCode: '01%2FLPTB', body: omittedOptionals,
   });
