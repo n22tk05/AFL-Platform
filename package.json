@@ -13,6 +13,8 @@
     "test:qa": "tsx tests/integration/qa-suite.ts",
     "test:api-integrity": "tsx tests/integration/api-integrity.test.ts",
     "test:forms-api": "tsx src/modules/forms/tests/test-form-api-client.ts && tsx tests/integration/p2p-api-integration.test.ts",
+    "test:p2p": "npm run test:forms-api && npm run test:voice-client",
+    "test:voice-client": "tsx src/modules/voice-ai/tests/test-voice-client.ts",
     "test:local": "npm run test:qa && npm run test:api-integrity",
     "test:tts": "tsx src/modules/voice-ai/tests/test-tts-api.ts",
     "test:stt": "tsx src/modules/voice-ai/tests/test-stt.ts",

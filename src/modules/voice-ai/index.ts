@@ -26,5 +26,6 @@ export type { VoiceCacheEntry, VoiceCacheRepository } from '@/modules/voice-ai/r
 export { GeminiPromptService } from '@/modules/voice-ai/services/gemini-prompt.service';
 export { WebSpeechSTT } from '@/modules/voice-ai/services/stt.service';
 export { TTSService } from '@/modules/voice-ai/services/tts.service';
-export { HalfDuplexController, VoiceQAService } from '@/modules/voice-ai/services/voice-qa.service';
+export { VoiceQAService } from '@/modules/voice-ai/services/voice-qa.service';
+export { HalfDuplexController } from '@/modules/voice-ai/services/half-duplex.service';
 export type * from '@/modules/voice-ai/types/voice-ai.types';

@@ -4,6 +4,7 @@ import type { FormWorkflow } from '@/shared/contracts';
 
 export type WorkflowStorage = Pick<Storage, 'getItem' | 'setItem'>;
 export type WorkflowFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+export type WorkflowSource = 'live' | 'cache' | 'fixture';
 
 export function canonicalFormCode(formCode: string): string {
   let value = formCode;
@@ -67,6 +68,7 @@ export async function fetchWorkflow(
     fetcher?: WorkflowFetch;
     storage?: WorkflowStorage;
     fallback?: FormWorkflow | (() => FormWorkflow | null | undefined);
+    onSource?: (source: WorkflowSource) => void;
   } = {}
 ): Promise<FormWorkflow> {
   const fetcher = options.fetcher ?? fetch;
@@ -82,12 +84,13 @@ export async function fetchWorkflow(
       throw new Error('INVALID_WORKFLOW_RESPONSE');
     }
     try { options.storage?.setItem(workflowStorageKey(formCode), JSON.stringify(data)); } catch { /* storage is optional */ }
+    options.onSource?.('live');
     return data;
   } catch {
     const cached = cachedWorkflow(options.storage, formCode);
-    if (cached) return cached;
+    if (cached) { options.onSource?.('cache'); return cached; }
     const fallback = typeof options.fallback === 'function' ? options.fallback() : options.fallback;
-    if (validWorkflow(fallback)) return fallback;
+    if (validWorkflow(fallback)) { options.onSource?.('fixture'); return fallback; }
     throw new Error('WORKFLOW_UNAVAILABLE');
   }
 }
