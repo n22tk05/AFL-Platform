@@ -6,6 +6,7 @@ import {
   WorkflowStep as ContractWorkflowStep,
 } from '@/shared/contracts';
 import { validateWorkflow, validCoords } from '@/modules/forms/services/form-validation.service';
+import type { AdminFormSummary } from '@/modules/forms/types/form.types';
 
 export class PrismaFormRepository implements FormRepository {
   constructor(private readonly database = prisma) {}
@@ -226,6 +227,49 @@ export class PrismaFormRepository implements FormRepository {
       status: template.workflow.status.toLowerCase() as FormWorkflow['status'],
       steps,
     };
+  }
+
+  public async listForms(): Promise<AdminFormSummary[]> {
+    const forms = await this.database.formTemplate.findMany({
+      include: { workflow: { include: { _count: { select: { steps: true } } } } },
+      orderBy: [{ updatedAt: 'desc' }, { formCode: 'asc' }],
+    });
+    return forms.map(form => ({
+      formId: form.id, formCode: form.formCode, formTitle: form.formTitle,
+      status: form.status.toLowerCase(), version: form.version,
+      stepCount: form.workflow?._count.steps ?? 0, updatedAt: form.updatedAt.toISOString(),
+    }));
+  }
+
+  public async getWorkflowForReview(formCode: string): Promise<FormWorkflow | null> {
+    const template = await this.database.formTemplate.findUnique({
+      where: { formCode },
+      include: { workflow: { include: { steps: { include: { faqs: { orderBy: { order: 'asc' } } }, orderBy: { stepIndex: 'asc' } } } } },
+    });
+    if (!template?.workflow) return null;
+    return {
+      formId: template.id, formCode: template.formCode, formTitle: template.formTitle,
+      status: template.workflow.status.toLowerCase() as FormWorkflow['status'],
+      version: template.workflow.version,
+      steps: template.workflow.steps.map(step => ({
+        stepIndex: step.stepIndex, boxId: step.boxId, sectionName: step.sectionName,
+        label: step.label, voiceGuidance: step.voiceGuidance, audioUrl: step.audioUrl ?? '',
+        exampleRedText: step.exampleRedText ?? '',
+        highlightCoords: [step.highlightYmin ?? 0, step.highlightXmin ?? 0, step.highlightYmax ?? 0, step.highlightXmax ?? 0],
+        requiresPrerequisiteDoc: step.requiresPrerequisiteDoc,
+        sourceFieldFromPrerequisite: step.sourceFieldFromPrerequisite ?? undefined,
+        legalWarningFlag: step.legalWarningFlag,
+        faqs: step.faqs.map(faq => ({ question: faq.question, answer: faq.answer })),
+      })),
+    };
+  }
+
+  public async saveReviewWorkflow(formCode: string, workflow: FormWorkflow) {
+    if (workflow.formCode !== formCode) throw new Error('FORM_CODE_MISMATCH');
+    const existing = await this.database.formTemplate.findUnique({ where: { formCode } });
+    if (!existing) throw new Error('NOT_FOUND');
+    if (existing.status === 'ACTIVE') throw new Error('FORM_ACTIVE');
+    return this.saveWorkflow(workflow);
   }
 
   public async approveWorkflow(

@@ -5,7 +5,7 @@ import {
   SaveWorkflowResult,
 } from '@/modules/forms/types/form.types';
 import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
-import { validateWorkflow } from '@/modules/forms/services/form-validation.service';
+import { validateWorkflow, validCoords } from '@/modules/forms/services/form-validation.service';
 
 export interface DatabaseHealth {
   check(): Promise<boolean>;
@@ -76,6 +76,33 @@ export class FormPersistenceService {
     } catch {
       this.databaseHealth.markOffline();
       throw new Error('DATABASE_UNAVAILABLE');
+    }
+  }
+
+  public async listForms() {
+    if (!await this.databaseHealth.check()) throw new Error('DATABASE_UNAVAILABLE');
+    try { return await this.repository.listForms(); }
+    catch { this.databaseHealth.markOffline(); throw new Error('DATABASE_UNAVAILABLE'); }
+  }
+
+  public async getWorkflowForReview(formCode: string): Promise<FormWorkflow | null> {
+    if (!await this.databaseHealth.check()) throw new Error('DATABASE_UNAVAILABLE');
+    try { return await this.repository.getWorkflowForReview(formCode); }
+    catch { this.databaseHealth.markOffline(); throw new Error('DATABASE_UNAVAILABLE'); }
+  }
+
+  public async saveReviewWorkflow(formCode: string, workflow: FormWorkflow) {
+    if (workflow.formCode !== formCode) throw new Error('FORM_CODE_MISMATCH');
+    if (!workflow.steps?.length) throw new Error('INVALID_WORKFLOW');
+    if (workflow.steps.some((step, index) => !step || step.stepIndex !== index + 1 ||
+      !step.boxId || !step.label?.trim() || !step.sectionName?.trim() || !step.voiceGuidance?.trim() ||
+      !step.exampleRedText?.trim() || !validCoords(step.highlightCoords) || !Array.isArray(step.faqs) ||
+      step.faqs.some(faq => !faq?.question?.trim() || !faq.answer?.trim()))) throw new Error('INVALID_WORKFLOW');
+    if (!await this.databaseHealth.check()) throw new Error('DATABASE_UNAVAILABLE');
+    try { return await this.repository.saveReviewWorkflow(formCode, workflow); }
+    catch (error) {
+      if (error instanceof Error && ['FORM_ACTIVE', 'NOT_FOUND', 'FORM_CODE_MISMATCH', 'INVALID_WORKFLOW'].includes(error.message)) throw error;
+      this.databaseHealth.markOffline(); throw new Error('DATABASE_UNAVAILABLE');
     }
   }
 
