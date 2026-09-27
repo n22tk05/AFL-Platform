@@ -290,7 +290,7 @@ export class PrismaFormRepository implements FormRepository {
             normalizedCoords: [box.boxYmin, box.boxXmin, box.boxYmax, box.boxXmax],
           })),
         };
-        if (workflow.steps.some(step => !Array.isArray(step.faqs) || step.faqs.length === 0)) throw new Error('INVALID_WORKFLOW');
+        if (workflow.steps.some(step => step.faqs !== undefined && step.faqs.length === 0)) throw new Error('INVALID_WORKFLOW');
         try { validateWorkflow(manifest, workflow); } catch { throw new Error('INVALID_WORKFLOW'); }
 
         const guarded = await tx.formTemplate.updateMany({
@@ -314,7 +314,7 @@ export class PrismaFormRepository implements FormRepository {
             requiresPrerequisiteDoc: step.requiresPrerequisiteDoc ?? false,
             sourceFieldFromPrerequisite: step.sourceFieldFromPrerequisite ?? null,
             legalWarningFlag: step.legalWarningFlag ?? false,
-            faqs: { create: step.faqs!.map((faq, index) => ({ question: faq.question, answer: faq.answer, order: index + 1 })) },
+            faqs: { create: (step.faqs ?? []).map((faq, index) => ({ question: faq.question, answer: faq.answer, order: index + 1 })) },
           } });
         }
         return { workflowId: formWorkflow.id, stepCount: workflow.steps.length };

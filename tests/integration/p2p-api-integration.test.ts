@@ -78,16 +78,46 @@ async function run() {
   assert.equal(persisted.formTitle, 'Edited draft');
 
   let healthChecksForInvalid = 0;
-  const invalidSaveService = new FormPersistenceService(repository, {
+  let repositoryWritesForInvalid = 0;
+  const invalidSaveRepository = {
+    ...repository,
+    saveReviewWorkflow: async (code: string, value: FormWorkflow) => {
+      repositoryWritesForInvalid++;
+      return repository.saveReviewWorkflow(code, value);
+    },
+  } as FormRepository;
+  const invalidSaveService = new FormPersistenceService(invalidSaveRepository, {
     check: async () => { healthChecksForInvalid++; return true; }, markOffline() {},
   });
   const invalidSaveController = new FormController(invalidSaveService, new AdminAuthorizationService(() => 'test-key'));
-  const invalidLabel = await invalidSaveController.saveReviewWorkflow({
-    ...auth, rawFormCode: '01%2FLPTB', body: { ...draft, steps: [{ ...draft.steps[0], label: 42 }] },
+  const malformedWorkflows = [
+    { ...draft, formTitle: '' },
+    { ...draft, formTitle: 12 },
+    { ...draft, steps: [{ ...draft.steps[0], label: 42 }] },
+    { ...draft, steps: [{ ...draft.steps[0], audioUrl: 7 }] },
+    { ...draft, steps: [{ ...draft.steps[0], legalWarningFlag: 'yes' }] },
+    { ...draft, steps: [{ ...draft.steps[0], pageNumber: Number.NaN }] },
+    { ...draft, steps: [{ ...draft.steps[0], faqs: [null] }] },
+    { ...draft, pages: [{ pageNumber: 1, imageUrl: '/page.png', width: 100, height: '100' }] },
+    { ...draft, totalPages: '1' },
+  ];
+  for (const body of malformedWorkflows) {
+    const invalid = await invalidSaveController.saveReviewWorkflow({
+      ...auth, rawFormCode: '01%2FLPTB', body,
+    });
+    assert.equal(invalid.status, 400, 'malformed review contract fields return HTTP 400');
+    assert.equal((invalid.body as any).error.code, 'INVALID_WORKFLOW');
+    assert.equal(healthChecksForInvalid, 0, 'invalid review fields stop before database health checks');
+    assert.equal(repositoryWritesForInvalid, 0, 'invalid review fields stop before repository writes');
+  }
+
+  const omittedOptionals = { ...draft, formTitleVi: undefined, steps: [{ ...draft.steps[0], faqs: undefined }] };
+  const validOptionalSave = await invalidSaveController.saveReviewWorkflow({
+    ...auth, rawFormCode: '01%2FLPTB', body: omittedOptionals,
   });
-  assert.equal(invalidLabel.status, 400, 'malformed review field types return INVALID_WORKFLOW');
-  assert.equal((invalidLabel.body as any).error.code, 'INVALID_WORKFLOW');
-  assert.equal(healthChecksForInvalid, 0, 'invalid review fields are rejected before database health checks');
+  assert.equal(validOptionalSave.status, 200, 'contract optional fields may be omitted');
+  assert.equal(healthChecksForInvalid, 1);
+  assert.equal(repositoryWritesForInvalid, 1);
 
   assert.equal((await controller.saveReviewWorkflow({ ...auth, rawFormCode: '01%2FLPTB', body: { ...draft, formCode: 'other' } })).status, 400);
   assert.equal((await controller.listForms({ authorization: 'Bearer bad' })).status, 401);
