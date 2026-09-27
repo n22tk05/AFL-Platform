@@ -18,9 +18,36 @@ export function workflowStorageKey(formCode: string): string {
 function validWorkflow(value: unknown): value is FormWorkflow {
   if (!value || typeof value !== 'object') return false;
   const workflow = value as Partial<FormWorkflow>;
-  return typeof workflow.formCode === 'string' && typeof workflow.formTitle === 'string' &&
-    Array.isArray(workflow.steps) && workflow.steps.length > 0 &&
-    workflow.steps.every(step => step && Number.isFinite(step.stepIndex) && typeof step.label === 'string');
+  const statuses = ['draft', 'pending_review', 'active', 'archived', 'DRAFT', 'ACTIVE', 'ARCHIVED'];
+  if (typeof workflow.formCode !== 'string' || !workflow.formCode.trim() ||
+      typeof workflow.formTitle !== 'string' || !workflow.formTitle.trim() ||
+      !Array.isArray(workflow.steps) || workflow.steps.length === 0 ||
+      (workflow.status !== undefined && !statuses.includes(workflow.status)) ||
+      (workflow.version !== undefined && (!Number.isSafeInteger(workflow.version) || workflow.version < 1)) ||
+      (workflow.totalPages !== undefined && (!Number.isSafeInteger(workflow.totalPages) || workflow.totalPages < 1)) ||
+      (workflow.totalSteps !== undefined && (!Number.isSafeInteger(workflow.totalSteps) || workflow.totalSteps < 1)) ||
+      (workflow.publishedAt !== undefined && typeof workflow.publishedAt !== 'string') ||
+      (workflow.formTitleVi !== undefined && typeof workflow.formTitleVi !== 'string') ||
+      (workflow.circularInfo !== undefined && typeof workflow.circularInfo !== 'string')) return false;
+  if (workflow.pages !== undefined && (!Array.isArray(workflow.pages) || workflow.pages.some(page =>
+    !page || !Number.isSafeInteger(page.pageNumber) || page.pageNumber < 1 || typeof page.imageUrl !== 'string' ||
+    !Number.isFinite(page.width) || page.width <= 0 || !Number.isFinite(page.height) || page.height <= 0))) return false;
+  return workflow.steps.every(step => step && Number.isSafeInteger(step.stepIndex) && step.stepIndex >= 1 &&
+    typeof step.boxId === 'string' && !!step.boxId.trim() &&
+    typeof step.sectionName === 'string' && !!step.sectionName.trim() &&
+    typeof step.label === 'string' && !!step.label.trim() &&
+    typeof step.voiceGuidance === 'string' && !!step.voiceGuidance.trim() &&
+    typeof step.audioUrl === 'string' && typeof step.exampleRedText === 'string' &&
+    Array.isArray(step.highlightCoords) && step.highlightCoords.length === 4 &&
+    step.highlightCoords.every(coord => Number.isFinite(coord) && coord >= 0 && coord <= 1) &&
+    step.highlightCoords[0] < step.highlightCoords[2] && step.highlightCoords[1] < step.highlightCoords[3] &&
+    (step.requiresPrerequisiteDoc === undefined || typeof step.requiresPrerequisiteDoc === 'boolean') &&
+    (step.sourceFieldFromPrerequisite === undefined || typeof step.sourceFieldFromPrerequisite === 'string') &&
+    (step.legalWarningFlag === undefined || typeof step.legalWarningFlag === 'boolean') &&
+    (step.pageNumber === undefined || (Number.isSafeInteger(step.pageNumber) && step.pageNumber >= 1)) &&
+    (step.faqs === undefined || (Array.isArray(step.faqs) && step.faqs.every(faq =>
+      faq && typeof faq.question === 'string' && !!faq.question.trim() &&
+      typeof faq.answer === 'string' && !!faq.answer.trim()))));
 }
 
 function cachedWorkflow(storage: WorkflowStorage | undefined, formCode: string): FormWorkflow | null {

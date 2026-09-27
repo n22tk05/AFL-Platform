@@ -96,12 +96,12 @@ export class FormPersistenceService {
     if (!workflow.steps?.length) throw new Error('INVALID_WORKFLOW');
     if (workflow.steps.some((step, index) => !step || step.stepIndex !== index + 1 ||
       !step.boxId || !step.label?.trim() || !step.sectionName?.trim() || !step.voiceGuidance?.trim() ||
-      !step.exampleRedText?.trim() || !validCoords(step.highlightCoords) || !Array.isArray(step.faqs) ||
+      !step.exampleRedText?.trim() || !validCoords(step.highlightCoords) || !Array.isArray(step.faqs) || step.faqs.length === 0 ||
       step.faqs.some(faq => !faq?.question?.trim() || !faq.answer?.trim()))) throw new Error('INVALID_WORKFLOW');
     if (!await this.databaseHealth.check()) throw new Error('DATABASE_UNAVAILABLE');
     try { return await this.repository.saveReviewWorkflow(formCode, workflow); }
     catch (error) {
-      if (error instanceof Error && ['FORM_ACTIVE', 'NOT_FOUND', 'FORM_CODE_MISMATCH', 'INVALID_WORKFLOW'].includes(error.message)) throw error;
+      if (error instanceof Error && ['FORM_ACTIVE', 'NOT_FOUND', 'FORM_CODE_MISMATCH', 'INVALID_WORKFLOW', 'REVIEW_CONFLICT'].includes(error.message)) throw error;
       this.databaseHealth.markOffline(); throw new Error('DATABASE_UNAVAILABLE');
     }
   }

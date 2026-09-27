@@ -43,6 +43,22 @@ async function run() {
   });
   assert.equal(fixture.formTitle, 'Fixture');
 
+  storage.values.clear();
+  const malformed = { ...workflow, steps: [{ stepIndex: 1, label: 'Missing required contract fields' }] } as unknown as FormWorkflow;
+  const malformedFallback = await fetchWorkflow('01/LPTB', {
+    storage, fallback,
+    fetcher: async () => Response.json({ success: true, data: malformed }),
+  });
+  assert.equal(malformedFallback.formTitle, 'Fixture', 'malformed successful envelopes use the bundled fallback');
+  assert.equal(storage.getItem(workflowStorageKey('01/LPTB')), null, 'malformed successful envelopes are never cached');
+
+  storage.setItem(workflowStorageKey('01/LPTB'), JSON.stringify(malformed));
+  const malformedCacheFallback = await fetchWorkflow('01/LPTB', {
+    storage, fallback,
+    fetcher: async () => { throw new Error('offline'); },
+  });
+  assert.equal(malformedCacheFallback.formTitle, 'Fixture', 'malformed cached workflows are rejected');
+
   await assert.rejects(fetchWorkflow('01/LPTB', {
     fetcher: async () => Response.json({ success: true, data: { ...workflow, steps: [] } }),
   }), /WORKFLOW_UNAVAILABLE/);

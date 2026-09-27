@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { formController } from '@/modules/forms';
+import { adminAuthorizationService, formController } from '@/modules/forms';
 import { readLimitedJson } from '@/modules/shared/services/request-body.service';
 
 export async function GET(
@@ -18,6 +18,13 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { formCode: string } }
 ) {
+  const authorization = req.headers.get('authorization');
+  const adminKey = req.headers.get('x-admin-key');
+  const authStatus = adminAuthorizationService.authorize(authorization, adminKey);
+  if (authStatus !== 200) return NextResponse.json({
+    success: false,
+    error: { code: authStatus === 503 ? 'ADMIN_KEY_UNCONFIGURED' : 'UNAUTHORIZED' },
+  }, { status: authStatus });
   let body: unknown;
   try { body = await readLimitedJson(req, 128 * 1024); }
   catch (error) {
@@ -26,8 +33,8 @@ export async function PUT(
   }
   const result = await formController.saveReviewWorkflow({
     rawFormCode: params.formCode,
-    authorization: req.headers.get('authorization'),
-    adminKey: req.headers.get('x-admin-key'),
+    authorization,
+    adminKey,
     body,
   });
   return NextResponse.json(result.body, { status: result.status });

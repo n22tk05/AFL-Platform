@@ -56,6 +56,7 @@ export class FormController {
       const message = error instanceof Error ? error.message : '';
       if (message === 'NOT_FOUND') return { status: 404, body: { success: false, error: { code: 'FORM_NOT_FOUND' } } };
       if (message === 'FORM_ACTIVE') return { status: 409, body: { success: false, error: { code: 'FORM_ACTIVE' } } };
+      if (message === 'REVIEW_CONFLICT') return { status: 409, body: { success: false, error: { code: 'REVIEW_CONFLICT' } } };
       if (message === 'INVALID_WORKFLOW' || message === 'FORM_CODE_MISMATCH') return { status: 400, body: { success: false, error: { code: 'INVALID_WORKFLOW' } } };
       return { status: 503, body: { success: false, error: { code: 'DATABASE_UNAVAILABLE' } } };
     }
