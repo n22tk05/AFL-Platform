@@ -41,8 +41,8 @@ const AVAILABLE_FORMS: FormOption[] = [
   {
     id: "tpl_03_khai_sinh",
     code: "Mẫu Khai Sinh",
-    title: "Tờ Khai Đăng Ký Khai Sinh",
-    description: "Dùng để đăng ký khai sinh khi",
+    title: "Tờ Khai Đăng Ký Lại Khai Sinh",
+    description: "Dùng để đăng ký lại khai sinh khi mất hoặc sai thông tin",
     badge: "Thường gặp",
     badgeColor: "bg-amber-100 text-amber-800 border-amber-300",
   },

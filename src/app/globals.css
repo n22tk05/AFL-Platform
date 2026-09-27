@@ -43,3 +43,24 @@ body {
   border-width: 2.5px;
   border-style: solid;
 }
+
+/* Hiệu ứng quét tia Laser Scanner AI */
+@keyframes laser-scan-motion {
+  0% {
+    top: 2%;
+    opacity: 0.9;
+  }
+  50% {
+    top: 96%;
+    opacity: 1;
+  }
+  100% {
+    top: 2%;
+    opacity: 0.9;
+  }
+}
+
+.animate-laser-scan {
+  animation: laser-scan-motion 2s ease-in-out infinite;
+}
+

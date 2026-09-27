@@ -7,7 +7,7 @@
 import mockManifestJson from '../../assets/mock-data/mock-manifest.json';
 import mockWorkflowJson from '../../assets/mock-data/mock-workflow.json';
 import mockWorkflowLptb from '../../assets/mock-data/mock-workflow-01-lptb.json';
-import mockWorkflowKhaiSinh from '../../assets/mock-data/mock-workflow-khai-sinh.json';
+import mockWorkflowKhaiSinh from '../../assets/mock-data/mock-workflow-khai-sinh-lai.json';
 import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
 
 export interface AppConfig {

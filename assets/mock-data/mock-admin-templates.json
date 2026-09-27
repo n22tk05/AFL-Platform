@@ -1,0 +1,41 @@
+[
+  {
+    "id": "tpl_01_lptb",
+    "formCode": "Mẫu 01/LPTB",
+    "title": "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
+    "legalBasis": "Thông tư số 89/2026/TT-BTC ngày 30/6/2026 của Bộ Tài chính",
+    "department": "Chi cục Thuế / Bộ phận Tiếp nhận & Trả kết quả Một cửa",
+    "version": 2,
+    "totalSteps": 40,
+    "totalPages": 2,
+    "status": "ACTIVE",
+    "publishedAt": "2026-09-20T08:30:00.000Z",
+    "thumbnailUrl": "/assets/forms/01-lptb/page-1.jpg"
+  },
+  {
+    "id": "tpl_03_khai_sinh",
+    "formCode": "Mẫu Khai Sinh",
+    "title": "Tờ Khai Đăng Ký Lại Khai Sinh",
+    "legalBasis": "Thông tư số 04/2020/TT-BTP hướng dẫn Luật Hộ tịch",
+    "department": "UBND Xã / Phường - Bộ phận Tư pháp Hộ tịch",
+    "version": 1,
+    "totalSteps": 28,
+    "totalPages": 1,
+    "status": "ACTIVE",
+    "publishedAt": "2026-09-15T14:20:00.000Z",
+    "thumbnailUrl": "/assets/forms/khai-sinh/page-1.png"
+  },
+  {
+    "id": "tpl_02_vphc",
+    "formCode": "Mẫu Nộp Phạt",
+    "title": "Biểu Mẫu Nộp Tiền Phạt Vi Phạm Giao Thông",
+    "legalBasis": "Nghị định 100/2019/NĐ-CP & Nghị định 123/2021/NĐ-CP",
+    "department": "Đội Cảnh sát Giao thông - Trật tự / Kho bạc Nhà nước",
+    "version": 1,
+    "totalSteps": 18,
+    "totalPages": 1,
+    "status": "DRAFT",
+    "publishedAt": "2026-09-25T09:10:00.000Z",
+    "thumbnailUrl": "/assets/forms/01-lptb/page-1.jpg"
+  }
+]

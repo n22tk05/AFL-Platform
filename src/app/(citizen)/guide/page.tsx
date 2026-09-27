@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
-import { WorkflowStep } from "@/shared/contracts";
+import { WorkflowStep, FormWorkflow } from "@/shared/contracts";
 import { getMockWorkflow } from "@/config/app.config";
 import { VisualTwin } from "@/components/mobile/VisualTwin";
 import { RedTextExample } from "@/components/mobile/RedTextExample";
@@ -14,21 +14,66 @@ function GuideContent() {
   const searchParams = useSearchParams();
   const templateId = searchParams?.get("templateId") || "tpl_01_lptb";
 
-  // Lựa chọn kịch bản dựa vào templateId thông qua Mock Switcher Registry
-  const workflow = useMemo(() => {
+  // Lựa chọn kịch bản: Ưu tiên nạp bản mới nhất từ localStorage do Admin vừa xuất bản
+  const [workflow, setWorkflow] = useState<FormWorkflow>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedData = localStorage.getItem(`afl_workflow_published_${templateId}`);
+        if (savedData) {
+          const parsed = JSON.parse(savedData) as FormWorkflow;
+          if (parsed && Array.isArray(parsed.steps) && parsed.steps.length > 0) {
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.warn("Lỗi đọc bản lưu localStorage:", e);
+      }
+    }
     return getMockWorkflow(templateId);
+  });
+
+  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+
+  // Tự động nạp lại kịch bản khi templateId thay đổi
+  useEffect(() => {
+    let activeWorkflow = getMockWorkflow(templateId);
+    if (typeof window !== "undefined") {
+      try {
+        const savedData = localStorage.getItem(`afl_workflow_published_${templateId}`);
+        if (savedData) {
+          const parsed = JSON.parse(savedData) as FormWorkflow;
+          if (parsed && Array.isArray(parsed.steps) && parsed.steps.length > 0) {
+            activeWorkflow = parsed;
+          }
+        }
+      } catch (e) {
+        console.warn("Lỗi đọc bản lưu localStorage:", e);
+      }
+    }
+    setWorkflow(activeWorkflow);
+    setCurrentStepIndex(0);
+  }, [templateId]);
+
+  // Lắng nghe sự kiện đồng bộ storage nếu Admin xuất bản ở tab khác
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === `afl_workflow_published_${templateId}` && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue) as FormWorkflow;
+          if (parsed && Array.isArray(parsed.steps) && parsed.steps.length > 0) {
+            setWorkflow(parsed);
+          }
+        } catch (err) {
+          console.warn("Lỗi cập nhật workflow từ storage event:", err);
+        }
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, [templateId]);
 
   const steps: WorkflowStep[] = workflow.steps || [];
   const totalSteps = steps.length;
-
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-
-  // Tự động reset về bước 0 khi chuyển biểu mẫu
-  useEffect(() => {
-    setCurrentStepIndex(0);
-  }, [templateId]);
-
   const currentStep = steps[currentStepIndex];
 
   const handlePrevStep = () => {

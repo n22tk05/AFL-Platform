@@ -70,6 +70,8 @@ export interface FormWorkflow {
   totalPages?: number;
   pages?: FormPageMetadata[];
   totalSteps?: number;
-  status?: 'draft' | 'pending_review' | 'active' | 'archived';
+  status?: 'draft' | 'pending_review' | 'active' | 'archived' | 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+  version?: number;                  // Số hiệu phiên bản ban hành: 1, 2, 3...
+  publishedAt?: string;              // Mốc thời gian ban hành ISO: 2026-09-27T...
   steps: WorkflowStep[];
 }
