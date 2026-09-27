@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-feature/citizen-ui-flow
   async rewrites() {
     return [
       {
@@ -13,6 +12,7 @@ feature/citizen-ui-flow
         destination: "/review/:id",
       },
     ];
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -23,7 +23,6 @@ feature/citizen-ui-flow
       };
     }
     return config;
-main
   },
 };
 
