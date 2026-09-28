@@ -32,6 +32,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const stt = useRef<WebSpeechSTT | null>(null);
   const recognition = useRef(new RecognitionSubmissionLifecycle());
   const recognitionId = useRef<number | null>(null);
+  const activeRecognition = useRef<WebSpeechSTT | null>(null);
   const finalTranscript = useRef(new FinalTranscriptBuffer());
   const playback = useRef<PlaybackSession | null>(null);
   const playbackGeneration = useRef(0);
@@ -45,16 +46,24 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const contextKeyRef = useRef(contextKey);
   contextKeyRef.current = contextKey;
 
+  const scheduleEchoRelease = useCallback((generation: number) => {
+    if (echoTimer.current) clearTimeout(echoTimer.current);
+    echoTimer.current = setTimeout(() => {
+      echoTimer.current = null;
+      if (!mounted.current || generation !== playbackGeneration.current) return;
+      if (duplex.current.canSafelyListen()) setCanListen(true);
+      else scheduleEchoRelease(generation);
+    }, 300);
+  }, []);
+
   const finishDuplexPlayback = useCallback((generation: number) => {
     if (!mounted.current || generation !== playbackGeneration.current || !duplex.current.isSpeaking) return;
     duplex.current.onAudioPlaybackEnd();
     setIsPlaying(false);
     setCanListen(false);
-    if (echoTimer.current) clearTimeout(echoTimer.current);
-    echoTimer.current = setTimeout(() => {
-      if (mounted.current && generation === playbackGeneration.current) setCanListen(true);
-    }, 300);
-  }, []);
+    scheduleEchoRelease(generation);
+  }, [scheduleEchoRelease]);
+
 
   const cancelPlayback = useCallback((updateState = true) => {
     const generation = ++playbackGeneration.current;
@@ -67,12 +76,16 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
       if (updateState && mounted.current) {
         setIsPlaying(false);
         setCanListen(false);
-        echoTimer.current = setTimeout(() => {
-          if (mounted.current && generation === playbackGeneration.current) setCanListen(true);
-        }, 300);
+        scheduleEchoRelease(generation);
       }
-    } else if (updateState && mounted.current) setIsPlaying(false);
-  }, []);
+    } else if (updateState && mounted.current) {
+      setIsPlaying(false);
+      if (!duplex.current.canSafelyListen()) {
+        setCanListen(false);
+        scheduleEchoRelease(generation);
+      }
+    }
+  }, [scheduleEchoRelease]);
 
   const cancelQa = useCallback(() => {
     qaGeneration.current.invalidate();
@@ -144,28 +157,28 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const submitRecognition = useCallback((result: { ready: boolean; question: string; context?: { formCode: string; stepIndex: number } }) => {
     if (result.ready && result.question && result.context) void askQuestion(result.context.formCode, result.context.stepIndex, result.question);
   }, [askQuestion]);
-
-  useEffect(() => {
-    mounted.current = true;
-    const speech = new WebSpeechSTT({ lang: 'vi-VN', continuous: false, interimResults: true });
+  const bindRecognitionCallbacks = useCallback((speech: WebSpeechSTT, id: number) => {
     speech.registerCallbacks({
-      onStart: () => { if (mounted.current) { setIsListening(true); setError(null); } },
+      onStart: () => { if (mounted.current && recognitionId.current === id) { setIsListening(true); setError(null); } },
       onResult: (text, isFinal) => {
-        const id = recognitionId.current;
-        if (id === null || !mounted.current) return;
-        recognition.current.result(id, text, isFinal);
+        if (!mounted.current || !recognition.current.result(id, text, isFinal)) return;
         finalTranscript.current.update(text, isFinal);
         setTranscript(text);
         optionsRef.current?.onTranscriptUpdate?.(text, isFinal);
       },
-      onError: message => { if (mounted.current) { setIsListening(false); setError(message); } },
+      onError: message => { if (mounted.current && recognitionId.current === id) { setIsListening(false); setError(message); } },
       onEnd: () => {
-        const id = recognitionId.current;
-        if (mounted.current) setIsListening(false);
+        if (!mounted.current || recognitionId.current !== id) return;
+        setIsListening(false);
         duplex.current.onMicRelease();
-        if (id !== null) submitRecognition(recognition.current.end(id));
+        submitRecognition(recognition.current.end(id));
       },
     });
+  }, [submitRecognition]);
+
+  useEffect(() => {
+    mounted.current = true;
+    const speech = new WebSpeechSTT({ lang: 'vi-VN', continuous: false, interimResults: true });
     stt.current = speech;
     setIsSupported(speech.isSupported());
     return () => {
@@ -174,7 +187,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
       qaController.current?.abort();
       qaController.current = null;
       recognition.current.reset();
-      speech.abort();
+      speech.abort(); activeRecognition.current?.abort();
       cancelPlayback(false);
       if (echoTimer.current) clearTimeout(echoTimer.current);
     };
@@ -197,14 +210,19 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
     recognitionId.current = id;
     finalTranscript.current.clear(); setTranscript(''); setError(null);
     duplex.current.onMicPress();
-    const started = stt.current?.start() ?? false;
+    const previous = activeRecognition.current;
+    previous?.abort();
+    const session = new WebSpeechSTT({ lang: 'vi-VN', continuous: false, interimResults: true });
+    bindRecognitionCallbacks(session, id);
+    activeRecognition.current = session;
+    const started = session.start();
     if (!started) {
+      recognition.current.reset(); recognitionId.current = null;
       setIsListening(false);
       duplex.current.onMicRelease();
-      submitRecognition(recognition.current.end(id));
     }
     return started;
-  }, [canListen, submitRecognition]);
+  }, [canListen, bindRecognitionCallbacks]);
 
   const stopListening = useCallback((formCode = optionsRef.current?.formCode, stepIndex = optionsRef.current?.stepIndex) => {
     const id = recognitionId.current;
@@ -220,6 +238,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const stopAudio = useCallback(() => {
     cancelQa();
     cancelPlayback();
+    activeRecognition.current?.abort(); activeRecognition.current = null;
     stt.current?.abort();
     recognition.current.reset(); recognitionId.current = null; finalTranscript.current.clear();
     duplex.current.onMicRelease();
