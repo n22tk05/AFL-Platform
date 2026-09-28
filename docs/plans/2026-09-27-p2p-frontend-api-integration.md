@@ -73,12 +73,30 @@ tests/integration/p2p-api-integration.test.ts
 
 Each implementation task requires a fresh independent review. Architectural release also requires a fresh final integration review.
 
+### Approved Task 2 replan (2026-09-28)
+
+The first Task 2 remediation did not pass its scoped re-review. The user approved
+replanning the remaining work as a new focused lifecycle task before Task 3:
+
+2R. Repair microphone echo-guard cancellation and bind Web Speech callbacks to
+immutable recognition sessions. Add deterministic hook-level regression tests
+that drive the actual callback closures for cancellation, abort/restart, failed
+restart, delayed QA responses, and media fallback. Preserve the accepted fixture,
+workflow, browser-boundary, and half-duplex behavior already present at
+`77f617fa3170765ce2ad4ed48c26a9a70705250f`.
+
+Task 2R receives a fresh implementer and a fresh independent task review. Task 3
+does not start until Task 2R is accepted.
+
 ## Acceptance criteria
 
 | Risk | Required proof |
 | --- | --- |
 | Empty successful workflow response poisons cache | Client rejects an empty workflow and preserves fallback behavior in an automated test. |
 | Stale speech transcript or speaker/microphone overlap | Voice-client tests cover finalized transcript submission and half-duplex state. |
+| Cancelling playback during the echo guard permanently disables listening | A hook-level fake-clock test completes playback, cancels inside the guard, repeats cancellation, advances past the guard, and proves listening recovers exactly once. The counterexample is an implementation that clears the release timer without restoring or rescheduling the guard. |
+| An aborted recognition session submits transcript into a newer turn | Hook/service callback-order tests deliver final/end callbacks from session A after session B starts (including a failed B start) and prove that neither transcript state nor QA submission accepts A. The counterexample is callback ownership looked up from the current mutable recognition id. |
+| Lifecycle tests pass while bypassing real callbacks | Tests retain and invoke the actual recognition and media callback closures assigned by the hook/services, including rejected playback, `onerror`, `onended`, abort/restart, delayed fetch, and echo-guard expiry. The counterexample is a no-op callback or isolated counter that never drives production state. |
 | Failed approval appears active | Admin UI preserves failure state; API/controller test covers unauthorized or unavailable approval. |
 | Canonical admin route is missing | Production build route table contains `/admin/library` and `/admin/review/[id]`; legacy routes redirect. |
 | Secret leaks to browser persistence or public environment | Source scan finds no admin-key local storage and no `NEXT_PUBLIC_ADMIN*`. |
