@@ -1,6 +1,8 @@
 'use client';
 
 import type { FormWorkflow } from '@/shared/contracts';
+export { AdminApiError, approveAdminWorkflow, listAdminForms, readAdminWorkflow, saveAdminWorkflow } from '@/modules/forms/services/form-api.client';
+export type { AdminApiFetch } from '@/modules/forms/services/form-api.client';
 
 export type WorkflowStorage = Pick<Storage, 'getItem' | 'setItem'>;
 export type WorkflowFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;

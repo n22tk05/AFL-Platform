@@ -6,6 +6,8 @@ import type { FormRepository } from '@/modules/forms/repositories/form.repositor
 import { PrismaFormRepository } from '@/modules/forms/repositories/prisma-form.repository';
 import { PUT as reviewWorkflowPut } from '@/app/api/admin/forms/[formCode]/workflow/route';
 import type { FormWorkflow } from '@/shared/contracts';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const draft: FormWorkflow = {
   formId: 'form_1', formCode: '01/LPTB', formTitle: 'Draft form', status: 'draft', steps: [{
@@ -63,6 +65,21 @@ const twoStepDraft: FormWorkflow = {
 };
 
 async function run() {
+  const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8');
+  const canonicalPaths = [
+    'src/app/admin/layout.tsx', 'src/app/admin/library/page.tsx', 'src/app/admin/review/[id]/page.tsx',
+    'src/modules/forms/client.ts', 'src/modules/forms/services/form-api.client.ts',
+  ];
+  for (const path of canonicalPaths) assert.ok(existsSync(resolve(process.cwd(), path)), `canonical path exists: ${path}`);
+  const canonicalSource = canonicalPaths.map(read).join('\n');
+  assert.doesNotMatch(canonicalSource, /localStorage|sessionStorage|NEXT_PUBLIC_ADMIN|\/api\/admin\/publish/);
+  assert.doesNotMatch(canonicalSource, /from\s+['"][^'"]*(?:@\/modules\/forms(?:['"]|\/index)|prisma-form\.repository|form\.controller|form-persistence\.service)/);
+  assert.match(read('src/app/(admin)/library/page.tsx'), /redirect\(['"]\/admin\/library['"]\)/);
+  assert.match(read('src/app/(admin)/review/[id]/page.tsx'), /redirect\(`\/admin\/review\/\$\{encodeURIComponent\(params\.id\)\}`\)/);
+  const reviewUi = read('src/app/admin/review/[id]/page.tsx');
+  assert.match(reviewUi, /disabled=\{!editable\}|readOnly=\{!editable\}/);
+  assert.match(reviewUi, /result\.status\).*ACTIVE/);
+  assert.match(reviewUi, /setWorkflow\(updated\)/);
   assert.equal((await controller.listForms({})).status, 401);
   const list = await controller.listForms(auth);
   assert.equal(list.status, 200);

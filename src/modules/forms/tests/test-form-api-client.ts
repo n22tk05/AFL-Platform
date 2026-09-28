@@ -1,8 +1,9 @@
-import assert from 'node:assert/strict';
+﻿import assert from 'node:assert/strict';
 import { fetchWorkflow, workflowStorageKey } from '@/modules/forms/client';
 import type { FormWorkflow } from '@/shared/contracts';
 import bundledLptb from '../../../../assets/mock-data/mock-workflow-tpl_01_lptb.json';
 import { prepareWorkflowFixture } from '@/modules/forms/client';
+import { AdminApiError, approveAdminWorkflow, listAdminForms, readAdminWorkflow, saveAdminWorkflow } from '@/modules/forms/client';
 
 const workflow: FormWorkflow = {
   formCode: '01/LPTB', formTitle: 'Live', steps: [{
@@ -95,3 +96,31 @@ async function run() {
 }
 
 run().catch(error => { console.error(error); process.exitCode = 1; });
+
+async function runAdminClientTests() {
+  const calls: Array<{ url: string | URL | RequestInfo; init?: RequestInit }> = [];
+  const fake = async (url: string | URL | RequestInfo, init?: RequestInit) => {
+    calls.push({ url, init });
+    const data = init?.method === 'POST' ? { formCode: 'A/B', status: 'ACTIVE', approvedAt: 'now' }
+      : init?.method === 'PUT' ? { formCode: 'A/B', workflowId: 'w1', stepCount: 1 }
+        : String(url).endsWith('/workflow') ? workflow : { forms: [{ formId: 'f1', formCode: 'A/B', formTitle: 'Form', status: 'draft', version: 1, stepCount: 1, updatedAt: 'now' }] };
+    return Response.json({ success: true, data });
+  };
+  assert.equal((await listAdminForms('private-key', fake)).forms.length, 1);
+  await readAdminWorkflow('A/B', 'private-key', fake);
+  await saveAdminWorkflow('A/B', 'private-key', workflow, fake);
+  assert.equal((await approveAdminWorkflow('A/B', 'private-key', { performedBy: '  Op\nName ', note: ' Note\ttext ' }, fake)).status, 'ACTIVE');
+  assert.deepEqual(calls.map(call => [String(call.url), call.init?.method ?? 'GET']), [
+    ['/api/admin/forms', 'GET'], ['/api/admin/forms/A%2FB/workflow', 'GET'],
+    ['/api/admin/forms/A%2FB/workflow', 'PUT'], ['/api/admin/forms/A%2FB/approve', 'POST'],
+  ]);
+  assert.ok(calls.every(call => (call.init?.headers as Record<string, string>)['x-admin-key'] === 'private-key'));
+  assert.deepEqual(JSON.parse(String(calls[3].init?.body)), { reviewConfirmed: true, performedBy: 'Op Name', note: 'Note text' });
+  await assert.rejects(listAdminForms('bad', async () => Response.json({ success: false, error: { code: 'UNAUTHORIZED' } }, { status: 401 })), (e: unknown) => e instanceof AdminApiError && e.status === 401 && e.isUnauthorized);
+  await assert.rejects(listAdminForms('key', async () => Response.json({ success: false, error: { code: 'ADMIN_KEY_UNCONFIGURED' } }, { status: 503 })), (e: unknown) => e instanceof AdminApiError && e.status === 503 && e.isConfigurationError);
+  let active = false;
+  await assert.rejects(approveAdminWorkflow('A/B', 'key', { performedBy: 'Op', note: '' }, async () => Response.json({ success: false, error: { code: 'DATABASE_UNAVAILABLE' } }, { status: 503 })), /DATABASE_UNAVAILABLE/);
+  assert.equal(active, false, 'a rejected approve request produces no success value or ACTIVE state');
+  console.log('admin forms API client tests passed');
+}
+runAdminClientTests().catch(error => { console.error(error); process.exitCode = 1; });
