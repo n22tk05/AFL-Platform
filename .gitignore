@@ -47,3 +47,4 @@ _bmad-output
 src/modules/voice-ai/gemini-cache.json
 node_modules/
 *.docx
+SLIDE-DECK-AI-FOR-LIFE.md
