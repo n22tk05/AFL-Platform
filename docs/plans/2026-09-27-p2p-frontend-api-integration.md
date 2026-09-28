@@ -103,6 +103,31 @@ test for release-before-onstart ordering.
 Task 2S receives a fresh implementer and a fresh independent task review. Task 3
 does not start until Task 2S is accepted.
 
+### Approved Task 3R replan (2026-09-28)
+
+Task 3's initial review reproduced three admin lifecycle failures: approving
+stale persisted data while reviewed edits remain unsaved, deriving an ACTIVE UI
+from submitted JSON after an ordinary save, and allowing delayed mutation
+responses to overwrite a newer review route. The first remediation commit
+`b265b38f8d94b49aa2bd7618438b8c387bd1f03f` contains direct component guards,
+but two implementation attempts could not produce the required deterministic
+production-callback evidence. The user approved replanning the unresolved proof
+and ownership boundary as a new focused task:
+
+3R. Move the admin review save/approve/generation transitions into browser-safe,
+framework-independent lifecycle logic under the existing Forms client boundary,
+and make the canonical review page delegate to it. Direct deterministic tests
+must prove that dirty or failed saves block approval, successful saves reconcile
+through an authoritative GET, submitted status cannot fabricate ACTIVE, and
+stale GET/PUT/POST completions cannot affect a newer form/key generation. Keep
+the existing protected endpoints, in-memory key handling, canonical routes and
+all accepted citizen/voice behavior unchanged.
+
+Task 3R receives a fresh implementer and a fresh independent task review. Task 4
+does not start until Task 3R is accepted. The existing component-only remediation
+commit remains in history and may be simplified or replaced within the owned
+Task 3 paths; no history rewrite is authorized.
+
 ## Acceptance criteria
 
 | Risk | Required proof |
