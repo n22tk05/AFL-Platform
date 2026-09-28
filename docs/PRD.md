@@ -9,6 +9,8 @@ language: vi
 ---
 
 # TÀI LIỆU YÊU CẦU SẢN PHẨM (PRD)
+
+**Cập nhật nghiệm thu FR-6:** Mỗi trường chứng từ phải có bằng chứng OCR, confidence và trạng thái kiểm tra. Dữ liệu thiếu bằng chứng phải để trống hoặc chờ người dùng duyệt; không sinh dữ liệu mẫu. Chỉ trường được chấp nhận hoặc xác nhận thủ công mới vào Session RAM và `/guide`. Phạm vi hiện thực hiện là biên bản vi phạm giao thông. Xem [pipeline và giới hạn thực tế](DOCUMENT-EXTRACTION.md); chưa có benchmark trên ảnh thật. Các phần trăm và lời khẳng định tuyệt đối trong mô tả lịch sử bên dưới không phải kết quả đo.
 ## Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh & Quản trị Quy trình Hành chính cho Người cao tuổi
 
 ---

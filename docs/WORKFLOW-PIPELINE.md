@@ -1,4 +1,6 @@
 # KẾ HOẠCH PHÂN CÔNG CÔNG VIỆC & PIPELINE THỰC THI DỰ ÁN AFL
+
+**Cập nhật luồng FR-6:** Việc đọc chứng từ cá nhân là bước riêng khi người dùng yêu cầu: OpenCV detect/warp và quality gate → Blob đã xử lý → Document AI OCR → Gemini text classification → schema giao thông → validation → review → Session RAM. Việc phát kịch bản đã duyệt vẫn theo luồng runtime phía dưới. Khi OCR lỗi, trả manual review với fields rỗng. Xem [audit, cách chạy và benchmark](DOCUMENT-EXTRACTION.md).
 ## Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh & Quản trị Quy trình cho Người cao tuổi
 **Mô hình Đội ngũ:** 4 Thành viên (Nền tảng IT)  
 **Tài liệu quy chiếu:** [PRD (11 FRs)](PRD.md) & [Architecture Spine](ARCHITECTURE.md)  

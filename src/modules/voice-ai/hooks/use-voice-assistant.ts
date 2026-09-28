@@ -36,6 +36,25 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const sttRef = useRef<WebSpeechSTT | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const echoGuardTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
+
+  /**
+   * Xử lý kết thúc phát âm thanh với khoảng đệm Echo-Guard 300ms
+   */
+  const handleAudioEnded = useCallback(() => {
+    setIsPlaying(false);
+    halfDuplexRef.current.onAudioPlaybackEnd();
+    setCanListen(false);
+
+    // Kích hoạt bộ đếm thời gian an toàn 300ms chống dội âm
+    if (echoGuardTimerRef.current) {
+      clearTimeout(echoGuardTimerRef.current);
+    }
+    echoGuardTimerRef.current = setTimeout(() => {
+      setCanListen(true);
+    }, 300);
+  }, []);
 
   // Khởi tạo STT và kiểm tra hỗ trợ trên trình duyệt
   useEffect(() => {
@@ -53,13 +72,13 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
         },
         onResult: (text: string, isFinal: boolean) => {
           setTranscript(text);
-          options?.onTranscriptUpdate?.(text, isFinal);
+          optionsRef.current?.onTranscriptUpdate?.(text, isFinal);
         },
         onError: (errMsg: string) => {
           setIsListening(false);
           halfDuplexRef.current.onMicRelease();
           setError(errMsg);
-          options?.onError?.(errMsg);
+          optionsRef.current?.onError?.(errMsg);
         },
         onEnd: () => {
           setIsListening(false);
@@ -90,24 +109,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
         clearTimeout(echoGuardTimerRef.current);
       }
     };
-  }, []);
-
-  /**
-   * Xử lý kết thúc phát âm thanh với khoảng đệm Echo-Guard 300ms
-   */
-  const handleAudioEnded = useCallback(() => {
-    setIsPlaying(false);
-    halfDuplexRef.current.onAudioPlaybackEnd();
-    setCanListen(false);
-
-    // Kích hoạt bộ đếm thời gian an toàn 300ms chống dội âm
-    if (echoGuardTimerRef.current) {
-      clearTimeout(echoGuardTimerRef.current);
-    }
-    echoGuardTimerRef.current = setTimeout(() => {
-      setCanListen(true);
-    }, 300);
-  }, []);
+  }, [handleAudioEnded]);
 
   /**
    * Dừng toàn bộ âm thanh đang phát

@@ -109,8 +109,11 @@ export function CameraScannerModal({
     }
   };
 
-  // 4. Chụp ảnh từ khung Video
-  const handleCapture = () => {
+  const [isDeskewing, setIsDeskewing] = useState<boolean>(false);
+  const [deskewFeedback, setDeskewFeedback] = useState<string | null>(null);
+
+  // 4. Chụp ảnh từ khung Video & Nắn thẳng phối cảnh bằng OpenCV WASM
+  const handleCapture = async () => {
     if (!videoRef.current || !canvasRef.current) return;
 
     const video = videoRef.current;
@@ -120,17 +123,67 @@ export function CameraScannerModal({
     canvas.height = video.videoHeight || 720;
 
     const context = canvas.getContext("2d");
-    if (context) {
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
-      setCapturedImage(dataUrl);
-      stopCamera();
+    if (!context) return;
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const originalDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+    
+    stopCamera();
+    setIsDeskewing(true);
+    setDeskewFeedback("Đang phân tích và nắn thẳng góc phối cảnh tờ khai...");
+
+    try {
+      const { loadOpenCv, detectDocument, warpDocument } = await import("@/modules/opencv");
+      const cv = await loadOpenCv();
+
+      // Đọc ảnh vào Mat
+      const sourceMat = (cv as unknown as { imread: (c: HTMLCanvasElement) => import("@/modules/opencv/types").CvMat }).imread(canvas);
+
+      try {
+        const detected = detectDocument(cv, sourceMat);
+
+        if (detected.quality.accepted && detected.sourceQuad) {
+          const deskewResult = warpDocument(cv, sourceMat, detected.sourceQuad);
+
+          // Vẽ ảnh đã nắn thẳng ra canvas
+          const dCanvas = document.createElement("canvas");
+          dCanvas.width = deskewResult.width;
+          dCanvas.height = deskewResult.height;
+          (cv as unknown as { imshow: (c: HTMLCanvasElement, m: unknown) => void }).imshow(dCanvas, deskewResult.deskewed);
+          
+          const deskewedDataUrl = dCanvas.toDataURL("image/jpeg", 0.95);
+          deskewResult.deskewed.delete();
+
+          setCapturedImage(deskewedDataUrl);
+          setDeskewFeedback("✔ Đã tự động nắn thẳng tài liệu vuông vức theo chuẩn A4!");
+        } else {
+          // Xử lý thông báo thân thiện theo mã rejection reasons
+          let warningNote = "Đã lưu ảnh chụp.";
+          const reasons = detected.quality.rejectionReasons || [];
+          if (reasons.some(r => r.includes("area") || r.includes("tiny"))) {
+            warningNote = "Tờ giấy hơi xa. Lần sau bác đưa điện thoại gần hơn một chút nhé!";
+          } else if (reasons.some(r => r.includes("margin") || r.includes("corner"))) {
+            warningNote = "Lưu ý: Tờ khai hơi sát mép ảnh, bác nhớ chụp đủ cả 4 góc giấy nhé!";
+          }
+          setCapturedImage(originalDataUrl);
+          setDeskewFeedback(warningNote);
+        }
+      } finally {
+        sourceMat.delete();
+      }
+    } catch (cvErr) {
+      console.warn("Lưu ý OpenCV Deskew camera:", cvErr);
+      setCapturedImage(originalDataUrl);
+      setDeskewFeedback("Đã chụp thành công ảnh tờ khai!");
+    } finally {
+      setIsDeskewing(false);
     }
   };
 
   // 5. Chụp lại
   const handleRetake = () => {
     setCapturedImage(null);
+    setDeskewFeedback(null);
     startCamera();
   };
 
@@ -205,13 +258,29 @@ export function CameraScannerModal({
           </div>
         ) : capturedImage ? (
           /* Màn hình xem trước ảnh vừa chụp */
-          <div className="relative w-full h-full flex items-center justify-center p-4">
+          <div className="relative w-full h-full flex flex-col items-center justify-center p-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={capturedImage}
               alt="Ảnh tờ khai vừa chụp"
-              className="max-h-full max-w-full object-contain rounded-xl shadow-2xl border-2 border-white/20"
+              className="max-h-[80%] max-w-full object-contain rounded-xl shadow-2xl border-2 border-white/20"
             />
+            {deskewFeedback && (
+              <div className="mt-3 px-4 py-2 bg-black/80 backdrop-blur-md rounded-full border border-white/20 text-xs sm:text-sm font-bold text-center text-emerald-300 shadow-lg animate-fadeIn max-w-xs sm:max-w-md">
+                {deskewFeedback}
+              </div>
+            )}
+          </div>
+        ) : isDeskewing ? (
+          /* Đang xử lý nắn thẳng ảnh */
+          <div className="flex flex-col items-center justify-center gap-3 p-6 text-white text-center">
+            <RefreshCw className="w-10 h-10 animate-spin text-emerald-400" />
+            <span className="text-sm sm:text-base font-extrabold text-emerald-300">
+              Đang tự động nắn phẳng góc phối cảnh...
+            </span>
+            <span className="text-xs text-slate-300">
+              OpenCV WASM đang chuẩn hóa ảnh theo khổ A4
+            </span>
           </div>
         ) : (
           /* Khung ngắm Video trực tiếp */

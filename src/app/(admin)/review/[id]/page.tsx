@@ -195,7 +195,26 @@ export default function AdminReviewPage() {
       templateId: workflow.templateId || formId,
     };
     try {
-      // Gọi API phía server để ghi file vào thư mục assets/mock-data/
+      // 1. Phê duyệt trong Database qua API /api/admin/forms/[formCode]/approve (chuyển trạng thái sang ACTIVE)
+      const formCode = workflow.formCode || formId;
+      try {
+        await fetch(`/api/admin/forms/${encodeURIComponent(formCode)}/approve`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": "afl_admin_secret_guard_key_2026",
+          },
+          body: JSON.stringify({
+            reviewConfirmed: true,
+            performedBy: "Cán bộ quản trị",
+            note: "Phê duyệt biểu mẫu qua Admin Review Portal",
+          }),
+        });
+      } catch (dbErr) {
+        console.warn("DB approve warning (offline fallback enabled):", dbErr);
+      }
+
+      // 2. Gọi API phía server để ghi file vào thư mục assets/mock-data/
       const res = await fetch("/api/admin/publish", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

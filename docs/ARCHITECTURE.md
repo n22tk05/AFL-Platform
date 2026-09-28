@@ -16,6 +16,10 @@ language: vi
 
 # Khung Kiến trúc Hệ thống (Architecture Spine) — AFL Platform
 
+## Cập nhật FR-6 (2026-09-27)
+
+Luồng chứng từ công dân hiện dùng **OpenCV WASM → Google Document AI OCR → Gemini phân loại và trích xuất schema → validation tất định → human review → Session RAM**. OpenCV chỉ xử lý hình học; OCR chữ dùng provider server-side độc lập. Tọa độ hợp đồng `[ymin,xmin,ymax,xmax]` là số thực `[0,1]`. Cổng review chặn dữ liệu chưa duyệt; bộ nhớ phiên tồn tại tối đa 15 phút và không dùng sessionStorage. Xem [kiến trúc chi tiết và khác biệt so với mô tả cũ](DOCUMENT-EXTRACTION.md). Các tỷ lệ trong tài liệu lịch sử bên dưới là mục tiêu thiết kế, không phải benchmark đã đo cho FR-6.
+
 ## 1. Mô hình Kiến trúc Cốt lõi (Design Paradigm)
 
 Hệ thống tuân thủ mô hình **Kiến trúc Lục giác (Hexagonal Architecture / Ports & Adapters)** kết hợp với **Máy trạng thái Quy trình hướng Sự kiện (Event-driven Workflow State Machine)**:

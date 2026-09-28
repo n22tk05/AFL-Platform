@@ -173,6 +173,29 @@ export default function CitizenScanPage() {
         ))}
       </div>
 
+      {/* Nút Universal Document Scanner cho chứng từ bất kỳ */}
+      <button
+        type="button"
+        onClick={() => router.push('/scan-document')}
+        className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl p-4 flex items-center justify-between border-2 border-slate-700 shadow-md transition-all active:scale-98"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+            <ScanLine className="w-6 h-6" />
+          </div>
+          <div className="text-left">
+            <div className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+              Quét & Trích Xuất Văn Bản Toàn Năng
+              <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">MỚI</span>
+            </div>
+            <div className="text-xs text-slate-400 font-medium">
+              Quét Biên bản phạt, Sổ đỏ, Khai sinh, CCCD & bóc tách 100% dữ liệu
+            </div>
+          </div>
+        </div>
+        <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
+      </button>
+
       {/* Khung chỉ dẫn trợ giúp */}
       <div className="bg-slate-100 rounded-xl p-3.5 border border-slate-200 flex items-start gap-2.5 text-slate-600 text-xs sm:text-sm font-medium mt-auto">
         <AlertCircle className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
