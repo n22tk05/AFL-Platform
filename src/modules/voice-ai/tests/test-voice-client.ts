@@ -69,24 +69,44 @@ async function run() {
   }
   (globalThis as any).window = { SpeechRecognition: FakeRecognition };
   const submitted: string[] = []; const shown: string[] = [];
+  let releasedAnswerDone: (() => void) | undefined;
   let recognitionOptions: any = { formCode: 'FORM', stepIndex: 1,
     onTranscriptUpdate: (value: string) => shown.push(value),
+    speak: (_text: string, done: () => void) => { releasedAnswerDone = done; return () => {}; },
     fetcher: async (_url: RequestInfo | URL, init?: RequestInit) => { submitted.push(JSON.parse(String(init?.body)).userQuestion); return Response.json({ success: true, data: { answerText: 'ok' } }); },
   };
   const recognitionHook = hookHarness(() => useVoiceAssistant(recognitionOptions));
   let recognizer = recognitionHook.render(); assert.equal(recognizer.startListening(), true);
   const deviceA = recognitionDevices[recognitionDevices.length - 1];
-  deviceA.onstart?.(); recognizer = recognitionHook.render();
   recognizer.stopListening(); recognizer = recognitionHook.render();
-  assert.equal(deviceA.stopCalls, 1, 'pointer release stops the exact active native recognizer before native end');
+  assert.equal(recognizer.isListening, false, 'release before native onstart keeps hook capture state false');
+  assert.equal(recognizer.halfDuplex.isListening, false, 'release before native onstart releases duplex capture state');
+  deviceA.onstart?.(); recognizer = recognitionHook.render();
+  assert.equal(recognizer.isListening, false, 'late native onstart cannot resurrect released hook listening state');
+  assert.equal(recognizer.halfDuplex.isListening, false, 'late native onstart cannot diverge from released duplex state');
+  deviceA.onresult?.({ resultIndex: 0, results: [{ 0: { transcript: 'RELEASED FINAL' }, isFinal: true }] });
+  deviceA.onend?.(); deviceA.onend?.();
+  for (let i = 0; i < 8; i++) await Promise.resolve();
+  assert.deepEqual(submitted, ['RELEASED FINAL'], 'released turn preserves final text and submits exactly once');
+  for (let i = 0; i < 8; i++) await Promise.resolve();
+  assert.equal(typeof releasedAnswerDone, 'function', 'QA answer playback completes through the assigned speech callback');
+  releasedAnswerDone?.();
+  await new Promise(resolve => setTimeout(resolve, 400));
+  recognizer = recognitionHook.render();
+  assert.equal(recognizer.startListening(), true, 'a subsequent recognition turn remains available');
+  submitted.length = 0; shown.length = 0;
+  const deviceForExistingCases = recognitionDevices[recognitionDevices.length - 1];
+  deviceForExistingCases.onstart?.(); recognizer = recognitionHook.render();
+  recognizer.stopListening(); recognizer = recognitionHook.render();
+  assert.equal(deviceForExistingCases.stopCalls, 1, 'pointer release stops the exact active native recognizer before native end');
   assert.equal(recognizer.isListening, false, 'pointer release clears hook capture state');
   assert.equal(recognizer.halfDuplex.isListening, false, 'pointer release clears duplex capture state');
-  assert.equal(deviceA.isCapturing, true, 'native session remains pending until its asynchronous end callback');
-  deviceA.onend?.();
+  assert.equal(deviceForExistingCases.isCapturing, true, 'native session remains pending until its asynchronous end callback');
+  deviceForExistingCases.onend?.();
   assert.equal(recognizer.startListening(), true, 'restart after abort opens a fresh recognition session');
   const deviceB = recognitionDevices[recognitionDevices.length - 1];
-  deviceA.onresult?.({ resultIndex: 0, results: [{ 0: { transcript: 'OLD TURN' }, isFinal: true }] });
-  deviceA.onend?.();
+  deviceForExistingCases.onresult?.({ resultIndex: 0, results: [{ 0: { transcript: 'OLD TURN' }, isFinal: true }] });
+  deviceForExistingCases.onend?.();
   assert.deepEqual(shown, [], 'aborted recognition result closure cannot update transcript');
   assert.deepEqual(submitted, [], 'aborted recognition end closure cannot submit QA');
   deviceB.onresult?.({ resultIndex: 0, results: [{ 0: { transcript: 'CURRENT TURN' }, isFinal: true }] });

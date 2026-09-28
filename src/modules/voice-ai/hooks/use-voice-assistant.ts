@@ -31,6 +31,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const duplex = useRef(new HalfDuplexController());
   const recognition = useRef(new RecognitionSubmissionLifecycle());
   const recognitionId = useRef<number | null>(null);
+  const releasedRecognitionId = useRef<number | null>(null);
   const activeRecognition = useRef<WebSpeechSTT | null>(null);
   const finalTranscript = useRef(new FinalTranscriptBuffer());
   const playback = useRef<PlaybackSession | null>(null);
@@ -163,7 +164,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   }, [askQuestion]);
   const bindRecognitionCallbacks = useCallback((speech: WebSpeechSTT, id: number) => {
     speech.registerCallbacks({
-      onStart: () => { if (mounted.current && recognitionId.current === id) { setIsListening(true); setError(null); } },
+      onStart: () => { if (mounted.current && recognitionId.current === id && releasedRecognitionId.current !== id) { setIsListening(true); setError(null); } },
       onResult: (text, isFinal) => {
         if (!mounted.current || !recognition.current.result(id, text, isFinal)) return;
         finalTranscript.current.update(text, isFinal);
@@ -215,6 +216,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
     const id = recognition.current.begin();
     if (id === null) return false;
     recognitionId.current = id;
+    releasedRecognitionId.current = null;
     finalTranscript.current.clear(); setTranscript(''); setError(null);
     duplex.current.onMicPress();
     const previous = activeRecognition.current;
@@ -234,6 +236,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const stopListening = useCallback((formCode = optionsRef.current?.formCode, stepIndex = optionsRef.current?.stepIndex) => {
     const id = recognitionId.current;
     if (id === null || !formCode || stepIndex === undefined) return;
+    releasedRecognitionId.current = id;
     const released = recognition.current.release(id, { formCode, stepIndex });
     if (!released.ready) {
       activeRecognition.current?.stop();
