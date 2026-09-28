@@ -88,6 +88,21 @@ workflow, browser-boundary, and half-duplex behavior already present at
 Task 2R receives a fresh implementer and a fresh independent task review. Task 3
 does not start until Task 2R is accepted.
 
+### Approved Task 2S replan (2026-09-28)
+
+Task 2R's scoped remediation review closed echo-guard recovery, stale media
+callbacks, and active recognizer teardown, but found one remaining async-start
+race. The user approved a new narrowly scoped task before Task 3:
+
+2S. Mark a recognition turn as released before native `onstart` can arrive so a
+late start callback cannot resurrect the visible listening state or diverge from
+the duplex controller. Preserve late final/end delivery, exactly-once QA
+submission, and availability of the next turn. Add an actual hook/native callback
+test for release-before-onstart ordering.
+
+Task 2S receives a fresh implementer and a fresh independent task review. Task 3
+does not start until Task 2S is accepted.
+
 ## Acceptance criteria
 
 | Risk | Required proof |
@@ -97,6 +112,7 @@ does not start until Task 2R is accepted.
 | Cancelling playback during the echo guard permanently disables listening | A hook-level fake-clock test completes playback, cancels inside the guard, repeats cancellation, advances past the guard, and proves listening recovers exactly once. The counterexample is an implementation that clears the release timer without restoring or rescheduling the guard. |
 | An aborted recognition session submits transcript into a newer turn | Hook/service callback-order tests deliver final/end callbacks from session A after session B starts (including a failed B start) and prove that neither transcript state nor QA submission accepts A. The counterexample is callback ownership looked up from the current mutable recognition id. |
 | Lifecycle tests pass while bypassing real callbacks | Tests retain and invoke the actual recognition and media callback closures assigned by the hook/services, including rejected playback, `onerror`, `onended`, abort/restart, delayed fetch, and echo-guard expiry. The counterexample is a no-op callback or isolated counter that never drives production state. |
+| A delayed native `onstart` resurrects a released turn | An actual hook/native callback test starts a turn, releases it before `onstart`, then delivers late `onstart`, final result, and `onend`. It proves hook and duplex listening stay false after release, QA submits the final transcript exactly once, and a subsequent turn can start. The counterexample is an `onStart` callback that checks only the immutable recognition id and sets visible listening true after release. |
 | Failed approval appears active | Admin UI preserves failure state; API/controller test covers unauthorized or unavailable approval. |
 | Canonical admin route is missing | Production build route table contains `/admin/library` and `/admin/review/[id]`; legacy routes redirect. |
 | Secret leaks to browser persistence or public environment | Source scan finds no admin-key local storage and no `NEXT_PUBLIC_ADMIN*`. |
