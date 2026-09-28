@@ -77,9 +77,15 @@ async function run() {
   assert.match(read('src/app/(admin)/library/page.tsx'), /redirect\(['"]\/admin\/library['"]\)/);
   assert.match(read('src/app/(admin)/review/[id]/page.tsx'), /redirect\(`\/admin\/review\/\$\{encodeURIComponent\(params\.id\)\}`\)/);
   const reviewUi = read('src/app/admin/review/[id]/page.tsx');
-  assert.match(reviewUi, /disabled=\{!editable\}|readOnly=\{!editable\}/);
-  assert.match(reviewUi, /result\.status\).*ACTIVE/);
-  assert.match(reviewUi, /setWorkflow\(updated\)/);
+  const reviewLifecycle = read('src/modules/forms/services/form-api.client.ts');
+  assert.match(reviewUi, /readOnly=\{!editable \|\| visibleState\.busy\}/);
+  assert.match(reviewUi, /createAdminReviewSession/);
+  assert.match(reviewUi, /owner\.save\(\)/);
+  assert.match(reviewUi, /owner\.approve\(/);
+  assert.match(reviewLifecycle, /this\.state\.busy \|\| this\.state\.dirty\) return this\.result\(false\)/);
+  assert.match(reviewLifecycle, /await saveAdminWorkflow[\s\S]*await readAdminWorkflow/);
+  assert.match(reviewLifecycle, /String\(result\.status\)\.toUpperCase\(\) !== 'ACTIVE'/);
+  assert.match(reviewLifecycle, /if \(!this\.valid\) return this\.result\(true\)/);
   assert.equal((await controller.listForms({})).status, 401);
   const list = await controller.listForms(auth);
   assert.equal(list.status, 200);

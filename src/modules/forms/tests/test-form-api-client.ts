@@ -3,7 +3,7 @@ import { fetchWorkflow, workflowStorageKey } from '@/modules/forms/client';
 import type { FormWorkflow } from '@/shared/contracts';
 import bundledLptb from '../../../../assets/mock-data/mock-workflow-tpl_01_lptb.json';
 import { prepareWorkflowFixture } from '@/modules/forms/client';
-import { AdminApiError, approveAdminWorkflow, listAdminForms, readAdminWorkflow, saveAdminWorkflow } from '@/modules/forms/client';
+import { AdminApiError, approveAdminWorkflow, createAdminReviewSession, listAdminForms, readAdminWorkflow, saveAdminWorkflow, type AdminApiFetch } from '@/modules/forms/services/form-api.client';
 
 const workflow: FormWorkflow = {
   formCode: '01/LPTB', formTitle: 'Live', steps: [{
@@ -123,4 +123,151 @@ async function runAdminClientTests() {
   assert.equal(active, false, 'a rejected approve request produces no success value or ACTIVE state');
   console.log('admin forms API client tests passed');
 }
+
+function deferred<T>() {
+  let resolve!: (value: T) => void; let reject!: (reason: unknown) => void;
+  const promise = new Promise<T>((res, rej) => { resolve = res; reject = rej; });
+  return { promise, resolve, reject };
+}
+const ok = (data: unknown) => Response.json({ success: true, data });
+const failure = (status: number, code: string) => Response.json({ success: false, error: { code } }, { status });
+
+async function runReviewSessionTests() {
+  const calls: string[] = [];
+  let current = { ...workflow, status: 'DRAFT' } as FormWorkflow;
+  const fetcher: AdminApiFetch = async (_url, init) => {
+    const method = init?.method ?? 'GET'; calls.push(method);
+    if (method === 'PUT') { current = JSON.parse(String(init?.body)); return ok({ workflowId: 'w' }); }
+    if (method === 'POST') return ok({ formCode: '01/LPTB', status: 'ACTIVE', approvedAt: 'now' });
+    return ok(current);
+  };
+  const session = createAdminReviewSession('01/LPTB', 'memory-key', fetcher);
+  assert.equal((await session.load()).state.workflow?.status, 'DRAFT');
+  session.setEditor(JSON.stringify({ ...workflow, status: 'DRAFT', formTitle: 'Edited' }, null, 2));
+  const beforeDirtyApprove = calls.length;
+  const dirtyApproval = await session.approve({ performedBy: 'Op', note: '' });
+  assert.equal(dirtyApproval.state.error, null);
+  assert.deepEqual(calls.slice(beforeDirtyApprove), [], 'dirty editor blocks approval without POST');
+
+  const failedFetch: AdminApiFetch = async (_url, init) => {
+    calls.push(init?.method ?? 'GET');
+    if (init?.method === 'PUT') return failure(503, 'DATABASE_UNAVAILABLE');
+    return ok(current);
+  };
+  const failed = createAdminReviewSession('01/LPTB', 'key', failedFetch);
+  await failed.load();
+  const edited = JSON.stringify({ ...workflow, status: 'DRAFT', formTitle: 'Keep my edit' }, null, 2);
+  failed.setEditor(edited);
+  const savedFailure = await failed.save();
+  assert.equal(savedFailure.state.editor, edited, 'failed PUT preserves editor text');
+  assert.equal(savedFailure.state.dirty, true);
+  const callsBeforeBlocked = calls.length;
+  await failed.approve({ performedBy: 'Op', note: '' });
+  assert.deepEqual(calls.slice(callsBeforeBlocked), [], 'failed save remains dirty and blocks POST');
+
+  const owned = createAdminReviewSession('01/LPTB', 'key', fetcher);
+  await owned.load();
+  const injected = JSON.stringify({ ...workflow, status: 'ACTIVE', formTitle: 'Injected' }, null, 2);
+  owned.setEditor(injected);
+  const callsBeforeOwnedSave = calls.length;
+  const forged = await owned.save();
+  assert.ok(forged.state.error instanceof Error, 'submitted server-owned ACTIVE status is rejected');
+  assert.equal(forged.state.workflow?.status, 'DRAFT');
+  assert.equal(calls.length, callsBeforeOwnedSave, 'invalid status never reaches PUT');
+  owned.setEditor(JSON.stringify({ ...workflow, status: 'DRAFT', formTitle: 'Normal' }, null, 2));
+  const reconciled = await owned.save();
+  assert.deepEqual(calls.slice(callsBeforeOwnedSave), ['PUT', 'GET'], 'successful PUT is followed by authoritative GET');
+  assert.equal(reconciled.state.workflow?.formTitle, 'Normal');
+  assert.equal(reconciled.state.dirty, false);
+  const approved = await owned.approve({ performedBy: ' Op\nName ', note: ' note\ttext ' });
+  assert.equal(approved.state.workflow?.status, 'ACTIVE');
+  assert.deepEqual(calls.slice(-1), ['POST']);
+
+  const getPending = deferred<Response>();
+  const pendingCalls: string[] = [];
+  const reconcileSession = createAdminReviewSession('01/LPTB', 'key', async (_url, init) => {
+    pendingCalls.push(init?.method ?? 'GET');
+    if (init?.method === 'PUT') return ok({ status: 'ACTIVE' });
+    if (pendingCalls.length === 1) return ok({ ...workflow, status: 'DRAFT' });
+    return getPending.promise;
+  });
+  await reconcileSession.load();
+  reconcileSession.setEditor(JSON.stringify({ ...workflow, status: 'DRAFT', formTitle: 'Reconciling' }, null, 2));
+  const pendingSave = reconcileSession.save();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(reconcileSession.snapshot().busy, true);
+  assert.equal(reconcileSession.snapshot().dirty, true, 'pending authoritative GET leaves submitted editor dirty');
+  getPending.resolve(ok({ ...workflow, status: 'DRAFT', formTitle: 'Reconciling' }));
+  assert.equal((await pendingSave).state.dirty, false);
+  assert.deepEqual(pendingCalls, ['GET', 'PUT', 'GET']);
+
+  const delayedReconcileGet = deferred<Response>();
+  let staleARequests = 0;
+  const staleA = createAdminReviewSession('01/LPTB', 'key-A', async (_url, init) => {
+    staleARequests++;
+    if (init?.method === 'PUT') return ok({ status: 'ACTIVE' });
+    return staleARequests === 1 ? ok({ ...workflow, status: 'DRAFT' }) : delayedReconcileGet.promise;
+  });
+  await staleA.load();
+  staleA.setEditor(JSON.stringify({ ...workflow, status: 'DRAFT', formTitle: 'A delayed reconcile' }, null, 2));
+  const staleReconcilePromise = staleA.save();
+  await new Promise(resolve => setImmediate(resolve));
+  staleA.invalidate();
+  const reconcileB = createAdminReviewSession('OTHER', 'key-B', async () => ok({ ...workflow, formCode: 'OTHER', status: 'DRAFT', formTitle: 'B remains current' }));
+  await reconcileB.load();
+  delayedReconcileGet.resolve(ok({ ...workflow, status: 'DRAFT', formTitle: 'A result' }));
+  assert.equal((await staleReconcilePromise).stale, true, 'stale save reconciliation success is explicitly discarded');
+  assert.equal(reconcileB.snapshot().workflow?.formTitle, 'B remains current');
+
+  const delayedPut = deferred<Response>();
+  const delayedA = createAdminReviewSession('01/LPTB', 'key-A', async (_url, init) => {
+    if (init?.method === 'PUT') return delayedPut.promise;
+    return ok({ ...workflow, status: 'DRAFT' });
+  });
+  await delayedA.load();
+  delayedA.setEditor(JSON.stringify({ ...workflow, status: 'DRAFT', formTitle: 'A edit' }, null, 2));
+  const aSave = delayedA.save(); delayedA.invalidate();
+  const sessionB = createAdminReviewSession('OTHER', 'key-B', async () => ok({ ...workflow, formCode: 'OTHER', status: 'DRAFT', formTitle: 'B' }));
+  await sessionB.load();
+  delayedPut.reject(new Error('late A failure'));
+  const staleSave = await aSave;
+  assert.equal(staleSave.stale, true);
+  assert.equal(staleSave.state.error, null);
+  assert.equal(sessionB.snapshot().workflow?.formTitle, 'B');
+
+  const delayedLoad = deferred<Response>();
+  const staleLoad = createAdminReviewSession('01/LPTB', 'key-A', async () => delayedLoad.promise);
+  const staleLoadPromise = staleLoad.load(); staleLoad.invalidate();
+  delayedLoad.reject(new Error('late A load failure'));
+  assert.equal((await staleLoadPromise).stale, true, 'invalidated GET failure is explicitly stale');
+
+  const delayedPost = deferred<Response>();
+  const delayedApprovalSession = createAdminReviewSession('01/LPTB', 'key-A', async (_url, init) => init?.method === 'POST' ? delayedPost.promise : ok({ ...workflow, status: 'DRAFT' }));
+  await delayedApprovalSession.load();
+  const aApproval = delayedApprovalSession.approve({ performedBy: 'Op', note: '' });
+  delayedApprovalSession.invalidate();
+  const postB = createAdminReviewSession('OTHER', 'key-B', async () => ok({ ...workflow, formCode: 'OTHER', status: 'DRAFT', formTitle: 'B' }));
+  await postB.load();
+  delayedPost.reject(new Error('late A approval failure'));
+  assert.equal((await aApproval).stale, true);
+  assert.equal(postB.snapshot().workflow?.status, 'DRAFT');
+
+  const activeView = createAdminReviewSession('01/LPTB', 'key', async () => ok({ ...workflow, status: 'ACTIVE' }));
+  await activeView.load();
+  assert.equal(activeView.snapshot().workflow?.status, 'ACTIVE');
+  const activeCalls: string[] = [];
+  const viewOnly = createAdminReviewSession('01/LPTB', 'key', async (_url, init) => { activeCalls.push(init?.method ?? 'GET'); return ok({ ...workflow, status: 'ACTIVE' }); });
+  await viewOnly.load(); await viewOnly.approve({ performedBy: 'Op', note: '' });
+  assert.deepEqual(activeCalls, ['GET'], 'ACTIVE workflow remains view-only');
+
+  await assert.rejects(createAdminReviewSession('A', 'key', async () => failure(503, 'ADMIN_KEY_UNCONFIGURED')).load().then(r => { throw r.state.error; }), (e: unknown) => e instanceof AdminApiError && e.isConfigurationError);
+  await assert.rejects(createAdminReviewSession('A', 'key', async () => failure(401, 'UNAUTHORIZED')).load().then(r => { throw r.state.error; }), (e: unknown) => e instanceof AdminApiError && e.isUnauthorized);
+  const nonActive = createAdminReviewSession('01/LPTB', 'key', async (_url, init) => init?.method === 'POST' ? ok({ formCode: '01/LPTB', status: 'PENDING_REVIEW' }) : ok({ ...workflow, status: 'DRAFT' }));
+  await nonActive.load();
+  const rejectedActive = await nonActive.approve({ performedBy: 'Op', note: '' });
+  assert.equal(rejectedActive.state.workflow?.status, 'DRAFT', 'non-ACTIVE approval response does not produce ACTIVE state');
+  assert.ok(rejectedActive.state.error);
+}
+
+runReviewSessionTests().catch(error => { console.error(error); process.exitCode = 1; });
 runAdminClientTests().catch(error => { console.error(error); process.exitCode = 1; });
