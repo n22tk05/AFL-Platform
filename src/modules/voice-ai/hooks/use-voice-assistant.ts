@@ -29,7 +29,6 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const [isSupported, setIsSupported] = useState(false);
   const [canListen, setCanListen] = useState(true);
   const duplex = useRef(new HalfDuplexController());
-  const stt = useRef<WebSpeechSTT | null>(null);
   const recognition = useRef(new RecognitionSubmissionLifecycle());
   const recognitionId = useRef<number | null>(null);
   const activeRecognition = useRef<WebSpeechSTT | null>(null);
@@ -83,7 +82,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
       if (!duplex.current.canSafelyListen()) {
         setCanListen(false);
         scheduleEchoRelease(generation);
-      }
+      } else setCanListen(true);
     }
   }, [scheduleEchoRelease]);
 
@@ -96,7 +95,12 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
 
   const playAnswer = useCallback(async (text: string, audioUrl?: string) => {
     cancelPlayback();
-    if (stt.current?.isListening) { stt.current.abort(); setIsListening(false); duplex.current.onMicRelease(); }
+    if (activeRecognition.current) {
+      activeRecognition.current.abort();
+      activeRecognition.current = null;
+      recognition.current.reset(); recognitionId.current = null; finalTranscript.current.clear();
+      setIsListening(false); duplex.current.onMicRelease();
+    }
     if (echoTimer.current) clearTimeout(echoTimer.current);
     const generation = ++playbackGeneration.current;
     duplex.current.onAudioPlaybackStart();
@@ -171,6 +175,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
         if (!mounted.current || recognitionId.current !== id) return;
         setIsListening(false);
         duplex.current.onMicRelease();
+        if (activeRecognition.current === speech) activeRecognition.current = null;
         submitRecognition(recognition.current.end(id));
       },
     });
@@ -179,7 +184,6 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   useEffect(() => {
     mounted.current = true;
     const speech = new WebSpeechSTT({ lang: 'vi-VN', continuous: false, interimResults: true });
-    stt.current = speech;
     setIsSupported(speech.isSupported());
     return () => {
       mounted.current = false;
@@ -187,7 +191,8 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
       qaController.current?.abort();
       qaController.current = null;
       recognition.current.reset();
-      speech.abort(); activeRecognition.current?.abort();
+      activeRecognition.current?.abort();
+      activeRecognition.current = null;
       cancelPlayback(false);
       if (echoTimer.current) clearTimeout(echoTimer.current);
     };
@@ -199,8 +204,10 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
     previousContext.current = contextKey;
     cancelQa();
     cancelPlayback();
+    activeRecognition.current?.abort();
+    activeRecognition.current = null;
     recognition.current.reset(); recognitionId.current = null; finalTranscript.current.clear();
-    stt.current?.abort(); setIsListening(false); setAnswer(null); setAnswerAudioUrl(undefined); setTranscript('');
+    setIsListening(false); duplex.current.onMicRelease(); setAnswer(null); setAnswerAudioUrl(undefined); setTranscript('');
   }, [contextKey, cancelPlayback, cancelQa]);
 
   const startListening = useCallback((): boolean => {
@@ -229,7 +236,7 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
     if (id === null || !formCode || stepIndex === undefined) return;
     const released = recognition.current.release(id, { formCode, stepIndex });
     if (!released.ready) {
-      stt.current?.stop();
+      activeRecognition.current?.stop();
       duplex.current.onMicRelease();
       setIsListening(false);
     } else submitRecognition(released);
@@ -238,8 +245,8 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
   const stopAudio = useCallback(() => {
     cancelQa();
     cancelPlayback();
-    activeRecognition.current?.abort(); activeRecognition.current = null;
-    stt.current?.abort();
+    activeRecognition.current?.abort();
+    activeRecognition.current = null;
     recognition.current.reset(); recognitionId.current = null; finalTranscript.current.clear();
     duplex.current.onMicRelease();
     if (mounted.current) setIsListening(false);

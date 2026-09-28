@@ -42,16 +42,18 @@ async function run() {
   speechClosures[0]();
   voice = hook.render();
   assert.equal(voice.canListen, false);
+  fireTimers(100); voice = hook.render();
   voice.stopAudio(); voice = hook.render();
+  fireTimers(201); voice = hook.render();
+  assert.equal(voice.halfDuplex.canSafelyListen(), true, 'original 300ms guard has expired at t=301');
   voice.stopAudio(); voice = hook.render();
-  fireTimers(301); voice = hook.render();
-  assert.equal(voice.canListen, true, 'cancel during echo guard recovers listening exactly once');
-  assert.equal(hook.canListenTrueTransitions, 1, 'echo guard enables listening with one state transition');
-  void voice.playAnswer('faq answer'); speechClosures[1](); voice = hook.render();
-  voice.stopAudio(); await voice.askQuestion('FORM', 1, 'FAQ question');
-  fireTimers(301); voice = hook.render();
-  assert.equal(voice.canListen, true, 'failed FAQ after repeated stop still releases the echo guard');
-  assert.equal(hook.canListenTrueTransitions, 2, 'failed FAQ guard recovery performs one additional enabled transition');
+  assert.equal(voice.canListen, true, 'separated second cancellation restores listening after the original deadline');
+  assert.equal(timers.size, 0, 'safe second cancellation leaves no orphaned release timer');
+  await voice.askQuestion('FORM', 1, 'FAQ question');
+  fireTimers(1000); voice = hook.render();
+  assert.equal(voice.canListen, true, 'failed FAQ leaves listening available beyond every deadline');
+  assert.equal(voice.halfDuplex.canSafelyListen(), true, 'duplex remains safe after failed FAQ');
+  assert.equal(hook.canListenTrueTransitions, 1, 'separated cancel enables listening with one transition');
   (globalThis as any).setTimeout = oldSetTimeout; (globalThis as any).clearTimeout = oldClearTimeout; Date.now = oldNow;
 
   const oldWindow = (globalThis as any).window;
@@ -59,19 +61,28 @@ async function run() {
   class FakeRecognition {
     onstart: (() => void) | null = null; onresult: ((event: any) => void) | null = null;
     onerror: ((event: any) => void) | null = null; onend: (() => void) | null = null;
-    start() { if (failNextStart) { failNextStart = false; throw Object.assign(new Error('busy'), { name: 'InvalidStateError' }); } }
-    stop() {} abort() {}
+    stopCalls = 0; abortCalls = 0; isCapturing = false;
+    start() { if (failNextStart) { failNextStart = false; throw Object.assign(new Error('busy'), { name: 'InvalidStateError' }); } this.isCapturing = true; }
+    stop() { this.stopCalls++; }
+    abort() { this.abortCalls++; this.isCapturing = false; }
     constructor() { recognitionDevices.push(this); }
   }
   (globalThis as any).window = { SpeechRecognition: FakeRecognition };
   const submitted: string[] = []; const shown: string[] = [];
-  const recognitionHook = hookHarness(() => useVoiceAssistant({ formCode: 'FORM', stepIndex: 1,
-    onTranscriptUpdate: value => shown.push(value),
-    fetcher: async (_url, init) => { submitted.push(JSON.parse(String(init?.body)).userQuestion); return Response.json({ success: true, data: { answerText: 'ok' } }); },
-  }));
+  let recognitionOptions: any = { formCode: 'FORM', stepIndex: 1,
+    onTranscriptUpdate: (value: string) => shown.push(value),
+    fetcher: async (_url: RequestInfo | URL, init?: RequestInit) => { submitted.push(JSON.parse(String(init?.body)).userQuestion); return Response.json({ success: true, data: { answerText: 'ok' } }); },
+  };
+  const recognitionHook = hookHarness(() => useVoiceAssistant(recognitionOptions));
   let recognizer = recognitionHook.render(); assert.equal(recognizer.startListening(), true);
   const deviceA = recognitionDevices[recognitionDevices.length - 1];
-  recognizer.stopAudio();
+  deviceA.onstart?.(); recognizer = recognitionHook.render();
+  recognizer.stopListening(); recognizer = recognitionHook.render();
+  assert.equal(deviceA.stopCalls, 1, 'pointer release stops the exact active native recognizer before native end');
+  assert.equal(recognizer.isListening, false, 'pointer release clears hook capture state');
+  assert.equal(recognizer.halfDuplex.isListening, false, 'pointer release clears duplex capture state');
+  assert.equal(deviceA.isCapturing, true, 'native session remains pending until its asynchronous end callback');
+  deviceA.onend?.();
   assert.equal(recognizer.startListening(), true, 'restart after abort opens a fresh recognition session');
   const deviceB = recognitionDevices[recognitionDevices.length - 1];
   deviceA.onresult?.({ resultIndex: 0, results: [{ 0: { transcript: 'OLD TURN' }, isFinal: true }] });
@@ -91,6 +102,38 @@ async function run() {
   deviceB.onend?.();
   assert.deepEqual(shown, ['CURRENT TURN']);
   assert.deepEqual(submitted, ['CURRENT TURN'], 'failed start leaves no submit-capable turn');
+
+  let playbackDone!: () => void;
+  const interruptionHook = hookHarness(() => useVoiceAssistant({ formCode: 'FORM', stepIndex: 1,
+    speak: (_text, done) => { playbackDone = done; return () => {}; },
+  }));
+  let interrupted = interruptionHook.render(); interrupted.startListening();
+  const playbackInterruptedDevice = recognitionDevices[recognitionDevices.length - 1];
+  playbackInterruptedDevice.onstart?.(); interrupted = interruptionHook.render();
+  void interrupted.playAnswer('speaker interruption');
+  interrupted = interruptionHook.render();
+  assert.equal(playbackInterruptedDevice.abortCalls, 1, 'playback aborts the exact active native recognizer');
+  assert.equal(interrupted.isListening, false, 'playback interruption clears hook capture state');
+  assert.equal(interrupted.halfDuplex.isListening, false, 'playback interruption clears duplex capture state');
+  playbackInterruptedDevice.onend?.();
+  assert.equal(interrupted.startListening(), false, 'new capture waits until playback and echo guard finish');
+  playbackDone();
+
+  let contextHookOptions: any = { formCode: 'FORM', stepIndex: 1 };
+  const contextHook = hookHarness(() => useVoiceAssistant(contextHookOptions));
+  let contextual = contextHook.render(); contextual.startListening();
+  const contextDevice = recognitionDevices[recognitionDevices.length - 1];
+  contextDevice.onstart?.(); contextual = contextHook.render();
+  contextHookOptions = { formCode: 'FORM', stepIndex: 2 };
+  contextual = contextHook.render();
+  contextual = contextHook.render();
+  assert.equal(contextDevice.abortCalls, 1, 'context change aborts the exact active native recognizer');
+  assert.equal(contextual.isListening, false, 'context abort clears hook capture state');
+  assert.equal(contextual.halfDuplex.isListening, false, 'context abort clears duplex capture state');
+  contextDevice.onend?.();
+  await new Promise(resolve => setTimeout(resolve, 350));
+  contextual = contextHook.render();
+  assert.equal(contextual.startListening(), true, 'capture can start again after context teardown');
   (globalThis as any).window = oldWindow;
 
   let delayedResolve!: (response: Response) => void; let delayedOptions: any;
@@ -171,20 +214,29 @@ async function run() {
   speechDone?.(); await rejectionSession.promise;
   assert.deepEqual(playbackState, [true, false]);
 
-  let speechEnded!: () => void;
-  let cancelMedia = 0;
-  let replacedMedia: any;
-  const superseded = startVoicePlayback('first', '/first.mp3', () => {}, {
-    createAudio: () => (replacedMedia = { play: () => new Promise<void>(() => {}), pause: () => { cancelMedia++; }, currentTime: 0, onended: null, onerror: null }),
-    speak: (_text, done) => { speechEnded = done; return () => {}; },
+  let fallbackDone!: () => void; let staleMedia: any; let stalePauses = 0;
+  const staleTransitions: boolean[] = [];
+  const staleSession = startVoicePlayback('fallback', '/fallback.mp3', playing => staleTransitions.push(playing), {
+    createAudio: () => (staleMedia = { play: () => new Promise<void>(() => {}), pause: () => { stalePauses++; }, currentTime: 0, onended: null, onerror: null }),
+    speak: (_text, done) => { fallbackDone = done; return () => {}; },
   });
-  const staleEnd = replacedMedia.onended as () => void;
-  const staleError = replacedMedia.onerror as () => void;
-  superseded.cancel();
-  await superseded.promise;
-  assert.equal(cancelMedia, 1, 'explicit cancellation pauses the media and settles its promise');
-  staleEnd(); staleError();
-  speechEnded?.();
+  const staleEnd = staleMedia.onended as () => void;
+  const staleError = staleMedia.onerror as () => void;
+  staleError();
+  assert.equal(typeof fallbackDone, 'function', 'real media onerror enters synthesis fallback and retains its completion closure');
+  staleSession.cancel(); await staleSession.promise;
+  assert.equal(stalePauses, 1, 'explicit cancellation pauses media and settles playback');
+  assert.deepEqual(staleTransitions, [true, false]);
+  let replacementMedia: any; const replacementTransitions: boolean[] = [];
+  const replacement = startVoicePlayback('replacement', '/replacement.mp3', playing => replacementTransitions.push(playing), {
+    createAudio: () => (replacementMedia = { play: () => new Promise<void>(() => {}), pause: () => {}, currentTime: 0, onended: null, onerror: null }),
+  });
+  const replacementEnd = replacementMedia.onended as () => void;
+  staleEnd(); staleError(); fallbackDone();
+  assert.deepEqual(staleTransitions, [true, false], 'stale cancelled media and synthesis closures emit no extra transitions');
+  assert.deepEqual(replacementTransitions, [true], 'stale closures cannot change replacement playback state');
+  replacementEnd(); await replacement.promise;
+  assert.deepEqual(replacementTransitions, [true, false], 'replacement session settles only from its own media callback');
 
   const endedStates: boolean[] = []; let endedMedia: any;
   const endedSession = startVoicePlayback('ended', '/done.mp3', state => endedStates.push(state), {
