@@ -1,6 +1,6 @@
 # Frontend uses server APIs as the source of truth with explicit offline and admin-security boundaries
 
-Date: 2026-09-27  
+Date: 2026-09-27
 Status: Accepted
 
 ## Context
