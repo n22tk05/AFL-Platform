@@ -249,7 +249,7 @@ export class PrismaFormRepository implements FormRepository {
     if (!template) return null;
     if (!template.workflow) {
       if (template.status !== 'DRAFT') return null;
-      return { formId: template.id, formCode: template.formCode, formTitle: template.formTitle, status: 'draft', version: template.version, steps: [] };
+      return { formId: template.id, formCode: template.formCode, formTitle: template.formTitle, status: 'DRAFT', version: template.version, steps: [] };
     }
     return {
       formId: template.id, formCode: template.formCode, formTitle: template.formTitle,

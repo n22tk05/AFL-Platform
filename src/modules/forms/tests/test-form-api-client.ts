@@ -103,7 +103,7 @@ async function runAdminClientTests() {
     calls.push({ url, init });
     const data = init?.method === 'POST' ? { formCode: 'A/B', status: 'ACTIVE', approvedAt: 'now' }
       : init?.method === 'PUT' ? { formCode: 'A/B', workflowId: 'w1', stepCount: 1 }
-        : String(url).endsWith('/workflow') ? workflow : { forms: [{ formId: 'f1', formCode: 'A/B', formTitle: 'Form', status: 'draft', version: 1, stepCount: 1, updatedAt: 'now' }] };
+        : String(url).endsWith('/workflow') ? workflow : { forms: [{ formId: 'f1', formCode: 'A/B', formTitle: 'Form', status: 'DRAFT', version: 1, stepCount: 1, updatedAt: 'now' }] };
     return Response.json({ success: true, data });
   };
   assert.equal((await listAdminForms('private-key', fake)).forms.length, 1);
@@ -204,7 +204,7 @@ async function runReviewSessionTests() {
   assert.deepEqual(pendingCalls, ['GET', 'PUT', 'GET']);
 
   // The PUT echo is not authoritative: the reconciled GET owns baseline and editor state.
-  const authoritative = { ...workflow, status: 'pending_review', formTitle: 'Server normalized' } as FormWorkflow;
+  const authoritative = { ...workflow, status: 'PENDING_REVIEW', formTitle: 'Server normalized' } as FormWorkflow;
   const authoritativeCalls: Array<{ method: string; url: string; body?: unknown }> = [];
   let authoritativeReads = 0;
   const authoritativeSession = createAdminReviewSession('01/LPTB', 'key', async (url, init) => {
@@ -224,7 +224,7 @@ async function runReviewSessionTests() {
   assert.deepEqual(authoritativeCalls[1].body, submitted);
   assert.deepEqual(authoritativeResult.state.workflow, authoritative);
   assert.equal(authoritativeResult.state.editor, JSON.stringify(authoritative, null, 2));
-  assert.equal(authoritativeResult.state.workflow?.status, 'pending_review');
+  assert.equal(authoritativeResult.state.workflow?.status, 'PENDING_REVIEW');
   assert.equal(authoritativeResult.state.dirty, false);
 
   for (const failedGet of [

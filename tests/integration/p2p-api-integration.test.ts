@@ -10,14 +10,14 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const draft: FormWorkflow = {
-  formId: 'form_1', formCode: '01/LPTB', formTitle: 'Draft form', status: 'draft', steps: [{
+  formId: 'form_1', formCode: '01/LPTB', formTitle: 'Draft form', status: 'DRAFT', steps: [{
     stepIndex: 1, boxId: 'box_1', sectionName: 'I', label: 'Name', voiceGuidance: 'Say name',
     audioUrl: '', exampleRedText: 'NAME', highlightCoords: [0.1, 0.1, 0.9, 0.9], faqs: [{ question: 'What?', answer: 'This.' }],
   }],
 };
 let persisted = draft;
 const repository = {
-  listForms: async () => [{ formId: 'form_1', formCode: '01/LPTB', formTitle: 'Draft form', status: 'draft', version: 1, stepCount: 1, updatedAt: '2026-09-27T00:00:00.000Z' }],
+  listForms: async () => [{ formId: 'form_1', formCode: '01/LPTB', formTitle: 'Draft form', status: 'DRAFT', version: 1, stepCount: 1, updatedAt: '2026-09-27T00:00:00.000Z' }],
   getWorkflowForReview: async () => persisted,
   saveReviewWorkflow: async (_code: string, value: FormWorkflow) => { persisted = value; return { workflowId: 'workflow_1', stepCount: value.steps.length }; },
 } as unknown as FormRepository;
@@ -89,7 +89,7 @@ async function run() {
   assert.equal((await controller.listForms({})).status, 401);
   const list = await controller.listForms(auth);
   assert.equal(list.status, 200);
-  assert.equal((list.body as any).data.forms[0].status, 'draft');
+  assert.equal((list.body as any).data.forms[0].status, 'DRAFT');
 
   const review = await controller.getWorkflowForReview({ ...auth, rawFormCode: '01%2FLPTB' });
   assert.equal(review.status, 200, 'review endpoint includes draft workflows');
