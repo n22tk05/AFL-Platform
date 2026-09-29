@@ -11,15 +11,7 @@ import {
   ScanLine
 } from "lucide-react";
 import { CameraScannerModal } from "@/components/mobile/CameraScannerModal";
-
-interface FormOption {
-  id: string;
-  code: string;
-  title: string;
-  description: string;
-  badge?: string;
-  badgeColor?: string;
-}
+import { FormOption } from "@/types";
 
 const AVAILABLE_FORMS: FormOption[] = [
   {

@@ -52,3 +52,4 @@ service-account*.json
 /test-results/
 node_modules/
 *.docx
+SLIDE-DECK-AI-FOR-LIFE.md
