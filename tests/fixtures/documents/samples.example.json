@@ -1,0 +1,11 @@
+[
+  {
+    "imagePath": "PRIVATE_DATASET/fictional-traffic-record.png",
+    "documentType": "traffic_violation_record",
+    "expectedFields": {
+      "recordNumber": "EXAMPLE-001/BB", "recordDate": "2026-01-15",
+      "citizenName": null, "citizenId": null, "address": null, "vehiclePlate": null,
+      "violationDescription": null, "decisionNumber": null, "fineAmount": null, "paymentDeadline": null
+    }
+  }
+]

@@ -75,3 +75,5 @@ export interface FormWorkflow {
   publishedAt?: string;              // Mốc thời gian ban hành ISO: 2026-09-27T...
   steps: WorkflowStep[];
 }
+
+export * from './document-extraction.types';

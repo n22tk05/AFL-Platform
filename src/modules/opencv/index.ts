@@ -11,3 +11,19 @@ export {
   type LineDetectionConfig,
   type PreprocessConfig,
 } from "./config";
+export {
+  DEFAULT_CONTOUR_DETECTION_CONFIG,
+  type ContourDetectionConfig,
+  type ContourHierarchy,
+  type FieldCandidate,
+  type PixelRect,
+} from "./field-types";
+export { detectContourCandidates } from "./contour-detector";
+export { calculateIou, filterCandidates } from "./box-filter";
+export { sortCandidatesGeometrically } from "./geometric-sort";
+export { detectDocument } from './document-detector';
+export { orderDocumentCorners } from './corner-ordering';
+export { evaluateDocumentQuality } from './document-quality';
+export { warpDocument, calculatePerspectiveGeometry } from './perspective-transform';
+export { DEFAULT_DOCUMENT_DETECTION_CONFIG, resolveDocumentConfig, type DocumentDetectionConfig } from './document-config';
+export { DocumentDetectionError, type Point2D, type DocumentQuad, type DocumentQuality, type DocumentMode, type DetectedDocument, type DeskewResult } from './document-types';
