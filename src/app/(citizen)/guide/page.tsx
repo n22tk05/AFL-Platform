@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
+import { documentSession, prerequisiteValue } from '@/modules/documents/session';
 import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 import type { WorkflowStep, FormWorkflow } from '@/shared/contracts';
@@ -12,6 +13,13 @@ import { StepHeader } from '@/components/mobile/StepHeader';
 import { VoiceAssistantPanel } from '@/components/mobile/VoiceAssistantPanel';
 
 const LIVE_FORM_CODE = 'Mẫu số: 01/LPTB';
+function prerequisiteExampleText(step: WorkflowStep, fields: Record<string, string> | null): string {
+  if (!step.requiresPrerequisiteDoc) return step.exampleRedText || '';
+  return prerequisiteValue(fields, step.sourceFieldFromPrerequisite)?.toUpperCase() ?? 'CHƯA CÓ DỮ LIỆU CHỨNG TỪ ĐÃ DUYỆT';
+}
+function completeGuideWorkflow(clear: () => void): void {
+  clear();
+}
 const aliases: Record<string, { formCode: string; fixtureId: string }> = {
   tpl_01_lptb: { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
   '01-lptb': { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
@@ -56,6 +64,14 @@ function GuideContent() {
   const [source, setSource] = useState<WorkflowSource | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [prerequisiteFields, setPrerequisiteFields] = useState<Record<string, string> | null>(null);
+
+  useEffect(() => {
+    try { window.sessionStorage.removeItem('afl_prerequisite_document_data'); } catch { /* Discard legacy data. */ }
+    const refresh = () => setPrerequisiteFields(documentSession.read());
+    refresh();
+    return documentSession.subscribe(refresh);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -71,7 +87,7 @@ function GuideContent() {
       if (active) setLoadError('Không tải được hướng dẫn. Vui lòng kiểm tra kết nối rồi thử lại.');
     });
     return () => { active = false; };
-  }, [formCode, templateId]);
+  }, [formCode, fixtureId, templateId]);
 
   if (loadError) return <div role="alert" className="p-6 text-center text-slate-700">{loadError}</div>;
   if (!workflow) return <div role="status" className="p-6 text-center text-slate-600 font-bold">Đang tải hướng dẫn...</div>;
@@ -82,7 +98,7 @@ function GuideContent() {
   const currentPageNumber = currentStep.pageNumber || 1;
   const handleNextStep = () => currentStepIndex < totalSteps - 1
     ? setCurrentStepIndex(index => index + 1)
-    : alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow.formTitleVi || workflow.formTitle || 'tờ khai'}!`);
+    : (completeGuideWorkflow(() => documentSession.clear()), alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow.formTitleVi || workflow.formTitle || 'tờ khai'}!`));
 
   return <div className="flex flex-col flex-1 pb-24 no-scrollbar">
     {source !== 'live' && <p role="status" className="px-4 pt-2 text-center text-xs font-semibold text-amber-800">
@@ -94,8 +110,10 @@ function GuideContent() {
       <VisualTwin pages={workflow.pages || []} currentPageNumber={currentPageNumber} highlightCoords={currentStep.highlightCoords}
         fieldLabel={currentStep.label} stepNumber={currentStepIndex + 1} />
       <VoiceAssistantPanel voiceGuidance={currentStep.voiceGuidance} audioUrl={currentStep.audioUrl} faqs={currentStep.faqs}
-        formCode={workflow.formCode} stepIndex={currentStep.stepIndex} />
-      <RedTextExample exampleText={currentStep.exampleRedText} fieldNote={currentStep.faqs?.[0]?.answer} />
+        formCode={workflow.formCode} stepIndex={currentStep.stepIndex || (currentStepIndex + 1)} />
+      <RedTextExample exampleText={prerequisiteExampleText(currentStep, prerequisiteFields)} fieldNote={currentStep.requiresPrerequisiteDoc && prerequisiteFields
+        ? '✨ Đã tự động trích xuất thông tin từ Biên bản phạt của bác (Nghị định 13)!'
+        : currentStep.faqs?.[0]?.answer} />
     </div>
     <footer className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t-2 border-slate-300 px-4 py-3 flex items-center justify-between gap-3 z-40 shadow-lg">
       <button type="button" onClick={() => setCurrentStepIndex(index => Math.max(0, index - 1))} disabled={currentStepIndex === 0}
