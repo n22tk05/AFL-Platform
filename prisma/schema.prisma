@@ -24,7 +24,6 @@ enum BoxType {
   CHECKBOX         // Ô tích chọn đánh dấu (V) hoặc (X)
   TABLE_CELL       // Ô nằm trong bảng dữ liệu nhiều cột/dòng
 }
-
 // -----------------------------------------------------------------------------
 // 1. Quản lý Mẫu biểu Hành chính (Form Template)
 // -----------------------------------------------------------------------------

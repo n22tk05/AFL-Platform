@@ -1,5 +1,5 @@
 "use client";
-
+import { FormStatus } from "@prisma/client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,51 +18,69 @@ import {
 } from "lucide-react";
 import initialTemplates from "../../../../assets/mock-data/mock-admin-templates.json";
 import { FormUploadModal } from "@/components/admin/FormUploadModal";
+import { AdminFormTemplate, Status } from "@/types";
 
 export default function AdminLibraryPage() {
   const router = useRouter();
+
+  const statusList: Status[] = [
+    { key: "ALL", value: "Tất cả" },
+    { key: "ACTIVE", value: "Đang áp dụng" },
+    { key: "PENDING_REVIEW", value: "Hàng chờ" },
+    { key: "DRAFT", value: "Bản nháp" },
+    { key: "ARCHIVED", value: "Lưu trữ" },
+  ];
+  
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"ALL" | "ACTIVE" | "DRAFT" | "ARCHIVED">("ALL");
+
+  const [statusFilter, setStatusFilter] = useState<Status>(statusList[0]);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [templates, setTemplates] = useState(initialTemplates);
+  const [templates, setTemplates] = useState<AdminFormTemplate[]>(initialTemplates as unknown as AdminFormTemplate[]);
 
   // Khôi phục thêm các biểu mẫu vừa lưu trong localStorage
   useEffect(() => {
     try {
       const keys = Object.keys(localStorage);
-      const customForms: typeof initialTemplates = [];
-      const updatedInitial = [...initialTemplates];
+      const customForms: AdminFormTemplate[] = [];
+      const updatedInitial = [...initialTemplates] as unknown as AdminFormTemplate[];
 
       keys.forEach((key) => {
         if (key.startsWith("afl_workflow_published_")) {
           const item = JSON.parse(localStorage.getItem(key) || "{}");
           if (item.templateId) {
-            const rawStatus = (item.status ? String(item.status).toUpperCase() : "DRAFT");
-            const normalizedStatus = (rawStatus === "ACTIVE" || rawStatus === "ARCHIVED" ? rawStatus : "DRAFT");
-            const existingIdx = updatedInitial.findIndex((t) => t.id === item.templateId);
+            const existingIdx = updatedInitial.findIndex(
+              (t) => t.id === item.templateId,
+            );
 
             if (existingIdx !== -1) {
               updatedInitial[existingIdx] = {
                 ...updatedInitial[existingIdx],
                 version: item.version || updatedInitial[existingIdx].version,
-                totalSteps: item.totalSteps || item.steps?.length || updatedInitial[existingIdx].totalSteps,
-                status: normalizedStatus,
-                publishedAt: item.publishedAt || updatedInitial[existingIdx].publishedAt,
+                totalSteps:
+                  item.totalSteps ||
+                  item.steps?.length ||
+                  updatedInitial[existingIdx].totalSteps,
+                status: item.status,
+                publishedAt:
+                  item.publishedAt || updatedInitial[existingIdx].publishedAt,
               };
             } else {
               customForms.push({
                 id: item.templateId,
                 formCode: item.formCode || "MẪU_MỚI",
-                title: item.formTitleVi || item.formTitle || "Biểu mẫu tùy chỉnh",
+                title:
+                  item.formTitleVi || item.formTitle || "Biểu mẫu tùy chỉnh",
                 legalBasis: item.circularInfo || "Kê khai hành chính",
                 department: "Bộ phận Một cửa",
                 version: item.version || 1,
                 totalSteps: item.totalSteps || item.steps?.length || 0,
                 totalPages: item.totalPages || 1,
-                status: normalizedStatus,
+                status: item.status,
                 publishedAt: item.publishedAt || new Date().toISOString(),
-                thumbnailUrl: item.pages?.[0]?.imageUrl || "/assets/forms/01-lptb/page-1.jpg",
+                thumbnailUrl:
+                  item.pages?.[0]?.imageUrl ||
+                  "/assets/forms/01-lptb/page-1.jpg",
               });
             }
           }
@@ -80,14 +98,18 @@ export default function AdminLibraryPage() {
       tpl.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       tpl.formCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       tpl.legalBasis.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "ALL" || tpl.status === statusFilter;
+    const matchesStatus =
+      statusFilter.key === "ALL" || tpl.status === statusFilter.key;
     return matchesSearch && matchesStatus;
   });
 
   return (
     <div className="w-full min-h-[calc(100vh-61px)] bg-slate-100 flex flex-col p-6 sm:p-8 space-y-6">
       {/* Component Modal Tải Lên & Quét AI */}
-      <FormUploadModal isOpen={isUploadOpen} onClose={() => setIsUploadOpen(false)} />
+      <FormUploadModal
+        isOpen={isUploadOpen}
+        onClose={() => setIsUploadOpen(false)}
+      />
 
       {/* 1. THANH TIÊU ĐỀ & NÚT THÊM BIỂU MẪU MỚI */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 shadow-sm">
@@ -99,7 +121,8 @@ export default function AdminLibraryPage() {
             Thư Viện Biểu Mẫu Đã Ban Hành
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
-            Quản lý, đối soát Bounding Box và xuất bản các kịch bản hướng dẫn người cao tuổi
+            Quản lý, đối soát Bounding Box và xuất bản các kịch bản hướng dẫn
+            người cao tuổi
           </p>
         </div>
 
@@ -131,24 +154,18 @@ export default function AdminLibraryPage() {
         {/* Bộ lọc trạng thái & Toggle Lưới/Bảng */}
         <div className="flex items-center gap-2.5">
           <div className="flex items-center bg-white border border-slate-300 rounded-xl p-1 shadow-sm">
-            {(["ALL", "ACTIVE", "DRAFT", "ARCHIVED"] as const).map((st) => (
+            {statusList.map((st, key) => (
               <button
-                key={st}
+                key={key}
                 type="button"
                 onClick={() => setStatusFilter(st)}
                 className={`px-3 py-1 rounded-lg text-xs font-black transition-all ${
-                  statusFilter === st
+                  statusFilter.key === st.key
                     ? "bg-slate-900 text-white shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                {st === "ALL"
-                  ? "Tất cả"
-                  : st === "ACTIVE"
-                  ? "Đang áp dụng"
-                  : st === "DRAFT"
-                  ? "Bản nháp"
-                  : "Lưu trữ"}
+                {st.value}
               </button>
             ))}
           </div>
@@ -216,15 +233,15 @@ export default function AdminLibraryPage() {
                       tpl.status === "ACTIVE"
                         ? "bg-emerald-500/95 text-white border-emerald-400"
                         : tpl.status === "ARCHIVED"
-                        ? "bg-slate-600/95 text-white border-slate-500"
-                        : "bg-amber-400/95 text-slate-950 border-amber-300"
+                          ? "bg-slate-600/95 text-white border-slate-500"
+                          : "bg-amber-400/95 text-slate-950 border-amber-300"
                     }`}
                   >
                     {tpl.status === "ACTIVE"
                       ? "Đang áp dụng"
                       : tpl.status === "ARCHIVED"
-                      ? "Lưu trữ"
-                      : "Bản nháp"}
+                        ? "Lưu trữ"
+                        : "Bản nháp"}
                   </span>
                 </div>
 
@@ -241,7 +258,10 @@ export default function AdminLibraryPage() {
               {/* Thông tin chi tiết */}
               <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-1.5 text-xs text-slate-600">
-                  <p className="line-clamp-2 font-medium" title={tpl.legalBasis}>
+                  <p
+                    className="line-clamp-2 font-medium"
+                    title={tpl.legalBasis}
+                  >
                     <strong>Căn cứ:</strong> {tpl.legalBasis}
                   </p>
                   <div className="flex items-center gap-3 pt-1 text-[11px] text-slate-500 font-bold">
@@ -297,7 +317,10 @@ export default function AdminLibraryPage() {
               </thead>
               <tbody className="divide-y divide-slate-200 font-medium text-slate-700">
                 {filteredTemplates.map((tpl) => (
-                  <tr key={tpl.id} className="hover:bg-slate-50 transition-colors">
+                  <tr
+                    key={tpl.id}
+                    className="hover:bg-slate-50 transition-colors"
+                  >
                     <td className="p-4">
                       <div className="flex items-center gap-1.5">
                         <span className="font-mono font-black text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
@@ -309,16 +332,26 @@ export default function AdminLibraryPage() {
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="font-black text-slate-900 text-sm">{tpl.title}</div>
-                      <div className="text-[11px] text-slate-500">{tpl.department}</div>
+                      <div className="font-black text-slate-900 text-sm">
+                        {tpl.title}
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        {tpl.department}
+                      </div>
                     </td>
                     <td className="p-4 max-w-xs">
-                      <p className="line-clamp-2 text-slate-600">{tpl.legalBasis}</p>
+                      <p className="line-clamp-2 text-slate-600">
+                        {tpl.legalBasis}
+                      </p>
                     </td>
                     <td className="p-4 text-center">
-                      <span className="font-bold text-slate-900">{tpl.totalPages} trang</span>
+                      <span className="font-bold text-slate-900">
+                        {tpl.totalPages} trang
+                      </span>
                       <span className="text-slate-400 mx-1">/</span>
-                      <span className="text-emerald-700 font-bold">{tpl.totalSteps} bước</span>
+                      <span className="text-emerald-700 font-bold">
+                        {tpl.totalSteps} bước
+                      </span>
                     </td>
                     <td className="p-4 text-center">
                       <span
@@ -326,15 +359,15 @@ export default function AdminLibraryPage() {
                           tpl.status === "ACTIVE"
                             ? "bg-emerald-100 text-emerald-800 border-emerald-300"
                             : tpl.status === "ARCHIVED"
-                            ? "bg-slate-100 text-slate-700 border-slate-300"
-                            : "bg-amber-100 text-amber-900 border-amber-300"
+                              ? "bg-slate-100 text-slate-700 border-slate-300"
+                              : "bg-amber-100 text-amber-900 border-amber-300"
                         }`}
                       >
                         {tpl.status === "ACTIVE"
                           ? "Đang áp dụng"
                           : tpl.status === "ARCHIVED"
-                          ? "Lưu trữ"
-                          : "Bản nháp"}
+                            ? "Lưu trữ"
+                            : "Bản nháp"}
                       </span>
                     </td>
                     <td className="p-4 text-right">
