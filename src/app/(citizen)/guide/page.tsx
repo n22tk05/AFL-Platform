@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { documentSession, prerequisiteValue } from '@/modules/documents/session';
+import { documentSession } from '@/modules/documents/session';
+import { createGuideController, createGuideStepView } from './guide-behavior';
 import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 import type { WorkflowStep, FormWorkflow } from '@/shared/contracts';
@@ -13,13 +14,6 @@ import { StepHeader } from '@/components/mobile/StepHeader';
 import { VoiceAssistantPanel } from '@/components/mobile/VoiceAssistantPanel';
 
 const LIVE_FORM_CODE = 'Mẫu số: 01/LPTB';
-function prerequisiteExampleText(step: WorkflowStep, fields: Record<string, string> | null): string {
-  if (!step.requiresPrerequisiteDoc) return step.exampleRedText || '';
-  return prerequisiteValue(fields, step.sourceFieldFromPrerequisite)?.toUpperCase() ?? 'CHƯA CÓ DỮ LIỆU CHỨNG TỪ ĐÃ DUYỆT';
-}
-function completeGuideWorkflow(clear: () => void): void {
-  clear();
-}
 const aliases: Record<string, { formCode: string; fixtureId: string }> = {
   tpl_01_lptb: { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
   '01-lptb': { formCode: LIVE_FORM_CODE, fixtureId: 'tpl_01_lptb' },
@@ -96,9 +90,14 @@ function GuideContent() {
   const currentStep = steps[currentStepIndex];
   if (!currentStep) return <div role="alert" className="p-6 text-center text-slate-700">Không tìm thấy dữ liệu quy trình biểu mẫu.</div>;
   const currentPageNumber = currentStep.pageNumber || 1;
-  const handleNextStep = () => currentStepIndex < totalSteps - 1
-    ? setCurrentStepIndex(index => index + 1)
-    : (completeGuideWorkflow(() => documentSession.clear()), alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow.formTitleVi || workflow.formTitle || 'tờ khai'}!`));
+  const controller = createGuideController({
+    getStepIndex: () => currentStepIndex,
+    getTotalSteps: () => totalSteps,
+    setStepIndex: setCurrentStepIndex,
+    clearSession: () => documentSession.clear(),
+    complete: () => alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow.formTitleVi || workflow.formTitle || 'tờ khai'}!`),
+  });
+  const guideStepView = createGuideStepView(currentStep, prerequisiteFields, controller);
 
   return <div className="flex flex-col flex-1 pb-24 no-scrollbar">
     {source !== 'live' && <p role="status" className="px-4 pt-2 text-center text-xs font-semibold text-amber-800">
@@ -111,7 +110,7 @@ function GuideContent() {
         fieldLabel={currentStep.label} stepNumber={currentStepIndex + 1} />
       <VoiceAssistantPanel voiceGuidance={currentStep.voiceGuidance} audioUrl={currentStep.audioUrl} faqs={currentStep.faqs}
         formCode={workflow.formCode} stepIndex={currentStep.stepIndex || (currentStepIndex + 1)} />
-      <RedTextExample exampleText={prerequisiteExampleText(currentStep, prerequisiteFields)} fieldNote={currentStep.requiresPrerequisiteDoc && prerequisiteFields
+      <RedTextExample exampleText={guideStepView.exampleText} fieldNote={currentStep.requiresPrerequisiteDoc && prerequisiteFields
         ? '✨ Đã tự động trích xuất thông tin từ Biên bản phạt của bác (Nghị định 13)!'
         : currentStep.faqs?.[0]?.answer} />
     </div>
@@ -121,7 +120,7 @@ function GuideContent() {
         <ChevronLeft className="w-6 h-6" /><span className="hidden sm:inline">Dòng trước</span>
       </button>
       <div className="text-center"><div className="font-black text-sm text-slate-800">Dòng {currentStepIndex + 1} / {totalSteps}</div><div className="text-[11px] font-bold text-slate-500">Trang {currentPageNumber}</div></div>
-      <button type="button" onClick={handleNextStep} className="min-h-touch-lg bg-afl-green flex-1 px-5 hover:bg-afl-green-dark text-white border-2 border-afl-green rounded-xl font-black text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md" aria-label={currentStepIndex === totalSteps - 1 ? 'Hoàn tất biểu mẫu' : 'Chuyển sang dòng tiếp theo'}>
+      <button type="button" onClick={guideStepView.onNext} className="min-h-touch-lg bg-afl-green flex-1 px-5 hover:bg-afl-green-dark text-white border-2 border-afl-green rounded-xl font-black text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md" aria-label={currentStepIndex === totalSteps - 1 ? 'Hoàn tất biểu mẫu' : 'Chuyển sang dòng tiếp theo'}>
         {currentStepIndex === totalSteps - 1 ? <><CheckCircle className="w-6 h-6" /><span>Hoàn Thành</span></> : <><span>Dòng Tiếp Theo</span><ChevronRight className="w-6 h-6" /></>}
       </button>
     </footer>

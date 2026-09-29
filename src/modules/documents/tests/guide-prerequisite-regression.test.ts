@@ -1,27 +1,65 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { prerequisiteValue } from '../session';
+import { createGuideController, createGuideStepView } from '../../../app/(citizen)/guide/guide-behavior';
+import { DocumentSession } from '../session';
+import type { StructuredDocumentResult } from '@/shared/document-extraction.types';
 import type { WorkflowStep } from '@/shared/contracts';
 
-test('guide displays the reviewed prerequisite value instead of the workflow example', () => {
-  const step = {
-    requiresPrerequisiteDoc: true,
-    sourceFieldFromPrerequisite: 'so_tien_phat',
-    exampleRedText: 'STATIC EXAMPLE',
-  } as WorkflowStep;
-  assert.equal(prerequisiteValue({ fineAmount: '900.000 đồng' }, step.sourceFieldFromPrerequisite)?.toUpperCase(), '900.000 ĐỒNG');
-  assert.equal(prerequisiteValue(null, step.sourceFieldFromPrerequisite) ?? 'CHƯA CÓ DỮ LIỆU CHỨNG TỪ ĐÃ DUYỆT', 'CHƯA CÓ DỮ LIỆU CHỨNG TỪ ĐÃ DUYỆT');
+const prerequisiteStep = {
+  requiresPrerequisiteDoc: true,
+  sourceFieldFromPrerequisite: 'so_tien_phat',
+  exampleRedText: 'STATIC WORKFLOW EXAMPLE',
+} as WorkflowStep;
+
+function extraction(value: number): StructuredDocumentResult {
+  return {
+    fields: {
+      fineAmount: { value, rawText: String(value), confidence: 1, evidenceText: String(value), sourceLineIds: [], status: 'accepted' },
+    },
+    documentType: 'traffic_violation_record',
+    provider: 'test',
+  } as unknown as StructuredDocumentResult;
+}
+
+test('guide prerequisite display follows reviewed session updates and fallback', () => {
+  const session = new DocumentSession();
+  let displayed = createGuideStepView(prerequisiteStep, session.read(), { nextStep() {} }).exampleText;
+  const unsubscribe = session.subscribe(() => { displayed = createGuideStepView(prerequisiteStep, session.read(), { nextStep() {} }).exampleText; });
+
+  assert.equal(displayed, 'CHƯA CÓ DỮ LIỆU CHỨNG TỪ ĐÃ DUYỆT');
+  session.save(extraction(900000), {});
+  assert.equal(displayed, '900.000 ĐỒNG');
+  session.save(extraction(1250000), {});
+  assert.equal(displayed, '1.250.000 ĐỒNG');
+  unsubscribe();
+  session.clear();
 });
 
-test('guide clears the reviewed document session once at workflow completion', () => {
+test('guide next-step action clears only on final completion and alerts', () => {
+  const session = new DocumentSession();
+  session.save(extraction(900000), {});
+  let stepIndex = 0;
+  const totalSteps = 2;
   let clears = 0;
-  (() => { clears += 1; })();
-  assert.equal(clears, 1);
-});
+  let alertMessage = '';
+  const unsubscribe = session.subscribe(() => {
+    if (session.read() === null) clears += 1;
+  });
+  const controller = createGuideController({
+    getStepIndex: () => stepIndex,
+    getTotalSteps: () => totalSteps,
+    setStepIndex: update => { stepIndex = update(stepIndex); },
+    clearSession: () => session.clear(),
+    complete: () => { alertMessage = 'completed workflow'; },
+  });
 
-test('guide renders the derived value and invokes clear on its final-step path', async () => {
-  const source = await readFile('src/app/(citizen)/guide/page.tsx', 'utf8');
-  assert.match(source, /exampleText=\{prerequisiteExampleText\(currentStep, prerequisiteFields\)\}/);
-  assert.match(source, /: \(completeGuideWorkflow\(\(\) => documentSession\.clear\(\)\), alert\(/);
+  createGuideStepView(prerequisiteStep, session.read(), controller).onNext();
+  assert.equal(stepIndex, 1);
+  assert.equal(clears, 0);
+  assert.equal(alertMessage, '');
+  createGuideStepView(prerequisiteStep, session.read(), controller).onNext();
+  assert.equal(stepIndex, 1);
+  assert.equal(clears, 1);
+  assert.equal(alertMessage, 'completed workflow');
+  unsubscribe();
 });
