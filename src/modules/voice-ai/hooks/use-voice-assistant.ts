@@ -6,6 +6,7 @@ import { WebSpeechSTT } from '@/modules/voice-ai/services/stt.service';
 import { WorkflowStep, StepFaqItem } from '@/shared/contracts';
 import { startVoicePlayback, type AudioFactory, type SpeechDriver, type PlaybackSession } from '@/modules/voice-ai/services/voice-playback.service';
 import { requestVoiceAnswer, FinalTranscriptBuffer, RecognitionSubmissionLifecycle, VoiceRequestGeneration, type VoiceFetch } from '@/modules/voice-ai/services/voice-qa.client';
+import { contentAddressedAudioUrlOrEmpty } from '@/modules/voice-ai/services/audio-url.service';
 
 export interface UseVoiceAssistantOptions {
   onTranscriptUpdate?: (transcript: string, isFinal: boolean) => void;
@@ -262,8 +263,12 @@ export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
     void playAnswer(faq.answer);
   }, [playAnswer, stopAudio]);
 
+  const playGuidance = useCallback((text: string, audioUrl?: string) => {
+    return playAnswer(text, contentAddressedAudioUrlOrEmpty(audioUrl) || undefined);
+  }, [playAnswer]);
+
   return { isListening, isPlaying, isAnswering, transcript, answer, answerAudioUrl, error, isSupported, canListen,
-    startListening, stopListening, playAudio: (url: string) => playAnswer('', url), playGuidance: playAnswer,
+    startListening, stopListening, playAudio: (url: string) => playAnswer('', url), playGuidance,
     playAnswer, stopAudio, askQuestion, triggerTouchToAsk, halfDuplex: duplex.current };
 }
 

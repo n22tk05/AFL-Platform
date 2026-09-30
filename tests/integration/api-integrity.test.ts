@@ -140,6 +140,12 @@ async function main() {
   const qaB = await qaController.answer({ formCode: 'B', stepIndex: 1, userQuestion: question });
   assert.equal((qaA.body as any).data.answerText.includes('A'), true);
   assert.equal((qaB.body as any).data.answerText.includes('B'), true);
+  const unavailableQaController = new VoiceQAController(qa, {
+    getWorkflowByFormCode: async () => { throw new Error('DATABASE_UNAVAILABLE'); },
+  } as any);
+  const unavailableQa = await unavailableQaController.answer({ formCode: 'A', stepIndex: 1, userQuestion: question });
+  assert.equal(unavailableQa.status, 503);
+  assert.equal((unavailableQa.body as any).error.code, 'DATABASE_UNAVAILABLE');
   console.log('PASS: admin, manifest, approval, public reads, audio identity/validity, QA isolation');
 }
 

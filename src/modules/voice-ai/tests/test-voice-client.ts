@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { HalfDuplexController } from '@/modules/voice-ai/services/half-duplex.service';
 import { startVoicePlayback } from '@/modules/voice-ai/services/voice-playback.service';
+import { contentAddressedAudioUrlOrEmpty, isContentAddressedAudioUrl } from '@/modules/voice-ai/services/audio-url.service';
 import { requestVoiceAnswer, FinalTranscriptBuffer, RecognitionSubmissionLifecycle, VoiceRequestGeneration } from '@/modules/voice-ai/services/voice-qa.client';
 import { useVoiceAssistant } from '@/modules/voice-ai/hooks/use-voice-assistant';
 import React from 'react';
@@ -215,6 +216,29 @@ async function run() {
   const generation = new VoiceRequestGeneration();
   const oldRequest = generation.current(); generation.invalidate();
   assert.equal(generation.isCurrent(oldRequest), false, 'step navigation invalidates a delayed QA response');
+
+  assert.equal(isContentAddressedAudioUrl('/audio/step_01.mp3'), false, 'legacy shared audio is never accepted as generated TTS');
+  assert.equal(contentAddressedAudioUrlOrEmpty('/audio/step_01.mp3'), '');
+  const generatedGuidanceAudio = `/audio/${'a'.repeat(64)}.mp3`;
+  assert.equal(isContentAddressedAudioUrl(generatedGuidanceAudio), true);
+  const guidanceAudioUrls: string[] = []; const guidanceSpeech: string[] = [];
+  let guidanceSpeechDone!: () => void; let generatedMedia: any;
+  const guidanceHook = hookHarness(() => useVoiceAssistant({ formCode: 'FORM', stepIndex: 2,
+    createAudio: url => {
+      guidanceAudioUrls.push(url);
+      return generatedMedia = { play: () => Promise.resolve(), pause: () => {}, currentTime: 0, onended: null, onerror: null };
+    },
+    speak: (text, done) => { guidanceSpeech.push(text); guidanceSpeechDone = done; return () => {}; },
+  }));
+  const guidance = guidanceHook.render();
+  const legacyGuidance = guidance.playGuidance('Hướng dẫn đúng của bước hai', '/audio/step_01.mp3');
+  assert.deepEqual(guidanceAudioUrls, [], 'legacy step audio must not be instantiated for a different guidance text');
+  assert.deepEqual(guidanceSpeech, ['Hướng dẫn đúng của bước hai'], 'legacy guidance falls back to the current text');
+  guidanceSpeechDone(); await legacyGuidance;
+  const generatedGuidance = guidance.playGuidance('Hướng dẫn đã có TTS', generatedGuidanceAudio);
+  assert.deepEqual(guidanceAudioUrls, [generatedGuidanceAudio], 'content-addressed TTS audio remains playable');
+  assert.deepEqual(guidanceSpeech, ['Hướng dẫn đúng của bước hai'], 'valid generated audio does not invoke speech fallback');
+  generatedMedia.onended(); await generatedGuidance;
 
   const playbackState: boolean[] = [];
   const duplexDuringSpeech = new HalfDuplexController();

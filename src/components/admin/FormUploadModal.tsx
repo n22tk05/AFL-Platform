@@ -10,6 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { FormWorkflow } from "@/shared/contracts";
+import { contentAddressedAudioUrlOrEmpty } from '@/modules/voice-ai/services/audio-url.service';
 
 interface FormUploadModalProps {
   isOpen: boolean;
@@ -226,7 +227,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
               sectionName: st.sectionName || `Mục ${sIdx + 1}`,
               label: st.label || `Thông tin trường ${sIdx + 1}`,
               voiceGuidance: st.voiceGuidance || "Bác ghi rõ thông tin vào ô này nhé.",
-              audioUrl: st.audioUrl || "/audio/step_01.mp3",
+              audioUrl: contentAddressedAudioUrlOrEmpty(st.audioUrl),
               exampleRedText: st.exampleRedText || "VÍ DỤ MẪU IN HOA",
               highlightCoords: st.highlightCoords || manifestBoxes[sIdx]?.normalizedCoords || [0.2, 0.2, 0.25, 0.8],
               requiresPrerequisiteDoc: st.requiresPrerequisiteDoc ?? false,
@@ -250,7 +251,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
           voiceGuidance: idx === manifestBoxes.length - 1
             ? "Bước cuối rồi bác ơi! Bác ký tên và viết rõ họ tên của mình vào ô này nhé."
             : "Bác nhìn vào ô đang sáng trên màn hình và viết thông tin rõ ràng nhé.",
-          audioUrl: "/audio/step_01.mp3",
+          audioUrl: "",
           exampleRedText: idx === manifestBoxes.length - 1 ? "KÝ VÀ GHI RÕ HỌ TÊN" : "THÔNG TIN MẪU IN HOA",
           highlightCoords: box.normalizedCoords,
           requiresPrerequisiteDoc: false,
