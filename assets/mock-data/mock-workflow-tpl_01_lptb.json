@@ -4,7 +4,7 @@
   "formCode": "01/LPTB",
   "formTitle": "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
   "formTitleVi": "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
-  "status": "active",
+  "status": "ACTIVE",
   "circularInfo": "Mẫu số 01/LPTB kèm theo Thông tư số 89/2026/TT-BTC ngày 30/6/2026 của Bộ trưởng Bộ Tài chính",
   "totalPages": 2,
   "pages": [
@@ -33,10 +33,10 @@
       "audioUrl": "/audio/step_01.mp3",
       "exampleRedText": "NGÀY 15 THÁNG 03 NĂM 2026",
       "highlightCoords": [
-        0.22,
-        0.22,
-        0.245,
-        0.8551
+        0.219,
+        0.2115,
+        0.244,
+        0.8466
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -153,9 +153,9 @@
       "audioUrl": "/audio/step_02.mp3",
       "exampleRedText": "10/08/1956",
       "highlightCoords": [
-        0.345,
+        0.341,
         0.16,
-        0.37,
+        0.366,
         0.85
       ],
       "requiresPrerequisiteDoc": false,
@@ -177,10 +177,10 @@
       "audioUrl": "/audio/step_02.mp3",
       "exampleRedText": "8012345678",
       "highlightCoords": [
-        0.37,
-        0.16,
-        0.395,
-        0.55
+        0.362,
+        0.1586,
+        0.384,
+        0.5711
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -201,9 +201,9 @@
       "audioUrl": "/audio/step_02.mp3",
       "exampleRedText": "048056001234",
       "highlightCoords": [
-        0.395,
+        0.3801,
         0.16,
-        0.42,
+        0.4051,
         0.6
       ],
       "requiresPrerequisiteDoc": false,
@@ -225,10 +225,10 @@
       "audioUrl": "/audio/step_03.mp3",
       "exampleRedText": "SỐ 45 ĐƯỜNG LÊ DUẨN",
       "highlightCoords": [
-        0.42,
+        0.4001,
         0.16,
-        0.445,
-        0.45
+        0.4251,
+        0.5852
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -249,9 +249,9 @@
       "audioUrl": "/audio/step_03.mp3",
       "exampleRedText": "PHƯỜNG HẢI CHÂU 1",
       "highlightCoords": [
-        0.445,
+        0.4211,
         0.16,
-        0.47,
+        0.4461,
         0.45
       ],
       "requiresPrerequisiteDoc": false,
@@ -268,10 +268,10 @@
       "audioUrl": "/audio/step_03.mp3",
       "exampleRedText": "QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
       "highlightCoords": [
-        0.445,
-        0.45,
-        0.47,
-        0.75
+        0.4201,
+        0.4472,
+        0.4451,
+        0.7472
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -287,10 +287,10 @@
       "audioUrl": "/audio/step_03.mp3",
       "exampleRedText": "ĐIỆN THOẠI: 0905123456 ; EMAIL: (ĐỂ TRỐNG)",
       "highlightCoords": [
-        0.47,
-        0.16,
-        0.495,
-        0.85
+        0.4411,
+        0.1487,
+        0.4661,
+        0.8387
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -311,9 +311,9 @@
       "audioUrl": "/audio/step_03.mp3",
       "exampleRedText": "(ĐỂ TRỐNG TOÀN BỘ MỤC 14, 15, 16)",
       "highlightCoords": [
-        0.495,
+        0.4591,
         0.16,
-        0.58,
+        0.5441,
         0.88
       ],
       "requiresPrerequisiteDoc": false,
@@ -335,10 +335,10 @@
       "audioUrl": "/audio/step_04.mp3",
       "exampleRedText": "128",
       "highlightCoords": [
-        0.615,
-        0.16,
-        0.645,
-        0.55
+        0.5672,
+        0.1614,
+        0.5972,
+        0.5514
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -359,10 +359,10 @@
       "audioUrl": "/audio/step_04.mp3",
       "exampleRedText": "15",
       "highlightCoords": [
-        0.615,
-        0.55,
-        0.645,
-        0.8
+        0.5881,
+        0.5669,
+        0.6181,
+        0.8169
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -378,10 +378,10 @@
       "audioUrl": "/audio/step_04.mp3",
       "exampleRedText": "SỐ 128 ĐƯỜNG TRẦN PHÚ, TỔ 12",
       "highlightCoords": [
-        0.66,
-        0.16,
-        0.705,
-        0.88
+        0.6301,
+        0.1473,
+        0.6751,
+        0.8673
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -402,10 +402,10 @@
       "audioUrl": "/audio/step_04.mp3",
       "exampleRedText": "PHƯỜNG THẠCH THANG",
       "highlightCoords": [
-        0.6697,
-        0.1587,
-        0.6947,
-        0.6205
+        0.6707,
+        0.1671,
+        0.6957,
+        0.6289
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -421,10 +421,10 @@
       "audioUrl": "/audio/step_04.mp3",
       "exampleRedText": "QUẬN HẢI CHÂU, THÀNH PHỐ ĐÀ NẴNG",
       "highlightCoords": [
-        0.73,
-        0.16,
-        0.755,
-        0.6
+        0.6931,
+        0.1614,
+        0.7181,
+        0.6014
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -440,10 +440,10 @@
       "audioUrl": "/audio/step_04.mp3",
       "exampleRedText": "ĐẤT MẶT TIỀN ĐƯỜNG PHỐ (HOẶC: ĐẤT NGÕ HẺM)",
       "highlightCoords": [
-        0.755,
-        0.16,
-        0.78,
-        0.7
+        0.7122,
+        0.1572,
+        0.7372,
+        0.6972
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -464,10 +464,10 @@
       "audioUrl": "/audio/step_05.mp3",
       "exampleRedText": "ĐẤT Ở TẠI ĐÔ THỊ",
       "highlightCoords": [
-        0.78,
-        0.16,
-        0.805,
-        0.6
+        0.7302,
+        0.1572,
+        0.7552,
+        0.5972
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -488,10 +488,10 @@
       "audioUrl": "/audio/step_05.mp3",
       "exampleRedText": "120,5 M2",
       "highlightCoords": [
-        0.805,
-        0.16,
-        0.83,
-        0.6
+        0.7512,
+        0.1558,
+        0.7762,
+        0.5958
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -512,10 +512,10 @@
       "audioUrl": "/audio/step_06.mp3",
       "exampleRedText": "NHẬN CHUYỂN NHƯỢNG (HOẶC: NHẬN TẶNG CHO / NHẬN THỪA KẾ)",
       "highlightCoords": [
-        0.83,
+        0.7722,
         0.16,
-        0.865,
-        0.88
+        0.8072,
+        0.9166
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -531,10 +531,10 @@
       "audioUrl": "/audio/step_06.mp3",
       "exampleRedText": "TRẦN VĂN BÌNH",
       "highlightCoords": [
-        0.87,
-        0.16,
-        0.9,
-        0.7
+        0.8262,
+        0.1572,
+        0.8562,
+        0.6972
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -555,10 +555,10 @@
       "audioUrl": "/audio/step_06.mp3",
       "exampleRedText": "CCCD SỐ: 048050005678",
       "highlightCoords": [
-        0.9,
-        0.16,
-        0.935,
-        0.6
+        0.8482,
+        0.153,
+        0.9051,
+        0.6268
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -574,10 +574,10 @@
       "audioUrl": "/audio/step_06.mp3",
       "exampleRedText": "SỐ 12 ĐƯỜNG NGUYỄN DU, PHƯỜNG BẾN NGHÉ, QUẬN 1, TP HỒ CHÍ MINH",
       "highlightCoords": [
-        0.935,
-        0.16,
-        0.96,
-        0.6
+        0.9031,
+        0.1684,
+        0.9281,
+        0.6084
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -593,9 +593,9 @@
       "audioUrl": "/audio/step_06.mp3",
       "exampleRedText": "NGÀY 15 THÁNG 03 NĂM 2026",
       "highlightCoords": [
-        0.96,
+        0.9261,
         0.16,
-        0.985,
+        0.9511,
         0.85
       ],
       "requiresPrerequisiteDoc": true,
@@ -636,10 +636,10 @@
       "audioUrl": "/audio/step_07.mp3",
       "exampleRedText": "CẤP NHÀ: CẤP III ; LOẠI NHÀ: NHÀ Ở RIÊNG LẺ (HOẶC: KHÔNG CÓ NHÀ)",
       "highlightCoords": [
-        0.125,
+        0.12,
         0.16,
-        0.155,
-        0.75
+        0.15,
+        0.7951
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": false,
@@ -736,10 +736,10 @@
       "audioUrl": "/audio/step_08.mp3",
       "exampleRedText": "500.000.000 ĐỒNG",
       "highlightCoords": [
-        0.395,
+        0.385,
         0.16,
-        0.42,
-        0.4
+        0.41,
+        0.6169
       ],
       "requiresPrerequisiteDoc": true,
       "legalWarningFlag": true,
@@ -755,10 +755,10 @@
       "audioUrl": "/audio/step_08.mp3",
       "exampleRedText": "ĐÁNH DẤU TÍCH [V] VÀO Ô: NHẬN CHUYỂN NHƯỢNG",
       "highlightCoords": [
-        0.425,
-        0.16,
-        0.45,
-        0.9
+        0.4081,
+        0.153,
+        0.467,
+        0.9254
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -798,10 +798,10 @@
       "audioUrl": "/audio/step_08.mp3",
       "exampleRedText": "MIỄN THEO KHOẢN 10 ĐIỀU 10 NGHỊ ĐỊNH 10/2022/NĐ-CP (HOẶC ĐỂ TRỐNG)",
       "highlightCoords": [
-        0.485,
-        0.16,
-        0.515,
-        0.75
+        0.4681,
+        0.1572,
+        0.5101,
+        0.7472
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": true,
@@ -824,7 +824,7 @@
       "highlightCoords": [
         0.53,
         0.16,
-        0.63,
+        0.6021,
         0.92
       ],
       "requiresPrerequisiteDoc": true,
@@ -841,10 +841,10 @@
       "audioUrl": "/audio/step_09.mp3",
       "exampleRedText": "1. HỢP ĐỒNG CHUYỂN NHƯỢNG CÔNG CHỨNG ; 2. BẢN SAO GIẤY CHỨNG NHẬN QSDĐ ; 3. BẢN SAO CCCD",
       "highlightCoords": [
-        0.63,
-        0.16,
-        0.67,
-        0.6
+        0.5961,
+        0.1572,
+        0.66,
+        0.5972
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -860,10 +860,10 @@
       "audioUrl": "/audio/step_09.mp3",
       "exampleRedText": "ĐÀ NẴNG, NGÀY 26 THÁNG 09 NĂM 2026",
       "highlightCoords": [
-        0.705,
-        0.5,
-        0.73,
-        0.85
+        0.692,
+        0.5183,
+        0.717,
+        0.8683
       ],
       "requiresPrerequisiteDoc": false,
       "legalWarningFlag": false,
@@ -879,13 +879,13 @@
       "audioUrl": "/audio/step_09.mp3",
       "exampleRedText": "KÝ VÀ GHI RÕ HỌ TÊN: NGUYỄN VĂN AN",
       "highlightCoords": [
-        0.73,
-        0.45,
-        0.85,
-        0.92
+        0.7061,
+        0.4542,
+        0.8899,
+        0.9242
       ],
-      "requiresPrerequisiteDoc": false,
-      "legalWarningFlag": false,
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": true,
       "faqs": [
         {
           "question": "Có cần điểm chỉ ngón tay không?",
@@ -894,6 +894,6 @@
       ]
     }
   ],
-  "version": 2,
-  "publishedAt": "2026-09-27T12:34:50.177Z"
+  "version": 3,
+  "publishedAt": "2026-09-27T14:08:33.006Z"
 }

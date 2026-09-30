@@ -27,8 +27,12 @@ person-4-voice-qa/
 │   └── SDK-COMPARISON-DEEP-RESEARCH.md       <-- Nghiên cứu sâu Google SDK vs Vercel AI SDK & Lộ trình
 ├── step-06-prisma-database-integration/
 │   └── PRISMA-POSTGRES-INTEGRATION-REPORT.md <-- [Bước 6] Tích hợp CSDL Prisma, ACID Transactions, Cache Đa Tầng & QA
-└── step-07-api-integrity/
-    └── API-INTEGRITY-AND-INTEGRATION-HANDOFF.md <-- [Bước 7] Toàn vẹn API, xác thực Admin, kiểm tra Manifest/Workflow & Audio Identity
+├── step-07-api-integrity/
+│   └── API-INTEGRITY-AND-INTEGRATION-HANDOFF.md <-- [Bước 7] Toàn vẹn API, xác thực Admin, kiểm tra Manifest/Workflow & Audio Identity
+├── step-08-p2p-integration-plan/
+│   └── P2P-INTEGRATION-PLAN.md               <-- [Bước 8] Kế hoạch hành động đấu nối Frontend với Backend API & CSDL Supabase
+└── step-09-fe-production-readiness/
+    └── FE-PRODUCTION-READINESS-REPORT.md     <-- [Bước 9] Đánh giá hiện trạng & danh mục việc cần làm để toàn bộ FE hoạt động
 ```
 
 ---
@@ -44,6 +48,8 @@ person-4-voice-qa/
 | **05** | **Deep Research: Google SDK vs Vercel AI SDK** | Nghiên cứu so sánh kiến trúc, streaming UI, Zod schema, tuân thủ Nghị định 13/2023/NĐ-CP và đề xuất mô hình lai (Hybrid) cho Sprint 2. | ✅ Hoàn thành | [`step-05-sdk-deep-research/SDK-COMPARISON-DEEP-RESEARCH.md`](step-05-sdk-deep-research/SDK-COMPARISON-DEEP-RESEARCH.md) |
 | **06** | **Tích hợp Tầng Lưu trữ CSDL & Cache Đa Tầng** | Xây dựng `FormPersistenceService`, ACID transactions, Prisma Singleton Pool, RESTful endpoints (`/workflow`, `/approve`), RAM Cache L0 + L1/L2, vá 6 góc khuất QA. | ✅ Hoàn thành (16/16 PASS, 6/6 QA PASS) | [`step-06-prisma-database-integration/PRISMA-POSTGRES-INTEGRATION-REPORT.md`](step-06-prisma-database-integration/PRISMA-POSTGRES-INTEGRATION-REPORT.md) |
 | **07** | **Toàn vẹn API & Bàn giao Tích hợp** | Xác thực Admin Key, giới hạn kích thước payload (256KB/8KB/4KB), validate chặt chẽ Manifest/Workflow, định danh Audio hash & không tạo file giả, phân lập ngữ cảnh Q&A. | ✅ Hoàn thành (API Integrity PASS) | [`step-07-api-integrity/API-INTEGRITY-AND-INTEGRATION-HANDOFF.md`](step-07-api-integrity/API-INTEGRITY-AND-INTEGRATION-HANDOFF.md) |
+| **08** | **Kế hoạch Đấu nối P2P Frontend & Backend** | Đánh giá thực trạng khoảng cách Mock vs Real, xây dựng lộ trình 4 pha đấu nối API workflow, tích hợp Voice Assistant thật và CSDL Supabase. | ✅ Hoàn thành | [`step-08-p2p-integration-plan/P2P-INTEGRATION-PLAN.md`](step-08-p2p-integration-plan/P2P-INTEGRATION-PLAN.md) |
+| **09** | **Đánh giá Hiện trạng & Kế hoạch Khắc phục FE** | Kiểm định toàn diện sau khi xóa `.env.local`, xác thực dữ liệu sống Supabase và lập danh mục 6 hành động đưa 100% FE vào hoạt động. | 🧭 Đang triển khai | [`step-09-fe-production-readiness/FE-PRODUCTION-READINESS-REPORT.md`](step-09-fe-production-readiness/FE-PRODUCTION-READINESS-REPORT.md) |
 
 ---
 
