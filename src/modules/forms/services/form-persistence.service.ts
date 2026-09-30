@@ -7,7 +7,7 @@ import {
 import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
 import { validateWorkflow, validCoords } from '@/modules/forms/services/form-validation.service';
 
-const WORKFLOW_STATUSES = ['draft', 'pending_review', 'active', 'archived', 'DRAFT', 'ACTIVE', 'ARCHIVED'];
+const WORKFLOW_STATUSES = ['draft', 'pending_review', 'active', 'archived', 'PENDING_REVIEW', 'DRAFT', 'ACTIVE', 'ARCHIVED'];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
