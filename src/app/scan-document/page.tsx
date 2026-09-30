@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Scan, ShieldCheck } from 'lucide-react';
+import { Scan, ShieldCheck, Sparkles } from 'lucide-react';
 import type { DocumentExtractionResult, NormalizedBoundingBox } from '@/shared/document-extraction.types';
 import type { DocumentMode } from '@/modules/opencv';
 import { prepareDocumentImage } from '@/modules/documents/prepare-image';
@@ -87,6 +87,40 @@ export default function ScanDocumentPage() {
       if (run === generation.current) setMessage(error instanceof Error ? error.message : 'Không xử lý được ảnh. Hãy chụp lại.');
     } finally { if (run === generation.current) setBusy(false); }
   }
+  async function exportMarkdown() {
+    if (!file) return;
+    invalidate();
+    const run = generation.current;
+    const abort = new AbortController(); controller.current = abort;
+    setBusy(true); setMessage('Đang xử lý ảnh bằng OpenCV…');
+    try {
+      const prepared = await prepareDocumentImage(file, mode);
+      if (run !== generation.current) return;
+      setProcessed(URL.createObjectURL(prepared.blob));
+      setMessage('Đang đọc toàn bộ chữ bằng Document AI và định dạng với Gemini…');
+      const form = new FormData();
+      form.set('file', prepared.blob, 'processed-document.png');
+      const response = await fetch('/api/documents/markdown', { method: 'POST', body: form, signal: abort.signal, cache: 'no-store' });
+      if (run !== generation.current) return;
+      if (!response.ok) {
+        const payload = await response.json();
+        throw new Error(payload.error?.message_vi || 'Không thể xuất Markdown.');
+      }
+      const blob = await response.blob();
+      if (run !== generation.current) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${file.name.replace(/\.[^.]+$/, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9._-]+/g, '_') || 'document'}.md`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setMessage('Đã tải file Markdown chứa toàn bộ văn bản OCR.');
+    } catch (error) {
+      if (run === generation.current) setMessage(error instanceof Error ? error.message : 'Không thể xuất Markdown.');
+    } finally { if (run === generation.current) setBusy(false); }
+  }
   function confirmField(key: string) {
     const raw = drafts[key] ?? '';
     const value = raw.trim() ? normalizeField(key, raw) : null;
@@ -104,7 +138,12 @@ export default function ScanDocumentPage() {
     <header className="border-b border-slate-700 bg-slate-950 px-6 py-4 flex flex-wrap gap-4 items-center justify-between">
       <div><h1 className="text-2xl font-bold flex items-center gap-3"><Scan aria-hidden="true" />Quét và kiểm tra chứng từ</h1>
         <p>Đọc chữ, đối chiếu bằng chứng và xác nhận trước khi điền biểu mẫu.</p></div>
-      <button className={button} onClick={clearAll}>Xóa phiên</button>
+      <div className="flex items-center gap-3">
+        <Link href="/document-test" className="min-h-14 px-4 py-3 rounded-xl border border-amber-600/50 bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 text-sm font-bold flex items-center gap-2 transition-colors">
+          <Sparkles className="w-4 h-4" /> Bàn làm việc Kiểm thử
+        </Link>
+        <button className={button} onClick={clearAll}>Xóa phiên</button>
+      </div>
     </header>
     <main className="max-w-7xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <section className="lg:col-span-5 space-y-5" aria-label="Ảnh chứng từ">
@@ -120,6 +159,7 @@ export default function ScanDocumentPage() {
               <option value="auto">Tự nhận diện</option><option value="traffic_violation_record">Biên bản vi phạm giao thông</option><option value="unknown">Loại khác (chưa hỗ trợ)</option>
             </select></label>
           <button className={`${button} w-full bg-emerald-800`} disabled={!file || busy} onClick={extract}>{busy ? 'Đang xử lý…' : 'Đọc chứng từ'}</button>
+          <button className={`${button} w-full bg-sky-800`} disabled={!file || busy} onClick={exportMarkdown}>Xuất toàn bộ nội dung ra .md</button>
           <p className="flex gap-2"><ShieldCheck aria-hidden="true" />Ảnh và dữ liệu chỉ giữ tạm trong phiên, tối đa 15 phút.</p>
         </div>
         <div className={panel}>
