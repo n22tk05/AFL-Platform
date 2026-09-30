@@ -3,7 +3,12 @@ import type { FormPersistenceService } from '@/modules/forms/services/form-persi
 import {
   ApproveWorkflowDto,
   GetWorkflowDto,
+  AdminFormSummary,
+  ListFormsDto,
+  SaveReviewWorkflowDto,
+  ReviewWorkflowDto,
 } from '@/modules/forms/types/form.types';
+import type { FormWorkflow } from '@/shared/contracts';
 import { ControllerResult } from '@/modules/shared/types/controller-result';
 
 export class FormController {
@@ -11,6 +16,51 @@ export class FormController {
     private readonly persistenceService: FormPersistenceService,
     private readonly authorizationService: AdminAuthorizationService
   ) {}
+
+  private authorizationFailure(status: 401 | 503): ControllerResult<unknown> {
+    return { status, body: { success: false, error: { code: status === 503 ? 'ADMIN_KEY_UNCONFIGURED' : 'UNAUTHORIZED' } } };
+  }
+
+  public async listForms(dto: ListFormsDto): Promise<ControllerResult<{ forms: AdminFormSummary[] } | unknown>> {
+    const auth = this.authorizationService.authorize(dto.authorization, dto.adminKey);
+    if (auth !== 200) return this.authorizationFailure(auth);
+    try { return { status: 200, body: { success: true, data: { forms: await this.persistenceService.listForms() } } }; }
+    catch { return { status: 503, body: { success: false, error: { code: 'DATABASE_UNAVAILABLE' } } }; }
+  }
+
+  public async getWorkflowForReview(dto: ReviewWorkflowDto): Promise<ControllerResult<unknown>> {
+    const auth = this.authorizationService.authorize(dto.authorization, dto.adminKey);
+    if (auth !== 200) return this.authorizationFailure(auth);
+    if (!dto.rawFormCode) return { status: 400, body: { success: false, error: { code: 'FORM_CODE_REQUIRED' } } };
+    try {
+      const formCode = decodeURIComponent(dto.rawFormCode);
+      const workflow = await this.persistenceService.getWorkflowForReview(formCode);
+      if (!workflow) return { status: 404, body: { success: false, error: { code: 'FORM_NOT_FOUND' } } };
+      return { status: 200, body: { success: true, data: workflow } };
+    } catch { return { status: 503, body: { success: false, error: { code: 'DATABASE_UNAVAILABLE' } } }; }
+  }
+
+  public async saveReviewWorkflow(dto: SaveReviewWorkflowDto): Promise<ControllerResult<unknown>> {
+    const auth = this.authorizationService.authorize(dto.authorization, dto.adminKey);
+    if (auth !== 200) return this.authorizationFailure(auth);
+    if (!dto.rawFormCode) return { status: 400, body: { success: false, error: { code: 'FORM_CODE_REQUIRED' } } };
+    const formCode = decodeURIComponent(dto.rawFormCode);
+    const workflow = dto.body as FormWorkflow | null;
+    if (!workflow || typeof workflow !== 'object' || workflow.formCode !== formCode || !Array.isArray(workflow.steps)) {
+      return { status: 400, body: { success: false, error: { code: 'INVALID_WORKFLOW' } } };
+    }
+    try {
+      const result = await this.persistenceService.saveReviewWorkflow(formCode, workflow);
+      return { status: 200, body: { success: true, data: { formCode, workflowId: result.workflowId, stepCount: result.stepCount } } };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : '';
+      if (message === 'NOT_FOUND') return { status: 404, body: { success: false, error: { code: 'FORM_NOT_FOUND' } } };
+      if (message === 'FORM_ACTIVE') return { status: 409, body: { success: false, error: { code: 'FORM_ACTIVE' } } };
+      if (message === 'REVIEW_CONFLICT') return { status: 409, body: { success: false, error: { code: 'REVIEW_CONFLICT' } } };
+      if (message === 'INVALID_WORKFLOW' || message === 'FORM_CODE_MISMATCH') return { status: 400, body: { success: false, error: { code: 'INVALID_WORKFLOW' } } };
+      return { status: 503, body: { success: false, error: { code: 'DATABASE_UNAVAILABLE' } } };
+    }
+  }
 
   public async getWorkflow(dto: GetWorkflowDto): Promise<ControllerResult<unknown>> {
     try {

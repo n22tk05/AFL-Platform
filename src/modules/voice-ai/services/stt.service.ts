@@ -9,6 +9,7 @@ import { STTCallbacks, STTConfig } from '@/modules/voice-ai/types/voice-ai.types
 export class WebSpeechSTT {
   private recognition: any = null;
   private isListeningState: boolean = false;
+  private startRequested = false;
   private config: STTConfig;
   private callbacks: STTCallbacks = {};
 
@@ -99,6 +100,7 @@ export class WebSpeechSTT {
 
       this.recognition.onend = () => {
         this.isListeningState = false;
+        this.startRequested = false;
         this.callbacks.onEnd?.();
       };
 
@@ -144,9 +146,13 @@ export class WebSpeechSTT {
     }
 
     try {
+      this.startRequested = true;
+      this.isListeningState = true;
       this.recognition.start();
       return true;
     } catch (error: any) {
+      this.startRequested = false;
+      this.isListeningState = false;
       // Một số trình duyệt báo lỗi nếu start khi đang active
       if (error.name !== 'InvalidStateError') {
         this.callbacks.onError?.('Không thể khởi động Micro.', error);
@@ -159,7 +165,7 @@ export class WebSpeechSTT {
    * Dừng lắng nghe
    */
   public stop(): void {
-    if (this.recognition && this.isListeningState) {
+    if (this.recognition && this.startRequested) {
       try {
         this.recognition.stop();
       } catch {
@@ -181,6 +187,7 @@ export class WebSpeechSTT {
       }
     }
     this.isListeningState = false;
+    this.startRequested = false;
   }
 
   /**

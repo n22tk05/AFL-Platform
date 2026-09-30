@@ -6,6 +6,7 @@ import {
   WorkflowStep as ContractWorkflowStep,
 } from '@/shared/contracts';
 import { validateWorkflow, validCoords } from '@/modules/forms/services/form-validation.service';
+import type { AdminFormSummary } from '@/modules/forms/types/form.types';
 
 export class PrismaFormRepository implements FormRepository {
   constructor(private readonly database = prisma) {}
@@ -226,6 +227,103 @@ export class PrismaFormRepository implements FormRepository {
       status: template.workflow.status.toLowerCase() as FormWorkflow['status'],
       steps,
     };
+  }
+
+  public async listForms(): Promise<AdminFormSummary[]> {
+    const forms = await this.database.formTemplate.findMany({
+      include: { workflow: { include: { _count: { select: { steps: true } } } } },
+      orderBy: [{ updatedAt: 'desc' }, { formCode: 'asc' }],
+    });
+    return forms.map(form => ({
+      formId: form.id, formCode: form.formCode, formTitle: form.formTitle,
+      status: form.status.toLowerCase(), version: form.version,
+      stepCount: form.workflow?._count.steps ?? 0, updatedAt: form.updatedAt.toISOString(),
+    }));
+  }
+
+  public async getWorkflowForReview(formCode: string): Promise<FormWorkflow | null> {
+    const template = await this.database.formTemplate.findUnique({
+      where: { formCode },
+      include: { workflow: { include: { steps: { include: { faqs: { orderBy: { order: 'asc' } } }, orderBy: { stepIndex: 'asc' } } } } },
+    });
+    if (!template) return null;
+    if (!template.workflow) {
+      if (template.status !== 'DRAFT') return null;
+      return { formId: template.id, formCode: template.formCode, formTitle: template.formTitle, status: 'DRAFT', version: template.version, steps: [] };
+    }
+    return {
+      formId: template.id, formCode: template.formCode, formTitle: template.formTitle,
+      status: template.workflow.status.toLowerCase() as FormWorkflow['status'],
+      version: template.workflow.version,
+      steps: template.workflow.steps.map(step => ({
+        stepIndex: step.stepIndex, boxId: step.boxId, sectionName: step.sectionName,
+        label: step.label, voiceGuidance: step.voiceGuidance, audioUrl: step.audioUrl ?? '',
+        exampleRedText: step.exampleRedText ?? '',
+        highlightCoords: [step.highlightYmin ?? 0, step.highlightXmin ?? 0, step.highlightYmax ?? 0, step.highlightXmax ?? 0],
+        requiresPrerequisiteDoc: step.requiresPrerequisiteDoc,
+        sourceFieldFromPrerequisite: step.sourceFieldFromPrerequisite ?? undefined,
+        legalWarningFlag: step.legalWarningFlag,
+        faqs: step.faqs.map(faq => ({ question: faq.question, answer: faq.answer })),
+      })),
+    };
+  }
+
+  public async saveReviewWorkflow(formCode: string, workflow: FormWorkflow) {
+    if (workflow.formCode !== formCode) throw new Error('FORM_CODE_MISMATCH');
+    if (typeof workflow.formTitle !== 'string' || !workflow.formTitle.trim()) throw new Error('INVALID_WORKFLOW');
+    try {
+      return await this.database.$transaction(async tx => {
+        const existing = await tx.formTemplate.findUnique({
+          where: { formCode }, include: { manifest: { include: { boxes: true } } },
+        });
+        if (!existing) throw new Error('NOT_FOUND');
+        if (existing.status !== 'DRAFT' && existing.status !== 'PENDING_REVIEW') throw new Error('FORM_ACTIVE');
+        const persistedManifest = existing.manifest;
+        if (!persistedManifest || persistedManifest.boxes.length === 0) throw new Error('INVALID_WORKFLOW');
+        const manifest: FormGeometricManifest = {
+          formId: existing.id, formCode: existing.formCode, formTitle: existing.formTitle,
+          imageDimensions: { width: persistedManifest.imageWidth, height: persistedManifest.imageHeight },
+          boxes: persistedManifest.boxes.map(box => ({
+            boxId: box.boxId, rawText: box.rawText,
+            boxType: box.boxType === 'CHECKBOX' ? 'checkbox' : box.boxType === 'TABLE_CELL' ? 'table_cell' : 'text',
+            estimatedWidthRatio: box.estimatedWidthRatio,
+            normalizedCoords: [box.boxYmin, box.boxXmin, box.boxYmax, box.boxXmax],
+          })),
+        };
+        if (workflow.steps.some(step => step.faqs !== undefined && step.faqs.length === 0)) throw new Error('INVALID_WORKFLOW');
+        try { validateWorkflow(manifest, workflow); } catch { throw new Error('INVALID_WORKFLOW'); }
+
+        const guarded = await tx.formTemplate.updateMany({
+          where: { id: existing.id, status: { in: ['DRAFT', 'PENDING_REVIEW'] } },
+          data: { formTitle: workflow.formTitle, status: 'PENDING_REVIEW' },
+        });
+        if (guarded.count !== 1) throw new Error('REVIEW_CONFLICT');
+        const formWorkflow = await tx.formWorkflow.upsert({
+          where: { formTemplateId: existing.id },
+          update: { status: 'PENDING_REVIEW', updatedAt: new Date() },
+          create: { formTemplateId: existing.id, status: 'PENDING_REVIEW' },
+        });
+        await tx.workflowStep.deleteMany({ where: { workflowId: formWorkflow.id } });
+        for (const step of workflow.steps) {
+          await tx.workflowStep.create({ data: {
+            workflowId: formWorkflow.id, stepIndex: step.stepIndex, boxId: step.boxId,
+            sectionName: step.sectionName, label: step.label, voiceGuidance: step.voiceGuidance,
+            audioUrl: step.audioUrl || null, exampleRedText: step.exampleRedText,
+            highlightYmin: step.highlightCoords[0], highlightXmin: step.highlightCoords[1],
+            highlightYmax: step.highlightCoords[2], highlightXmax: step.highlightCoords[3],
+            requiresPrerequisiteDoc: step.requiresPrerequisiteDoc ?? false,
+            sourceFieldFromPrerequisite: step.sourceFieldFromPrerequisite ?? null,
+            legalWarningFlag: step.legalWarningFlag ?? false,
+            faqs: { create: (step.faqs ?? []).map((faq, index) => ({ question: faq.question, answer: faq.answer, order: index + 1 })) },
+          } });
+        }
+        return { workflowId: formWorkflow.id, stepCount: workflow.steps.length };
+      }, { isolationLevel: 'Serializable' });
+    } catch (error) {
+      if (error instanceof Error && ['NOT_FOUND', 'FORM_ACTIVE', 'INVALID_WORKFLOW', 'REVIEW_CONFLICT'].includes(error.message)) throw error;
+      if (error && typeof error === 'object' && 'code' in error && (error as { code?: unknown }).code === 'P2034') throw new Error('REVIEW_CONFLICT');
+      throw error;
+    }
   }
 
   public async approveWorkflow(
