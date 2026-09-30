@@ -97,7 +97,7 @@ test('SUPERVISION GUARD 3: Quy ước stepIndex 1-based được bảo toàn cho
     formId: 'form_test_01',
     formTitle: 'Biểu mẫu kiểm thử',
     formCode: 'MẪU-TEST',
-    status: 'pending_review',
+    status: 'PENDING_REVIEW',
     steps: [
       {
         stepIndex: 1, // 1-based!
