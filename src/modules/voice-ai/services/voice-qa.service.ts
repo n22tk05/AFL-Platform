@@ -1,10 +1,78 @@
 import { GoogleGenAI } from '@google/genai';
-import type { WorkflowStep } from '@/shared/contracts';
-import type { QARequest, QAResponse } from '@/modules/voice-ai/types/voice-ai.types';
-import { HalfDuplexController } from '@/modules/voice-ai/services/half-duplex.service';
-export { HalfDuplexController } from '@/modules/voice-ai/services/half-duplex.service';
+import { WorkflowStep } from '@/shared/contracts';
+import { QARequest, QAResponse } from '@/modules/voice-ai/types/voice-ai.types';
 
-/** Server-side Gemini QA implementation. */
+// Nạp biến môi trường từ .env
+
+/**
+ * Bộ điều khiển Bán Song Công (Half-Duplex Controller)
+ * Triệt tiêu hoàn toàn hiện tượng dội âm (Echo loop) tại bàn tiếp dân.
+ */
+export class HalfDuplexController {
+  private isSpeakingState: boolean = false;
+  private isListeningState: boolean = false;
+  private lastSpokenAt: number = 0;
+  private readonly ECHO_GUARD_DELAY_MS = 300; // Khoảng trễ 300ms triệt tiêu sóng âm
+
+  /**
+   * Trạng thái loa đang phát
+   */
+  public get isSpeaking(): boolean {
+    return this.isSpeakingState;
+  }
+
+  /**
+   * Trạng thái mic đang thu
+   */
+  public get isListening(): boolean {
+    return this.isListeningState;
+  }
+
+  /**
+   * Khi loa bắt đầu phát âm thanh
+   */
+  public onAudioPlaybackStart(): void {
+    this.isSpeakingState = true;
+    this.isListeningState = false; // Khóa cứng Micro
+  }
+
+  /**
+   * Khi loa phát xong
+   */
+  public onAudioPlaybackEnd(): void {
+    this.isSpeakingState = false;
+    this.lastSpokenAt = Date.now();
+  }
+
+  /**
+   * Khi người dùng bấm nút Mic (Push-to-Talk)
+   * Lập tức ngắt loa và mở Micro
+   */
+  public onMicPress(): { shouldPauseSpeaker: boolean } {
+    const shouldPauseSpeaker = this.isSpeakingState;
+    this.isSpeakingState = false;
+    this.isListeningState = true;
+    return { shouldPauseSpeaker };
+  }
+
+  /**
+   * Khi người dùng nhả Mic
+   */
+  public onMicRelease(): void {
+    this.isListeningState = false;
+  }
+
+  /**
+   * Kiểm tra điều kiện mở Micro an toàn (Sau khi loa dứt + trễ 300ms Echo-Guard)
+   */
+  public canSafelyListen(): boolean {
+    if (this.isSpeakingState) return false;
+    return (Date.now() - this.lastSpokenAt) >= this.ECHO_GUARD_DELAY_MS;
+  }
+}
+/**
+ * Dịch vụ Hỏi đáp Ngữ cảnh Tức thì (FR-4)
+ */
 export class VoiceQAService {
   private client: GoogleGenAI | null = null;
   private activeGeminiCalls = 0;

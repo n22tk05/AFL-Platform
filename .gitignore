@@ -41,8 +41,6 @@ Thumbs.db
 _bmad
 _bmad-output
 .github
-AGENTS.md
-
 # Local cache & Sensitive files
 *.pem
 *.key

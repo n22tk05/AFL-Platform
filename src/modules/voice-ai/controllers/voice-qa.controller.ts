@@ -34,16 +34,13 @@ export class VoiceQAController {
       return { status: 200, body: { success: true, data: result } };
     } catch (error) {
       console.error('[VoiceQAController] Lỗi xử lý:', error);
-      const databaseUnavailable = error instanceof Error && error.message === 'DATABASE_UNAVAILABLE';
       return {
-        status: databaseUnavailable ? 503 : 500,
+        status: error instanceof Error && error.message === 'DATABASE_UNAVAILABLE' ? 503 : 500,
         body: {
           success: false,
           error: {
-            code: databaseUnavailable ? 'DATABASE_UNAVAILABLE' : 'QA_FAILED',
-            message_vi: databaseUnavailable
-              ? 'Dữ liệu hướng dẫn đang tạm thời không khả dụng. Bác vui lòng thử lại sau nhé!'
-              : 'Dạ bác ơi, bác nhìn theo chữ mẫu màu đỏ trên màn hình và ghi theo giúp cháu nhé!',
+            code: 'QA_FAILED',
+            message_vi: 'Dạ bác ơi, bác nhìn theo chữ mẫu màu đỏ trên màn hình và ghi theo giúp cháu nhé!',
           },
         },
       };

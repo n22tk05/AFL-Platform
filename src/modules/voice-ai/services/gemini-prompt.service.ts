@@ -69,7 +69,7 @@ export class GeminiPromptService {
       const cached = this.cache.get<FormWorkflow>(manifest);
       if (cached) {
         validateWorkflow(manifest, cached);
-        return { ...cached, status: 'PENDING_REVIEW' };
+        return { ...cached, status: 'pending_review' };
       }
     }
 
@@ -151,7 +151,7 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
         formId: manifest.formId,
         formTitle: manifest.formTitle,
         formCode: manifest.formCode,
-        status: 'PENDING_REVIEW',
+        status: 'pending_review',
         steps: normalizedSteps
       };
 
@@ -184,7 +184,7 @@ Hãy phân tích và trả về duy nhất một mảng JSON thuần túy gồm 
           formId: manifest.formId,
           formTitle: manifest.formTitle,
           formCode: manifest.formCode,
-          status: 'PENDING_REVIEW',
+          status: 'pending_review',
           steps: fallbackWorkflow.steps.map(step => {
             const matchingBox = manifest.boxes.find(b => b.boxId === step.boxId);
             return {

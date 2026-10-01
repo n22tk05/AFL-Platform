@@ -1,282 +1,266 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { HalfDuplexController } from '@/modules/voice-ai/services/half-duplex.service';
+import { HalfDuplexController } from '@/modules/voice-ai/services/voice-qa.service';
 import { WebSpeechSTT } from '@/modules/voice-ai/services/stt.service';
 import { WorkflowStep, StepFaqItem } from '@/shared/contracts';
-import { startVoicePlayback, type AudioFactory, type SpeechDriver, type PlaybackSession } from '@/modules/voice-ai/services/voice-playback.service';
-import { requestVoiceAnswer, FinalTranscriptBuffer, RecognitionSubmissionLifecycle, VoiceRequestGeneration, type VoiceFetch } from '@/modules/voice-ai/services/voice-qa.client';
-import { contentAddressedAudioUrlOrEmpty } from '@/modules/voice-ai/services/audio-url.service';
 
 export interface UseVoiceAssistantOptions {
   onTranscriptUpdate?: (transcript: string, isFinal: boolean) => void;
   onAnswerReceived?: (answerText: string, latencyMs: number) => void;
   onError?: (errorMessage: string) => void;
-  formCode?: string;
-  stepIndex?: number;
-  fetcher?: VoiceFetch;
-  createAudio?: AudioFactory;
-  speak?: SpeechDriver;
+}
+
+export interface VoiceAssistantState {
+  isListening: boolean;
+  isPlaying: boolean;
+  isAnswering: boolean;
+  transcript: string;
+  answer: string | null;
+  error: string | null;
+  isSupported: boolean;
+  canListen: boolean;
 }
 
 export function useVoiceAssistant(options?: UseVoiceAssistantOptions) {
-  const [isListening, setIsListening] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isAnswering, setIsAnswering] = useState(false);
-  const [transcript, setTranscript] = useState('');
+  const [isListening, setIsListening] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isAnswering, setIsAnswering] = useState<boolean>(false);
+  const [transcript, setTranscript] = useState<string>('');
   const [answer, setAnswer] = useState<string | null>(null);
-  const [answerAudioUrl, setAnswerAudioUrl] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
-  const [isSupported, setIsSupported] = useState(false);
-  const [canListen, setCanListen] = useState(true);
-  const duplex = useRef(new HalfDuplexController());
-  const recognition = useRef(new RecognitionSubmissionLifecycle());
-  const recognitionId = useRef<number | null>(null);
-  const releasedRecognitionId = useRef<number | null>(null);
-  const activeRecognition = useRef<WebSpeechSTT | null>(null);
-  const finalTranscript = useRef(new FinalTranscriptBuffer());
-  const playback = useRef<PlaybackSession | null>(null);
-  const playbackGeneration = useRef(0);
-  const echoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const qaController = useRef<AbortController | null>(null);
-  const qaGeneration = useRef(new VoiceRequestGeneration());
-  const mounted = useRef(true);
+  const [isSupported, setIsSupported] = useState<boolean>(false);
+  const [canListen, setCanListen] = useState<boolean>(true);
+
+  const halfDuplexRef = useRef<HalfDuplexController>(new HalfDuplexController());
+  const sttRef = useRef<WebSpeechSTT | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const echoGuardTimerRef = useRef<NodeJS.Timeout | null>(null);
   const optionsRef = useRef(options);
   optionsRef.current = options;
-  const contextKey = `${options?.formCode ?? ''}\u0000${options?.stepIndex ?? ''}`;
-  const contextKeyRef = useRef(contextKey);
-  contextKeyRef.current = contextKey;
 
-  const scheduleEchoRelease = useCallback((generation: number) => {
-    if (echoTimer.current) clearTimeout(echoTimer.current);
-    echoTimer.current = setTimeout(() => {
-      echoTimer.current = null;
-      if (!mounted.current || generation !== playbackGeneration.current) return;
-      if (duplex.current.canSafelyListen()) setCanListen(true);
-      else scheduleEchoRelease(generation);
+  /**
+   * Xử lý kết thúc phát âm thanh với khoảng đệm Echo-Guard 300ms
+   */
+  const handleAudioEnded = useCallback(() => {
+    setIsPlaying(false);
+    halfDuplexRef.current.onAudioPlaybackEnd();
+    setCanListen(false);
+
+    // Kích hoạt bộ đếm thời gian an toàn 300ms chống dội âm
+    if (echoGuardTimerRef.current) {
+      clearTimeout(echoGuardTimerRef.current);
+    }
+    echoGuardTimerRef.current = setTimeout(() => {
+      setCanListen(true);
     }, 300);
   }, []);
 
-  const finishDuplexPlayback = useCallback((generation: number) => {
-    if (!mounted.current || generation !== playbackGeneration.current || !duplex.current.isSpeaking) return;
-    duplex.current.onAudioPlaybackEnd();
-    setIsPlaying(false);
-    setCanListen(false);
-    scheduleEchoRelease(generation);
-  }, [scheduleEchoRelease]);
-
-
-  const cancelPlayback = useCallback((updateState = true) => {
-    const generation = ++playbackGeneration.current;
-    const previous = playback.current;
-    playback.current = null;
-    previous?.cancel();
-    if (echoTimer.current) clearTimeout(echoTimer.current);
-    if (duplex.current.isSpeaking) {
-      duplex.current.onAudioPlaybackEnd();
-      if (updateState && mounted.current) {
-        setIsPlaying(false);
-        setCanListen(false);
-        scheduleEchoRelease(generation);
-      }
-    } else if (updateState && mounted.current) {
-      setIsPlaying(false);
-      if (!duplex.current.canSafelyListen()) {
-        setCanListen(false);
-        scheduleEchoRelease(generation);
-      } else setCanListen(true);
-    }
-  }, [scheduleEchoRelease]);
-
-  const cancelQa = useCallback(() => {
-    qaGeneration.current.invalidate();
-    qaController.current?.abort();
-    qaController.current = null;
-    if (mounted.current) setIsAnswering(false);
-  }, []);
-
-  const playAnswer = useCallback(async (text: string, audioUrl?: string) => {
-    cancelPlayback();
-    if (activeRecognition.current) {
-      activeRecognition.current.abort();
-      activeRecognition.current = null;
-      recognition.current.reset(); recognitionId.current = null; finalTranscript.current.clear();
-      setIsListening(false); duplex.current.onMicRelease();
-    }
-    if (echoTimer.current) clearTimeout(echoTimer.current);
-    const generation = ++playbackGeneration.current;
-    duplex.current.onAudioPlaybackStart();
-    setCanListen(false);
-    const session = startVoicePlayback(text, audioUrl, playing => {
-      if (!mounted.current || generation !== playbackGeneration.current) return;
-      setIsPlaying(playing);
-      if (!playing) finishDuplexPlayback(generation);
-    }, {
-      createAudio: url => {
-        if (optionsRef.current?.createAudio) return optionsRef.current.createAudio(url);
-        const nextAudio = new Audio(url);
-        return nextAudio;
-      },
-      speak: (value, done) => optionsRef.current?.speak
-        ? optionsRef.current.speak(value, done)
-        : browserSpeech(value, done),
-    });
-    playback.current = session;
-    try { await session.promise; } finally {
-      if (generation === playbackGeneration.current && playback.current === session) playback.current = null;
-    }
-  }, [cancelPlayback, finishDuplexPlayback]);
-
-  const askQuestion = useCallback(async (formCode: string, stepIndex: number, question: string) => {
-    const clean = question.trim();
-    if (!clean || !mounted.current) return;
-    cancelQa();
-    const generation = qaGeneration.current.current();
-    const requestContext = `${formCode}\u0000${stepIndex}`;
-    const controller = new AbortController();
-    qaController.current = controller;
-    setIsAnswering(true); setError(null); setAnswerAudioUrl(undefined);
-    const start = Date.now();
-    try {
-      const response = await requestVoiceAnswer(formCode, stepIndex, clean, {
-        fetcher: optionsRef.current?.fetcher,
-        signal: controller.signal,
+  // Khởi tạo STT và kiểm tra hỗ trợ trên trình duyệt
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stt = new WebSpeechSTT({
+        lang: 'vi-VN',
+        continuous: false,
+        interimResults: true,
       });
-      if (!mounted.current || !qaGeneration.current.isCurrent(generation) || contextKeyRef.current !== requestContext) return;
-      setAnswer(response.answerText); setAnswerAudioUrl(response.audioUrl);
-      optionsRef.current?.onAnswerReceived?.(response.answerText, Date.now() - start);
-      await playAnswer(response.answerText, response.audioUrl);
-    } catch (cause) {
-      if (!mounted.current || !qaGeneration.current.isCurrent(generation) || contextKeyRef.current !== requestContext || (cause instanceof Error && cause.message === 'QA_ABORTED')) return;
-      const message = cause instanceof Error && cause.message === 'QA_TIMEOUT'
-        ? 'Máy chủ trả lời quá lâu. Bác vui lòng thử lại nhé.'
-        : cause instanceof Error ? cause.message : 'Không thể kết nối máy chủ hỗ trợ giọng nói.';
-      setError(message); optionsRef.current?.onError?.(message);
-    } finally {
-      if (qaGeneration.current.isCurrent(generation)) {
-        qaController.current = null;
-        if (mounted.current) setIsAnswering(false);
-      }
+
+      stt.registerCallbacks({
+        onStart: () => {
+          setIsListening(true);
+          setError(null);
+        },
+        onResult: (text: string, isFinal: boolean) => {
+          setTranscript(text);
+          optionsRef.current?.onTranscriptUpdate?.(text, isFinal);
+        },
+        onError: (errMsg: string) => {
+          setIsListening(false);
+          halfDuplexRef.current.onMicRelease();
+          setError(errMsg);
+          optionsRef.current?.onError?.(errMsg);
+        },
+        onEnd: () => {
+          setIsListening(false);
+          halfDuplexRef.current.onMicRelease();
+        }
+      });
+
+      sttRef.current = stt;
+      setIsSupported(stt.isSupported());
+
+      // Tạo đối tượng Audio duy nhất
+      audioRef.current = new Audio();
+      audioRef.current.onended = () => {
+        handleAudioEnded();
+      };
+      audioRef.current.onerror = () => {
+        handleAudioEnded();
+      };
     }
-  }, [cancelQa, playAnswer]);
 
-  const submitRecognition = useCallback((result: { ready: boolean; question: string; context?: { formCode: string; stepIndex: number } }) => {
-    if (result.ready && result.question && result.context) void askQuestion(result.context.formCode, result.context.stepIndex, result.question);
-  }, [askQuestion]);
-  const bindRecognitionCallbacks = useCallback((speech: WebSpeechSTT, id: number) => {
-    speech.registerCallbacks({
-      onStart: () => { if (mounted.current && recognitionId.current === id && releasedRecognitionId.current !== id) { setIsListening(true); setError(null); } },
-      onResult: (text, isFinal) => {
-        if (!mounted.current || !recognition.current.result(id, text, isFinal)) return;
-        finalTranscript.current.update(text, isFinal);
-        setTranscript(text);
-        optionsRef.current?.onTranscriptUpdate?.(text, isFinal);
-      },
-      onError: message => { if (mounted.current && recognitionId.current === id) { setIsListening(false); setError(message); } },
-      onEnd: () => {
-        if (!mounted.current || recognitionId.current !== id) return;
-        setIsListening(false);
-        duplex.current.onMicRelease();
-        if (activeRecognition.current === speech) activeRecognition.current = null;
-        submitRecognition(recognition.current.end(id));
-      },
-    });
-  }, [submitRecognition]);
-
-  useEffect(() => {
-    mounted.current = true;
-    const speech = new WebSpeechSTT({ lang: 'vi-VN', continuous: false, interimResults: true });
-    setIsSupported(speech.isSupported());
     return () => {
-      mounted.current = false;
-      qaGeneration.current.invalidate();
-      qaController.current?.abort();
-      qaController.current = null;
-      recognition.current.reset();
-      activeRecognition.current?.abort();
-      activeRecognition.current = null;
-      cancelPlayback(false);
-      if (echoTimer.current) clearTimeout(echoTimer.current);
+      sttRef.current?.abort();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      if (echoGuardTimerRef.current) {
+        clearTimeout(echoGuardTimerRef.current);
+      }
     };
-  }, [cancelPlayback, submitRecognition]);
+  }, [handleAudioEnded]);
 
-  const previousContext = useRef(contextKey);
-  useEffect(() => {
-    if (previousContext.current === contextKey) return;
-    previousContext.current = contextKey;
-    cancelQa();
-    cancelPlayback();
-    activeRecognition.current?.abort();
-    activeRecognition.current = null;
-    recognition.current.reset(); recognitionId.current = null; finalTranscript.current.clear();
-    setIsListening(false); duplex.current.onMicRelease(); setAnswer(null); setAnswerAudioUrl(undefined); setTranscript('');
-  }, [contextKey, cancelPlayback, cancelQa]);
+  /**
+   * Dừng toàn bộ âm thanh đang phát
+   */
+  const stopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    handleAudioEnded();
+  }, [handleAudioEnded]);
 
+  /**
+   * Phát tệp âm thanh hướng dẫn (MP3)
+   */
+  const playAudio = useCallback((audioUrl: string): Promise<void> => {
+    return new Promise((resolve) => {
+      if (!audioRef.current) {
+        resolve();
+        return;
+      }
+
+      // 1. Nếu đang thu âm -> Lập tức hủy thu âm
+      if (sttRef.current?.isListening) {
+        sttRef.current.abort();
+        setIsListening(false);
+        halfDuplexRef.current.onMicRelease();
+      }
+
+      // 2. Kích hoạt trạng thái phát âm thanh của bộ điều khiển bán song công
+      halfDuplexRef.current.onAudioPlaybackStart();
+      setIsPlaying(true);
+      setCanListen(false);
+
+      audioRef.current.src = audioUrl;
+      audioRef.current.play()
+        .then(() => resolve())
+        .catch((err) => {
+          console.warn('[useVoiceAssistant] Không thể phát âm thanh tự động:', err);
+          handleAudioEnded();
+          resolve();
+        });
+    });
+  }, [handleAudioEnded]);
+
+  /**
+   * Bắt đầu thu âm giọng nói (Push-to-Talk)
+   */
   const startListening = useCallback((): boolean => {
-    if (!canListen || !duplex.current.canSafelyListen()) return false;
-    const id = recognition.current.begin();
-    if (id === null) return false;
-    recognitionId.current = id;
-    releasedRecognitionId.current = null;
-    finalTranscript.current.clear(); setTranscript(''); setError(null);
-    duplex.current.onMicPress();
-    const previous = activeRecognition.current;
-    previous?.abort();
-    const session = new WebSpeechSTT({ lang: 'vi-VN', continuous: false, interimResults: true });
-    bindRecognitionCallbacks(session, id);
-    activeRecognition.current = session;
-    const started = session.start();
-    if (!started) {
-      recognition.current.reset(); recognitionId.current = null;
-      setIsListening(false);
-      duplex.current.onMicRelease();
+    // 1. Nếu loa đang phát, lập tức ngắt loa (Half-Duplex Rule 1)
+    const { shouldPauseSpeaker } = halfDuplexRef.current.onMicPress();
+    if (shouldPauseSpeaker && audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+
+    // 2. Xóa transcript và lỗi cũ
+    setTranscript('');
+    setError(null);
+
+    // 3. Khởi chạy nhận dạng giọng nói Web Speech API
+    if (!sttRef.current) return false;
+    const started = sttRef.current.start();
+    if (started) {
+      setIsListening(true);
     }
     return started;
-  }, [canListen, bindRecognitionCallbacks]);
+  }, []);
 
-  const stopListening = useCallback((formCode = optionsRef.current?.formCode, stepIndex = optionsRef.current?.stepIndex) => {
-    const id = recognitionId.current;
-    if (id === null || !formCode || stepIndex === undefined) return;
-    releasedRecognitionId.current = id;
-    const released = recognition.current.release(id, { formCode, stepIndex });
-    if (!released.ready) {
-      activeRecognition.current?.stop();
-      duplex.current.onMicRelease();
-      setIsListening(false);
-    } else submitRecognition(released);
-  }, [submitRecognition]);
+  /**
+   * Nhả Micro / Dừng thu âm
+   */
+  const stopListening = useCallback(() => {
+    if (sttRef.current) {
+      sttRef.current.stop();
+    }
+    halfDuplexRef.current.onMicRelease();
+    setIsListening(false);
+  }, []);
 
-  const stopAudio = useCallback(() => {
-    cancelQa();
-    cancelPlayback();
-    activeRecognition.current?.abort();
-    activeRecognition.current = null;
-    recognition.current.reset(); recognitionId.current = null; finalTranscript.current.clear();
-    duplex.current.onMicRelease();
-    if (mounted.current) setIsListening(false);
-  }, [cancelPlayback, cancelQa]);
+  /**
+   * Gửi câu hỏi thắc mắc tới API /api/llm/qa (FR-4)
+   */
+  const askQuestion = useCallback(async (formCode: string, stepIndex: number, questionText: string) => {
+    if (!questionText.trim()) return;
 
+    setIsAnswering(true);
+    setError(null);
+
+    try {
+      const startTime = Date.now();
+      const res = await fetch('/api/llm/qa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formCode, stepIndex, userQuestion: questionText })
+      });
+
+      const json = await res.json();
+      const latencyMs = Date.now() - startTime;
+
+      if (json.success && json.data) {
+        const answerText = json.data.answerText;
+        setAnswer(answerText);
+        options?.onAnswerReceived?.(answerText, latencyMs);
+      } else {
+        const fallbackMsg = json.error?.message_vi || 'Dạ bác ơi, bác nhìn theo chữ mẫu màu đỏ trên màn hình và ghi theo giúp cháu nhé!';
+        setAnswer(fallbackMsg);
+      }
+    } catch (err: any) {
+      const fallbackMsg = 'Dạ bác nhìn vào ô hướng dẫn chữ màu đỏ trên màn hình giúp cháu nhé!';
+      setAnswer(fallbackMsg);
+      setError('Lỗi kết nối máy chủ hỗ trợ giọng nói.');
+    } finally {
+      setIsAnswering(false);
+    }
+  }, [options]);
+
+  /**
+   * Xử lý tương tác một chạm Touch-to-Ask Chips (Fallback chống ồn)
+   */
   const triggerTouchToAsk = useCallback((step: WorkflowStep, faq: StepFaqItem) => {
-    stopAudio(); setTranscript(faq.question); setAnswer(faq.answer); setAnswerAudioUrl(undefined);
-    optionsRef.current?.onTranscriptUpdate?.(faq.question, true);
-    optionsRef.current?.onAnswerReceived?.(faq.answer, 0);
-    void playAnswer(faq.answer);
-  }, [playAnswer, stopAudio]);
+    // Ngắt toàn bộ âm thanh & Micro đang hoạt động
+    stopAudio();
+    stopListening();
 
-  const playGuidance = useCallback((text: string, audioUrl?: string) => {
-    return playAnswer(text, contentAddressedAudioUrlOrEmpty(audioUrl) || undefined);
-  }, [playAnswer]);
+    setTranscript(faq.question);
+    setAnswer(faq.answer);
+    options?.onTranscriptUpdate?.(faq.question, true);
+    options?.onAnswerReceived?.(faq.answer, 0);
+  }, [stopAudio, stopListening, options]);
 
-  return { isListening, isPlaying, isAnswering, transcript, answer, answerAudioUrl, error, isSupported, canListen,
-    startListening, stopListening, playAudio: (url: string) => playAnswer('', url), playGuidance,
-    playAnswer, stopAudio, askQuestion, triggerTouchToAsk, halfDuplex: duplex.current };
-}
+  return {
+    // Trạng thái hệ thống
+    isListening,
+    isPlaying,
+    isAnswering,
+    transcript,
+    answer,
+    error,
+    isSupported,
+    canListen,
 
-function browserSpeech(text: string, onDone: () => void) {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'vi-VN'; utterance.rate = 0.9;
-  utterance.onend = utterance.onerror = onDone;
-  window.speechSynthesis.speak(utterance);
-  return () => window.speechSynthesis.cancel();
+    // Thao tác điều khiển
+    startListening,
+    stopListening,
+    playAudio,
+    stopAudio,
+    askQuestion,
+    triggerTouchToAsk,
+
+    // Bộ điều khiển gốc
+    halfDuplex: halfDuplexRef.current
+  };
 }

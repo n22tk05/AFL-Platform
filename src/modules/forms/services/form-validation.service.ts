@@ -48,8 +48,8 @@ export function validateWorkflow(manifest: FormGeometricManifest, workflow: Form
         typeof step.voiceGuidance !== 'string' || !step.voiceGuidance.trim() ||
         typeof step.sectionName !== 'string' || !step.sectionName.trim() ||
         typeof step.exampleRedText !== 'string' || !step.exampleRedText.trim() ||
-        !validCoords(step.highlightCoords) || (step.faqs !== undefined && (!Array.isArray(step.faqs) ||
-        step.faqs.some((faq: { question: string; answer: string } | null) => !faq || typeof faq.question !== 'string' || !faq.question.trim() || typeof faq.answer !== 'string' || !faq.answer.trim())))) {
+        !validCoords(step.highlightCoords) || !Array.isArray(step.faqs) ||
+        step.faqs.some((faq: { question: string; answer: string } | null) => !faq || typeof faq.question !== 'string' || !faq.question.trim() || typeof faq.answer !== 'string' || !faq.answer.trim())) {
       throw new Error('INVALID_WORKFLOW');
     }
     seen.add(step.boxId);
