@@ -1,12 +1,60 @@
-# FR-6: OCR grounded extraction
+# Document OCR and review
 
-## Export the entire OCR text as Markdown
+## Image to Markdown: Google Enterprise OCR
 
-On `/scan-document`, select a JPEG or PNG (up to 8 MB), choose **Ảnh chụp** for a photo with four visible page corners or **Bản scan** for an already straight page, then select **Xuất toàn bộ nội dung ra .md**. The browser processes the image with OpenCV, sends the processed PNG to `POST /api/documents/markdown`, and downloads a file named after the source image.
+Required pipeline: **OpenCV deskewed image -> Google Document AI Enterprise OCR -> deterministic Markdown assembler -> validation -> human review -> download .md**.
 
-The server calls Google Document AI for the full OCR text. Gemini identifies heading line numbers only; the Markdown renderer copies every OCR line from `document.text` in order. It does not invent or silently omit words. The endpoint returns `text/markdown` with an attachment header. Empty OCR, invalid model output, and unavailable providers return an error instead of a fabricated file. OCR can still misread the original image, so review the downloaded text against the image when accuracy matters.
+### Configuration
 
-This export uses the same server credentials listed under Google setup below. It does not save the image or Markdown on the server. Document AI receives the processed image; Gemini receives the OCR text. The existing structured field extraction button remains available separately.
+Create an **Enterprise Document OCR** processor (type `OCR_PROCESSOR`, not a generative layout parser). Set server-only variables in `.env.local` and restart the application:
+
+```dotenv
+DOCUMENT_OCR_PROVIDER=google-document-ai
+GOOGLE_CLOUD_PROJECT_ID=your-project-id
+GOOGLE_CLOUD_LOCATION=us
+GOOGLE_DOCUMENT_AI_PROCESSOR_ID=your-processor-id
+# Optional: pin an Enterprise OCR version; otherwise use the processor default.
+GOOGLE_DOCUMENT_AI_PROCESSOR_VERSION=
+# Optional service-account file OUTSIDE the repository; otherwise use ADC/workload identity.
+GOOGLE_APPLICATION_CREDENTIALS=
+```
+
+Enable the Document AI API, billing and OCR quota. Give the runtime identity Document AI API User access. For local ADC use `gcloud auth application-default login`; do not commit credentials. Markdown conversion needs **no Gemini API key**.
+
+Official references: [Enterprise OCR](https://docs.cloud.google.com/document-ai/docs/enterprise-document-ocr), [processor creation](https://docs.cloud.google.com/document-ai/docs/create-processor), [Document response](https://docs.cloud.google.com/document-ai/docs/reference/rest/v1/Document).
+
+### Use
+
+Open `/scan-document`, choose a JPEG/PNG up to 8 MB and the matching photo/clean-scan mode, then select the Markdown conversion button. The exact OpenCV-processed PNG is displayed alongside the draft. Compare the raw OCR text, edit the Markdown if necessary, confirm review, and download the UTF-8 `.md`. Editing invalidates confirmation; changing the image, rerunning, clearing the session or its 15-minute expiry clears the draft. `/document-test` uses the same review component; its explicitly selected offline examples are synthetic, not OCR results.
+
+### Assembly and validation
+
+`Document.text` is the source of truth. Raw text is retained verbatim in `rawText`. The assembler adds Markdown syntax, escapes literal punctuation/HTML and retains line order and breaks. Conservative rules recognize short uppercase document titles and existing bullet markers. Numbered markers are escaped to prevent Markdown renderers from silently renumbering them. Names, numbers, dates and leading zeros are never rewritten.
+
+GFM tables are assembled only from provider-supplied cell text anchors when they are exact, ordered, non-overlapping, cover a complete block, have one header row, equal column counts and no merged cells. Non-whitespace gaps between cells invalidate the conversion. Ambiguous or overlapping tables fall back to the complete raw text in source order with a review warning. Enterprise OCR does not guarantee table structures; the assembler does not guess tables from multi-column prose or invent missing cells. This text export does not reconstruct logos, stamps or embedded document images.
+
+Validation checks empty/oversized output, control characters, unclosed code fences, inconsistent table columns and active content. Heading jumps and replacement characters trigger warnings. The original raw OCR stays available for comparison. Preview uses React Markdown/GFM, never executes source HTML and never fetches remote images. Validation is conservative lint, not proof of OCR accuracy. Human edits require renewed confirmation before download.
+
+Literal heading suffixes and strikethrough punctuation are escaped so source characters remain visible. Multiline table cells use `<br>`; the preview recognizes only this exact tag as a line break. Other HTML stays inert, including tags with attributes. A literal `<br>` in OCR is escaped and remains visible as source text.
+
+### Gemini boundary
+
+The Markdown pipeline makes **no Gemini calls**. The separate structured business-field pipeline may classify the document and select evidence from raw OCR text. Its schema requires `value` to be a verbatim string identical to `rawText`, or `null` if unsupported. Runtime checks reject fabricated evidence and any rewrite, including numerically equivalent amount/date reformatting. Only deterministic application code normalizes verified business values into separate typed fields; it never mutates raw OCR text or Markdown. Gemini receives no images for this path and is never asked to transcribe the full document or produce Markdown. Optional structural assistance is not implemented; uncertain structure stays available for human review.
+
+### API and limits
+
+`POST /api/documents/markdown` accepts multipart `file` or JSON `imageBase64`. It returns `{success:true,data:{contractVersion:1,status:"review_required",provider:"google-document-ai",rawText,markdown,validation,pageCount,confidence,warnings}}`, not an attachment. Both in-repository clients create the final file only after validation and review. Third-party callers must implement their own human-review step. Confidence is the lowest available token score (line scores only when tokens are absent), or null when incomplete; it is not measured accuracy.
+
+One JPEG/PNG page per request; 8 MB input, 12 MB request body, 120,000 raw text characters and 4,000 raw lines. Markdown has a separate expansion limit for escape characters and table syntax. Each Google request has a 30-second deadline, no automatic retries, and cancellation propagation. Provider failures return safe error codes with no fabricated content. Responses are `no-store`; images and OCR text are not written to disk, database or browser storage by this pipeline. Google receives the processed image; application non-persistence does not control provider retention.
+
+Unit tests inject OCR fixtures; browser tests use real OpenCV on synthetic images and intercepted API responses. **No live OCR accuracy benchmark has been run.** Configure Google credentials and evaluate representative Vietnamese documents against manually verified transcriptions before claiming accuracy.
+
+### Verification — 2026-10-02
+
+- `npm run test:supervise`: 41 OpenCV tests, 57 document tests, integration checks and TypeScript passed.
+- `npm run build`: production build, lint and type validation passed.
+- `npm run test:documents:browser`: 7 tests passed against the production server, including review before download, edits invalidating confirmation, exact downloaded content, API failure and replacing the source image.
+- Windows sandbox restrictions blocked child processes (`spawn EPERM`); these checks passed when rerun with permission outside the sandbox. OCR responses remained fixtures; no live OCR benchmark was performed.
 
 ## Audit before implementation
 
@@ -58,7 +106,7 @@ API v2 keeps `{success,data}` for successfully processed requests; `data.contrac
 
 The only implemented business schema is `traffic_violation_record`, with recordNumber, recordDate, citizenName, citizenId, address, vehiclePlate, violationDescription, decisionNumber, fineAmount, paymentDeadline. No field missing from OCR is filled from a template. No generic "extract everything" call exists.
 
-Each field retains raw text separately from normalization, source line IDs and provider-derived boxes. Runtime parsing rejects wrong JSON shape or unknown field keys. Evidence must match cited OCR lines; normalized values must agree with raw evidence. Unsubstantiated values are set to null. Dates must be calendar-valid; money must be a safe non-negative VND integer with consistent grouping. CCCD is 12 digits (the old contract supplied no validator); legacy 9-digit CMND requires manual handling. Plate checking is intentionally soft and allows human confirmation of unfamiliar formats.
+Each field retains raw text separately from deterministic normalization, source line IDs and provider-derived boxes. Runtime parsing rejects wrong JSON shape or unknown field keys. Evidence must match cited OCR lines; the model's value must equal its raw excerpt exactly. Even equivalent model-generated date/amount reformatting is rejected. Only application code normalizes verified raw values. Unsubstantiated values are set to null. Dates must be calendar-valid; money must be a safe non-negative VND integer with consistent grouping. CCCD is 12 digits (the old contract supplied no validator); legacy 9-digit CMND requires manual handling. Plate checking is intentionally soft and allows human confirmation of unfamiliar formats.
 
 Automatic acceptance requires valid source, evidence, geometry, validation, agreement and confidence at least `DOCUMENT_ACCEPTANCE_THRESHOLD` (default 0.95). Confidence is capped by OCR evidence confidence, never Gemini alone. Critical fields also require review if the OCR result has warnings. Thresholds are configuration defaults, not calibrated probabilities.
 

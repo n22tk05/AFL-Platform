@@ -21,7 +21,7 @@ async function main() {
   process.env.GEMINI_API_KEY = '';
   const manifest = validateManifest(JSON.parse(fs.readFileSync('assets/mock-data/mock-manifest.json', 'utf8')));
   const fixture: FormWorkflow = JSON.parse(fs.readFileSync('assets/mock-data/mock-workflow.json', 'utf8'));
-  const workflow = { ...fixture, formCode: manifest.formCode, formTitle: manifest.formTitle, status: 'pending_review' as const };
+  const workflow = { ...fixture, formCode: manifest.formCode, formTitle: manifest.formTitle, status: 'PENDING_REVIEW' as const };
   const cache = { get: () => null, set: () => {}, generateKey: () => 'test' } as any;
   const adminAuth = new AdminAuthorizationService(() => 'secret');
   assert.equal(adminAuth.authorize('Bearer secret'), 200);
@@ -71,7 +71,7 @@ async function main() {
   const singleBox = { ...manifest, formId: 'other_form', formCode: 'OTHER', boxes: [manifest.boxes[0]] };
   await assert.rejects(new GeminiPromptService(cache).generateWorkflow(singleBox), /AI_UNAVAILABLE/);
   const sampleFallback = await new GeminiPromptService(cache).generateWorkflow(manifest);
-  assert.equal(sampleFallback.status, 'pending_review');
+  assert.equal(sampleFallback.status, 'PENDING_REVIEW');
   assert.equal(sampleFallback.steps.length, manifest.boxes.length);
   const invalidGemini = new GeminiPromptService(cache) as any;
   invalidGemini.apiKey = 'fake';

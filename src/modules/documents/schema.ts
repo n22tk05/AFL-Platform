@@ -18,7 +18,7 @@ export const EXTRACTION_JSON_SCHEMA = {
         type: 'object', description: label, additionalProperties: false,
         required: ['value', 'rawText', 'confidence', 'evidenceText', 'sourceLineIds'],
         properties: {
-          value: { type: [key === 'fineAmount' ? 'number' : 'string', 'null'] },
+          value: { type: ['string', 'null'], description: 'Exact OCR excerpt identical to rawText; never normalize or rewrite.' },
           rawText: { type: ['string', 'null'] }, confidence: { type: 'number' },
           evidenceText: { type: ['string', 'null'] }, sourceLineIds: { type: 'array', items: { type: 'string' } },
         },

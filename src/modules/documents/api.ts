@@ -38,7 +38,9 @@ export async function parseDocumentImage(req: Request): Promise<DocumentOcrInput
   const raw = await limitedBody(req);
   let bytes: Uint8Array, mime: string;
   if (contentType.includes('multipart/form-data')) {
-    const form = await new Response(Buffer.from(raw), { headers: { 'Content-Type': contentType } }).formData();
+    let form: FormData;
+    try { form = await new Response(Buffer.from(raw), { headers: { 'Content-Type': contentType } }).formData(); }
+    catch { throw new InputError('INVALID_REQUEST', 400); }
     const file = form.get('file');
     if (!file || typeof file === 'string') throw new InputError('MISSING_FILE', 400);
     if (file.size > DOCUMENT_LIMITS.fileBytes) throw new InputError('FILE_TOO_LARGE', 413);

@@ -14,7 +14,7 @@ export function mapGoogleDocument(document: GoogleDocument): DocumentOcrResult {
   const fullText = document.text ?? '';
   const characters = Array.from(fullText);
   const warnings = new Set<string>();
-  const result: DocumentOcrResult = { provider: 'google-document-ai', fullText, tokens: [], lines: [], pageCount: document.pages?.length ?? 0, warnings: [] };
+  const result: DocumentOcrResult = { provider: 'google-document-ai', fullText, tokens: [], lines: [], tables: [], pageCount: document.pages?.length ?? 0, warnings: [] };
   function text(layout?: Layout | null): string {
     const spans = ranges(layout?.textAnchor);
     if (!spans.length) warnings.add('OCR_MISSING_TEXT_ANCHOR');
@@ -47,6 +47,14 @@ export function mapGoogleDocument(document: GoogleDocument): DocumentOcrResult {
     const width = page.dimension?.width ?? 0, height = page.dimension?.height ?? 0;
     const tokens = (page.tokens ?? []).map((token, i) => ({ id: `p${pageNumber}_t${i + 1}`, text: text(token.layout), confidence: confidence(token.layout), boundingBox: box(token.layout, width, height), page: pageNumber }));
     result.tokens.push(...tokens);
+    (page.tables ?? []).forEach((table, i) => {
+      result.tables!.push({ id: `p${pageNumber}_table${i + 1}`, page: pageNumber, headerRowCount: table.headerRows?.length ?? 0,
+        rows: [...(table.headerRows ?? []), ...(table.bodyRows ?? [])].map(row => (row.cells ?? []).map(cell => ({
+          text: text(cell.layout), sourceRanges: ranges(cell.layout?.textAnchor).map(([start, end]) => ({ start, end })),
+          rowSpan: cell.rowSpan ?? 1, columnSpan: cell.colSpan ?? 1,
+        }))),
+      });
+    });
     (page.lines ?? []).forEach((line, i) => {
       const spans = ranges(line.layout?.textAnchor);
       const tokenIds = tokens.filter((_, t) => ranges(page.tokens?.[t].layout?.textAnchor).some(([start, end]) => spans.some(([a, b]) => start >= a && end <= b && end > start))).map(t => t.id);
@@ -64,23 +72,26 @@ export class GoogleDocumentAiProvider implements DocumentOcrProvider {
   async extract(input: DocumentOcrInput): Promise<DocumentOcrResult> {
     if (typeof window !== 'undefined') throw new Error('SERVER_ONLY');
     const project = this.env.GOOGLE_CLOUD_PROJECT_ID, location = this.env.GOOGLE_CLOUD_LOCATION, processor = this.env.GOOGLE_DOCUMENT_AI_PROCESSOR_ID;
+    const version = this.env.GOOGLE_DOCUMENT_AI_PROCESSOR_VERSION?.trim();
     if (!project || !location || !processor || !/^[a-z0-9-]+$/.test(location) || !/^[a-zA-Z0-9_-]+$/.test(project) || !/^[a-zA-Z0-9_-]+$/.test(processor)) throw new DocumentPipelineError('OCR_NOT_CONFIGURED');
+    if (version && !/^[a-zA-Z0-9_-]+$/.test(version)) throw new DocumentPipelineError('OCR_NOT_CONFIGURED');
     const client = new v1.DocumentProcessorServiceClient({ apiEndpoint: `${location}-documentai.googleapis.com` });
     const cancel = () => { void client.close().catch(() => {}); };
     input.signal?.addEventListener('abort', cancel, { once: true });
     try {
       if (input.signal?.aborted) throw new DocumentPipelineError('OCR_TIMEOUT');
-      const [response] = await client.processDocument({ name: `projects/${project}/locations/${location}/processors/${processor}`,
+      const name = `projects/${project}/locations/${location}/processors/${processor}${version ? `/processorVersions/${version}` : ''}`;
+      const [response] = await client.processDocument({ name,
         rawDocument: { content: input.bytes, mimeType: input.mimeType },
         processOptions: { ocrConfig: { hints: { languageHints: ['vi'] }, enableImageQualityScores: true } },
       }, { timeout: DOCUMENT_LIMITS.timeoutMs, retry: null });
-      if (!response.document) throw new DocumentPipelineError('OCR_UNAVAILABLE');
+      if (!response.document) throw new DocumentPipelineError('OCR_INVALID_RESPONSE');
       return mapGoogleDocument(response.document);
     } catch (error) {
       if (error instanceof DocumentPipelineError) throw error;
       const code = typeof error === 'object' && error ? (error as { code?: number | string }).code : undefined;
       const authFailure = code === 7 || code === 16 || code === 'ENOENT' || (error instanceof Error && /default credentials|credentials.*file/i.test(error.message));
-      throw new DocumentPipelineError(input.signal?.aborted || code === 4 ? 'OCR_TIMEOUT' : authFailure ? 'OCR_NOT_CONFIGURED' : 'OCR_UNAVAILABLE');
+      throw new DocumentPipelineError(input.signal?.aborted || code === 4 ? 'OCR_TIMEOUT' : authFailure ? 'OCR_NOT_CONFIGURED' : code === 8 ? 'OCR_RATE_LIMITED' : 'OCR_UNAVAILABLE');
     } finally {
       input.signal?.removeEventListener('abort', cancel);
       await client.close().catch(() => {});
