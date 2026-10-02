@@ -3,7 +3,7 @@
 
 > **Vai trò:** Phụ trách Phân hệ Thị giác Máy tính (FR-1, FR-7), Nhận diện 4 góc phôi giấy tờ khai, Nắn phối cảnh (Perspective Transform), Bóc tách Tọa độ ô hình học (Bounding Boxes), Quét chứng từ tiên quyết (FR-6) và Xuất toàn văn OCR Markdown.  
 > **Thư viện chính:** OpenCV.js (WebAssembly / WASM), Google Document AI, Google Gemini.  
-> **Trạng thái hiện tại:** 💎 **100% Hoàn thành — 84/84 Unit Tests Pass — Sẵn sàng Nghiệm thu & Mở Pull Request**.
+> **Rà soát 30/09/2026:** **84/84 unit tests và 4/4 browser tests đạt; còn lỗi tích hợp camera/Admin, checkbox và thứ tự bảng cần sửa trước nghiệm thu.** Xem [đánh giá độ ổn định và kế hoạch tối ưu](step-05-stability-audit/OPENCV-STABILITY-AND-OPTIMIZATION-PLAN.md). Các chỉ số tốc độ bên dưới là báo cáo lịch sử; phép đo mới và giới hạn được ghi trong bản rà soát.
 
 ---
 

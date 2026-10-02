@@ -1,0 +1,456 @@
+{
+    "sourceCommit":  "3c51a7e",
+    "generatedAt":  "2026-09-30T06:30:36.974Z",
+    "browser":  "154.0.8037.58",
+    "environment":  "win32/x64, development server",
+    "scope":  "Browser geometry audit; no live OCR; fixture counts are not real-data accuracy.",
+    "unitTests":  {
+                      "documents":  "43/43",
+                      "opencv":  "41/41"
+                  },
+    "existingBrowserTests":  "4/4",
+    "typecheckErrors":  6,
+    "summary":  {
+                    "repeatedCleanIdentical":  true,
+                    "warmCleanSamples":  9,
+                    "warmCleanMedianMs":  362.5,
+                    "warmCleanP95Ms":  519.2,
+                    "cameraResultsIdentical":  true
+                },
+    "cameraLifecycle":  {
+                            "starts":  29,
+                            "stoppedTracks":  18
+                        },
+    "cameraAfterClose":  {
+                             "starts":  29,
+                             "stoppedTracks":  27
+                         },
+    "pageErrors":  [
+
+                   ],
+    "runs":  [
+                 {
+                     "label":  "synthetic-clean-1",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 5498.6 ms · 10 candidatesOpenCV: 5025.7 ms · Grayscale: 27.3 ms · Binary: 95.6 ms · Lines: 275.8 ms · Contours: 37.2 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-2",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 519.2 ms · 10 candidatesOpenCV: 2.8 ms · Grayscale: 18.7 ms · Binary: 70.9 ms · Lines: 258.7 ms · Contours: 6.8 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-3",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 346.3 ms · 10 candidatesOpenCV: 1.3 ms · Grayscale: 14.8 ms · Binary: 66.9 ms · Lines: 240.8 ms · Contours: 6.4 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-4",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 377.5 ms · 10 candidatesOpenCV: 1.5 ms · Grayscale: 16.8 ms · Binary: 74.4 ms · Lines: 256.5 ms · Contours: 5.6 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-5",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 356.4 ms · 10 candidatesOpenCV: 0.8 ms · Grayscale: 15.3 ms · Binary: 69.4 ms · Lines: 247.1 ms · Contours: 6 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-6",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 351.6 ms · 10 candidatesOpenCV: 1.1 ms · Grayscale: 18.9 ms · Binary: 67.9 ms · Lines: 241.4 ms · Contours: 6.3 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-7",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 362.5 ms · 10 candidatesOpenCV: 1.4 ms · Grayscale: 15.9 ms · Binary: 77.1 ms · Lines: 240.9 ms · Contours: 9.5 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-8",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 361.5 ms · 10 candidatesOpenCV: 0.7 ms · Grayscale: 13.7 ms · Binary: 76.3 ms · Lines: 243.2 ms · Contours: 8.3 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-9",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 405.8 ms · 10 candidatesOpenCV: 1.3 ms · Grayscale: 29.5 ms · Binary: 87.1 ms · Lines: 261.5 ms · Contours: 7.5 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-clean-10",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 383.2 ms · 10 candidatesOpenCV: 1.3 ms · Grayscale: 18.4 ms · Binary: 78.1 ms · Lines: 259.1 ms · Contours: 6.5 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  13,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-nested",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 393.1 ms · 11 candidatesOpenCV: 1.3 ms · Grayscale: 22.3 ms · Binary: 80.6 ms · Lines: 259.9 ms · Contours: 9.2 ms",
+                     "candidateCount":  11,
+                     "expectedFixtureRects":  14,
+                     "fixtureMatchesAtIou05":  [
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   true,
+                                                   false,
+                                                   false,
+                                                   false,
+                                                   true
+                                               ]
+                 },
+                 {
+                     "label":  "synthetic-camera-1",
+                     "mode":  "camera-photo",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 483.1 ms · 10 candidatesOpenCV: 0.9 ms · Grayscale: 9.5 ms · Binary: 44.8 ms · Lines: 109.9 ms · Contours: 8.2 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "synthetic-camera-2",
+                     "mode":  "camera-photo",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 271.3 ms · 10 candidatesOpenCV: 1.3 ms · Grayscale: 5.8 ms · Binary: 24.7 ms · Lines: 69.4 ms · Contours: 3 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "synthetic-camera-3",
+                     "mode":  "camera-photo",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 182.9 ms · 10 candidatesOpenCV: 1 ms · Grayscale: 5.3 ms · Binary: 23.6 ms · Lines: 59.1 ms · Contours: 2.4 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "synthetic-camera-4",
+                     "mode":  "camera-photo",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 213.3 ms · 10 candidatesOpenCV: 0.7 ms · Grayscale: 7.7 ms · Binary: 28.9 ms · Lines: 61.4 ms · Contours: 2.3 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "synthetic-camera-5",
+                     "mode":  "camera-photo",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 198.1 ms · 10 candidatesOpenCV: 1 ms · Grayscale: 7.1 ms · Binary: 23.1 ms · Lines: 67.7 ms · Contours: 2.9 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "synthetic-rotated-5deg",
+                     "mode":  "camera-photo",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 196 ms · 10 candidatesOpenCV: 0.7 ms · Grayscale: 6.5 ms · Binary: 23.3 ms · Lines: 64.5 ms · Contours: 2.6 ms",
+                     "candidateCount":  10,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "synthetic-empty-camera",
+                     "mode":  "camera-photo",
+                     "error":  "Không tìm thấy đủ bốn góc tờ giấy. Hãy chụp trọn tờ giấy trên nền tương phản.",
+                     "timing":  null,
+                     "candidateCount":  0,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "public/assets/forms/01-lptb/page-1.jpg",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 74.4 ms · 1 candidatesOpenCV: 0.7 ms · Grayscale: 4 ms · Binary: 15.8 ms · Lines: 37.3 ms · Contours: 2.9 ms",
+                     "candidateCount":  1,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "public/assets/forms/01-lptb/page-2.jpg",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 71 ms · 16 candidatesOpenCV: 0.5 ms · Grayscale: 4.4 ms · Binary: 17.8 ms · Lines: 40.1 ms · Contours: 3.5 ms",
+                     "candidateCount":  16,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 },
+                 {
+                     "label":  "public/assets/forms/khai-sinh-lai/page-1.jpg",
+                     "mode":  "clean-scan",
+                     "error":  null,
+                     "timing":  "Hoàn tất trong 203 ms · 0 candidatesOpenCV: 0.6 ms · Grayscale: 9 ms · Binary: 38.6 ms · Lines: 125.4 ms · Contours: 3.1 ms",
+                     "candidateCount":  0,
+                     "expectedFixtureRects":  null,
+                     "fixtureMatchesAtIou05":  null
+                 }
+             ],
+    "nestedCandidates":  [
+                             {
+                                 "id":  "candidate_001",
+                                 "x":  101,
+                                 "y":  421,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_002",
+                                 "x":  601,
+                                 "y":  421,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_003",
+                                 "x":  86,
+                                 "y":  186,
+                                 "width":  978,
+                                 "height":  1038
+                             },
+                             {
+                                 "id":  "candidate_004",
+                                 "x":  101,
+                                 "y":  201,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_005",
+                                 "x":  101,
+                                 "y":  641,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_006",
+                                 "x":  101,
+                                 "y":  861,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_007",
+                                 "x":  101,
+                                 "y":  1081,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_008",
+                                 "x":  601,
+                                 "y":  201,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_009",
+                                 "x":  601,
+                                 "y":  641,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_010",
+                                 "x":  601,
+                                 "y":  861,
+                                 "width":  448,
+                                 "height":  128
+                             },
+                             {
+                                 "id":  "candidate_011",
+                                 "x":  601,
+                                 "y":  1081,
+                                 "width":  448,
+                                 "height":  128
+                             }
+                         ]
+}
