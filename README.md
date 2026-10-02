@@ -3,6 +3,8 @@
 # AFL Platform — AI-Assisted Form-Filling CRM for Elderly Citizens
 
 **FR-6 hiện tại:** `/scan-document` dùng OpenCV deskew → Google Document AI OCR → Gemini text theo schema → kiểm chứng bằng chứng → người dùng duyệt → Session RAM. Chưa có benchmark độ chính xác trên ảnh thật. Xem [cấu hình, audit và kiểm thử](docs/DOCUMENT-EXTRACTION.md).
+
+**Ảnh → `.md`:** OpenCV → **Google Document AI Enterprise OCR** → ghép Markdown bằng quy tắc cố định → kiểm tra → người dùng duyệt → tải file. Cấu hình Google OCR và quyền truy cập trong `.env.local`, khởi động lại ứng dụng rồi chọn **Chuyển ảnh sang Markdown** tại `/scan-document`. Gemini không tạo hoặc chép lại Markdown. Xem [hướng dẫn và giới hạn](docs/DOCUMENT-EXTRACTION.md#image-to-markdown-google-enterprise-ocr).
 ## Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh & Quản trị Quy trình cho Người cao tuổi tại Việt Nam
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
