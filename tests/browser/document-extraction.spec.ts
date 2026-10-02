@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
+import { validateMarkdown } from '../../src/modules/documents/markdown-validator';
 
 async function synthetic(page: Page, kind: 'clean'|'camera'|'blur'|'glare'|'empty'): Promise<Buffer> {
   const data = await page.evaluate(kind => {
@@ -82,4 +83,71 @@ for(const kind of ['blur','glare','empty'] as const) test(`${kind} image fails g
   await page.getByRole('button',{name:'Đọc chứng từ',exact:true}).click();
   await expect(page.getByRole('status')).toContainText(kind==='blur'?'mờ':kind==='glare'?'lóa':'bốn góc',{timeout:60_000});
   expect(calls).toBe(0);
+});
+
+const draftText = '# THÔNG BÁO\n\n| Họ tên | Số tiền |\n| --- | --- |\n| Nguyễn Văn A | 100.000 đồng |\n';
+const draft = (markdown = draftText) => ({ success: true, data: { contractVersion: 1, status: 'review_required', markdown,
+  provider: 'google-document-ai', rawText: 'THÔNG BÁO\nHọ tên\nSố tiền\nNguyễn Văn A\n100.000 đồng', pageCount: 1, confidence: 0.99, warnings: [], validation: validateMarkdown(markdown) } });
+
+test('Markdown: OpenCV upload, table preview, edit invalidates review, download matches edited text', async ({ page }) => {
+  let downloads = 0;
+  page.on('download', () => downloads++);
+  await page.route('**/api/documents/markdown', async route => {
+    const bytes = route.request().postDataBuffer()!;
+    expect(bytes.indexOf(Buffer.from([137,80,78,71,13,10,26,10]))).toBeGreaterThan(0);
+    await route.fulfill({ json: draft() });
+  });
+  await page.goto('/scan-document');
+  await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
+  await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'test.png', mimeType: 'image/png', buffer: await synthetic(page, 'clean') });
+  await page.getByRole('button', { name: 'Chuyển ảnh sang Markdown' }).click();
+  const review = page.getByRole('region', { name: 'Duyệt Markdown' });
+  await expect(review).toBeVisible({ timeout: 60_000 });
+  await expect(review.getByRole('table')).toBeVisible();
+  await review.getByText('Văn bản OCR nguyên bản để đối chiếu', { exact: true }).click();
+  await expect(review.locator('details pre')).toHaveText(draft().data.rawText);
+  const download = review.getByRole('button', { name: '3. Tải file .md đã duyệt' });
+  const confirm = review.getByRole('checkbox');
+  expect(downloads).toBe(0);
+  await expect(download).toBeDisabled();
+  await confirm.check();
+  await expect(download).toBeEnabled();
+  await review.getByRole('button', { name: 'Sửa Markdown' }).click();
+  await review.getByLabel('Nội dung Markdown').fill('```\nthiếu dấu đóng');
+  await expect(confirm).not.toBeChecked();
+  await expect(confirm).toBeDisabled();
+  await expect(download).toBeDisabled();
+  const edited = draftText.replace('100.000', '200.000');
+  await review.getByLabel('Nội dung Markdown').fill(edited);
+  await expect(review.locator('details pre')).toHaveText(draft().data.rawText);
+  await confirm.check();
+  const pending = page.waitForEvent('download');
+  await download.click();
+  const file = await pending;
+  expect(file.suggestedFilename()).toBe('test.md');
+  expect(readFileSync((await file.path())!, 'utf8')).toBe(edited);
+  await page.getByLabel('Nguồn ảnh').selectOption('camera-photo');
+  await expect(review).toHaveCount(0);
+});
+
+test('Markdown API failure displays actionable error with no stale draft or download', async ({ page }) => {
+  await page.route('**/api/documents/markdown', route => route.fulfill({ status: 503, json: { success: false, error: { code: 'OCR_NOT_CONFIGURED', message_vi: 'Chưa cấu hình Google Document AI' } } }));
+  await page.goto('/scan-document');
+  await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
+  await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'test.png', mimeType: 'image/png', buffer: await synthetic(page, 'clean') });
+  await page.getByRole('button', { name: 'Chuyển ảnh sang Markdown' }).click();
+  await expect(page.getByRole('status')).toContainText('Google Document AI', { timeout: 60_000 });
+  await expect(page.getByRole('region', { name: 'Duyệt Markdown' })).toHaveCount(0);
+});
+
+test('test workspace also requires review and prevents stale results after replacement', async ({ page }) => {
+  await page.route('**/api/documents/markdown', route => route.fulfill({ json: draft() }));
+  await page.goto('/document-test');
+  await page.locator('input[type=file]').setInputFiles({ name: 'test.png', mimeType: 'image/png', buffer: await synthetic(page, 'clean') });
+  await page.getByRole('button', { name: 'Xuất Markdown', exact: true }).click();
+  const review = page.getByRole('region', { name: 'Duyệt Markdown' });
+  await expect(review).toBeVisible({ timeout: 60_000 });
+  await expect(review.getByRole('button', { name: '3. Tải file .md đã duyệt' })).toBeDisabled();
+  await page.locator('input[type=file]').setInputFiles({ name: 'next.png', mimeType: 'image/png', buffer: await synthetic(page, 'clean') });
+  await expect(review).toHaveCount(0);
 });

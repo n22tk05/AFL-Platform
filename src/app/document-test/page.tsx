@@ -9,8 +9,6 @@ import {
   XCircle,
   FileText,
   Scan,
-  Download,
-  Copy,
   Clock,
   ShieldCheck,
   Eye,
@@ -32,6 +30,9 @@ import type {
 import type { DocumentMode } from '@/modules/opencv';
 import { prepareDocumentImage } from '@/modules/documents/prepare-image';
 import { documentSession, reviewedFields, type FieldConfirmations } from '@/modules/documents/session';
+import { MarkdownReview } from '@/components/documents/MarkdownReview';
+import { validateMarkdown } from '@/modules/documents/markdown-validator';
+import type { MarkdownDraft } from '@/modules/documents/markdown.types';
 import { DOCUMENT_LIMITS } from '@/modules/documents/config';
 import { normalizeField, valueErrors } from '@/modules/documents/validation';
 import { TRAFFIC_FIELDS } from '@/modules/documents/schema';
@@ -331,8 +332,7 @@ export default function DocumentTestPage() {
 
   // Results state
   const [extractionResult, setExtractionResult] = useState<DocumentExtractionResult | null>(null);
-  const [markdownContent, setMarkdownContent] = useState<string | null>(null);
-  const [markdownView, setMarkdownView] = useState<'preview' | 'raw' | 'headings'>('preview');
+  const [markdownDraft, setMarkdownDraft] = useState<MarkdownDraft | null>(null);
 
   // Review & Session state
   const [draftValues, setDraftValues] = useState<Record<string, string>>({});
@@ -352,13 +352,26 @@ export default function DocumentTestPage() {
   const abortControllerRef = useRef<AbortController | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Clean object URLs on unmount
+  useEffect(() => () => abortControllerRef.current?.abort(), []);
   useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-      if (processedUrl) URL.revokeObjectURL(processedUrl);
-    };
-  }, [previewUrl, processedUrl]);
+    abortControllerRef.current?.abort();
+    setMarkdownDraft(null);
+  }, [mode, engineMode]);
+
+  // Each URL stays valid until that exact image is replaced or unmounted.
+  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
+  useEffect(() => () => { if (processedUrl) URL.revokeObjectURL(processedUrl); }, [processedUrl]);
+  useEffect(() => {
+    if (!file) return;
+    const timer = setTimeout(() => {
+      abortControllerRef.current?.abort();
+      setMarkdownDraft(null); setExtractionResult(null); setDraftValues({}); setConfirmations({});
+      setFile(null); setPreviewUrl(null); setProcessedUrl(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setStatusMessage({ type: 'info', text: 'Phiên đã hết hạn. Hãy chọn lại ảnh để tiếp tục.' });
+    }, DOCUMENT_LIMITS.sessionTtlMs);
+    return () => clearTimeout(timer);
+  }, [file]);
 
   // Subscribe to session changes
   useEffect(() => {
@@ -376,7 +389,7 @@ export default function DocumentTestPage() {
     if (processedUrl) URL.revokeObjectURL(processedUrl);
 
     setExtractionResult(null);
-    setMarkdownContent(null);
+    setMarkdownDraft(null);
     setDraftValues({});
     setConfirmations({});
     setSelectedFieldKey(null);
@@ -429,6 +442,8 @@ export default function DocumentTestPage() {
     const abort = new AbortController();
     abortControllerRef.current = abort;
 
+    setMarkdownDraft(null);
+    setConfirmations({});
     setIsProcessing(true);
     setStatusMessage(null);
     const startTotal = performance.now();
@@ -438,6 +453,7 @@ export default function DocumentTestPage() {
       setCurrentStepText('Đang nắn phối cảnh & thẩm định ảnh bằng OpenCV WASM...');
       const startDeskew = performance.now();
       const prepared = await prepareDocumentImage(file, mode);
+      if (abort.signal.aborted) return;
       const deskewTime = Math.round(performance.now() - startDeskew);
 
       const processedBlobUrl = URL.createObjectURL(prepared.blob);
@@ -451,6 +467,7 @@ export default function DocumentTestPage() {
         setCurrentStepText('Đang chạy chế độ mô phỏng offline...');
         await new Promise((r) => setTimeout(r, 650)); // Realistic network latency simulation
 
+        if (abort.signal.aborted) return;
         const sampleText = `CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nCÔNG AN TP. HÀ NỘI\nPHÒNG CSGT ĐƯỜNG BỘ\n\nBIÊN BẢN VI PHẠM HÀNH CHÍNH\nVề trật tự an toàn giao thông đường bộ\n\nSố biên bản: 004821/BB-VPHC\nNgày lập biên bản: 15/09/2026\nHọ và tên người vi phạm: NGUYỄN VĂN AN\nSố CCCD / Mã định danh: 001085012345\nĐịa chỉ thường trú: Số 12 phố Hàng Bông, Q. Hoàn Kiếm, TP. Hà Nội\nPhương tiện vi phạm mang biển số: 29A-888.88\nHành vi vi phạm: Không chấp hành hiệu lệnh của đèn tín hiệu giao thông\nSố quyết định xử phạt: 9042/QĐ-XPHC\nSố tiền phạt: 900.000 đồng (Chín trăm nghìn đồng)\nThời hạn nộp tiền phạt: 30/09/2026`;
 
         if (target === 'all' || target === 'structured') {
@@ -483,7 +500,7 @@ Về trật tự an toàn giao thông đường bộ
 - **Số tiền phạt:** 900.000 đồng
 - **Thời hạn nộp:** 30/09/2026
 `;
-          setMarkdownContent(mockMarkdown);
+          setMarkdownDraft({ contractVersion: 1, status: 'review_required', rawText: sampleText, markdown: mockMarkdown, validation: validateMarkdown(mockMarkdown), provider: 'offline-demo', pageCount: 1, confidence: null, warnings: ['OFFLINE DEMO: synthetic content, not OCR output.'] });
         }
 
         const totalTime = Math.round(performance.now() - startTotal);
@@ -507,6 +524,7 @@ Về trật tự an toàn giao thông đường bộ
             cache: 'no-store',
           });
           const payload = await response.json();
+          if (abort.signal.aborted) return;
 
           if (!response.ok || !payload.success) {
             hasError = true;
@@ -524,7 +542,7 @@ Về trật tự an toàn giao thông đường bộ
         }
 
         if (target === 'all' || target === 'markdown') {
-          setCurrentStepText('Đang gọi Codex MarkdownExportService...');
+          setCurrentStepText('Đang đọc bằng Google Document AI, ghép và kiểm tra Markdown...');
           const mdForm = new FormData();
           mdForm.set('file', prepared.blob, 'document.png');
 
@@ -536,16 +554,19 @@ Về trật tự an toàn giao thông đường bộ
           });
 
           if (mdRes.ok) {
-            const text = await mdRes.text();
-            setMarkdownContent(text);
+            const payload = await mdRes.json();
+            if (abort.signal.aborted) return;
+            if (!payload.success || payload.data?.contractVersion !== 1 || payload.data?.status !== 'review_required') throw new Error('INVALID_MARKDOWN_RESPONSE');
+            setMarkdownDraft(payload.data);
+            setActiveTab('markdown');
           } else {
             const errJson = await mdRes.json().catch(() => ({}));
-            if (!hasError) {
-              setStatusMessage({
-                type: 'warning',
-                text: `Markdown Export: ${errJson.error?.message_vi || 'Chưa cấu hình Google Document AI'}. Có thể dùng chế độ Offline để xem cấu trúc mẫu.`,
-              });
-            }
+            if (abort.signal.aborted) return;
+            hasError = true;
+            setStatusMessage({
+              type: 'warning',
+              text: `Markdown: ${errJson.error?.message_vi || 'Chưa cấu hình Google Document AI Enterprise OCR'}`,
+            });
           }
         }
 
@@ -556,11 +577,13 @@ Về trật tự an toàn giao thông đường bộ
         }
       }
     } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return;
+      if (abort.signal.aborted) return;
       setStatusMessage({ type: 'error', text: 'Lỗi xử lý: ' + (err instanceof Error ? err.message : String(err)) });
     } finally {
-      setIsProcessing(false);
-      setCurrentStepText('');
+      if (abortControllerRef.current === abort) {
+        setIsProcessing(false);
+        setCurrentStepText('');
+      }
     }
   };
 
@@ -609,40 +632,11 @@ Về trật tự an toàn giao thông đường bộ
     setStatusMessage({ type: 'info', text: 'Đã xóa trắng Session RAM (Zero-Retention Wipe).' });
   };
 
-  // Download Markdown file
-  const handleDownloadMarkdown = () => {
-    if (!markdownContent) return;
-    const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${file?.name.replace(/\.[^.]+$/, '') || 'document'}_extracted.md`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  };
-
-  // Copy Markdown to clipboard
-  const handleCopyMarkdown = async () => {
-    if (!markdownContent) return;
-    await navigator.clipboard.writeText(markdownContent);
-    setStatusMessage({ type: 'success', text: 'Đã sao chép Markdown vào clipboard!' });
-  };
-
   // Bounding boxes of the currently selected field
   const activeBoxes: NormalizedBoundingBox[] =
     selectedFieldKey && extractionResult?.fields[selectedFieldKey]
       ? extractionResult.fields[selectedFieldKey].sourceBoundingBoxes || []
       : [];
-
-  // Parse markdown headings for headings tab
-  const headingList = markdownContent
-    ? markdownContent
-        .split('\n')
-        .map((line, idx) => ({ line: idx + 1, text: line }))
-        .filter((item) => item.text.trim().startsWith('#'))
-    : [];
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
@@ -667,7 +661,7 @@ Về trật tự an toàn giao thông đường bộ
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              Kiểm thử & đối chiếu trực quan 2 luồng: Bóc tách Có cấu trúc (JSON v2) & Xuất Toàn văn Markdown (Codex)
+              Kiểm thử & đối chiếu: Trích xuất trường (JSON v2) và Google OCR → Ghép Markdown → Kiểm tra → Duyệt → .md
             </p>
           </div>
         </div>
@@ -931,10 +925,10 @@ Về trật tự an toàn giao thông đường bộ
               }`}
             >
               <FileText className="w-4 h-4" />
-              <span>Xuất Markdown (Codex)</span>
-              {markdownContent && (
+              <span>Duyệt Markdown</span>
+              {markdownDraft && (
                 <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-400 font-mono">
-                  {markdownContent.length} chars
+                  {markdownDraft.markdown.length} chars
                 </span>
               )}
             </button>
@@ -1094,141 +1088,10 @@ Về trật tự an toàn giao thông đường bộ
             </div>
           )}
 
-          {/* TAB 2: Full Text Markdown Export (Codex) */}
           {activeTab === 'markdown' && (
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4 flex-1 flex flex-col">
-              {markdownContent ? (
-                <>
-                  {/* Top Bar for Markdown */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
-                    <div className="flex items-center gap-1.5 bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs font-bold">
-                      <button
-                        onClick={() => setMarkdownView('preview')}
-                        className={`px-3 py-1 rounded-lg transition-all ${
-                          markdownView === 'preview' ? 'bg-sky-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        Bản Xem (Preview)
-                      </button>
-                      <button
-                        onClick={() => setMarkdownView('raw')}
-                        className={`px-3 py-1 rounded-lg transition-all ${
-                          markdownView === 'raw' ? 'bg-sky-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        Mã Nguồn (Raw)
-                      </button>
-                      <button
-                        onClick={() => setMarkdownView('headings')}
-                        className={`px-3 py-1 rounded-lg transition-all ${
-                          markdownView === 'headings' ? 'bg-sky-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        Tiêu Đề ({headingList.length})
-                      </button>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={handleCopyMarkdown}
-                        className="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 flex items-center gap-1.5 transition-colors"
-                      >
-                        <Copy className="w-3.5 h-3.5" /> Sao Chép
-                      </button>
-                      <button
-                        onClick={handleDownloadMarkdown}
-                        className="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white shadow-sm flex items-center gap-1.5 transition-colors"
-                      >
-                        <Download className="w-3.5 h-3.5" /> Tải File .md
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Rendered Preview */}
-                  {markdownView === 'preview' && (
-                    <div className="bg-slate-950 p-5 rounded-xl border border-slate-800/80 overflow-y-auto max-h-[620px] font-sans text-slate-200 leading-relaxed text-sm space-y-3">
-                      {markdownContent.split('\n').map((line, idx) => {
-                        const trimmed = line.trim();
-                        if (trimmed.startsWith('# ')) {
-                          return (
-                            <h1 key={idx} className="text-lg font-black text-amber-400 pt-2 border-b border-slate-800 pb-1">
-                              {trimmed.replace('# ', '')}
-                            </h1>
-                          );
-                        }
-                        if (trimmed.startsWith('## ')) {
-                          return (
-                            <h2 key={idx} className="text-base font-bold text-sky-400 pt-1">
-                              {trimmed.replace('## ', '')}
-                            </h2>
-                          );
-                        }
-                        if (trimmed.startsWith('### ')) {
-                          return (
-                            <h3 key={idx} className="text-sm font-bold text-slate-300">
-                              {trimmed.replace('### ', '')}
-                            </h3>
-                          );
-                        }
-                        if (trimmed.startsWith('- ')) {
-                          return (
-                            <li key={idx} className="ml-4 list-disc text-slate-300 text-xs">
-                              {trimmed.replace('- ', '')}
-                            </li>
-                          );
-                        }
-                        if (!trimmed) {
-                          return <div key={idx} className="h-2" />;
-                        }
-                        return (
-                          <p key={idx} className="text-xs text-slate-300">
-                            {line}
-                          </p>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Raw Text Code */}
-                  {markdownView === 'raw' && (
-                    <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-sky-300 overflow-y-auto max-h-[620px] whitespace-pre-wrap leading-relaxed">
-                      {markdownContent}
-                    </div>
-                  )}
-
-                  {/* Headings Structure Inspector */}
-                  {markdownView === 'headings' && (
-                    <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-y-auto max-h-[620px] space-y-2">
-                      <p className="text-xs text-slate-400 mb-2">
-                        Danh sách các dòng được Gemini phân loại là tiêu đề cấu trúc văn bản:
-                      </p>
-                      {headingList.length > 0 ? (
-                        headingList.map((item, i) => (
-                          <div
-                            key={i}
-                            className="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-xs"
-                          >
-                            <span className="font-mono text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-400/10 shrink-0">
-                              Dòng {item.line}
-                            </span>
-                            <span className="font-semibold text-slate-200">{item.text}</span>
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-xs text-slate-500 italic">Không có dòng tiêu đề nào được phát hiện.</p>
-                      )}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-slate-600">
-                  <FileText className="w-12 h-12 mb-3 opacity-30" />
-                  <p className="text-sm font-semibold text-slate-400">Chưa có nội dung Markdown</p>
-                  <p className="text-xs text-slate-500 max-w-sm mt-1">
-                    Bấm &quot;Xuất Markdown&quot; hoặc &quot;Chạy Cả Hai&quot; để sinh file Markdown toàn văn từ ảnh
-                  </p>
-                </div>
-              )}
+            <div className="p-4">
+              {markdownDraft ? <MarkdownReview key={markdownDraft.markdown} draft={markdownDraft} filename={file?.name || 'document'} disabled={isProcessing} />
+                : <p className="text-slate-400">Chuyển ảnh sang Markdown để tạo bản nháp và duyệt trước khi tải.</p>}
             </div>
           )}
 

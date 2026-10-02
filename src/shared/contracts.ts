@@ -7,6 +7,17 @@
 /** Tọa độ chuẩn hóa theo tỷ lệ phần trăm từ 0.0 đến 1.0: [ymin, xmin, ymax, xmax] */
 export type NormalizedBoundingBox = [number, number, number, number];
 
+/**
+ * Kết quả nhận diện dòng chữ qua pipeline OpenCV Line Segmentation (Phương pháp 2) + VietOCR
+ * Tọa độ chuẩn hóa theo tỷ lệ phần trăm từ 0.0 đến 1.0: [ymin, xmin, ymax, xmax]
+ */
+export interface DetectedLineText {
+  lineId: string;
+  coordinates: NormalizedBoundingBox; // [ymin, xmin, ymax, xmax] thang 0.0 - 1.0
+  rawText: string;
+  confidence: number;
+}
+
 // ============================================================================
 // 1. ĐẦU RA CỦA NGƯỜI 3 (OpenCV WASM) -> ĐẦU VÀO CỦA NGƯỜI 4 (Gemini Text LLM)
 // ============================================================================

@@ -56,7 +56,7 @@ export default function HomePage() {
               <BookOpen className="w-8 h-8" aria-hidden="true" />
               <div className="text-left">
                 <div className="font-bold text-base">Chuyển ảnh thành Markdown</div>
-                <div className="text-xs">OpenCV → Document AI → Gemini → .md</div>
+                <div className="text-xs">OpenCV → Google OCR → Ghép Markdown → Duyệt → .md</div>
               </div>
             </div>
           </Link>

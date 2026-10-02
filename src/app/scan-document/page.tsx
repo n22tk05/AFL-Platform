@@ -8,6 +8,8 @@ import type { DocumentMode } from '@/modules/opencv';
 import { prepareDocumentImage } from '@/modules/documents/prepare-image';
 import { documentSession, reviewedFields, type FieldConfirmations } from '@/modules/documents/session';
 import { DOCUMENT_LIMITS } from '@/modules/documents/config';
+import { MarkdownReview } from '@/components/documents/MarkdownReview';
+import type { MarkdownDraft } from '@/modules/documents/markdown.types';
 import { normalizeField, valueErrors } from '@/modules/documents/validation';
 
 const button = 'min-h-14 px-4 py-3 rounded-xl border border-slate-600 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-lg font-bold';
@@ -33,6 +35,7 @@ export default function ScanDocumentPage() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [saved, setSaved] = useState(false);
+  const [markdownDraft, setMarkdownDraft] = useState<MarkdownDraft | null>(null);
   const generation = useRef(0);
   const controller = useRef<AbortController>();
   const expiry = useRef<ReturnType<typeof setTimeout>>();
@@ -48,6 +51,7 @@ export default function ScanDocumentPage() {
   }, [cancelPending]);
   function invalidate() {
     generation.current++; controller.current?.abort();
+    setMarkdownDraft(null);
     setResult(null); setDrafts({}); setConfirmed({}); setSelected(null); setProcessed(null); setSaved(false); setBusy(false); setMessage('');
     documentSession.clear();
   }
@@ -97,26 +101,17 @@ export default function ScanDocumentPage() {
       const prepared = await prepareDocumentImage(file, mode);
       if (run !== generation.current) return;
       setProcessed(URL.createObjectURL(prepared.blob));
-      setMessage('Đang đọc toàn bộ chữ bằng Document AI và định dạng với Gemini…');
+      setMessage('Đang trích xuất OCR văn bản, ghép cấu trúc và kiểm tra Markdown…');
       const form = new FormData();
       form.set('file', prepared.blob, 'processed-document.png');
       const response = await fetch('/api/documents/markdown', { method: 'POST', body: form, signal: abort.signal, cache: 'no-store' });
+      const payload = await response.json();
       if (run !== generation.current) return;
-      if (!response.ok) {
-        const payload = await response.json();
-        throw new Error(payload.error?.message_vi || 'Không thể xuất Markdown.');
+      if (!response.ok || !payload.success || payload.data?.contractVersion !== 1 || payload.data?.status !== 'review_required') {
+        throw new Error(payload.error?.message_vi || 'Không thể tạo bản nháp Markdown.');
       }
-      const blob = await response.blob();
-      if (run !== generation.current) return;
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${file.name.replace(/\.[^.]+$/, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9._-]+/g, '_') || 'document'}.md`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-      setMessage('Đã tải file Markdown chứa toàn bộ văn bản OCR.');
+      setMarkdownDraft(payload.data);
+      setMessage('Bản nháp đã sẵn sàng. Hãy đối chiếu với ảnh, sửa nếu cần và xác nhận trước khi tải.');
     } catch (error) {
       if (run === generation.current) setMessage(error instanceof Error ? error.message : 'Không thể xuất Markdown.');
     } finally { if (run === generation.current) setBusy(false); }
@@ -159,7 +154,7 @@ export default function ScanDocumentPage() {
               <option value="auto">Tự nhận diện</option><option value="traffic_violation_record">Biên bản vi phạm giao thông</option><option value="unknown">Loại khác (chưa hỗ trợ)</option>
             </select></label>
           <button className={`${button} w-full bg-emerald-800`} disabled={!file || busy} onClick={extract}>{busy ? 'Đang xử lý…' : 'Đọc chứng từ'}</button>
-          <button className={`${button} w-full bg-sky-800`} disabled={!file || busy} onClick={exportMarkdown}>Xuất toàn bộ nội dung ra .md</button>
+          <button className={`${button} w-full bg-sky-800`} disabled={!file || busy} onClick={exportMarkdown}>Chuyển ảnh sang Markdown</button>
           <p className="flex gap-2"><ShieldCheck aria-hidden="true" />Ảnh và dữ liệu chỉ giữ tạm trong phiên, tối đa 15 phút.</p>
         </div>
         <div className={panel}>
@@ -176,6 +171,7 @@ export default function ScanDocumentPage() {
       </section>
       <section className="lg:col-span-7 space-y-5" aria-label="Kiểm tra kết quả">
         <p role="status" aria-live="polite" className={panel}>{message || 'Chưa có kết quả.'}</p>
+        {markdownDraft && <MarkdownReview key={generation.current} draft={markdownDraft} filename={file?.name || 'document'} disabled={busy} />}
         {result && <>
           {result.warnings.length > 0 && <div className={panel}><h2 className="font-bold">Lưu ý</h2>{result.warnings.map((w,i) => <p key={i}>{warnings[w] || `Cần đối chiếu chất lượng nguồn (${w}).`}</p>)}</div>}
           <div className={panel}><h2 className="text-2xl font-bold">2. Đối chiếu từng trường</h2>
