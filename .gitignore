@@ -53,3 +53,9 @@ service-account*.json
 node_modules/
 *.docx
 SLIDE-DECK-AI-FOR-LIFE.md
+
+# Python
+.venv/
+venv/
+**/__pycache__/
+*.py[cod]
