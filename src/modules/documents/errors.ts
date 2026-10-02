@@ -1,4 +1,4 @@
-export type DocumentErrorCode = 'OCR_NOT_CONFIGURED' | 'OCR_TIMEOUT' | 'OCR_UNAVAILABLE' | 'STRUCTURED_UNAVAILABLE' | 'INVALID_STRUCTURED_RESPONSE' | 'OCR_LIMIT_EXCEEDED';
+export type DocumentErrorCode = 'OCR_NOT_CONFIGURED' | 'OCR_TIMEOUT' | 'OCR_UNAVAILABLE' | 'OCR_EMPTY_TEXT' | 'STRUCTURED_UNAVAILABLE' | 'INVALID_STRUCTURED_RESPONSE' | 'OCR_LIMIT_EXCEEDED' | 'OCR_RATE_LIMITED' | 'OCR_INVALID_RESPONSE';
 export class DocumentPipelineError extends Error {
   constructor(public readonly code: DocumentErrorCode) { super(code); this.name = 'DocumentPipelineError'; }
 }

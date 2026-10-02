@@ -39,7 +39,7 @@ async function runAdversarialQAVerification() {
     formId: 'test_empty_form_id',
     formCode: 'TEST_EMPTY_MALFORMED',
     formTitle: 'Biểu mẫu rỗng không có bước',
-    status: 'draft',
+    status: 'DRAFT',
     steps: [] // 0 bước nguy hại
   };
 
@@ -116,14 +116,14 @@ async function runAdversarialQAVerification() {
   localCache.set('workflow_TEST_XSS_FORM', {
     formCode: 'TEST_XSS_FORM',
     formTitle: 'Biểu mẫu kiểm thử XSS',
-    status: 'pending_review',
+    status: 'PENDING_REVIEW',
     steps: [{ stepIndex: 1, label: 'Bước 1', voiceGuidance: 'Đọc hướng dẫn' }]
   });
 
   const xssApprove = await formPersistenceService.approveWorkflow('TEST_XSS_FORM', xssPerformedBy, xssNote);
   if (xssApprove.success && xssApprove.newStatus === 'ACTIVE') {
     const updated = localCache.get<FormWorkflow>('workflow_TEST_XSS_FORM');
-    if (updated && updated.status === 'active') {
+    if (updated && updated.status === 'ACTIVE') {
       console.log('  ✅ [PASS] Phê duyệt cập nhật trạng thái chuẩn xác sang ACTIVE');
       passedVerifications++;
     }

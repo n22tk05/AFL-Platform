@@ -2,7 +2,7 @@ import type { DocumentOcrInput } from '@/shared/document-extraction.types';
 import { DOCUMENT_LIMITS } from './config';
 import { DocumentExtractionService, manualReview } from './services/document-extraction.service';
 
-class InputError extends Error { constructor(public code: string, public status: number) { super(code); } }
+export class InputError extends Error { constructor(public code: string, public status: number) { super(code); } }
 async function limitedBody(req: Request): Promise<Uint8Array> {
   const declared = req.headers.get('content-length');
   if (declared && (!/^\d+$/.test(declared) || Number(declared) > DOCUMENT_LIMITS.requestBytes)) throw new InputError('REQUEST_TOO_LARGE', 413);
@@ -32,6 +32,31 @@ function checkImage(bytes: Uint8Array, mime: string): asserts mime is DocumentOc
   if (!(mime === 'image/jpeg' ? jpeg : png)) throw new InputError('INVALID_IMAGE', 400);
 }
 const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store, max-age=0', 'X-Content-Type-Options': 'nosniff' } });
+export async function parseDocumentImage(req: Request): Promise<DocumentOcrInput> {
+  const contentType = req.headers.get('content-type') || '';
+  if (!contentType.includes('multipart/form-data') && !contentType.includes('application/json')) throw new InputError('UNSUPPORTED_CONTENT_TYPE', 415);
+  const raw = await limitedBody(req);
+  let bytes: Uint8Array, mime: string;
+  if (contentType.includes('multipart/form-data')) {
+    let form: FormData;
+    try { form = await new Response(Buffer.from(raw), { headers: { 'Content-Type': contentType } }).formData(); }
+    catch { throw new InputError('INVALID_REQUEST', 400); }
+    const file = form.get('file');
+    if (!file || typeof file === 'string') throw new InputError('MISSING_FILE', 400);
+    if (file.size > DOCUMENT_LIMITS.fileBytes) throw new InputError('FILE_TOO_LARGE', 413);
+    bytes = new Uint8Array(await file.arrayBuffer()); mime = file.type;
+  } else {
+    let body: unknown;
+    try { body = JSON.parse(new TextDecoder().decode(raw)); } catch { throw new InputError('INVALID_REQUEST', 400); }
+    if (!body || typeof body !== 'object' || !('imageBase64' in body) || typeof body.imageBase64 !== 'string') throw new InputError('MISSING_IMAGE', 400);
+    const match = /^data:(image\/[a-z]+);base64,([A-Za-z0-9+/]+={0,2})$/.exec(body.imageBase64);
+    if (!match) throw new InputError('INVALID_IMAGE', 400);
+    mime = match[1]; bytes = Buffer.from(match[2], 'base64');
+    if (Buffer.from(bytes).toString('base64') !== match[2]) throw new InputError('INVALID_IMAGE', 400);
+  }
+  checkImage(bytes, mime);
+  return { bytes, mimeType: mime, signal: req.signal };
+}
 /** Same handler for route and injected tests. No raw provider exceptions reach clients. */
 export async function handleDocumentExtraction(req: Request, factory: () => DocumentExtractionService): Promise<Response> {
   try {

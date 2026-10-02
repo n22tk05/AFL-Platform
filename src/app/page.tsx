@@ -48,6 +48,37 @@ export default function HomePage() {
             </div>
           </Link>
 
+          <Link
+            href="/scan-document"
+            className="w-full p-4 bg-sky-50 hover:bg-sky-100 border-2 border-sky-300 rounded-2xl flex items-center justify-between text-sky-950 transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <BookOpen className="w-8 h-8" aria-hidden="true" />
+              <div className="text-left">
+                <div className="font-bold text-base">Chuyển ảnh thành Markdown</div>
+                <div className="text-xs">OpenCV → Google OCR → Ghép Markdown → Duyệt → .md</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* Lối vào Bàn làm việc Kiểm thử */}
+          <Link
+            href="/document-test"
+            className="w-full p-4 bg-amber-50 hover:bg-amber-100 border-2 border-amber-400 rounded-2xl flex items-center justify-between text-amber-950 transition-all group shadow-sm active:scale-98"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-md">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div className="text-left">
+                <div className="font-bold text-base">Bàn Làm Việc Kiểm Thử (Workbench)</div>
+                <div className="text-xs text-amber-800 font-medium">
+                  Soi Bounding Box, test trích xuất JSON & Markdown
+                </div>
+              </div>
+            </div>
+          </Link>
+
           {/* Lối vào dành cho Cán bộ Quản trị */}
           <Link
             href="/admin/library"

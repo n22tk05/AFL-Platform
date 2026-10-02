@@ -74,10 +74,10 @@ export function parseStructuredResult(response: unknown, ocr: DocumentOcrResult,
     const tokens = ocr.tokens.filter(token => tokenIds.has(token.id));
     const confidence = Math.min(clampConfidence(candidate.confidence), ...lines.map(line => clampConfidence(line.confidence ?? 0)), ...tokens.map(token => clampConfidence(token.confidence ?? 0)));
     const normalized = raw === null ? null : normalizeField(key, raw);
-    const expected = typeof candidate.value === 'string' ? normalizeField(key, candidate.value) : candidate.value;
-    const conflict = normalized === null || expected !== normalized;
-    if (candidate.value !== null && conflict) errors.push('Giá trị chuẩn hóa khác văn bản gốc.');
-    errors.push(...valueErrors(key, candidate.value));
+    // Gemini selects evidence only. Even equivalent reformattings must not pass.
+    const conflict = normalized === null || candidate.value !== raw;
+    if (candidate.value !== null && conflict) errors.push('Giá trị trích xuất phải giống nguyên văn OCR; không cho phép mô hình sửa hoặc chuẩn hóa.');
+    errors.push(...valueErrors(key, candidate.value === null ? null : normalized));
     if (confidence < threshold) errors.push('Độ tin cậy chưa đạt ngưỡng duyệt.');
     const value = grounded && !conflict && candidate.value !== null ? normalized : null;
     if (CRITICAL_FIELDS.has(key) && ocr.warnings.length) errors.push('Trường quan trọng cần đối chiếu cảnh báo OCR.');

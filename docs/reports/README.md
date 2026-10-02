@@ -22,7 +22,15 @@ docs/reports/
 │   └── README.md                             <-- Tiến độ Giao diện Mobile, WCAG AAA, Audio Player
 │
 ├── person-3-opencv/                          <-- Nguyễn Thế Anh (Algorithm & OpenCV Specialist)
-│   └── README.md                             <-- Tiến độ Xử lý ảnh WASM, Perspective & Bounding Boxes
+│   ├── README.md                             <-- Dashboard chi tiết tiến độ Người 3
+│   ├── step-01-wasm-contracts/
+│   │   └── OPENCV-WASM-CONTRACTS-REPORT.md   <-- [Bước 1] Tích hợp OpenCV.js WASM, SSR Safety & Hợp đồng [0.0 - 1.0]
+│   ├── step-02-deskew-and-boxes/
+│   │   └── DESKEW-AND-BOUNDING-BOXES-REPORT.md<-- [Bước 2] Nắn góc xiên (FR-1) & Bóc tách khung ô hình học (FR-7)
+│   ├── step-03-prerequisite-ocr-session/
+│   │   └── PREREQUISITE-OCR-SESSION-REPORT.md<-- [Bước 3] Quét chứng từ tiên quyết (FR-6) & Bảo mật Session RAM
+│   └── step-04-markdown-export/
+│       └── MARKDOWN-EXPORT-REPORT.md         <-- [Bước 4] Phân hệ xuất toàn văn OCR ra Markdown
 │
 └── person-4-voice-qa/                        <-- Nguyễn Thanh Chiến (AI Voice & QA Lead)
     ├── README.md                             <-- Dashboard chi tiết tiến độ Người 4
@@ -50,7 +58,7 @@ docs/reports/
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Người 1: Nguyễn Tuấn Khánh**<br>*(Tech Lead & PM)* | • Kiến trúc hệ thống tổng thể<br>• CSDL PostgreSQL & Prisma<br>• Phê duyệt Pull Requests | • Thiết kế 9 models Prisma quan hệ<br>• Đồng bộ hóa môi trường `.env`<br>• Cấu hình lệnh `prisma generate` | Rà soát & Merge PR #2 và PR #3 vào `main`; chuẩn bị API lưu CSDL. | 🟢 Đúng tiến độ | [`person-1-tech-lead/`](person-1-tech-lead/README.md) |
 | **Người 2: Võ Quốc Anh**<br>*(Frontend Specialist)* | • Giao diện Mobile Touch-first<br>• Tiêu chuẩn WCAG 2.1 AAA<br>• Đồng bộ Karaoke Audio UI | • Khung layout Mobile chuẩn WCAG<br>• Tích hợp dữ liệu giả lập `mock-workflow`<br>• Khung hiển thị chữ đỏ in hoa | Cắm hook `useVoiceAssistant` và đọc file `timestamps.json` để làm sáng viền ô. | 🟢 Đúng tiến độ | [`person-2-frontend/`](person-2-frontend/README.md) |
-| **Người 3: Nguyễn Thế Anh**<br>*(Algorithm / OpenCV)* | • Nhận diện 4 góc phôi giấy<br>• Nắn góc xiên (Perspective)<br>• Tọa độ chuẩn hóa $[0.0 - 1.0]$ | • Chuẩn hóa hợp đồng `contracts.ts`<br>• Xuất file mẫu `mock-manifest.json`<br>• Tích hợp module `@techstark/opencv-js` | Tinh chỉnh bộ lọc Canny & `approxPolyDP` chạy mượt trên WebAssembly (WASM). | 🟢 Đúng tiến độ | [`person-3-opencv/`](person-3-opencv/README.md) |
+| **Người 3: Nguyễn Thế Anh**<br>*(Algorithm / OpenCV)* | • Nhận diện 4 góc phôi giấy (FR-1)<br>• Nắn góc xiên (Perspective Transform)<br>• Tọa độ chuẩn hóa $[0.0 - 1.0]$ (FR-7)<br>• Quét chứng từ tiên quyết (FR-6)<br>• Phân hệ xuất OCR Markdown | • Chuẩn hóa hợp đồng `contracts.ts`<br>• Xuất file mẫu `mock-manifest.json`<br>• Pipeline nắn góc xiên & bóc khung ô<br>• Đấu nối Session RAM chữ mẫu đỏ `/guide`<br>• Endpoint `POST /api/documents/markdown` | **Hoàn thành Bước 04**<br>• OpenCV tests: 41/41 PASS<br>• Document tests: 43/43 PASS<br>• Tổng tests: 84/84 PASS<br>• NĐ 13/2023/NĐ-CP: 100% tuân thủ | 💎 Hoàn tất (Sẵn sàng nghiệm thu) | [`person-3-opencv/`](person-3-opencv/README.md) |
 | **Người 4: Nguyễn Thanh Chiến**<br>*(AI Voice & QA Lead)* | • Kịch bản Gemini Prompt (FR-8)<br>• Giọng đọc 0.9x & Karaoke (FR-3)<br>• Hỏi đáp Bán song công (FR-4)<br>• Kiểm toán QA 11 FRs & CSDL | • Bóc tách kịch bản 9 bước tự động<br>• Nâng cấp SSML Marks mili-giây (PR #2)<br>• Nâng cấp hàm băm SHA-256 (PR #3)<br>• Nghiên cứu sâu Google SDK vs Vercel<br>• Tích hợp CSDL Prisma & Cache Đa tầng<br>• Siết chặt toàn vẹn API & xác thực Admin | **Hoàn thành Bước 7**<br>• Persistence test: 16/16 PASS<br>• API Integrity test: PASS<br>• Local QA: 6/6 PASS<br>• Cache test: 13/13 PASS<br>• TypeScript: 0 lỗi biên dịch | 💎 Hoàn tất (Sẵn sàng đấu nối P2P) | [`person-4-voice-qa/`](person-4-voice-qa/README.md) |
 
 ---

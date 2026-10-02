@@ -10,6 +10,20 @@ export interface OcrToken {
   page: number;
 }
 export interface OcrLine extends OcrToken { tokenIds: string[] }
+/** Unicode character offsets into fullText, end exclusive. */
+export interface OcrTextRange { start: number; end: number }
+export interface OcrTableCell {
+  text: string;
+  sourceRanges: OcrTextRange[];
+  rowSpan: number;
+  columnSpan: number;
+}
+export interface OcrTable {
+  id: string;
+  page: number;
+  headerRowCount: number;
+  rows: OcrTableCell[][];
+}
 export interface DocumentOcrResult {
   provider: string;
   fullText: string;
@@ -17,6 +31,8 @@ export interface DocumentOcrResult {
   lines: OcrLine[];
   pageCount: number;
   warnings: string[];
+  /** Optional provider-supplied table layout, never inferred by an LLM. */
+  tables?: OcrTable[];
 }
 export interface DocumentOcrProvider { extract(input: DocumentOcrInput): Promise<DocumentOcrResult> }
 export type DocumentType = 'traffic_violation_record' | 'citizen_identity_card' | 'land_document' | 'unknown';

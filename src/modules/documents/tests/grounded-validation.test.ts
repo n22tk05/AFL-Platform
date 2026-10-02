@@ -64,8 +64,15 @@ test('money supports safe grouping and VND symbols',()=>{
   assert.equal(parseMoney('0'),0);
 });
 test('normalized date and money preserve raw evidence',()=>{
-  const r=parseStructuredResult({fields:{fineAmount:{value:900000,rawText:'900.000 đồng',confidence:1,evidenceText:'Phạt: 900.000 đồng',sourceLineIds:['l3']},recordDate:{value:'2024-02-29',rawText:'29/02/2024',confidence:1,evidenceText:'Ngày: 29/02/2024',sourceLineIds:['l2']}}},ocr);
+  const r=parseStructuredResult({fields:{fineAmount:{value:'900.000 đồng',rawText:'900.000 đồng',confidence:1,evidenceText:'Phạt: 900.000 đồng',sourceLineIds:['l3']},recordDate:{value:'29/02/2024',rawText:'29/02/2024',confidence:1,evidenceText:'Ngày: 29/02/2024',sourceLineIds:['l2']}}},ocr);
   assert.equal(r.fields.fineAmount.status,'accepted'); assert.equal(r.fields.fineAmount.rawText,'900.000 đồng'); assert.equal(r.fields.recordDate.status,'accepted');
+  assert.equal(r.fields.fineAmount.value,900000); assert.equal(r.fields.recordDate.value,'2024-02-29');
+});
+
+test('Gemini cannot reformat dates or amounts even when numerically equivalent',()=>{
+  const r=parseStructuredResult({fields:{fineAmount:{value:900000,rawText:'900.000 đồng',confidence:1,evidenceText:'Phạt: 900.000 đồng',sourceLineIds:['l3']},recordDate:{value:'2024-02-29',rawText:'29/02/2024',confidence:1,evidenceText:'Ngày: 29/02/2024',sourceLineIds:['l2']}}},ocr);
+  assert.equal(r.fields.fineAmount.value,null); assert.equal(r.fields.recordDate.value,null);
+  assert.equal(r.fields.fineAmount.status,'needs_review');
 });
 test('benchmark counts false accepted values and missing fields',()=>{
   const r=parseStructuredResult({fields:{recordNumber:candidate}},ocr);
