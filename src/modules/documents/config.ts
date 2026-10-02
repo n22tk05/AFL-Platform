@@ -1,6 +1,7 @@
 export const DOCUMENT_LIMITS = Object.freeze({
   fileBytes: 8 * 1024 * 1024, requestBytes: 12 * 1024 * 1024,
-  ocrCharacters: 120_000, ocrLines: 4000, timeoutMs: 30_000,
+  ocrCharacters: 120_000, ocrLines: 4000,
+  timeoutMs: Number(process.env.DOCUMENT_OCR_TIMEOUT_MS || 60_000),
   acceptanceThreshold: 0.95, sessionTtlMs: 15 * 60 * 1000,
 });
 export function acceptanceThreshold(env = process.env): number {

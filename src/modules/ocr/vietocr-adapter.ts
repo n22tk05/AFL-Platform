@@ -22,7 +22,7 @@ export interface VietOcrConfig {
 
 export const DEFAULT_VIETOCR_CONFIG: Readonly<VietOcrConfig> = Object.freeze({
   endpoint: process.env.VIETOCR_ENDPOINT || 'http://localhost:8000/predict',
-  timeoutMs: 30_000,
+  timeoutMs: Number(process.env.DOCUMENT_OCR_TIMEOUT_MS || 60_000),
   batchSize: 8,
   allowOfflineFallback: process.env.NODE_ENV !== 'production',
 });
