@@ -13,9 +13,11 @@ import {
   Search,
   BookOpen,
   AlertCircle,
+  QrCode,
 } from "lucide-react";
 import initialTemplates from "../../../../assets/mock-data/mock-admin-templates.json";
 import { FormUploadModal } from "@/components/admin/FormUploadModal";
+import { CitizenPortalQrModal } from "@/components/admin/CitizenPortalQrModal";
 import { FormStorageService } from "@/shared/services/form-storage";
 
 export type FormStatusType = "ALL" | "ACTIVE" | "PENDING_REVIEW" | "DRAFT" | "ARCHIVED";
@@ -47,6 +49,7 @@ export default function AdminLibraryPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<FormStatusType>("ALL");
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isPortalQrOpen, setIsPortalQrOpen] = useState(false);
   const [templates, setTemplates] = useState<LibraryTemplateItem[]>(
     initialTemplates as LibraryTemplateItem[]
   );
@@ -150,6 +153,9 @@ export default function AdminLibraryPage() {
       {/* Component Modal Tải Lên & Quét AI */}
       <FormUploadModal isOpen={isUploadOpen} onClose={() => setIsUploadOpen(false)} />
 
+      {/* Component Modal Mã QR Bàn Tiếp Đón */}
+      <CitizenPortalQrModal isOpen={isPortalQrOpen} onClose={() => setIsPortalQrOpen(false)} />
+
       {/* 1. THANH TIÊU ĐỀ & NÚT THÊM BIỂU MẪU MỚI */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 shadow-sm">
         <div>
@@ -165,15 +171,27 @@ export default function AdminLibraryPage() {
           </p>
         </div>
 
-        {/* Nút Hero: Tải Biểu Mẫu Mới */}
-        <button
-          type="button"
-          onClick={() => setIsUploadOpen(true)}
-          className="min-h-[48px] px-5 bg-emerald-700 hover:bg-emerald-800 text-white font-black text-sm rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-95 transition-all"
-        >
-          <Plus className="w-5 h-5" />
-          <span>TẢI LÊN BIỂU MẪU MỚI</span>
-        </button>
+        {/* Cụm nút thao tác Hero */}
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setIsPortalQrOpen(true)}
+            className="min-h-[48px] px-4 bg-white hover:bg-emerald-50 text-emerald-900 border-2 border-emerald-600/40 font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
+            title="In mã QR dán bàn tiếp đón Một cửa"
+          >
+            <QrCode className="w-4 h-4 text-emerald-700" />
+            <span>MÃ QR BÀN TIẾP ĐÓN</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsUploadOpen(true)}
+            className="min-h-[48px] px-5 bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-95 transition-all"
+          >
+            <Plus className="w-5 h-5" />
+            <span>TẢI LÊN BIỂU MẪU MỚI</span>
+          </button>
+        </div>
       </div>
 
       {/* Thông báo biểu mẫu chờ thẩm định */}
