@@ -2,7 +2,15 @@
 
 # AFL Platform — AI-Assisted Form-Filling CRM for Elderly Citizens
 
-**FR-6 hiện tại:** `/scan-document` dùng OpenCV deskew → Google Document AI OCR → Gemini text theo schema → kiểm chứng bằng chứng → người dùng duyệt → Session RAM. Chưa có benchmark độ chính xác trên ảnh thật. Xem [cấu hình, audit và kiểm thử](docs/DOCUMENT-EXTRACTION.md).
+**Cập nhật xử lý ảnh trước OCR:** `/scan-document` giữ ảnh màu primary, phân tích
+chất lượng bằng cảnh báo mềm, tạo bản tăng tương phản/cân bằng ánh sáng khi cần,
+đọc OCR tối đa hai lần tuần tự và giữ vùng chưa chắc chắn để người dùng kiểm tra.
+Ảnh mờ/nghi lóa hợp lệ được thử đọc; lỗi giải mã và warp không hợp lệ vẫn bị từ chối.
+Adapter Google Document AI và cấu hình chọn provider hiện có được giữ nguyên;
+cấu hình local hiện chọn VietOCR. Gemini chỉ xử lý text của luồng trích xuất trường.
+Xem [báo cáo triển khai](docs/reports/person-3-opencv/step-06-adaptive-ocr/ADAPTIVE-OCR-REPORT.md).
+
+**FR-6 hiện tại:** `/scan-document` dùng OpenCV → OCR theo cấu hình (Google Document AI hoặc VietOCR hiện có) → Gemini text theo schema → kiểm chứng bằng chứng → người dùng duyệt → Session RAM. Chưa có benchmark độ chính xác trên ảnh thật. Xem [cấu hình, audit và kiểm thử](docs/DOCUMENT-EXTRACTION.md).
 
 **Ảnh → `.md`:** OpenCV → **Google Document AI Enterprise OCR** → ghép Markdown bằng quy tắc cố định → kiểm tra → người dùng duyệt → tải file. Cấu hình Google OCR và quyền truy cập trong `.env.local`, khởi động lại ứng dụng rồi chọn **Chuyển ảnh sang Markdown** tại `/scan-document`. Gemini không tạo hoặc chép lại Markdown. Xem [hướng dẫn và giới hạn](docs/DOCUMENT-EXTRACTION.md#image-to-markdown-google-enterprise-ocr).
 ## Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh & Quản trị Quy trình cho Người cao tuổi tại Việt Nam

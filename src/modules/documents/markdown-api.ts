@@ -24,7 +24,7 @@ export async function handleMarkdownConversion(req: Request, factory: () => Mark
       : code === 'OCR_NOT_CONFIGURED' ? 503
       : code === 'OCR_RATE_LIMITED' ? 429 : code === 'OCR_TIMEOUT' ? 504
       : code === 'OCR_EMPTY_TEXT' || code === 'OCR_LIMIT_EXCEEDED' ? 422 : 502;
-    return Response.json({ success: false, error: { code, message_vi: messages[code] ?? (error instanceof InputError
+    return Response.json({ success: false, error: { code, ocrReview: error instanceof DocumentPipelineError ? error.ocrReview : undefined, message_vi: messages[code] ?? (error instanceof InputError
       ? 'Hãy chọn ảnh JPEG/PNG hợp lệ, tối đa 8 MB.' : 'Không thể kết nối dịch vụ OCR. Hãy kiểm tra microservice VietOCR hoặc cấu hình Document AI.') } }, { status, headers });
   }
 }

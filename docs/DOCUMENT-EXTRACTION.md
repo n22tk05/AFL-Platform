@@ -1,5 +1,88 @@
 # Document OCR and review
 
+## Adaptive preprocessing and bounded OCR (2026-10-04)
+
+The active `/scan-document` path now performs **quality analysis -> color primary
+image -> at most two optional enhanced candidates -> primary OCR -> one optional
+sequential enhanced OCR -> deterministic comparison -> human review**. Blur, low
+contrast, small images, shadows and possible glare are soft warnings. A white
+page is not proof of glare or of missing text. The older quality-gate description
+below is historical; it no longer describes this page's text-quality policy.
+
+Provider selection is preserved: `DOCUMENT_OCR_PROVIDER=google-document-ai` uses
+**Google Document AI** for OCR and **Gemini text** only for structured classification
+and field extraction. The current local `.env` and code default select the existing
+`vietocr` adapter. Neither provider was replaced; no Mistral integration or credential
+change was made. Markdown makes no Gemini calls. Citizen document processing disables
+VietOCR's development synthesizer; absent OCR confidence remains null.
+
+Contrast candidates use grayscale, mild bilateral denoise (Gaussian fallback),
+CLAHE when available (mild linear contrast fallback), and a mild unsharp mask.
+Lighting candidates use grayscale, Gaussian background estimation and bounded
+floating-point background normalization with a denominator floor. Filters never
+overwrite the primary; no morphology, threshold-only input, generative restoration
+or invented characters are used. Runtime capability checks precede optional APIs.
+The installed OpenCV 5 WASM exposes and successfully runs CLAHE/bilateralFilter.
+If an unexpectedly weak OCR result has no client candidate, the server builds one
+grayscale/blur/mild linear contrast/unsharp candidate with Sharp, after the first
+result, without changing the OCR provider. This fallback is not OpenCV CLAHE.
+
+Detection alone uses a reduced resolution. OCR no longer inherits the old 1600px
+preview cap. The source is bounded to 12 million pixels / 8192px per axis. Warp
+output retains its explicit 4096px/12-million-pixel safety caps; enhanced images
+preserve the primary frame and upscale by at most 2x within 8192px/12 million pixels.
+Rounded scaleX/scaleY are derived independently from actual decoded dimensions.
+Normalized evidence coordinates refer to the processed primary frame, not the
+original pre-warp photograph. Encoding uses PNG, with JPEG quality 0.95 if PNG
+exceeds 8 MB; each transmitted file still has an 8 MB cap. A request containing
+primary plus up to two candidates is capped at 26 MB. Mats are freed sequentially
+in finally; object URLs are revoked on replacement, failure, expiry and unmount.
+
+No low-confidence quad is cropped. Upload photos may fall back to the full image
+with `documentDetectionFailed=true`, `deskewApplied=false` and review required.
+Camera mode preserves the preview and requires the explicit **Thử đọc toàn ảnh**
+action. Corrupt/unsupported/empty-dimension/oversized inputs and non-finite,
+singular or horizon-crossing warps remain hard errors. The server fully decodes
+all transmitted images in bounded RAM before OCR; headers/signatures alone are
+insufficient. It rejects mismatched enhanced coordinate frames.
+
+OCR retry is triggered by empty/non-readable text, missing lines/geometry/confidence,
+malformed text, provider quality warnings or a low-confidence fraction. Starting
+values are retryConfidence=0.8, lowConfidenceFraction=0.2, alignmentIoU=0.65; they
+require calibration and are not accuracy guarantees. Two attempts share the
+configured `DOCUMENT_OCR_TIMEOUT_MS` budget (default 60 seconds); calls are serial.
+Errors, credentials/configuration failures, quota and timeout are not retried.
+Google OCR transport retries are disabled. Gemini retries are also disabled:
+at most 2 OCR + 1 classification + 1 schema call for a supported page; Markdown
+uses at most 2 OCR calls. Cancellation prevents subsequent calls.
+
+Each attempt retains exact raw OCR, variant, provider, timing and axis scales in
+RAM. Primary is retained by default. Only empty/non-readable primary or damaged
+primary with identical numeric strings can be replaced by the whole readable
+enhanced result. More text or higher confidence alone never wins. No regional
+merge or concatenation occurs. Only mutually unique high-IoU line matches are
+considered aligned; unaligned disagreement remains a whole-page review warning.
+Changed amounts, IDs, dates, record numbers or plates require review. Gemini sees
+only the already selected OCR and never arbitrates between competing values.
+Uncertain fields cannot be saved to Session RAM/guide without manual confirmation.
+
+After reading, the page exposes raw attempts, source-region overlays, editable
+fields and primary/enhanced previews. Unknown coordinates require checking the
+whole source page; they never become invented boxes. Empty OCR shows **Chưa đọc
+được vùng này**, retains the source and cannot be extraction success or a valid
+empty Markdown download. Possible blankness also forces manual review, even if
+the provider returns text. Retaking is optional. Request IDs plus AbortController
+prevent stale responses from overwriting new output; replacing image/mode clears
+all prior output and review state.
+
+Fixtures under `tests/fixtures/documents/` are fictional synthetic pixels generated
+by `node scripts/generate-document-image-fixtures.mjs`. Tests separate fake providers,
+real local OpenCV WASM and browser interception. Live OCR remains opt-in via
+`scripts/evaluate-document-extraction.ts --live` with consented, redacted images.
+No real documents were sent to cloud; synthetic tests do not measure camera OCR
+accuracy. Full implementation/verification evidence is in
+[the delivery report](reports/person-3-opencv/step-06-adaptive-ocr/ADAPTIVE-OCR-REPORT.md).
+
 ## Image to Markdown: Google Enterprise OCR
 
 Required pipeline: **OpenCV deskewed image -> Google Document AI Enterprise OCR -> deterministic Markdown assembler -> validation -> human review -> download .md**.

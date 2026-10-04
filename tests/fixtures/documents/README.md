@@ -1,5 +1,16 @@
 # Private extraction benchmark
 
+## Non-sensitive adaptive preprocessing fixtures
+
+`clear.png`, `low-contrast.png`, `small.png`, `shadow.png`, `clipped.png`,
+`blank.png` and `no-paper.png` contain only synthetic grayscale strokes or flat
+pixels. Regenerate them with `node scripts/generate-document-image-fixtures.mjs`.
+They exercise image quality, bounds and preprocessing, not Vietnamese OCR accuracy.
+Browser tests separately draw fictional Vietnamese text and a camera-style page
+with canvas; cloud OCR is intercepted. Real local OpenCV integration runs both
+enhancement variants and rejects a uniform image without cropping an invented quad.
+No private photograph or citizen document is included or needed for these tests.
+
 The example manifest contains fictional values and an intentionally nonexistent image path. It is not an accuracy dataset. No real document image belongs in this repository.
 
 Keep consented images and ground truth outside the repository. Use JPEG/PNG pages already processed by the client deskew step. Copy the manifest outside the repository, supply paths relative to that manifest, and annotate all ten fields; use null for absent/unreadable values. Have a second reviewer check annotations. Include Vietnamese diacritics, handwriting, missing fields, camera skew, glare and blur. Report source category and sample size with any scores.

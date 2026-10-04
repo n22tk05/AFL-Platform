@@ -59,7 +59,7 @@ test('VietOcrAdapter offline fallback generates sorted DetectedLineText with val
   assert.equal(typeof results[0].rawText, 'string');
   assert.equal(results[0].rawText.length > 0, true);
   assert.equal(typeof results[0].confidence, 'number');
-  assert.equal(results[0].confidence >= 0 && results[0].confidence <= 1, true);
+  assert.equal(results[0].confidence !== null && results[0].confidence >= 0 && results[0].confidence <= 1, true);
 
   assert.equal(results[1].lineId, 'line_002');
   assert.deepEqual(results[1].coordinates, [0.12, 0.1, 0.16, 0.85]);

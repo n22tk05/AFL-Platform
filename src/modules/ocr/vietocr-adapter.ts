@@ -116,9 +116,9 @@ export class VietOcrAdapter {
   ): Promise<DetectedLineText[]> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.config.timeoutMs);
-    const combinedSignal = signal
-      ? anySignal([signal, controller.signal])
-      : controller.signal;
+    const abort = () => controller.abort();
+    signal?.addEventListener('abort', abort, { once: true });
+    if (signal?.aborted) controller.abort();
 
     try {
       const payload = {
@@ -137,7 +137,7 @@ export class VietOcrAdapter {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-        signal: combinedSignal,
+        signal: controller.signal,
       });
 
       if (!res.ok) {
@@ -174,7 +174,7 @@ export class VietOcrAdapter {
                 : lines[0].coordinates,
             rawText: String(pred.text ?? '').trim(),
             confidence:
-              typeof pred.confidence === 'number' ? pred.confidence : 0.95,
+              typeof pred.confidence === 'number' && Number.isFinite(pred.confidence) && pred.confidence >= 0 && pred.confidence <= 1 ? pred.confidence : null,
           }),
         );
       }
@@ -189,11 +189,12 @@ export class VietOcrAdapter {
               : line.coordinates,
           rawText: String(pred.text ?? '').trim(),
           confidence:
-            typeof pred.confidence === 'number' ? pred.confidence : 0.95,
+            typeof pred.confidence === 'number' && Number.isFinite(pred.confidence) && pred.confidence >= 0 && pred.confidence <= 1 ? pred.confidence : null,
         };
       });
     } finally {
       clearTimeout(timeout);
+      signal?.removeEventListener('abort', abort);
     }
   }
 
@@ -208,16 +209,4 @@ export class VietOcrAdapter {
       confidence: 0.98,
     }));
   }
-}
-
-function anySignal(signals: AbortSignal[]): AbortSignal {
-  const controller = new AbortController();
-  for (const sig of signals) {
-    if (sig.aborted) {
-      controller.abort();
-      return controller.signal;
-    }
-    sig.addEventListener('abort', () => controller.abort(), { once: true });
-  }
-  return controller.signal;
 }

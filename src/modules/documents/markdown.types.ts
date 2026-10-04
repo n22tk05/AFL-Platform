@@ -1,4 +1,5 @@
 import { DOCUMENT_LIMITS } from './config';
+import type { OcrReview } from '@/shared/document-extraction.types';
 
 export interface MarkdownIssue {
   code: string;
@@ -22,6 +23,7 @@ export interface MarkdownDraft {
   confidence: number | null;
   warnings: string[];
   validation: MarkdownValidation;
+  ocrReview?: OcrReview;
 }
 export const MARKDOWN_LIMITS = Object.freeze({
   timeoutMs: DOCUMENT_LIMITS.timeoutMs,

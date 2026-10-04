@@ -68,6 +68,7 @@ export function mapGoogleDocument(document: GoogleDocument): DocumentOcrResult {
   return result;
 }
 export class GoogleDocumentAiProvider implements DocumentOcrProvider {
+  readonly providerId = 'google-document-ai';
   constructor(private readonly env: NodeJS.ProcessEnv = process.env) {}
   async extract(input: DocumentOcrInput): Promise<DocumentOcrResult> {
     if (typeof window !== 'undefined') throw new Error('SERVER_ONLY');

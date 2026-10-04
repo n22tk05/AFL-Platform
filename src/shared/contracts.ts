@@ -15,7 +15,7 @@ export interface DetectedLineText {
   lineId: string;
   coordinates: NormalizedBoundingBox; // [ymin, xmin, ymax, xmax] thang 0.0 - 1.0
   rawText: string;
-  confidence: number;
+  confidence: number | null;
 }
 
 // ============================================================================

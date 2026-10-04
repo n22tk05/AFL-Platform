@@ -22,6 +22,12 @@ Luồng chứng từ công dân hiện dùng **OpenCV WASM → Google Document A
 
 ## 1. Mô hình Kiến trúc Cốt lõi (Design Paradigm)
 
+Cập nhật tiền xử lý OCR (2026-10-04): quality analysis chọn ứng viên ảnh, ảnh màu
+primary được đọc trước, retry tối đa một lần tuần tự khi OCR yếu, rồi đối chiếu
+tất định và người dùng duyệt. Google Document AI là OCR khi được chọn trong config;
+Gemini là bộ trích xuất text riêng. Hình học vẫn kiểm tra nghiêm ngặt; mờ/lóa chỉ
+là cảnh báo. Xem [hợp đồng và giới hạn](DOCUMENT-EXTRACTION.md#adaptive-preprocessing-and-bounded-ocr-2026-10-04).
+
 Hệ thống tuân thủ mô hình **Kiến trúc Lục giác (Hexagonal Architecture / Ports & Adapters)** kết hợp với **Máy trạng thái Quy trình hướng Sự kiện (Event-driven Workflow State Machine)**:
 
 * **Core Domain:** Chứa logic thuần túy về cấu trúc Biểu mẫu (Form Schema), Các bước quy trình (Workflow Steps), Tọa độ Bounding Box, và Quy tắc Ánh xạ Liên chứng từ (Dependency Rules). Không phụ thuộc vào bất kỳ thư viện giao diện hay cơ sở dữ liệu nào.
