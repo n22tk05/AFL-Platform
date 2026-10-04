@@ -42,8 +42,12 @@ export function warpDocument(cv: CvRuntime, source: CvMat, quad: DocumentQuad, o
     sourcePoints = runtime.matFromArray(4, 1, runtime.CV_32FC2, points.flatMap(p => [p.x, p.y]));
     destinationPoints = runtime.matFromArray(4, 1, runtime.CV_32FC2, [0, 0, width - 1, 0, width - 1, height - 1, 0, height - 1]);
     transform = runtime.getPerspectiveTransform(sourcePoints, destinationPoints);
+    const coefficients = transform as CvMat & { data64F?: Float64Array; data32F?: Float32Array };
+    const matrix = coefficients.data64F?.length === 9 ? coefficients.data64F : coefficients.data32F;
+    if (matrix) validatePerspectiveMatrix(matrix, quad);
     output = new runtime.Mat();
     runtime.warpPerspective(source, output, transform, new runtime.Size(width, height), runtime.INTER_LINEAR, runtime.BORDER_REPLICATE);
+    if (output.cols <= 0 || output.rows <= 0 || !Number.isFinite(output.cols * output.rows)) throw new RangeError('Invalid warp output.');
     const deskewed = output;
     output = undefined;
     return { deskewed, width, height };
@@ -53,4 +57,15 @@ export function warpDocument(cv: CvRuntime, source: CvMat, quad: DocumentQuad, o
     destinationPoints?.delete();
     sourcePoints?.delete();
   }
+}
+
+/** Reject non-finite/singular transforms and projective horizons through the ROI. */
+export function validatePerspectiveMatrix(matrix: ArrayLike<number>, quad: DocumentQuad): void {
+  const m = Array.from(matrix);
+  if (m.length !== 9 || m.some(n => !Number.isFinite(n))) throw new RangeError('Non-finite perspective transform.');
+  const determinant = m[0] * (m[4] * m[8] - m[5] * m[7]) - m[1] * (m[3] * m[8] - m[5] * m[6]) + m[2] * (m[3] * m[7] - m[4] * m[6]);
+  if (!Number.isFinite(determinant) || determinant === 0) throw new RangeError('Singular perspective transform.');
+  const denominators = quadPoints(quad).map(p => m[6] * p.x + m[7] * p.y + m[8]);
+  if (denominators.some(n => !Number.isFinite(n) || n === 0) || denominators.some(n => Math.sign(n) !== Math.sign(denominators[0])))
+    throw new RangeError('Perspective horizon crosses the document.');
 }

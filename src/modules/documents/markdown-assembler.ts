@@ -1,25 +1,10 @@
 import type { DocumentOcrResult, OcrTable } from '@/shared/document-extraction.types';
+import { normalizeOcrTextToMarkdown, escapeOcrText } from './markdown-normalizer';
 
-/** Escape OCR as literal content; never interpret source HTML or Markdown links. */
-export function escapeOcrText(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/[\\`*_[\]|#~+=-]/g, '\\$&');
-}
+export { escapeOcrText };
 
-function plainMarkdown(text: string): string {
-  const lines = text.replace(/\r\n?/g, '\n').split('\n');
-  return lines.map(line => {
-    const trimmed = line.trim();
-    if (!trimmed) return line;
-    // A short uppercase document title, not arbitrary names/addresses/numbers.
-    const heading = trimmed.length <= 160 && trimmed === trimmed.toLocaleUpperCase('vi')
-      && /^(?:CỘNG H[OÒ]A XÃ HỘI CHỦ NGHĨA VIỆT NAM|THÔNG BÁO|BIÊN BẢN|QUYẾT ĐỊNH|TỜ KHAI|ĐƠN ĐỀ NGHỊ|GIẤY|HỢP ĐỒNG|BÁO CÁO)(?:\s|$)/.test(trimmed);
-    if (heading) return `\n# ${escapeOcrText(line)}\n`;
-    const bullet = /^( {0,3}[-+*] )(.+)$/.exec(line);
-    if (bullet) return `${bullet[1]}${escapeOcrText(bullet[2])}  `;
-    // Preserve numbered markers literally: renderers must not renumber 1, 3 as 1, 2.
-    return escapeOcrText(line).replace(/^( {0,3})([#=~+-])/, '$1\\$2').replace(/^( {0,3}\d+)([.)])(?=\s)/, '$1\\$2')
-      .replace(/^[ \t]+/, whitespace => whitespace.replace(/ /g, '&#32;').replace(/\t/g, '&#9;')) + '  ';
-  }).join('\n');
+function plainMarkdown(text: string, ocr?: DocumentOcrResult): string {
+  return normalizeOcrTextToMarkdown(text, ocr?.lines);
 }
 
 type TableRegion = { start: number; end: number; markdown: string };
@@ -56,7 +41,7 @@ function tableRegion(table: OcrTable, chars: string[]): TableRegion | null {
 /** All words come from fullText. Ambiguous layout falls back to full source order. */
 export function assembleMarkdown(ocr: DocumentOcrResult): { markdown: string; warnings: string[] } {
   if (!ocr.tables?.length) {
-    return { markdown: plainMarkdown(ocr.fullText), warnings: [] };
+    return { markdown: plainMarkdown(ocr.fullText, ocr), warnings: [] };
   }
 
   const chars = Array.from(ocr.fullText);
@@ -70,14 +55,14 @@ export function assembleMarkdown(ocr: DocumentOcrResult): { markdown: string; wa
   regions.sort((a, b) => a.start - b.start);
   // Conflicting source ranges invalidate all table transformations.
   if (regions.some((region, i) => i > 0 && region.start < regions[i - 1].end)) {
-    return { markdown: plainMarkdown(ocr.fullText), warnings: [...warnings, 'Vùng bảng chồng lấn; đã giữ nguyên toàn văn OCR.'] };
+    return { markdown: plainMarkdown(ocr.fullText, ocr), warnings: [...warnings, 'Vùng bảng chồng lấn; đã giữ nguyên toàn văn OCR.'] };
   }
   const parts: string[] = [];
   let cursor = 0;
   for (const region of regions) {
-    parts.push(plainMarkdown(chars.slice(cursor, region.start).join('')), region.markdown);
+    parts.push(plainMarkdown(chars.slice(cursor, region.start).join(''), ocr), region.markdown);
     cursor = region.end;
   }
-  parts.push(plainMarkdown(chars.slice(cursor).join('')));
+  parts.push(plainMarkdown(chars.slice(cursor).join(''), ocr));
   return { markdown: parts.join(''), warnings: Array.from(new Set(warnings)) };
 }

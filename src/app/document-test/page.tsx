@@ -25,12 +25,13 @@ import {
 import type {
   DocumentExtractionResult,
   NormalizedBoundingBox,
-  ExtractedField,
+  OcrReview,
 } from '@/shared/document-extraction.types';
-import type { DocumentMode } from '@/modules/opencv';
-import { prepareDocumentImage } from '@/modules/documents/prepare-image';
+import { FullImageConsentRequired, prepareDocumentImage, type PreparationMode, type PreparedDocumentImage } from '@/modules/documents/prepare-image';
 import { documentSession, reviewedFields, type FieldConfirmations } from '@/modules/documents/session';
 import { MarkdownReview } from '@/components/documents/MarkdownReview';
+import { OcrAttemptReview } from '@/components/documents/OcrAttemptReview';
+import { IMAGE_WARNING_MESSAGES } from '@/modules/documents/image-quality';
 import { validateMarkdown } from '@/modules/documents/markdown-validator';
 import type { MarkdownDraft } from '@/modules/documents/markdown.types';
 import { DOCUMENT_LIMITS } from '@/modules/documents/config';
@@ -39,7 +40,7 @@ import { TRAFFIC_FIELDS } from '@/modules/documents/schema';
 
 // Synthetic sample generator for 1-click test document creation
 function createSyntheticDocumentBlob(kind: 'traffic' | 'clean' | 'angled'): Promise<{ blob: Blob; filename: string }> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
     canvas.height = 1600;
@@ -177,7 +178,7 @@ function createSyntheticDocumentBlob(kind: 'traffic' | 'clean' | 'angled'): Prom
       (blob) => {
         if (blob) {
           resolve({ blob, filename: `bien_ban_csgt_${kind}.png` });
-        }
+        } else reject(new Error('Không tạo được ảnh mẫu.'));
       },
       'image/png'
     );
@@ -186,14 +187,14 @@ function createSyntheticDocumentBlob(kind: 'traffic' | 'clean' | 'angled'): Prom
 
 // Simulated mock extraction result for offline testing
 function buildMockExtraction(rawText: string, processingTimeMs: number): DocumentExtractionResult {
-  return {
+  const demo: DocumentExtractionResult = {
     contractVersion: 2,
-    status: 'extracted',
+    status: 'manual_review_required',
     documentType: 'traffic_violation_record',
     fullText: rawText,
-    overallConfidence: 0.96,
-    requiresReview: false,
-    warnings: [],
+    overallConfidence: 0,
+    requiresReview: true,
+    warnings: ['Dữ liệu mô phỏng giao diện; không phải kết quả OCR và không được lưu vào phiên hướng dẫn.'],
     processingTimeMs,
     deskewApplied: true,
     fields: {
@@ -319,16 +320,27 @@ function buildMockExtraction(rawText: string, processingTimeMs: number): Documen
       },
     },
   };
+  for (const field of Object.values(demo.fields)) { field.confidence = 0; field.status = 'needs_review'; }
+  return demo;
 }
 
 export default function DocumentTestPage() {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string | null>(null);
-  const [mode, setMode] = useState<DocumentMode>('clean-scan');
+  const [mode, setMode] = useState<PreparationMode>('upload-photo');
   const [engineMode, setEngineMode] = useState<'live' | 'mock'>('live');
   const [activeTab, setActiveTab] = useState<'structured' | 'markdown' | 'diagnostics'>('structured');
   const [selectedFieldKey, setSelectedFieldKey] = useState<string | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
+  const [enhancedPreviews, setEnhancedPreviews] = useState<{ variant: string; url: string }[]>([]);
+  const [shownVariant, setShownVariant] = useState('primary');
+  const [imageWarnings, setImageWarnings] = useState<string[]>([]);
+  const [deskewApplied, setDeskewApplied] = useState(false);
+  const [failedReview, setFailedReview] = useState<OcrReview | undefined>();
+  const [needsFullImage, setNeedsFullImage] = useState<'structured' | 'markdown' | null>(null);
+  const [textConsent, setTextConsent] = useState(false);
+  const [syntheticInput, setSyntheticInput] = useState(false);
 
   // Results state
   const [extractionResult, setExtractionResult] = useState<DocumentExtractionResult | null>(null);
@@ -350,28 +362,34 @@ export default function DocumentTestPage() {
   });
 
   const abortControllerRef = useRef<AbortController | null>(null);
+  const generation = useRef(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => () => abortControllerRef.current?.abort(), []);
-  useEffect(() => {
+  const invalidate = useCallback(() => {
+    generation.current++;
     abortControllerRef.current?.abort();
-    setMarkdownDraft(null);
-  }, [mode, engineMode]);
+    setExtractionResult(null); setMarkdownDraft(null); setDraftValues({}); setConfirmations({});
+    setSelectedFieldKey(null); setSelectedRegion(null); setProcessedUrl(null); setEnhancedPreviews([]);
+    setShownVariant('primary'); setImageWarnings([]); setDeskewApplied(false); setFailedReview(undefined);
+    setNeedsFullImage(null); setIsProcessing(false); setCurrentStepText(''); setStatusMessage(null);
+    setTimings({ deskewMs: 0, extractionMs: 0, totalMs: 0 }); documentSession.clear();
+  }, []);
+  useEffect(() => () => { generation.current++; abortControllerRef.current?.abort(); }, []);
 
   // Each URL stays valid until that exact image is replaced or unmounted.
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
   useEffect(() => () => { if (processedUrl) URL.revokeObjectURL(processedUrl); }, [processedUrl]);
+  useEffect(() => () => { enhancedPreviews.forEach(image => URL.revokeObjectURL(image.url)); }, [enhancedPreviews]);
   useEffect(() => {
     if (!file) return;
     const timer = setTimeout(() => {
-      abortControllerRef.current?.abort();
-      setMarkdownDraft(null); setExtractionResult(null); setDraftValues({}); setConfirmations({});
+      invalidate();
       setFile(null); setPreviewUrl(null); setProcessedUrl(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
       setStatusMessage({ type: 'info', text: 'Phiên đã hết hạn. Hãy chọn lại ảnh để tiếp tục.' });
     }, DOCUMENT_LIMITS.sessionTtlMs);
     return () => clearTimeout(timer);
-  }, [file]);
+  }, [file, invalidate]);
 
   // Subscribe to session changes
   useEffect(() => {
@@ -383,18 +401,8 @@ export default function DocumentTestPage() {
   }, []);
 
   // Handle file selection
-  const selectFile = useCallback((newFile: File | null) => {
-    if (abortControllerRef.current) abortControllerRef.current.abort();
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    if (processedUrl) URL.revokeObjectURL(processedUrl);
-
-    setExtractionResult(null);
-    setMarkdownDraft(null);
-    setDraftValues({});
-    setConfirmations({});
-    setSelectedFieldKey(null);
-    setProcessedUrl(null);
-    setStatusMessage(null);
+  const selectFile = useCallback((newFile: File | null, isSynthetic = false) => {
+    invalidate(); setSyntheticInput(isSynthetic); setTextConsent(false);
 
     if (!newFile) {
       setFile(null);
@@ -405,10 +413,12 @@ export default function DocumentTestPage() {
     setFile(newFile);
     setPreviewUrl(URL.createObjectURL(newFile));
     setStatusMessage({ type: 'info', text: `Đã nạp file: ${newFile.name} (${(newFile.size / 1024).toFixed(1)} KB)` });
-  }, [previewUrl, processedUrl]);
+  }, [invalidate]);
 
   // Quick preset loader
   const loadPreset = async (presetType: 'synthetic-traffic' | 'synthetic-angled' | 'form-lptb') => {
+    invalidate(); const requestId = generation.current;
+    const abort = new AbortController(); abortControllerRef.current = abort;
     setIsProcessing(true);
     setCurrentStepText('Đang tạo mẫu thử nghiệm...');
     try {
@@ -416,48 +426,54 @@ export default function DocumentTestPage() {
         const { blob, filename } = await createSyntheticDocumentBlob(
           presetType === 'synthetic-traffic' ? 'clean' : 'angled'
         );
+        if (requestId !== generation.current) return;
         const synthFile = new File([blob], filename, { type: 'image/png' });
         setMode(presetType === 'synthetic-angled' ? 'camera-photo' : 'clean-scan');
-        selectFile(synthFile);
+        selectFile(synthFile, true);
       } else if (presetType === 'form-lptb') {
-        const response = await fetch('/assets/forms/01-lptb/page-1.jpg');
+        const response = await fetch('/assets/forms/01-lptb/page-1.jpg', { signal: abort.signal });
+        if (!response.ok) throw new Error('Ảnh mẫu chưa sẵn sàng.');
         const blob = await response.blob();
+        if (requestId !== generation.current) return;
         const lptbFile = new File([blob], 'to_khai_01_lptb_mau.jpg', { type: 'image/jpeg' });
         setMode('clean-scan');
         selectFile(lptbFile);
       }
     } catch (err) {
-      setStatusMessage({ type: 'error', text: 'Không tải được file mẫu: ' + (err instanceof Error ? err.message : String(err)) });
+      if (requestId === generation.current) setStatusMessage({ type: 'error', text: 'Không tải được file mẫu: ' + (err instanceof Error ? err.message : String(err)) });
     } finally {
-      setIsProcessing(false);
-      setCurrentStepText('');
+      if (requestId === generation.current) { setIsProcessing(false); setCurrentStepText(''); }
     }
   };
 
   // Run full extraction pipeline
-  const runPipeline = async (target: 'all' | 'structured' | 'markdown') => {
+  const runPipeline = async (target: 'structured' | 'markdown', allowFullImage = false) => {
     if (!file) return;
+    if (engineMode === 'live' && target === 'structured' && !textConsent) return;
+    if (engineMode === 'mock' && !syntheticInput) {
+      setStatusMessage({ type: 'warning', text: 'Chế độ mô phỏng chỉ dùng ảnh tổng hợp. Chọn Biên Bản CSGT hoặc Chụp Nghiêng để thử giao diện.' }); return;
+    }
 
-    if (abortControllerRef.current) abortControllerRef.current.abort();
+    invalidate(); const requestId = generation.current;
     const abort = new AbortController();
     abortControllerRef.current = abort;
 
-    setMarkdownDraft(null);
-    setConfirmations({});
     setIsProcessing(true);
-    setStatusMessage(null);
+    setActiveTab(target);
     const startTotal = performance.now();
 
     try {
       // Step 1: Preprocessing & Deskew (OpenCV WASM)
-      setCurrentStepText('Đang nắn phối cảnh & thẩm định ảnh bằng OpenCV WASM...');
+      setCurrentStepText('Đang tối ưu hình ảnh…');
       const startDeskew = performance.now();
-      const prepared = await prepareDocumentImage(file, mode);
-      if (abort.signal.aborted) return;
+      const prepared = await prepareDocumentImage(file, mode, { allowFullImage, signal: abort.signal });
+      if (requestId !== generation.current) return;
       const deskewTime = Math.round(performance.now() - startDeskew);
 
       const processedBlobUrl = URL.createObjectURL(prepared.blob);
       setProcessedUrl(processedBlobUrl);
+      setDeskewApplied(prepared.deskewApplied); setImageWarnings(prepared.quality.warnings);
+      setEnhancedPreviews(prepared.enhancements.map(image => ({ variant: image.variant, url: URL.createObjectURL(image.blob) })));
 
       // Step 2: Extraction execution
       const startExtraction = performance.now();
@@ -467,18 +483,19 @@ export default function DocumentTestPage() {
         setCurrentStepText('Đang chạy chế độ mô phỏng offline...');
         await new Promise((r) => setTimeout(r, 650)); // Realistic network latency simulation
 
-        if (abort.signal.aborted) return;
+        if (requestId !== generation.current) return;
         const sampleText = `CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nCÔNG AN TP. HÀ NỘI\nPHÒNG CSGT ĐƯỜNG BỘ\n\nBIÊN BẢN VI PHẠM HÀNH CHÍNH\nVề trật tự an toàn giao thông đường bộ\n\nSố biên bản: 004821/BB-VPHC\nNgày lập biên bản: 15/09/2026\nHọ và tên người vi phạm: NGUYỄN VĂN AN\nSố CCCD / Mã định danh: 001085012345\nĐịa chỉ thường trú: Số 12 phố Hàng Bông, Q. Hoàn Kiếm, TP. Hà Nội\nPhương tiện vi phạm mang biển số: 29A-888.88\nHành vi vi phạm: Không chấp hành hiệu lệnh của đèn tín hiệu giao thông\nSố quyết định xử phạt: 9042/QĐ-XPHC\nSố tiền phạt: 900.000 đồng (Chín trăm nghìn đồng)\nThời hạn nộp tiền phạt: 30/09/2026`;
 
-        if (target === 'all' || target === 'structured') {
+        if (target === 'structured') {
           const mockData = buildMockExtraction(sampleText, Math.round(performance.now() - startExtraction));
+          mockData.deskewApplied = prepared.deskewApplied;
           setExtractionResult(mockData);
           setDraftValues(
             Object.fromEntries(Object.entries(mockData.fields).map(([k, v]) => [k, v.value === null ? '' : String(v.value)]))
           );
         }
 
-        if (target === 'all' || target === 'markdown') {
+        if (target === 'markdown') {
           const mockMarkdown = `# CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
 Độc lập - Tự do - Hạnh phúc
 
@@ -505,87 +522,58 @@ Về trật tự an toàn giao thông đường bộ
 
         const totalTime = Math.round(performance.now() - startTotal);
         setTimings({ deskewMs: deskewTime, extractionMs: Math.round(performance.now() - startExtraction), totalMs: totalTime });
-        setStatusMessage({ type: 'success', text: `Xử lý thành công trong ${totalTime}ms (Chế độ mô phỏng Offline)` });
+        setStatusMessage({ type: 'warning', text: `Dữ liệu mẫu mô phỏng trong ${totalTime}ms; chưa thực hiện OCR. Không thể lưu dữ liệu mẫu vào Session RAM hoặc dùng trong hướng dẫn.` });
       } else {
-        // Live API execution
-        let hasError = false;
-
-        if (target === 'all' || target === 'structured') {
-          setCurrentStepText('Đang gửi Google Document AI & Gemini structured extraction...');
-          const form = new FormData();
-          form.set('file', prepared.blob, 'document.png');
-          form.set('deskewApplied', String(prepared.deskewApplied));
-          form.set('documentHint', 'traffic_violation_record');
-
-          const response = await fetch('/api/documents/extract', {
-            method: 'POST',
-            body: form,
-            signal: abort.signal,
-            cache: 'no-store',
-          });
-          const payload = await response.json();
-          if (abort.signal.aborted) return;
-
-          if (!response.ok || !payload.success) {
-            hasError = true;
-            setStatusMessage({
-              type: 'warning',
-              text: `Live API cảnh báo: ${payload.error?.message_vi || 'Cần kiểm tra API key trong .env'}. Bạn có thể chuyển sang chế độ "Mô phỏng Offline" để test giao diện.`,
-            });
-          } else {
-            const data: DocumentExtractionResult = payload.data;
-            setExtractionResult(data);
-            setDraftValues(
-              Object.fromEntries(Object.entries(data.fields).map(([k, v]) => [k, v.value === null ? '' : String(v.value)]))
-            );
-          }
+        setCurrentStepText('Đang đọc nội dung…');
+        const response = await fetch(`/api/documents/${target === 'structured' ? 'extract' : 'markdown'}`, {
+          method: 'POST', body: preparedForm(prepared), signal: abort.signal, cache: 'no-store',
+        });
+        if (requestId !== generation.current) return;
+        setCurrentStepText('Đang kiểm tra kết quả…');
+        const payload = await response.json();
+        if (requestId !== generation.current) return;
+        if (!response.ok || !payload.success) {
+          if (payload.error?.ocrReview?.attempts && payload.error?.ocrReview?.regions) setFailedReview(payload.error.ocrReview);
+          throw new Error(payload.error?.message_vi || 'Không đọc được phản hồi. Hãy thử lại.');
         }
-
-        if (target === 'all' || target === 'markdown') {
-          setCurrentStepText('Đang đọc bằng Google Document AI, ghép và kiểm tra Markdown...');
-          const mdForm = new FormData();
-          mdForm.set('file', prepared.blob, 'document.png');
-
-          const mdRes = await fetch('/api/documents/markdown', {
-            method: 'POST',
-            body: mdForm,
-            signal: abort.signal,
-            cache: 'no-store',
-          });
-
-          if (mdRes.ok) {
-            const payload = await mdRes.json();
-            if (abort.signal.aborted) return;
-            if (!payload.success || payload.data?.contractVersion !== 1 || payload.data?.status !== 'review_required') throw new Error('INVALID_MARKDOWN_RESPONSE');
-            setMarkdownDraft(payload.data);
-            setActiveTab('markdown');
-          } else {
-            const errJson = await mdRes.json().catch(() => ({}));
-            if (abort.signal.aborted) return;
-            hasError = true;
-            setStatusMessage({
-              type: 'warning',
-              text: `Markdown: ${errJson.error?.message_vi || 'Chưa cấu hình Google Document AI Enterprise OCR'}`,
-            });
-          }
+        let requiresReview = true;
+        if (target === 'structured') {
+          if (payload.data?.contractVersion !== 2 || !payload.data?.fields || typeof payload.data.fullText !== 'string') throw new Error('Phản hồi trích xuất không hợp lệ.');
+          const data: DocumentExtractionResult = payload.data;
+          setExtractionResult(data);
+          setDraftValues(Object.fromEntries(Object.entries(data.fields).map(([key, field]) => [key, field.value === null ? '' : String(field.value)])));
+          requiresReview = data.requiresReview || data.status === 'manual_review_required' || !data.fullText.trim();
+        } else {
+          if (payload.data?.contractVersion !== 1 || payload.data?.status !== 'review_required') throw new Error('Phản hồi Markdown không hợp lệ.');
+          setMarkdownDraft(payload.data);
         }
-
         const totalTime = Math.round(performance.now() - startTotal);
         setTimings({ deskewMs: deskewTime, extractionMs: Math.round(performance.now() - startExtraction), totalMs: totalTime });
-        if (!hasError) {
-          setStatusMessage({ type: 'success', text: `Trích xuất hoàn tất trong ${totalTime}ms (Live API)` });
-        }
+        setStatusMessage({ type: requiresReview ? 'warning' : 'info', text: payload.data.fullText?.trim() || payload.data.rawText?.trim()
+          ? `Đã nhận bản nháp trong ${totalTime}ms. Đối chiếu ảnh và xác nhận nội dung trước khi dùng.`
+          : 'Chưa đọc được vùng này. Hãy xem ảnh nguồn và kết quả từng lần đọc; có thể chọn ảnh khác nếu cần.' });
       }
     } catch (err) {
-      if (abort.signal.aborted) return;
+      if (requestId !== generation.current) return;
+      if (err instanceof FullImageConsentRequired) setNeedsFullImage(target);
       setStatusMessage({ type: 'error', text: 'Lỗi xử lý: ' + (err instanceof Error ? err.message : String(err)) });
     } finally {
-      if (abortControllerRef.current === abort) {
+      if (requestId === generation.current) {
         setIsProcessing(false);
         setCurrentStepText('');
       }
     }
   };
+
+  function preparedForm(prepared: PreparedDocumentImage) {
+    const form = new FormData();
+    form.set('file', prepared.blob, `document.${prepared.blob.type === 'image/png' ? 'png' : 'jpg'}`);
+    form.set('deskewApplied', String(prepared.deskewApplied)); form.set('documentHint', 'traffic_violation_record');
+    form.set('documentDetectionFailed', String(prepared.documentDetectionFailed));
+    form.set('imageWarnings', JSON.stringify(prepared.quality.warnings));
+    for (const image of prepared.enhancements) form.set(image.variant, image.blob, `${image.variant}.${image.blob.type === 'image/png' ? 'png' : 'jpg'}`);
+    return form;
+  }
 
   // Field confirmation
   const handleConfirmField = (key: string) => {
@@ -600,6 +588,7 @@ Về trật tự an toàn giao thông đường bộ
       return;
     }
 
+    documentSession.clear();
     setConfirmations((prev) => ({ ...prev, [key]: normalized }));
     setStatusMessage({
       type: 'success',
@@ -609,7 +598,7 @@ Về trật tự an toàn giao thông đường bộ
 
   // Save to Session RAM
   const handleSaveToSession = () => {
-    if (!extractionResult) return;
+    if (!extractionResult || engineMode !== 'live' || isProcessing) return;
     try {
       documentSession.save(extractionResult, confirmations);
       setSessionData(documentSession.read());
@@ -633,10 +622,16 @@ Về trật tự an toàn giao thông đường bộ
   };
 
   // Bounding boxes of the currently selected field
-  const activeBoxes: NormalizedBoundingBox[] =
-    selectedFieldKey && extractionResult?.fields[selectedFieldKey]
+  const review = extractionResult?.ocrReview ?? markdownDraft?.ocrReview ?? failedReview;
+  const activeBoxes: NormalizedBoundingBox[] = selectedRegion !== null && review?.regions[selectedRegion]
+    ? [review.regions[selectedRegion].boundingBox ?? [0, 0, 1, 1]]
+    : selectedFieldKey && extractionResult?.fields[selectedFieldKey]
       ? extractionResult.fields[selectedFieldKey].sourceBoundingBoxes || []
       : [];
+  const reviewBoxes = review?.regions.flatMap(region => region.boundingBox ? [region.boundingBox] : []) ?? [];
+  const displayImage = shownVariant === 'primary' ? processedUrl : enhancedPreviews.find(image => image.variant === shownVariant)?.url ?? processedUrl;
+  let canSave = false;
+  try { canSave = engineMode === 'live' && !!extractionResult?.fullText.trim() && Object.keys(reviewedFields(extractionResult!, confirmations)).length > 0; } catch { /* Unconfirmed fields block saving. */ }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
@@ -661,16 +656,17 @@ Về trật tự an toàn giao thông đường bộ
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              Kiểm thử & đối chiếu: Trích xuất trường (JSON v2) và Google OCR → Ghép Markdown → Kiểm tra → Duyệt → .md
+              Kiểm thử & đối chiếu: VietOCR cục bộ → Trích xuất trường hoặc ghép Markdown → Kiểm tra → Duyệt
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
+          <button onClick={() => { selectFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="rounded-lg border border-slate-700 px-3 py-2 text-sm font-semibold">Xóa phiên và ảnh</button>
           {/* Quick Engine Selector */}
           <div className="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs font-bold">
             <button
-              onClick={() => setEngineMode('live')}
+              onClick={() => { invalidate(); setEngineMode('live'); }}
               className={`px-3 py-1 rounded-lg transition-all ${
                 engineMode === 'live' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
@@ -679,7 +675,7 @@ Về trật tự an toàn giao thông đường bộ
               Live API
             </button>
             <button
-              onClick={() => setEngineMode('mock')}
+              onClick={() => { invalidate(); setEngineMode('mock'); }}
               className={`px-3 py-1 rounded-lg transition-all ${
                 engineMode === 'mock' ? 'bg-amber-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
@@ -750,8 +746,9 @@ Về trật tự an toàn giao thông đường bộ
             {/* File Input and Mode */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Hoặc Chọn File Ảnh Tùy Ý</label>
+                <label htmlFor="workbench-file" className="block text-xs font-semibold text-slate-400 mb-1">Hoặc Chọn File Ảnh Tùy Ý</label>
                 <input
+                  id="workbench-file"
                   ref={fileInputRef}
                   type="file"
                   accept="image/jpeg,image/png"
@@ -761,12 +758,14 @@ Về trật tự an toàn giao thông đường bộ
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Chế Độ Nắn Phối Cảnh (OpenCV)</label>
+                <label htmlFor="workbench-mode" className="block text-xs font-semibold text-slate-400 mb-1">Chế Độ Nắn Phối Cảnh (OpenCV)</label>
                 <select
+                  id="workbench-mode"
                   value={mode}
-                  onChange={(e) => setMode(e.target.value as DocumentMode)}
+                  onChange={(e) => { invalidate(); setMode(e.target.value as PreparationMode); }}
                   className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:border-amber-500"
                 >
+                  <option value="upload-photo">Ảnh tải lên (Có thể đọc toàn ảnh)</option>
                   <option value="clean-scan">Bản Scan Phẳng (Không xoay)</option>
                   <option value="camera-photo">Ảnh Chụp Camera (Tìm 4 góc & Nắn)</option>
                 </select>
@@ -774,10 +773,16 @@ Về trật tự an toàn giao thông đường bộ
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-3 gap-2.5 pt-2">
+            {engineMode === 'live' && <label className="flex gap-2 text-sm text-slate-300">
+              <input type="checkbox" checked={textConsent} onChange={e => { invalidate(); setTextConsent(e.target.checked); }} />
+              Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.
+            </label>}
+            {engineMode === 'mock' && <p className="text-sm text-amber-300" role="note">Dữ liệu mô phỏng chỉ để thử giao diện trên ảnh tổng hợp, không phải OCR. Không lưu vào phiên hướng dẫn.</p>}
+            <p className="text-xs text-slate-400">JSON dùng VietOCR cục bộ và Gemini text; Markdown dùng VietOCR cục bộ. Mỗi thao tác thử tối đa hai lần đọc.</p>
+            <div className="grid grid-cols-2 gap-2.5 pt-2">
               <button
                 onClick={() => runPipeline('structured')}
-                disabled={!file || isProcessing}
+                disabled={!file || isProcessing || (engineMode === 'live' && !textConsent)}
                 className="px-3 py-2.5 rounded-xl font-bold text-xs bg-emerald-700 hover:bg-emerald-600 disabled:opacity-40 text-white shadow-sm flex items-center justify-center gap-1.5 transition-all"
               >
                 <Layers className="w-3.5 h-3.5" /> Trích Xuất JSON
@@ -791,18 +796,12 @@ Về trật tự an toàn giao thông đường bộ
                 <FileText className="w-3.5 h-3.5" /> Xuất Markdown
               </button>
 
-              <button
-                onClick={() => runPipeline('all')}
-                disabled={!file || isProcessing}
-                className="px-3 py-2.5 rounded-xl font-bold text-xs bg-amber-600 hover:bg-amber-500 disabled:opacity-40 text-white shadow-sm flex items-center justify-center gap-1.5 transition-all"
-              >
-                <Sparkles className="w-3.5 h-3.5" /> Chạy Cả Hai
-              </button>
             </div>
+            {needsFullImage && <button className="w-full rounded-xl bg-amber-800 p-3 font-bold" disabled={isProcessing} onClick={() => runPipeline(needsFullImage, true)}>Thử đọc toàn ảnh</button>}
 
             {/* Status & Progress Message */}
             {isProcessing && (
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 animate-pulse font-medium">
+              <div role="status" aria-live="polite" className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 animate-pulse font-medium">
                 <RefreshCw className="w-3.5 h-3.5 animate-spin shrink-0" />
                 <span>{currentStepText}</span>
               </div>
@@ -810,6 +809,7 @@ Về trật tự an toàn giao thông đường bộ
 
             {statusMessage && !isProcessing && (
               <div
+                role="status" aria-live="polite"
                 className={`flex items-start gap-2 px-3 py-2 rounded-xl text-xs font-medium border ${
                   statusMessage.type === 'success'
                     ? 'bg-emerald-950/60 border-emerald-500/30 text-emerald-300'
@@ -827,6 +827,7 @@ Về trật tự an toàn giao thông đường bộ
                 <div className="flex-1">{statusMessage.text}</div>
               </div>
             )}
+            {!isProcessing && imageWarnings.length > 0 && <div aria-label="Lưu ý chất lượng ảnh" className="text-sm text-amber-200">{imageWarnings.map(warning => <p key={warning}>{IMAGE_WARNING_MESSAGES[warning] || warning}</p>)}</div>}
           </div>
 
           {/* Interactive Document Canvas View */}
@@ -834,7 +835,7 @@ Về trật tự an toàn giao thông đường bộ
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs uppercase tracking-wider font-black text-slate-400 flex items-center gap-1.5">
                 <Eye className="w-3.5 h-3.5 text-slate-400" />
-                {processedUrl ? 'Ảnh Đã Nắn Chuẩn Hóa (OpenCV Deskewed)' : 'Ảnh Gốc'}
+                {processedUrl ? (deskewApplied ? 'Ảnh đã nắn phối cảnh' : 'Ảnh primary chưa nắn phối cảnh') : 'Ảnh Gốc'}
               </span>
               {selectedFieldKey && (
                 <span className="text-xs font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
@@ -842,16 +843,21 @@ Về trật tự an toàn giao thông đường bộ
                 </span>
               )}
             </div>
+            {processedUrl && <div className="flex flex-wrap gap-2 mb-3" aria-label="Bản ảnh xử lý">
+              <button className="rounded-lg border border-slate-700 p-2" aria-pressed={shownVariant === 'primary'} onClick={() => setShownVariant('primary')}>Ảnh màu primary</button>
+              {enhancedPreviews.map(image => <button key={image.variant} className="rounded-lg border border-slate-700 p-2" aria-pressed={shownVariant === image.variant} onClick={() => setShownVariant(image.variant)}>{image.variant === 'contrast' ? 'Bản tăng tương phản' : 'Bản cân bằng ánh sáng'}</button>)}
+            </div>}
 
             <div className="relative w-full rounded-xl overflow-hidden border border-slate-800 bg-slate-950/60 flex items-center justify-center min-h-[420px]">
               {processedUrl || previewUrl ? (
-                <div className="relative w-full max-w-full">
+                <div className="relative w-full max-w-full" data-testid="workbench-evidence-image">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={processedUrl || previewUrl!}
+                    src={displayImage || previewUrl!}
                     alt="Chứng từ kiểm thử"
                     className="block w-full h-auto object-contain select-none"
                   />
+                  {processedUrl && reviewBoxes.map(([top, left, bottom, right], i) => <div key={`review-${i}`} data-testid="workbench-review-box" className="absolute border-2 border-orange-400 pointer-events-none" style={{ top: `${top * 100}%`, left: `${left * 100}%`, width: `${(right-left)*100}%`, height: `${(bottom-top)*100}%` }} />)}
 
                   {/* Overlaid Bounding Boxes */}
                   {processedUrl &&
@@ -897,6 +903,7 @@ Về trật tự an toàn giao thông đường bộ
 
         {/* Right Column: Tabbed Outputs (Structured Fields / Markdown / Diagnostics) */}
         <div className="lg:col-span-6 flex flex-col gap-4">
+          <OcrAttemptReview review={review} onRegion={index => { setSelectedRegion(index); setSelectedFieldKey(null); setShownVariant('primary'); }} />
           {/* Tab Navigation */}
           <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
             <button
@@ -965,23 +972,26 @@ Về trật tự an toàn giao thông đường bộ
                               : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
                           }`}
                         >
-                          {extractionResult.status === 'extracted' ? 'Tự Động Đạt' : 'Cần Rà Soát'}
+                          {engineMode === 'mock' ? 'Dữ Liệu Mô Phỏng' : extractionResult.requiresReview || !extractionResult.fullText.trim() ? 'Cần Rà Soát' : 'Bản Nháp Đã Đọc'}
                         </span>
                       </div>
                       <div className="text-xs text-slate-400 mt-0.5">
-                        Độ tin cậy tổng quát: {(extractionResult.overallConfidence * 100).toFixed(1)}% • Xử lý: {extractionResult.processingTimeMs}ms
+                        {engineMode === 'mock' ? 'Chưa thực hiện OCR' : `Điểm trích xuất tổng quát: ${(extractionResult.overallConfidence * 100).toFixed(1)}% (không phải độ chính xác đã đo)`} • Xử lý: {extractionResult.processingTimeMs}ms
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleSaveToSession}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow-sm flex items-center gap-1.5 transition-colors"
+                        disabled={!canSave || isProcessing}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-xs font-bold text-white shadow-sm flex items-center gap-1.5 transition-colors"
                       >
                         <ShieldCheck className="w-3.5 h-3.5" /> Lưu Vào Session RAM
                       </button>
                     </div>
                   </div>
+                  {extractionResult.warnings.map((warning, i) => <p key={i} className="text-sm text-amber-200">{warning}</p>)}
+                  {!canSave && <p className="text-sm text-slate-400">Hãy xác nhận hoặc để trống các trường cần kiểm tra. Dữ liệu mô phỏng không thể lưu.</p>}
 
                   {/* Fields List */}
                   <div className="space-y-3 overflow-y-auto max-h-[620px] pr-1">
@@ -993,7 +1003,7 @@ Về trật tự an toàn giao thông đường bộ
                       return (
                         <div
                           key={key}
-                          onClick={() => setSelectedFieldKey(key)}
+                          onClick={() => { setSelectedFieldKey(key); setSelectedRegion(null); setShownVariant('primary'); }}
                           className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                             isSelected
                               ? 'bg-slate-800/90 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.15)] ring-1 ring-amber-500/30'
@@ -1017,10 +1027,14 @@ Về trật tự an toàn giao thông đường bộ
                               <div className="mt-1.5 flex items-center gap-2">
                                 <input
                                   type="text"
+                                  aria-label={`Giá trị ${field.label}`}
                                   value={draftValues[key] ?? ''}
-                                  onChange={(e) =>
-                                    setDraftValues((prev) => ({ ...prev, [key]: e.target.value }))
-                                  }
+                                  onChange={(e) => {
+                                    setDraftValues(prev => ({ ...prev, [key]: e.target.value }));
+                                    setConfirmations(prev => { const next = { ...prev }; delete next[key]; return next; });
+                                    setExtractionResult(prev => prev ? { ...prev, fields: { ...prev.fields, [key]: { ...prev.fields[key], status: 'needs_review' } } } : prev);
+                                    documentSession.clear();
+                                  }}
                                   className="w-full text-xs font-bold font-mono px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-slate-100 focus:outline-none focus:border-amber-500"
                                   placeholder="Chưa có giá trị..."
                                 />
@@ -1035,6 +1049,7 @@ Về trật tự an toàn giao thông đường bộ
                                       : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
                                   }`}
                                   title="Xác nhận giá trị trường"
+                                  aria-label={`Xác nhận ${field.label}`}
                                 >
                                   {isConfirmed ? <Check className="w-3.5 h-3.5" /> : 'Xác Nhận'}
                                 </button>
@@ -1059,7 +1074,7 @@ Về trật tự an toàn giao thông đường bộ
                                     : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
                                 }`}
                               >
-                                {field.status === 'accepted'
+                                {isConfirmed ? 'Đã Xác Nhận' : field.status === 'accepted'
                                   ? 'Đạt'
                                   : field.status === 'needs_review'
                                   ? 'Cần Xem'
@@ -1067,7 +1082,7 @@ Về trật tự an toàn giao thông đường bộ
                               </span>
 
                               <span className="text-[10px] font-mono text-slate-500">
-                                {(field.confidence * 100).toFixed(0)}% OCR
+                                {engineMode === 'mock' ? 'Mẫu giao diện' : `Điểm trích xuất ${(field.confidence * 100).toFixed(0)}%`}
                               </span>
                             </div>
                           </div>
@@ -1075,13 +1090,14 @@ Về trật tự an toàn giao thông đường bộ
                       );
                     })}
                   </div>
+                  <details><summary className="cursor-pointer py-3 font-semibold">Xem toàn văn OCR</summary><pre className="whitespace-pre-wrap break-words font-sans">{extractionResult.fullText || 'Chưa đọc được vùng này.'}</pre></details>
                 </>
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-slate-600">
                   <Layers className="w-12 h-12 mb-3 opacity-30" />
                   <p className="text-sm font-semibold text-slate-400">Chưa có kết quả trích xuất cấu trúc</p>
                   <p className="text-xs text-slate-500 max-w-sm mt-1">
-                    Bấm &quot;Trích Xuất JSON&quot; hoặc &quot;Chạy Cả Hai&quot; từ cột bên trái để thực hiện phân tích
+                    Bấm &quot;Trích Xuất JSON&quot; từ cột bên trái để thực hiện phân tích
                   </p>
                 </div>
               )}

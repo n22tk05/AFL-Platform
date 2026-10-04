@@ -48,6 +48,8 @@ export interface ListFormsDto {
   adminKey?: string | null;
 }
 
+export type PublicFormSummary = Pick<AdminFormSummary, 'formId' | 'formCode' | 'formTitle' | 'version' | 'stepCount' | 'updatedAt'> & { status: 'ACTIVE' };
+
 export interface ReviewWorkflowDto extends ApproveWorkflowDto {}
 
 export interface SaveReviewWorkflowDto extends ApproveWorkflowDto {}

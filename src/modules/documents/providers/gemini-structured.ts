@@ -20,7 +20,7 @@ export class GeminiStructuredProvider implements StructuredExtractionProvider {
       model: process.env.GEMINI_DOCUMENT_MODEL || process.env.GEMINI_MODEL || 'gemini-2.5-flash',
       contents: JSON.stringify({ instruction, fullText: ocr.fullText, lines: ocr.lines }),
       config: { systemInstruction: GROUNDING, responseMimeType: 'application/json', responseJsonSchema: schema,
-        temperature: 0, abortSignal: signal, httpOptions: { timeout: DOCUMENT_LIMITS.timeoutMs } },
+        temperature: 0, abortSignal: signal, httpOptions: { timeout: DOCUMENT_LIMITS.timeoutMs, retryOptions: { attempts: 1 } } },
     });
     if (!response.text) throw new DocumentPipelineError('INVALID_STRUCTURED_RESPONSE');
     return response.text;

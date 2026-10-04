@@ -7,10 +7,12 @@ import { DocumentPipelineError } from '../errors';
  * Integrates line segmentation with VietOCR recognition
  */
 export class VietOcrProvider implements DocumentOcrProvider {
+  readonly providerId = 'vietocr';
   private readonly adapter: VietOcrAdapter;
 
   constructor(config: Partial<VietOcrConfig> = {}) {
-    this.adapter = new VietOcrAdapter(config);
+    // Citizen documents must never use the adapter's development synthesizer.
+    this.adapter = new VietOcrAdapter({ ...config, allowOfflineFallback: false });
   }
 
   async extract(input: DocumentOcrInput): Promise<DocumentOcrResult> {

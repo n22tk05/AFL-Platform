@@ -1,19 +1,25 @@
 import { test, expect, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { validateMarkdown } from '../../src/modules/documents/markdown-validator';
+test.beforeEach(async ({ page }) => {
+  // All browser OCR is intercepted; never submit fixtures or private documents
+  // to a real provider. Per-test routes below override this fail-closed guard.
+  await page.route('**/api/documents/**', route => route.fulfill({ status: 503, json: { success: false, error: { message_vi: 'Test provider not intercepted' } } }));
+});
 
-async function synthetic(page: Page, kind: 'clean'|'camera'|'blur'|'glare'|'empty'): Promise<Buffer> {
+async function synthetic(page: Page, kind: 'clean'|'camera'|'blur'|'glare'|'empty'|'low-contrast'|'small'|'shadow'): Promise<Buffer> {
   const data = await page.evaluate(kind => {
-    const c=document.createElement('canvas'); c.width=1200;c.height=1600;const ctx=c.getContext('2d')!;
+    const c=document.createElement('canvas'); c.width=kind==='small'?123:1200;c.height=kind==='small'?161:1600;const ctx=c.getContext('2d')!;
     ctx.fillStyle='#404040';ctx.fillRect(0,0,c.width,c.height);
     if(kind==='empty') return c.toDataURL('image/png').split(',')[1];
     const paper=document.createElement('canvas');paper.width=1000;paper.height=1400;const p=paper.getContext('2d')!;
-    p.fillStyle=kind==='glare' ? '#b0b0b0' : '#fff';p.fillRect(0,0,1000,1400);p.fillStyle='#111';p.font='24px Arial';
+    p.fillStyle=kind==='glare' ? '#b0b0b0' : kind==='low-contrast' ? '#e6e6e6' : '#fff';p.fillRect(0,0,1000,1400);p.fillStyle=kind==='low-contrast'?'#cdcdcd':'#111';p.font='24px Arial';
     p.fillText('BIÊN BẢN VI PHẠM GIAO THÔNG — DỮ LIỆU THỬ',50,70);
     for(let i=0;i<26;i++)p.fillText(`Dòng thử nghiệm ${i+1}: ABCDEFG 0123456789`,50,130+i*42);
     if(kind==='glare'){p.fillStyle='#fff';p.fillRect(430,650,38,38);}
     if(kind==='camera'){ctx.setTransform(0.85,0.06,-0.06,0.85,220,130);ctx.drawImage(paper,0,0);}
-    else {if(kind==='blur')ctx.filter='blur(12px)';ctx.drawImage(paper,0,0,1200,1600);}
+    else {if(kind==='blur')ctx.filter='blur(12px)';ctx.drawImage(paper,0,0,c.width,c.height);}
+    if(kind==='shadow'){const shade=ctx.createLinearGradient(0,0,c.width,0);shade.addColorStop(0,'rgba(0,0,0,0.6)');shade.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=shade;ctx.fillRect(0,0,c.width,c.height);}
     return c.toDataURL('image/png').split(',')[1];
   },kind);
   return Buffer.from(data,'base64');
@@ -68,26 +74,26 @@ test('clean scan, evidence, review, expiry-safe navigation and three consecutive
     await page.getByRole('button',{name:'Đọc chứng từ',exact:true}).click();
     await expect(page.getByText('2. Đối chiếu từng trường')).toBeVisible({timeout:60_000});
     expect(dimensions[i+1][0]).toBeLessThan(1200);expect(dimensions[i+1][1]).toBeLessThan(1600);
-    expect(await page.evaluate(()=>Reflect.get(window,'documentTestLiveUrls'))).toBe(2);
+    expect(await page.evaluate(()=>Reflect.get(window,'documentTestLiveUrls'))).toBeLessThanOrEqual(4);
   }
   await page.getByLabel('Loại chứng từ').selectOption('unknown');await expect(page.getByText('2. Đối chiếu từng trường')).toHaveCount(0);
   await page.getByRole('button',{name:'Xóa phiên',exact:true}).click();
   expect(await page.evaluate(()=>Reflect.get(window,'documentTestLiveUrls'))).toBe(0);
   expect(errors).toEqual([]);expect(consoleErrors).toEqual([]);
 });
-for(const kind of ['blur','glare','empty'] as const) test(`${kind} image fails gate without OCR request`,async({page})=>{
+for(const kind of ['blur','glare','empty'] as const) test(`${kind} valid image reaches OCR instead of failing a quality gate`,async({page})=>{
   let calls=0;await page.route('**/api/documents/extract',async route=>{calls++;await route.fulfill({json:{success:true,data:result}});});
   await page.goto('/scan-document');
-  if(kind!=='empty')await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
+  await page.getByLabel('Nguồn ảnh').selectOption(kind==='empty'?'upload-photo':'clean-scan');
   await page.getByLabel('1. Chọn ảnh').setInputFiles({name:`${kind}.png`,mimeType:'image/png',buffer:await synthetic(page,kind)});
   await page.getByRole('button',{name:'Đọc chứng từ',exact:true}).click();
-  await expect(page.getByRole('status')).toContainText(kind==='blur'?'mờ':kind==='glare'?'lóa':'bốn góc',{timeout:60_000});
-  expect(calls).toBe(0);
+  await expect(page.getByText('2. Đối chiếu từng trường')).toBeVisible({timeout:60_000});
+  expect(calls).toBe(1);
 });
 
 const draftText = '# THÔNG BÁO\n\n| Họ tên | Số tiền |\n| --- | --- |\n| Nguyễn Văn A | 100.000 đồng |\n';
 const draft = (markdown = draftText) => ({ success: true, data: { contractVersion: 1, status: 'review_required', markdown,
-  provider: 'google-document-ai', rawText: 'THÔNG BÁO\nHọ tên\nSố tiền\nNguyễn Văn A\n100.000 đồng', pageCount: 1, confidence: 0.99, warnings: [], validation: validateMarkdown(markdown) } });
+  provider: 'vietocr', rawText: 'THÔNG BÁO\nHọ tên\nSố tiền\nNguyễn Văn A\n100.000 đồng', pageCount: 1, confidence: 0.99, warnings: [], validation: validateMarkdown(markdown) } });
 
 test('Markdown: OpenCV upload, table preview, edit invalidates review, download matches edited text', async ({ page }) => {
   let downloads = 0;
@@ -131,12 +137,12 @@ test('Markdown: OpenCV upload, table preview, edit invalidates review, download 
 });
 
 test('Markdown API failure displays actionable error with no stale draft or download', async ({ page }) => {
-  await page.route('**/api/documents/markdown', route => route.fulfill({ status: 503, json: { success: false, error: { code: 'OCR_NOT_CONFIGURED', message_vi: 'Chưa cấu hình Google Document AI' } } }));
+  await page.route('**/api/documents/markdown', route => route.fulfill({ status: 503, json: { success: false, error: { code: 'OCR_NOT_CONFIGURED', message_vi: 'Chưa cấu hình VietOCR' } } }));
   await page.goto('/scan-document');
   await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
   await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'test.png', mimeType: 'image/png', buffer: await synthetic(page, 'clean') });
   await page.getByRole('button', { name: 'Chuyển ảnh sang Markdown' }).click();
-  await expect(page.getByRole('status')).toContainText('Google Document AI', { timeout: 60_000 });
+  await expect(page.getByRole('status')).toContainText('VietOCR', { timeout: 60_000 });
   await expect(page.getByRole('region', { name: 'Duyệt Markdown' })).toHaveCount(0);
 });
 
@@ -150,4 +156,99 @@ test('test workspace also requires review and prevents stale results after repla
   await expect(review.getByRole('button', { name: '3. Tải file .md đã duyệt' })).toBeDisabled();
   await page.locator('input[type=file]').setInputFiles({ name: 'next.png', mimeType: 'image/png', buffer: await synthetic(page, 'clean') });
   await expect(review).toHaveCount(0);
+});
+
+for (const kind of ['clean', 'low-contrast', 'small'] as const) test(`adaptive ${kind}: three runs retain primary, preview enhancement and clear output`, async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  const consoleErrors: string[] = []; page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  let calls = 0; const sizes: number[][] = [];
+  await page.route('**/api/documents/extract', async route => {
+    calls++; const body = route.request().postDataBuffer()!;
+    const offset = body.indexOf(Buffer.from([137,80,78,71,13,10,26,10]));
+    sizes.push([body.readUInt32BE(offset+16), body.readUInt32BE(offset+20)]);
+    if (kind !== 'clean') expect(body.toString('latin1')).toContain('name="contrast"');
+    await route.fulfill({ json: { success: true, data: result } });
+  });
+  await page.goto('/scan-document'); await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
+  const image = await synthetic(page, kind);
+  for (let i = 0; i < 3; i++) {
+    await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: `${kind}-${i}.png`, mimeType: 'image/png', buffer: image });
+    await expect(page.getByText('2. Đối chiếu từng trường')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Đọc chứng từ', exact: true }).click();
+    await expect(page.getByText('2. Đối chiếu từng trường')).toBeVisible({ timeout: 60_000 });
+    if (kind !== 'clean') {
+      const primary = await page.getByTestId('evidence-image').locator('img').getAttribute('src');
+      await page.getByRole('button', { name: 'Bản tăng tương phản', exact: true }).click();
+      expect(await page.getByTestId('evidence-image').locator('img').getAttribute('src')).not.toBe(primary);
+      await page.getByRole('button', { name: 'Ảnh màu primary', exact: true }).click();
+      await expect(page.getByTestId('evidence-image').locator('img')).toHaveAttribute('src', primary!);
+      await expect(page.getByRole('region', { name: 'Kiểm tra kết quả' })).not.toContainText('Hãy chụp lại');
+    }
+  }
+  expect(calls).toBe(3); expect(sizes.every(size => JSON.stringify(size) === JSON.stringify(kind === 'small' ? [123,161] : [1200,1600]))).toBe(true);
+  await page.getByLabel('Nguồn ảnh').selectOption('upload-photo'); await expect(page.getByText('2. Đối chiếu từng trường')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Ảnh màu primary', exact: true })).toHaveCount(0);
+  expect(errors).toEqual([]); expect(consoleErrors).toEqual([]);
+});
+
+test('shadow input previews the lighting variant without a blocking warning', async ({ page }) => {
+  await page.route('**/api/documents/extract', route => route.fulfill({ json: { success: true, data: result } }));
+  await page.goto('/scan-document'); await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
+  await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'shadow.png', mimeType: 'image/png', buffer: await synthetic(page, 'shadow') });
+  await page.getByRole('button', { name: 'Đọc chứng từ', exact: true }).click();
+  await expect(page.getByText('2. Đối chiếu từng trường')).toBeVisible({ timeout: 60_000 });
+  await page.getByRole('button', { name: 'Bản cân bằng ánh sáng', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Bản cân bằng ánh sáng', exact: true })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('camera with no trustworthy paper retains preview and requires explicit whole-image action', async ({ page }) => {
+  await page.addInitScript(() => {
+    const live = new Set<string>(), create = URL.createObjectURL.bind(URL), revoke = URL.revokeObjectURL.bind(URL);
+    URL.createObjectURL = blob => { const url = create(blob); live.add(url); return url; };
+    URL.revokeObjectURL = url => { live.delete(url); revoke(url); };
+    Object.defineProperty(window, 'ocrCleanupUrls', { get: () => live.size });
+  });
+  let calls = 0;
+  await page.route('**/api/documents/extract', async route => {
+    calls++; const body = route.request().postDataBuffer()!.toString('latin1');
+    expect(body).toMatch(/name="documentDetectionFailed"\r\n\r\ntrue/); expect(body).toMatch(/name="deskewApplied"\r\n\r\nfalse/);
+    await route.fulfill({ json: { success: true, data: { ...result, status: 'manual_review_required', fields: {}, fullText: '',
+      ocrReview: { documentDetectionFailed: true, attempts: [], selectedAttempt: 0, selectionReason: '', warnings: ['OCR_EMPTY_TEXT'], requiresReview: true,
+        regions: [{ boundingBox: [0,0,1,1], status: 'unreadable', reason: 'OCR_EMPTY_TEXT', sources: [] }] } } } });
+  });
+  await page.goto('/scan-document'); await page.getByLabel('Nguồn ảnh').selectOption('camera-photo');
+  await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'no-paper.png', mimeType: 'image/png', buffer: await synthetic(page, 'empty') });
+  await page.getByRole('button', { name: 'Đọc chứng từ', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Thử đọc toàn ảnh', exact: true })).toBeVisible({ timeout: 60_000 });
+  expect(calls).toBe(0); await expect(page.getByTestId('evidence-image').locator('img')).toBeVisible();
+  expect(await page.evaluate(() => Reflect.get(window, 'ocrCleanupUrls'))).toBe(1);
+  await page.getByRole('button', { name: 'Thử đọc toàn ảnh', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Vùng cần kiểm tra', exact: true })).toContainText('Chưa đọc được vùng này', { timeout: 60_000 });
+  expect(calls).toBe(1); await expect(page.getByRole('button', { name: '3. Xác nhận' })).toBeDisabled();
+  await page.getByRole('button', { name: /Vùng cần kiểm tra 1/ }).click(); await expect(page.getByTestId('evidence-box')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Xóa phiên', exact: true }).click();
+  expect(await page.evaluate(() => Reflect.get(window, 'ocrCleanupUrls'))).toBe(0);
+});
+
+test('late response cannot overwrite a newer request; replacing image clears output immediately', async ({ page }) => {
+  let releaseOld!: () => void; const oldResponse = new Promise<void>(resolve => { releaseOld = resolve; });
+  let announceFirst!: () => void; const firstStarted = new Promise<void>(resolve => { announceFirst = resolve; });
+  let calls = 0;
+  await page.route('**/api/documents/extract', async route => {
+    const old = ++calls === 1;
+    if (old) { announceFirst(); await oldResponse; }
+    try { await route.fulfill({ json: { success: true, data: { ...result, fullText: old ? 'OLD_RESULT_SHOULD_NOT_APPEAR' : 'NEW_RESULT_CURRENT' } } }); } catch { /* Old aborted request may be gone. */ }
+  });
+  await page.goto('/scan-document'); await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
+  const image = await synthetic(page, 'clean');
+  await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'old.png', mimeType: 'image/png', buffer: image });
+  await page.getByRole('button', { name: 'Đọc chứng từ', exact: true }).click(); await firstStarted;
+  await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'new.png', mimeType: 'image/png', buffer: image });
+  await page.getByRole('button', { name: 'Đọc chứng từ', exact: true }).click();
+  await expect(page.getByText('2. Đối chiếu từng trường')).toBeVisible({ timeout: 60_000 });
+  releaseOld(); await page.getByText('Xem toàn văn OCR', { exact: true }).click();
+  await expect(page.locator('details pre').last()).toHaveText('NEW_RESULT_CURRENT');
+  await expect(page.getByText('OLD_RESULT_SHOULD_NOT_APPEAR', { exact: true })).toHaveCount(0);
+  await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'third.png', mimeType: 'image/png', buffer: image });
+  await expect(page.getByText('2. Đối chiếu từng trường')).toHaveCount(0); await expect(page.getByText('NEW_RESULT_CURRENT', { exact: true })).toHaveCount(0);
 });

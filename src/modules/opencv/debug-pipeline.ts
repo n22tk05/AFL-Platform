@@ -4,6 +4,16 @@ import {
 } from "./config";
 import { detectLines, type LineDetectionResult } from "./line-detector";
 import { detectContourCandidates } from "./contour-detector";
+import { filterCandidates, mergeFormCandidates } from "./box-filter";
+import {
+  detectCheckboxCandidates,
+  stampCheckboxesOnMask,
+  type CheckboxDetectionConfig,
+} from "./checkbox-detector";
+import {
+  detectFieldRowCandidates,
+  type FieldRowDetectionConfig,
+} from "./row-detector";
 import { sortCandidatesGeometrically } from "./geometric-sort";
 import { loadOpenCv } from "./loader";
 import { preprocessToBinary } from "./preprocess";
@@ -35,6 +45,8 @@ export interface DebugPipelineOptions {
   preprocessConfig?: Partial<PreprocessConfig>;
   lineConfig?: Partial<LineDetectionConfig>;
   contourConfig?: Partial<ContourDetectionConfig>;
+  checkboxConfig?: Partial<CheckboxDetectionConfig>;
+  rowConfig?: Partial<FieldRowDetectionConfig>;
   /** Invoked immediately after the shared OpenCV runtime is ready. */
   onOpenCvReady?: () => void;
 }
@@ -135,13 +147,38 @@ export async function runLineDetectionDebug(
     const binaryTimeMs = elapsedSince(binaryStartedAt);
 
     const lineDetectionStartedAt = performance.now();
+    // 1. Detect small checkboxes directly from binary before line erosion
+    const checkboxCandidates = detectCheckboxCandidates(cv, binary, options.checkboxConfig);
+
+    // 2. Extract long horizontal and vertical lines
     lines = detectLines(cv, binary, options.lineConfig);
+
+    // 3. Stamp detected checkboxes onto lines.combined so they are visible on combinedCanvas
+    if (checkboxCandidates.length > 0) {
+      stampCheckboxesOnMask(cv, lines.combined, checkboxCandidates);
+    }
+
     cv.imshow(options.horizontalCanvas, lines.horizontal);
     cv.imshow(options.verticalCanvas, lines.vertical);
     cv.imshow(options.combinedCanvas, lines.combined);
     const lineDetectionTimeMs = elapsedSince(lineDetectionStartedAt);
+
     const contourDetectionStartedAt = performance.now();
-    const candidates = sortCandidatesGeometrically(detectContourCandidates(cv, lines.combined, options.contourConfig));
+    // 4. Detect table cells & closed form boxes from line mask
+    const lineCandidates = detectContourCandidates(cv, lines.combined, options.contourConfig);
+
+    // 5. Detect form field rows, prompts, and fill-in lines from binary
+    const fieldRowCandidates = detectFieldRowCandidates(cv, binary, options.rowConfig);
+
+    // 6. Merge table cells, checkboxes, and standalone field rows
+    const mergedCandidates = mergeFormCandidates(
+      lineCandidates,
+      checkboxCandidates,
+      fieldRowCandidates,
+      { width: page.cols, height: page.rows },
+      options.contourConfig,
+    );
+    const candidates = sortCandidatesGeometrically(mergedCandidates);
     drawCandidateOverlay(options.deskewedCanvas, options.candidateOverlayCanvas, candidates);
     const contourDetectionTimeMs = elapsedSince(contourDetectionStartedAt);
 
@@ -226,15 +263,53 @@ function drawCandidateOverlay(source: HTMLCanvasElement, overlay: HTMLCanvasElem
   const context = overlay.getContext("2d");
   if (!context) throw new Error("candidateOverlayCanvas does not provide a 2D context.");
   context.drawImage(source, 0, 0);
-  context.strokeStyle = "#ef4444";
-  context.fillStyle = "#ef4444";
-  context.lineWidth = Math.max(1, Math.round(Math.min(source.width, source.height) / 700));
+  const baseLineWidth = Math.max(1, Math.round(Math.min(source.width, source.height) / 700));
   context.font = `${Math.max(10, Math.round(Math.min(source.width, source.height) / 75))}px sans-serif`;
+
   candidates.forEach((candidate, index) => {
     const { x, y, width, height } = candidate.rect;
-    context.strokeRect(x, y, width, height);
-    // Limit labels, not rectangles, so dense images remain readable.
-    if (index < 75) context.fillText(candidate.candidateId, x + 3, Math.max(12, y - 3));
+    if (candidate.isContainer) {
+      context.save();
+      context.strokeStyle = "#2563eb"; // Blue for container
+      context.fillStyle = "#2563eb";
+      context.lineWidth = baseLineWidth + 1;
+      context.setLineDash([6, 4]);
+      context.strokeRect(x, y, width, height);
+      if (index < 75) context.fillText(`${candidate.candidateId} [Khung]`, x + 3, Math.max(12, y - 3));
+      context.restore();
+    } else if (candidate.source === "checkbox") {
+      context.save();
+      context.strokeStyle = "#10b981"; // Green for checkbox
+      context.fillStyle = "#10b981";
+      context.lineWidth = baseLineWidth;
+      context.strokeRect(x, y, width, height);
+      if (index < 75) context.fillText(candidate.candidateId, x + 3, Math.max(12, y - 3));
+      context.restore();
+    } else if (candidate.source === "field_row") {
+      context.save();
+      context.strokeStyle = "#f59e0b"; // Amber for field row / fill-in line
+      context.fillStyle = "#f59e0b";
+      context.lineWidth = baseLineWidth;
+      context.strokeRect(x, y, width, height);
+      if (index < 75) context.fillText(candidate.candidateId, x + 3, Math.max(12, y - 3));
+      context.restore();
+    } else if (candidate.source === "phrase_cluster") {
+      context.save();
+      context.strokeStyle = "#8b5cf6"; // Purple for fine phrase cluster
+      context.fillStyle = "#8b5cf6";
+      context.lineWidth = baseLineWidth;
+      context.strokeRect(x, y, width, height);
+      if (index < 75) context.fillText(candidate.candidateId, x + 3, Math.max(12, y - 3));
+      context.restore();
+    } else {
+      context.save();
+      context.strokeStyle = "#ef4444"; // Red for regular table cell
+      context.fillStyle = "#ef4444";
+      context.lineWidth = baseLineWidth;
+      context.strokeRect(x, y, width, height);
+      if (index < 75) context.fillText(candidate.candidateId, x + 3, Math.max(12, y - 3));
+      context.restore();
+    }
   });
 }
 

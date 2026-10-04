@@ -1,19 +1,30 @@
 import type { DocumentOcrInput, DocumentOcrProvider } from '@/shared/document-extraction.types';
 import { DOCUMENT_LIMITS } from '../config';
-import { DocumentPipelineError, withDeadline } from '../errors';
+import { DocumentPipelineError } from '../errors';
+import { runAdaptiveOcr } from '../adaptive-ocr';
 import { assembleMarkdown } from '../markdown-assembler';
 import { validateMarkdown } from '../markdown-validator';
 import { MARKDOWN_LIMITS, type MarkdownDraft } from '../markdown.types';
 
-/** Google OCR -> deterministic assembly -> validation -> human review. No LLM. */
+/** VietOCR -> deterministic assembly -> validation -> human review. No LLM. */
 export class MarkdownExportService {
   constructor(private readonly ocr: DocumentOcrProvider) {}
 
   async convert(input: DocumentOcrInput): Promise<MarkdownDraft> {
-    const result = await withDeadline(signal => this.ocr.extract({ ...input, signal }), MARKDOWN_LIMITS.timeoutMs, 'OCR_TIMEOUT', input.signal);
-    if (result.provider !== 'google-document-ai' && result.provider !== 'vietocr') throw new DocumentPipelineError('OCR_NOT_CONFIGURED');
+    const adaptive = await runAdaptiveOcr({ providerId: this.ocr.providerId, extract: async image => {
+      const output = await this.ocr.extract(image);
+      if (output.provider !== 'vietocr') throw new DocumentPipelineError('OCR_NOT_CONFIGURED');
+      return output;
+    } }, input, MARKDOWN_LIMITS.timeoutMs);
+    const result = adaptive.ocr;
+    if (!result) throw new DocumentPipelineError(adaptive.errorCode ?? 'OCR_UNAVAILABLE', adaptive.review);
+    if (result.provider !== 'vietocr') throw new DocumentPipelineError('OCR_NOT_CONFIGURED');
     if (result.pageCount !== 1 || result.fullText.length > DOCUMENT_LIMITS.ocrCharacters || result.fullText.split(/\r\n?|\n/).length > DOCUMENT_LIMITS.ocrLines) throw new DocumentPipelineError('OCR_LIMIT_EXCEEDED');
-    if (!result.fullText.trim()) throw new DocumentPipelineError('OCR_EMPTY_TEXT');
+    if (!result.fullText.trim() || input.imageWarnings?.includes('POSSIBLE_BLANK')) {
+      return { provider: result.provider, rawText: result.fullText, markdown: '', pageCount: result.pageCount,
+        confidence: null, warnings: [...adaptive.review.warnings, 'Chưa đọc được vùng này. Đối chiếu ảnh nguồn; chụp lại là lựa chọn bổ sung.'],
+        contractVersion: 1, status: 'review_required', validation: validateMarkdown(''), ocrReview: adaptive.review };
+    }
     const assembled = assembleMarkdown(result);
     const validation = validateMarkdown(assembled.markdown);
     if (validation.issues.some(issue => issue.code === 'MARKDOWN_TOO_LARGE')) throw new DocumentPipelineError('OCR_LIMIT_EXCEEDED');
@@ -23,7 +34,7 @@ export class MarkdownExportService {
     const warnings = [...result.warnings.map(code => `Cảnh báo OCR: ${code}`), ...assembled.warnings];
     if (confidence === null) warnings.push('Không đủ điểm tin cậy OCR; hãy đối chiếu toàn bộ nội dung với ảnh.');
     else if (confidence < DOCUMENT_LIMITS.acceptanceThreshold) warnings.push('Có vùng chữ có điểm tin cậy thấp; cần đối chiếu tên riêng, số liệu và dấu tiếng Việt.');
-    return { provider: result.provider as 'google-document-ai' | 'vietocr', rawText: result.fullText, markdown: validation.markdown,
-      pageCount: result.pageCount, confidence, warnings, contractVersion: 1, status: 'review_required', validation };
+    return { provider: result.provider, rawText: result.fullText, markdown: validation.markdown,
+      pageCount: result.pageCount, confidence, warnings, contractVersion: 1, status: 'review_required', validation, ocrReview: adaptive.review };
   }
 }
