@@ -73,5 +73,5 @@ export async function listCitizenForms(options: {
     const code = canonicalFormCode(workflow.formCode);
     if (!byCode.has(code)) byCode.set(code, { id, formCode: code, formTitle: workflow.formTitle, source: 'demo' });
   }
-  return { forms: [...byCode.values()], offline };
+  return { forms: Array.from(byCode.values()), offline };
 }

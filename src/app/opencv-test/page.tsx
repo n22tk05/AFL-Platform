@@ -448,7 +448,7 @@ export default function OpenCvTestPage() {
           const sx = nativeInput.width / result.sourceWidth, sy = nativeInput.height / result.sourceHeight;
           const scalePoint = (p: {x: number; y: number}) => ({x: p.x * sx, y: p.y * sy});
           const q = result.detectedQuad;
-          warped = warpDocument(cv as Parameters<typeof warpDocument>[0], original, {
+          warped = warpDocument(cv as unknown as Parameters<typeof warpDocument>[0], original, {
             topLeft: scalePoint(q.topLeft), topRight: scalePoint(q.topRight),
             bottomLeft: scalePoint(q.bottomLeft), bottomRight: scalePoint(q.bottomRight),
           }, ADAPTIVE_IMAGE_CONFIG).deskewed;
