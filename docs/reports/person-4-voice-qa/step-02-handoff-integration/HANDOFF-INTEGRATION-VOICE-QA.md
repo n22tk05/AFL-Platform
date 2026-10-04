@@ -351,7 +351,7 @@ export function VoiceGuidanceCard({ step }: Props) {
       "formId": "form_01_lptb",
       "formTitle": "Tờ khai lệ phí trước bạ (nhà, đất)",
       "formCode": "Mẫu số: 01/LPTB",
-      "status": "pending_review",
+      "status": "PENDING_REVIEW",
       "steps": [
         {
           "stepIndex": 1,
