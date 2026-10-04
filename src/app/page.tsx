@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Smartphone, ShieldCheck, Sparkles, BookOpen } from "lucide-react";
+import { Smartphone, ShieldCheck, Sparkles, BookOpen, ArrowRight } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -32,20 +32,21 @@ export default function HomePage() {
         <div className="space-y-4 mb-6">
           {/* Lối vào dành cho Người dân */}
           <Link
-            href="/scan"
-            className="w-full p-4 bg-emerald-50 hover:bg-emerald-100 border-2 border-afl-green rounded-2xl flex items-center justify-between text-emerald-950 transition-all group shadow-sm active:scale-98"
+            href="/citizen"
+            className="w-full min-h-touch-lg p-5 bg-afl-green hover:bg-emerald-800 text-white font-black text-xl rounded-2xl flex items-center justify-between shadow-xl active:scale-95 transition-all group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-afl-green text-white flex items-center justify-center shadow-md">
+              <div className="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-md">
                 <Smartphone className="w-7 h-7" />
               </div>
               <div className="text-left">
-                <div className="font-black text-lg text-emerald-950">Bắt Đầu Sử Dụng</div>
-                <div className="text-xs text-emerald-700 font-bold">
+                <div className="font-black text-lg text-white">BẮT ĐẦU SỬ DỤNG</div>
+                <div className="text-xs text-emerald-100 font-medium">
                   Dành cho người dân: Chụp ảnh hoặc chọn biểu mẫu
                 </div>
               </div>
             </div>
+            <ArrowRight className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <Link

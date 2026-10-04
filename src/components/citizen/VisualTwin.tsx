@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { NormalizedBoundingBox, FormPageMetadata } from "@/shared/contracts";
+import { normalizeCoordsToBoxStyle } from "@/shared/utils/geometry";
 
 interface VisualTwinProps {
   pages: FormPageMetadata[];
@@ -22,12 +23,7 @@ export function VisualTwin({
   const highlightBoxRef = useRef<HTMLDivElement>(null);
 
   const activePage = pages.find((p) => p.pageNumber === currentPageNumber) || pages[0];
-  const [ymin, xmin, ymax, xmax] = highlightCoords;
-
-  const boxTop = `${ymin * 100}%`;
-  const boxLeft = `${xmin * 100}%`;
-  const boxHeight = `${(ymax - ymin) * 100}%`;
-  const boxWidth = `${(xmax - xmin) * 100}%`;
+  const boxStyle = normalizeCoordsToBoxStyle(highlightCoords);
 
   // Tự động căn chỉnh mượt mà để ô cần điền luôn nằm ở vị trí dễ nhìn nhất
   useEffect(() => {
@@ -74,18 +70,13 @@ export function VisualTwin({
           {/* VÙNG KHUNG MÀU ĐỎ NHẤP NHÁY VÀ NHÃN NẰM TRÊN CẠNH TRÊN */}
           <div
             ref={highlightBoxRef}
-            style={{
-              top: boxTop,
-              left: boxLeft,
-              height: boxHeight,
-              width: boxWidth,
-            }}
-            className="absolute pulse-border-red rounded bg-[#D32F2F]/10 pointer-events-none transition-all duration-200 z-20"
+            style={boxStyle}
+            className="absolute pulse-border-red rounded bg-afl-red/10 pointer-events-none transition-all duration-200 z-20"
             aria-label={`Vị trí ô: ${fieldLabel}`}
           >
             {/* Nhãn chú thích đặt nổi hẳn lên phía trên mép khung, không đè nội dung */}
             <div className="absolute bottom-full mb-1.5 left-0 z-30 pointer-events-none whitespace-nowrap">
-              <span className="bg-[#D32F2F] text-white text-[10px] sm:text-[11px] font-black px-2 py-0.5 rounded shadow-md tracking-wider uppercase inline-flex items-center gap-1">
+              <span className="bg-afl-red text-white text-[10px] sm:text-[11px] font-black px-2 py-0.5 rounded shadow-md tracking-wider uppercase inline-flex items-center gap-1">
                 VIẾT VÀO Ô NÀY
               </span>
             </div>
