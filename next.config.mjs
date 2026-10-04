@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Keep production verification separate from a running development server.
+  distDir: process.env.AFL_BUILD_DIR || '.next',
   reactStrictMode: true,
   async rewrites() {
     return [

@@ -16,16 +16,16 @@ language: vi
 
 # Khung Kiến trúc Hệ thống (Architecture Spine) — AFL Platform
 
-## Cập nhật FR-6 (2026-09-27)
+## Cập nhật FR-6 (2026-10-04)
 
-Luồng chứng từ công dân hiện dùng **OpenCV WASM → Google Document AI OCR → Gemini phân loại và trích xuất schema → validation tất định → human review → Session RAM**. OpenCV chỉ xử lý hình học; OCR chữ dùng provider server-side độc lập. Tọa độ hợp đồng `[ymin,xmin,ymax,xmax]` là số thực `[0,1]`. Cổng review chặn dữ liệu chưa duyệt; bộ nhớ phiên tồn tại tối đa 15 phút và không dùng sessionStorage. Xem [kiến trúc chi tiết và khác biệt so với mô tả cũ](DOCUMENT-EXTRACTION.md). Các tỷ lệ trong tài liệu lịch sử bên dưới là mục tiêu thiết kế, không phải benchmark đã đo cho FR-6.
+Luồng chứng từ công dân hiện dùng **OpenCV WASM → VietOCR cục bộ → Gemini phân loại và trích xuất schema → validation tất định → human review → lưu Session RAM bằng hành động rõ ràng**. OpenCV xử lý hình học và tiền xử lý ảnh; OCR chữ dùng microservice Python server-side. Tọa độ hợp đồng `[ymin,xmin,ymax,xmax]` là số thực `[0,1]`. Cổng review chặn dữ liệu chưa duyệt; bộ nhớ phiên tồn tại tối đa 15 phút và không dùng sessionStorage. Xem [kiến trúc chi tiết và khác biệt so với mô tả cũ](DOCUMENT-EXTRACTION.md). Các tỷ lệ trong tài liệu lịch sử bên dưới là mục tiêu thiết kế, không phải benchmark đã đo cho FR-6.
 
 ## 1. Mô hình Kiến trúc Cốt lõi (Design Paradigm)
 
 Cập nhật tiền xử lý OCR (2026-10-04): quality analysis chọn ứng viên ảnh, ảnh màu
 primary được đọc trước, retry tối đa một lần tuần tự khi OCR yếu, rồi đối chiếu
-tất định và người dùng duyệt. Google Document AI là OCR khi được chọn trong config;
-Gemini là bộ trích xuất text riêng. Hình học vẫn kiểm tra nghiêm ngặt; mờ/lóa chỉ
+tất định và người dùng duyệt. VietOCR là provider OCR duy nhất;
+Gemini là bộ trích xuất text riêng, Google Cloud TTS vẫn phục vụ giọng nói. Hình học vẫn kiểm tra nghiêm ngặt; mờ/lóa chỉ
 là cảnh báo. Xem [hợp đồng và giới hạn](DOCUMENT-EXTRACTION.md#adaptive-preprocessing-and-bounded-ocr-2026-10-04).
 
 Hệ thống tuân thủ mô hình **Kiến trúc Lục giác (Hexagonal Architecture / Ports & Adapters)** kết hợp với **Máy trạng thái Quy trình hướng Sự kiện (Event-driven Workflow State Machine)**:

@@ -6,14 +6,17 @@
 chất lượng bằng cảnh báo mềm, tạo bản tăng tương phản/cân bằng ánh sáng khi cần,
 đọc OCR tối đa hai lần tuần tự và giữ vùng chưa chắc chắn để người dùng kiểm tra.
 Ảnh mờ/nghi lóa hợp lệ được thử đọc; lỗi giải mã và warp không hợp lệ vẫn bị từ chối.
-Adapter Google Document AI và cấu hình chọn provider hiện có được giữ nguyên;
-cấu hình local hiện chọn VietOCR. Gemini chỉ xử lý text của luồng trích xuất trường.
-Xem [báo cáo triển khai](docs/reports/person-3-opencv/step-06-adaptive-ocr/ADAPTIVE-OCR-REPORT.md).
+OCR hiện chỉ dùng VietOCR qua microservice Python cục bộ. Gemini chỉ xử lý text
+của luồng trích xuất trường; Google Cloud Text-to-Speech là dịch vụ giọng nói riêng.
+Các báo cáo trong `docs/reports/` ghi lại trạng thái lịch sử; cấu hình runtime hiện tại
+được mô tả trong [hướng dẫn OCR](docs/DOCUMENT-EXTRACTION.md).
 
-**FR-6 hiện tại:** `/scan-document` dùng OpenCV → OCR theo cấu hình (Google Document AI hoặc VietOCR hiện có) → Gemini text theo schema → kiểm chứng bằng chứng → người dùng duyệt → Session RAM. Chưa có benchmark độ chính xác trên ảnh thật. Xem [cấu hình, audit và kiểm thử](docs/DOCUMENT-EXTRACTION.md).
+**FR-6 hiện tại:** `/scan-document` dùng OpenCV → VietOCR → Gemini text theo schema → kiểm chứng bằng chứng → người dùng duyệt → lưu Session RAM bằng hành động rõ ràng. Chưa có benchmark độ chính xác trên ảnh thật. Xem [cấu hình, audit và kiểm thử](docs/DOCUMENT-EXTRACTION.md).
 
-**Ảnh → `.md`:** OpenCV → **Google Document AI Enterprise OCR** → ghép Markdown bằng quy tắc cố định → kiểm tra → người dùng duyệt → tải file. Cấu hình Google OCR và quyền truy cập trong `.env.local`, khởi động lại ứng dụng rồi chọn **Chuyển ảnh sang Markdown** tại `/scan-document`. Gemini không tạo hoặc chép lại Markdown. Xem [hướng dẫn và giới hạn](docs/DOCUMENT-EXTRACTION.md#image-to-markdown-google-enterprise-ocr).
+**Ảnh → `.md`:** OpenCV → **VietOCR cục bộ** → ghép Markdown bằng quy tắc cố định → kiểm tra → người dùng duyệt → tải file. Cấu hình `VIETOCR_ENDPOINT` và khởi động microservice VietOCR rồi chọn **Chuyển ảnh sang Markdown** tại `/scan-document`. Gemini không tạo hoặc chép lại Markdown. Xem [hướng dẫn và giới hạn](docs/DOCUMENT-EXTRACTION.md#image-to-markdown-vietocr).
 ## Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh & Quản trị Quy trình cho Người cao tuổi tại Việt Nam
+
+> 📖 **HƯỚNG DẪN VẬN HÀNH:** Xem cẩm nang chi tiết [Hướng Dẫn Khởi Chạy & Vận Hành Toàn Bộ Chức Năng (Kèm VietOCR Server)](docs/HUONG-DAN-CHAY-TAT-CA-CHUC-NANG.md).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Next.js 14](https://img.shields.io/badge/Next.js-14.x-black)](https://nextjs.org/)
@@ -42,7 +45,7 @@ Thay vì ép người già phải học cách thao tác bàn phím cảm ứng p
 * **Trợ lý Giọng nói Đọc Hướng dẫn Từng Dòng (FR-3):** Giọng đọc tiếng Việt tự nhiên (tùy chọn miền Bắc / miền Nam), phát âm chậm rãi (tốc độ 0.9x), tròn vành rõ chữ, tự động dừng lại ngay lập tức khi người dùng bấm mic nói (*Interruption handling*).
 * **Chữ Mẫu Màu Đỏ Tương Phản Cao (FR-5):** Tại mỗi bước, màn hình hiển thị ví dụ mẫu bằng chữ in hoa màu đỏ đậm (`#D32F2F`) tương phản cao trên nền trắng đạt chuẩn **WCAG 2.1 AAA (>= 7:1)**, cỡ chữ tối thiểu 18pt để người già nhìn theo chép lại chuẩn xác từng nét.
 * **Hỏi đáp Giọng nói Ngữ cảnh Tức thì (FR-4):** Người dùng nhấn giữ nút Micro hỏi bất kỳ thắc mắc nào (*"Cháu ơi, diện tích ghi theo Sổ đỏ hay Hợp đồng?"*). AI đối chiếu nghiệp vụ giải đáp ngắn gọn trong 2-3 câu với độ trễ phản hồi <= 1.5 giây.
-* **Quét Chứng Từ Tiên Quyết Thông Minh (FR-6):** Tự động bóc tách số Căn cước công dân, số Biên bản phạt vi phạm giao thông hoặc thông tin Sổ đỏ để tự động đưa vào chữ mẫu đỏ ở các bước tiếp theo.
+* **Quét Chứng Từ Tiên Quyết Thông Minh (FR-6):** Đọc chứng từ và đề xuất dữ liệu có bằng chứng để người dùng đối chiếu, sửa và xác nhận. Chỉ các giá trị đã đủ điều kiện hoặc được xác nhận, sau thao tác lưu rõ ràng, mới được ánh xạ vào chữ mẫu đỏ ở các bước tiếp theo. Schema hiện triển khai cho biên bản vi phạm giao thông.
 
 ---
 
@@ -132,6 +135,6 @@ Toàn bộ tài liệu quy chuẩn kỹ thuật và kế hoạch thực thi đã
    ```
 5. **Chạy máy chủ phát triển:**
    ```bash
-   npm run dev
+   npm run dev:all
    ```
-6. **Mở trình duyệt:** Truy cập `http://localhost:3000` để xem ứng dụng di động dành cho người cao tuổi hoặc `http://localhost:3000/admin` để vào Cổng Quản trị Một cửa.
+6. **Mở trình duyệt:** Truy cập `http://localhost:3001` để xem ứng dụng hoặc `http://localhost:3001/scan-document` để thử đọc ảnh. Kiểm tra `http://127.0.0.1:8000/health`: Web mở được chưa chứng minh OCR đã sẵn sàng. Nếu import PyTorch/model thất bại, xem [chẩn đoán VietOCR](services/vietocr-service/README.md).
