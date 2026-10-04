@@ -3,6 +3,7 @@ import { FormRepository } from "@/modules/forms/repositories/form.repository";
 import {
   FormGeometricManifest,
   FormWorkflow,
+  FormStatus,
   WorkflowStep as ContractWorkflowStep,
 } from "@/shared/contracts";
 import {
@@ -191,14 +192,14 @@ export class PrismaFormRepository implements FormRepository {
       const template = await tx.formTemplate.upsert({
         where: { formCode: workflow.formCode },
         update: {
-          formTitle: workflow.formTitle,
-          status: "PENDING_REVIEW",
+          formTitle: workflow.formTitle || workflow.formTitleVi || workflow.formCode,
+          status: 'PENDING_REVIEW',
           updatedAt: new Date(),
         },
         create: {
           formCode: workflow.formCode,
-          formTitle: workflow.formTitle,
-          status: "PENDING_REVIEW",
+          formTitle: workflow.formTitle || workflow.formTitleVi || workflow.formCode,
+          status: 'PENDING_REVIEW',
         },
       });
 
@@ -306,7 +307,7 @@ export class PrismaFormRepository implements FormRepository {
       formId: template.id,
       formTitle: template.formTitle,
       formCode: template.formCode,
-      status: template.workflow.status.toLowerCase() as FormWorkflow["status"],
+      status: (template.workflow.status.toUpperCase() as FormStatus),
       steps,
     };
   }

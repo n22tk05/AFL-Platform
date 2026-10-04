@@ -2,6 +2,7 @@
 
 import React, { useMemo, useRef, useEffect } from "react";
 import { WorkflowStep, NormalizedBoundingBox } from "@/shared/contracts";
+import { speakVietnamese } from "@/shared/utils/speech";
 import {
   ChevronLeft,
   ChevronRight,
@@ -72,13 +73,7 @@ export function AdminStepEditor({
   };
 
   const speakPreview = (text: string) => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "vi-VN";
-      utterance.rate = 0.9;
-      window.speechSynthesis.speak(utterance);
-    }
+    speakVietnamese(text);
   };
 
   const handleDeleteCurrentStep = () => {
@@ -281,7 +276,7 @@ export function AdminStepEditor({
             type="text"
             value={currentStep.exampleRedText}
             onChange={(e) => handleFieldChange("exampleRedText", e.target.value)}
-            className="w-full text-sm font-black px-3 py-2 border-2 border-red-300 bg-red-50/40 rounded-lg text-[#D32F2F] tracking-wide uppercase focus:ring-2 focus:ring-red-500"
+            className="w-full text-sm font-black px-3 py-2 border-2 border-red-300 bg-red-50/40 rounded-lg text-afl-red tracking-wide uppercase focus:ring-2 focus:ring-red-500"
           />
         </div>
 

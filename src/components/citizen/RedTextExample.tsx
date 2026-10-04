@@ -21,7 +21,7 @@ export function RedTextExample({ exampleText, fieldNote }: RedTextExampleProps) 
     <div className="w-full bg-white rounded-2xl border-2 border-slate-300 p-4 shadow-sm flex flex-col gap-2.5">
       <div className="flex items-center justify-between border-b border-slate-100 pb-2">
         <div className="flex items-center gap-2 text-slate-800">
-          <PenTool className="w-4 h-4 text-[#D32F2F] shrink-0" />
+          <PenTool className="w-4 h-4 text-afl-red shrink-0" />
           <span className="font-extrabold text-xs sm:text-sm tracking-wide uppercase">
             CHỮ MẪU ĐỂ BÁC CHÉP THEO:
           </span>
@@ -49,8 +49,8 @@ export function RedTextExample({ exampleText, fieldNote }: RedTextExampleProps) 
         </div>
       </div>
 
-      <div className="bg-[#FFFDF8] border-2 border-dashed border-slate-300 rounded-xl p-3.5 flex items-center justify-center text-center min-h-[80px]">
-        <p className={`font-black tracking-wide uppercase text-[#D32F2F] break-words ${fontClasses[fontScale]}`}>
+      <div className="bg-afl-bg border-2 border-dashed border-slate-300 rounded-xl p-3.5 flex items-center justify-center text-center min-h-[80px]">
+        <p className={`font-black tracking-wide uppercase text-afl-red break-words ${fontClasses[fontScale]}`}>
           {exampleText || "(ĐỂ TRỐNG Ô NÀY NẾU CHƯA CÓ)"}
         </p>
       </div>

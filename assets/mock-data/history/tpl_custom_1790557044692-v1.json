@@ -1,0 +1,117 @@
+{
+  "templateId": "tpl_custom_1790557044692",
+  "formCode": "uu",
+  "formTitle": "page-1",
+  "formTitleVi": "page-1",
+  "circularInfo": "uu",
+  "totalPages": 1,
+  "version": 1,
+  "status": "ACTIVE",
+  "publishedAt": "2026-10-03T15:22:34.985Z",
+  "pages": [
+    {
+      "pageNumber": 1,
+      "imageUrl": "blob:http://localhost:3000/75c9febc-ee3a-4cb5-96ce-d1d105e7e1c2",
+      "width": 1200,
+      "height": 1700
+    }
+  ],
+  "totalSteps": 5,
+  "steps": [
+    {
+      "stepIndex": 0,
+      "boxId": "box_new_01",
+      "pageNumber": 1,
+      "sectionName": "I. TIÊU ĐỀ & KÍNH GỬI",
+      "label": "Cơ quan tiếp nhận giải quyết",
+      "voiceGuidance": "Bác nhìn vào góc trên cùng của tờ giấy, viết tên cơ quan tiếp nhận vào đây nhé.",
+      "audioUrl": "/assets/audio/default.mp3",
+      "exampleRedText": "ỦY BAN NHÂN DÂN XÃ / PHƯỜNG",
+      "highlightCoords": [
+        0.1287,
+        0.2128,
+        0.1687,
+        0.8128
+      ],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 1,
+      "boxId": "box_new_02",
+      "pageNumber": 1,
+      "sectionName": "II. THÔNG TIN NGƯỜI KÊ KHAI",
+      "label": "Họ và tên người kê khai",
+      "voiceGuidance": "Bác viết rõ họ và tên của mình bằng chữ in hoa theo đúng thẻ Căn cước công dân.",
+      "audioUrl": "/assets/audio/default.mp3",
+      "exampleRedText": "NGUYỄN VĂN AN",
+      "highlightCoords": [
+        0.245,
+        0.16,
+        0.295,
+        0.85
+      ],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 2,
+      "boxId": "box_new_03",
+      "pageNumber": 1,
+      "sectionName": "II. THÔNG TIN NGƯỜI KÊ KHAI",
+      "label": "Số Căn cước công dân / Định danh",
+      "voiceGuidance": "Bác chép đúng 12 chữ số trên thẻ Căn cước công dân của bác vào dòng này.",
+      "audioUrl": "/assets/audio/default.mp3",
+      "exampleRedText": "048056001234",
+      "highlightCoords": [
+        0.345,
+        0.16,
+        0.385,
+        0.6
+      ],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 3,
+      "boxId": "box_new_04",
+      "pageNumber": 1,
+      "sectionName": "III. NỘI DUNG YÊU CẦU",
+      "label": "Nội dung đề nghị giải quyết",
+      "voiceGuidance": "Bác ghi rõ nội dung yêu cầu làm thủ tục hành chính vào ô này.",
+      "audioUrl": "/assets/audio/default.mp3",
+      "exampleRedText": "XIN CẤP LẠI GIẤY TỜ DO BỊ THẤT LẠC",
+      "highlightCoords": [
+        0.55,
+        0.16,
+        0.65,
+        0.88
+      ],
+      "requiresPrerequisiteDoc": true,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 4,
+      "boxId": "box_new_05",
+      "pageNumber": 1,
+      "sectionName": "IV. KÝ TÊN",
+      "label": "Chữ ký và họ tên người làm đơn",
+      "voiceGuidance": "Bước cuối rồi bác ơi! Bác ký tên và viết rõ họ tên của mình vào góc phải dưới cùng này nhé.",
+      "audioUrl": "/assets/audio/default.mp3",
+      "exampleRedText": "KÝ VÀ GHI RÕ HỌ TÊN",
+      "highlightCoords": [
+        0.77,
+        0.48,
+        0.88,
+        0.9
+      ],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    }
+  ]
+}

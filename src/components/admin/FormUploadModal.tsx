@@ -10,6 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { FormWorkflow } from "@/shared/contracts";
+import { FormStorageService } from "@/shared/services/form-storage";
 
 interface FormUploadModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [dataUrl, setDataUrl] = useState<string | null>(null);
   const [formTitle, setFormTitle] = useState("");
   const [formCode, setFormCode] = useState("");
   const [legalBasis, setLegalBasis] = useState("");
@@ -42,15 +44,26 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
     legalBasis.trim().length > 0
   );
 
+  const processSelectedFile = (file: File) => {
+    setSelectedFile(file);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    if (!formTitle.trim()) {
+      setFormTitle(file.name.replace(/\.[^/.]+$/, ""));
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setDataUrl(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      if (!formTitle.trim()) {
-        setFormTitle(file.name.replace(/\.[^/.]+$/, ""));
-      }
+      processSelectedFile(file);
     }
   };
 
@@ -58,12 +71,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
     if (file) {
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      if (!formTitle.trim()) {
-        setFormTitle(file.name.replace(/\.[^/.]+$/, ""));
-      }
+      processSelectedFile(file);
     }
   };
 
@@ -281,7 +289,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
         pages: [
           {
             pageNumber: 1,
-            imageUrl: previewUrl || "/assets/forms/01-lptb/page-1.jpg",
+            imageUrl: dataUrl || previewUrl || "/assets/forms/01-lptb/page-1.jpg",
             width,
             height,
           },
@@ -291,8 +299,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
       };
 
       try {
-        localStorage.setItem(`afl_workflow_published_${draftId}`, JSON.stringify(draftWorkflow));
-        localStorage.setItem(`afl_workflow_draft_${draftId}`, JSON.stringify(draftWorkflow));
+        FormStorageService.saveDraft(draftWorkflow);
       } catch (e) {
         console.warn("Storage error", e);
       }
@@ -326,10 +333,10 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
             </div>
             <div>
               <h3 className="font-black text-sm uppercase tracking-wide">
-                Tải Lên Biểu Mẫu Hành Chính Mới
+                Tải Lên Biểu Mẫu Mới
               </h3>
               <p className="text-[11px] text-emerald-400 font-medium">
-                Bóc tách khung ô tự động bằng OpenCV & Gemini AI
+                Bóc tách khung ô tự động
               </p>
             </div>
           </div>
@@ -472,7 +479,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
                   </div>
                   <div className="col-span-2">
                     <label className="block text-xs font-bold text-slate-700 mb-1 uppercase">
-                      Tên biểu mẫu tiếng Việt <span className="text-red-500">*</span>:
+                      Tên biểu mẫu<span className="text-red-500">*</span>:
                     </label>
                     <input
                       type="text"
@@ -511,7 +518,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
                 <div className="p-2.5 bg-amber-50 border border-amber-300 rounded-xl flex items-center gap-2 text-amber-900 text-xs font-bold">
                   <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
                   <span>
-                    Bác vui lòng tải tệp ảnh và điền đủ 3 mục (Mã biểu mẫu, Tên biểu mẫu, Căn cứ pháp lý) để kích hoạt AI quét nhé!
+                    Vui lòng tải tệp ảnh và điền đủ 3 mục (Mã biểu mẫu, Tên biểu mẫu, Căn cứ pháp lý) để kích hoạt AI quét nhé!
                   </span>
                 </div>
               )}

@@ -1,11 +1,44 @@
 /**
  * HỢP ĐỒNG KẾT NỐI DỮ LIỆU CHUẨN (INTERFACE CONTRACTS) - DỰ ÁN AFL
- * Quy định chuẩn giao tiếp giữa 4 thành viên.
+ * Quy định chuẩn giao tiếp giữa các phân hệ (Citizen, Admin, Vision, Voice AI).
  * QUY TẮC BẤT BIẾN: Bắt buộc dùng Normalized Coordinates [0.0 - 1.0] để không bị lệch màn hình!
  */
 
 /** Tọa độ chuẩn hóa theo tỷ lệ phần trăm từ 0.0 đến 1.0: [ymin, xmin, ymax, xmax] */
 export type NormalizedBoundingBox = [number, number, number, number];
+
+/** Trạng thái vòng đời chuẩn của Biểu mẫu Hành chính */
+export type FormStatus = "DRAFT" | "PENDING_REVIEW" | "ACTIVE" | "ARCHIVED";
+
+export type StatusKey = FormStatus | "ALL";
+
+export interface Status {
+  key: StatusKey;
+  value: string;
+}
+
+export interface FormOption {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
+  badge?: string;
+  badgeColor?: string;
+}
+
+export interface AdminFormTemplate {
+  id: string;
+  formCode: string;
+  title: string;
+  legalBasis: string;
+  department: string;
+  version: number;
+  totalSteps: number;
+  totalPages: number;
+  status: FormStatus;
+  publishedAt: string | Date;
+  thumbnailUrl: string;
+}
 
 /**
  * Kết quả nhận diện dòng chữ qua pipeline OpenCV Line Segmentation (Phương pháp 2) + VietOCR
@@ -19,7 +52,7 @@ export interface DetectedLineText {
 }
 
 // ============================================================================
-// 1. ĐẦU RA CỦA NGƯỜI 3 (OpenCV WASM) -> ĐẦU VÀO CỦA NGƯỜI 4 (Gemini Text LLM)
+// 1. ĐẦU RA CỦA OpenCV WASM -> ĐẦU VÀO CỦA Gemini Text LLM
 // ============================================================================
 export interface FormGeometricBox {
   boxId: string;                     // Mã định danh duy nhất: "box_01", "box_02"...
@@ -41,7 +74,7 @@ export interface FormGeometricManifest {
 }
 
 // ============================================================================
-// 2. ĐẦU RA CỦA NGƯỜI 4 (Gemini + TTS) -> ĐẦU VÀO CỦA NGƯỜI 2 (Frontend Mobile/Admin)
+// 2. ĐẦU RA CỦA Gemini + TTS -> ĐẦU VÀO CỦA Frontend Citizen / Admin
 // ============================================================================
 export interface StepFaqItem {
   question: string;                  // Câu hỏi người già hay thắc mắc tại ô này
@@ -77,13 +110,14 @@ export interface FormWorkflow {
   formCode: string;
   formTitle: string;
   formTitleVi?: string;
-  circularInfo?: string;             // "Mẫu số 01/LPTB kèm theo Thông tư số 89/2026/TT-BTC"
+  circularInfo?: string;              // "Mẫu số 01/LPTB kèm theo Thông tư số 89/2026/TT-BTC"
+  department?: string;
   totalPages?: number;
   pages?: FormPageMetadata[];
   totalSteps?: number;
-  status?: 'PENDING_REVIEW' | 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
-  version?: number;                  // Số hiệu phiên bản ban hành: 1, 2, 3...
-  publishedAt?: string;              // Mốc thời gian ban hành ISO: 2026-09-27T...
+  version?: number;                   // Số hiệu phiên bản ban hành: 1, 2, 3...
+  status: FormStatus;
+  publishedAt?: string;               // Mốc thời gian ban hành ISO: 2026-09-27T...
   steps: WorkflowStep[];
 }
 

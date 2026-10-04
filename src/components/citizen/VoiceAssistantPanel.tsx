@@ -5,6 +5,8 @@ import { Volume2, RotateCcw, Mic, HelpCircle, Loader2 } from "lucide-react";
 import { StepFaqItem } from "@/shared/contracts";
 import { useVoiceAssistant } from "@/modules/voice-ai/hooks/use-voice-assistant";
 
+import { speakVietnamese } from "@/shared/utils/speech";
+
 interface VoiceAssistantPanelProps {
   voiceGuidance: string;
   audioUrl?: string;
@@ -23,18 +25,11 @@ export function VoiceAssistantPanel({
   const [faqAnswer, setFaqAnswer] = useState<string | null>(null);
   const transcriptRef = useRef<string>("");
 
-  // Đọc câu thoại bằng Web Speech Synthesis (tốc độ 0.9x)
+  // Đọc câu thoại bằng Web Speech Synthesis qua utility chung (tốc độ 0.9x)
   const speakText = useCallback((text: string) => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "vi-VN";
-      utterance.rate = 0.9;
-      utterance.onstart = () => setIsPlaying(true);
-      utterance.onend = () => setIsPlaying(false);
-      utterance.onerror = () => setIsPlaying(false);
-      window.speechSynthesis.speak(utterance);
-    }
+    setIsPlaying(true);
+    speakVietnamese(text);
+    setTimeout(() => setIsPlaying(false), Math.max(1000, text.length * 70));
   }, []);
 
   const askQuestionRef = useRef<(code: string, idx: number, q: string) => Promise<void>>();
@@ -113,7 +108,7 @@ export function VoiceAssistantPanel({
   return (
     <div className="w-full flex flex-col gap-2.5">
       {/* Khung lời thoại hướng dẫn (Tối giản màu sắc) */}
-      <div className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col gap-2">
+      <div className="w-full bg-green border-2 border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col gap-2">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-start gap-3">
             <div
@@ -159,26 +154,35 @@ export function VoiceAssistantPanel({
         )}
       </div>
 
-      {/* Nút Nhấn Giữ Mic (Chuẩn bị cho Voice AI) */}
+      {/* NÚT NHẤN GIỮ ĐỂ NÓI: NỀN XANH - CHỮ TRẮNG */}
       <button
         type="button"
         onMouseDown={handleMicDown}
         onMouseUp={handleMicUp}
         onTouchStart={handleMicDown}
         onTouchEnd={handleMicUp}
-        className={`w-full min-h-[52px] rounded-xl border-2 flex items-center justify-center gap-2.5 font-bold text-sm select-none transition-all ${
+        className={`min-h-[56px] w-full px-6 py-3 rounded-2xl flex items-center justify-center gap-3 select-none active:scale-95 transition-all shadow-md ${
           isListening
-            ? "bg-[#D32F2F] text-white border-[#D32F2F] animate-pulse"
-            : "bg-white text-slate-800 border-slate-300 hover:bg-slate-50"
+            ? "bg-emerald-900 text-white ring-4 ring-emerald-400/60 shadow-lg scale-98"
+            : "bg-emerald-700 hover:bg-emerald-800 text-white"
         }`}
       >
-        <Mic className="w-5 h-5" />
-        <span>
+        {/* Icon Micro màu trắng */}
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center ${
+            isListening ? "bg-white/25 animate-pulse" : "bg-white/20"
+          }`}
+        >
+          <Mic className="w-5 h-5 text-white" />
+        </div>
+
+        {/* Chữ hiển thị màu trắng rõ nét */}
+        <span className="text-sm sm:text-base font-black tracking-wide text-white uppercase">
           {isListening
             ? transcript
-              ? `BÁC ĐANG HỎI: "${transcript}"`
-              : "ĐANG LẮNG NGHE BÁC NÓI..."
-            : "NHẤN GIỮ VÀO ĐÂY ĐỂ HỎI TRỢ LÝ"}
+              ? `Bác đang hỏi: "${transcript}"`
+              : "Đang lắng nghe bác nói..."
+            : "Nhấn giữ để nói"}
         </span>
       </button>
 

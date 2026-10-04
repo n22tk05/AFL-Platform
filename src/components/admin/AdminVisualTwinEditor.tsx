@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { NormalizedBoundingBox, FormPageMetadata } from "@/shared/contracts";
+import { normalizeCoordsToBoxStyle } from "@/shared/utils/geometry";
 import { Move, Crop } from "lucide-react";
 
 interface AdminVisualTwinEditorProps {
@@ -45,12 +46,7 @@ export function AdminVisualTwinEditor({
     };
 
   const [mode, setMode] = useState<"drag" | "draw">("drag");
-  const [ymin, xmin, ymax, xmax] = highlightCoords;
-
-  const boxTop = `${ymin * 100}%`;
-  const boxLeft = `${xmin * 100}%`;
-  const boxHeight = `${Math.max(0.005, ymax - ymin) * 100}%`;
-  const boxWidth = `${Math.max(0.005, xmax - xmin) * 100}%`;
+  const boxStyle = normalizeCoordsToBoxStyle(highlightCoords);
 
   // Khởi động thao tác kéo thả (di chuyển, co giãn 8 điểm neo, hoặc vẽ mới)
   const startInteraction = (e: React.MouseEvent, type: InteractionType) => {
@@ -279,17 +275,12 @@ export function AdminVisualTwinEditor({
 
           {/* Vùng khung viền đỏ highlight */}
           <div
-            style={{
-              top: boxTop,
-              left: boxLeft,
-              height: boxHeight,
-              width: boxWidth,
-            }}
-            className="absolute border-2 border-[#D32F2F] bg-[#D32F2F]/15 z-20 shadow-[0_0_0_1px_rgba(255,255,255,0.8)]"
+            style={boxStyle}
+            className="absolute border-2 border-afl-red bg-afl-red/15 z-20 shadow-[0_0_0_1px_rgba(255,255,255,0.8)]"
           >
             {/* Nhãn nổi ở cạnh trên */}
             <div className="absolute bottom-full mb-1.5 left-0 z-30 pointer-events-none whitespace-nowrap">
-              <span className="bg-[#D32F2F] text-white text-[10px] font-black px-2 py-0.5 rounded shadow tracking-wider uppercase inline-flex items-center gap-1">
+              <span className="bg-afl-red text-white text-[10px] font-black px-2 py-0.5 rounded shadow tracking-wider uppercase inline-flex items-center gap-1">
                 {fieldLabel || "VỊ TRÍ CẦN ĐIỀN"}
               </span>
             </div>
@@ -301,7 +292,7 @@ export function AdminVisualTwinEditor({
                   startInteraction(e, "move");
                 }
               }}
-              className="absolute inset-0 cursor-move pointer-events-auto bg-[#D32F2F]/5 hover:bg-[#D32F2F]/20 transition-colors"
+              className="absolute inset-0 cursor-move pointer-events-auto bg-afl-red/5 hover:bg-afl-red/20 transition-colors"
               title="Nhấn giữ và kéo để di chuyển ô"
             />
 
