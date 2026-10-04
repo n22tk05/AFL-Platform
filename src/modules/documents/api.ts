@@ -5,7 +5,7 @@ import { DocumentExtractionService, manualReview } from './services/document-ext
 import { analyzeImageQuality, validateImageDimensions, IMAGE_WARNING_MESSAGES } from './image-quality';
 
 export class InputError extends Error { constructor(public code: string, public status: number) { super(code); } }
-async function limitedBody(req: Request): Promise<Uint8Array> {
+export async function limitedBody(req: Request): Promise<Uint8Array> {
   const declared = req.headers.get('content-length');
   if (declared && (!/^\d+$/.test(declared) || Number(declared) > DOCUMENT_LIMITS.requestBytes)) throw new InputError('REQUEST_TOO_LARGE', 413);
   const reader = req.body?.getReader(); if (!reader) throw new InputError('EMPTY_REQUEST', 400);
@@ -22,7 +22,7 @@ async function limitedBody(req: Request): Promise<Uint8Array> {
   for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
   return bytes;
 }
-async function checkImage(bytes: Uint8Array, mime: string) {
+export async function checkImage(bytes: Uint8Array, mime: string) {
   if (bytes.length > DOCUMENT_LIMITS.fileBytes) throw new InputError('FILE_TOO_LARGE', 413);
   if (!['image/jpeg', 'image/png'].includes(mime)) throw new InputError('UNSUPPORTED_MIME', 415);
   const jpeg = bytes.length >= 4 && bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;

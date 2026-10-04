@@ -9,12 +9,15 @@ contrast, small images, shadows and possible glare are soft warnings. A white
 page is not proof of glare or of missing text. The older quality-gate description
 below is historical; it no longer describes this page's text-quality policy.
 
-Provider selection is preserved: `DOCUMENT_OCR_PROVIDER=google-document-ai` uses
-**Google Document AI** for OCR and **Gemini text** only for structured classification
-and field extraction. The current local `.env` and code default select the existing
-`vietocr` adapter. Neither provider was replaced; no Mistral integration or credential
-change was made. Markdown makes no Gemini calls. Citizen document processing disables
-VietOCR's development synthesizer; absent OCR confidence remains null.
+OCR now uses **VietOCR only**, through the local Python microservice at
+`VIETOCR_ENDPOINT`. `DOCUMENT_OCR_PROVIDER` defaults to `vietocr`; other values are
+rejected as invalid configuration. The former cloud OCR adapter and dependency have
+been removed. **Gemini text** remains separate for structured classification and
+field extraction, and Google Cloud Text-to-Speech remains separate for voice.
+Markdown makes no Gemini calls. Citizen document processing disables VietOCR's
+test-only synthesizer; absent OCR confidence remains null. Reports under
+`docs/reports/` record earlier implementation states and are superseded by this
+document for current runtime configuration.
 
 Contrast candidates use grayscale, mild bilateral denoise (Gaussian fallback),
 CLAHE when available (mild linear contrast fallback), and a mild unsharp mask.
@@ -52,7 +55,7 @@ values are retryConfidence=0.8, lowConfidenceFraction=0.2, alignmentIoU=0.65; th
 require calibration and are not accuracy guarantees. Two attempts share the
 configured `DOCUMENT_OCR_TIMEOUT_MS` budget (default 60 seconds); calls are serial.
 Errors, credentials/configuration failures, quota and timeout are not retried.
-Google OCR transport retries are disabled. Gemini retries are also disabled:
+VietOCR transport errors are not retried. Gemini transport retries are also disabled:
 at most 2 OCR + 1 classification + 1 schema call for a supported page; Markdown
 uses at most 2 OCR calls. Cancellation prevents subsequent calls.
 
@@ -79,42 +82,41 @@ Fixtures under `tests/fixtures/documents/` are fictional synthetic pixels genera
 by `node scripts/generate-document-image-fixtures.mjs`. Tests separate fake providers,
 real local OpenCV WASM and browser interception. Live OCR remains opt-in via
 `scripts/evaluate-document-extraction.ts --live` with consented, redacted images.
-No real documents were sent to cloud; synthetic tests do not measure camera OCR
-accuracy. Full implementation/verification evidence is in
+Synthetic tests do not measure camera OCR accuracy. The prior adaptive-preprocessing
+implementation and its historical verification evidence are recorded in
 [the delivery report](reports/person-3-opencv/step-06-adaptive-ocr/ADAPTIVE-OCR-REPORT.md).
 
-## Image to Markdown: Google Enterprise OCR
+## Image to Markdown: VietOCR
 
-Required pipeline: **OpenCV deskewed image -> Google Document AI Enterprise OCR -> deterministic Markdown assembler -> validation -> human review -> download .md**.
+Required pipeline: **OpenCV-prepared primary image -> local VietOCR -> optional bounded enhanced retry -> deterministic Markdown assembler -> validation -> human review -> download .md**. Whole-image fallback is marked as not deskewed.
 
 ### Configuration
 
-Create an **Enterprise Document OCR** processor (type `OCR_PROCESSOR`, not a generative layout parser). Set server-only variables in `.env.local` and restart the application:
+Set server-only variables in `.env` or `.env.local` and restart the application:
 
 ```dotenv
-DOCUMENT_OCR_PROVIDER=google-document-ai
-GOOGLE_CLOUD_PROJECT_ID=your-project-id
-GOOGLE_CLOUD_LOCATION=us
-GOOGLE_DOCUMENT_AI_PROCESSOR_ID=your-processor-id
-# Optional: pin an Enterprise OCR version; otherwise use the processor default.
-GOOGLE_DOCUMENT_AI_PROCESSOR_VERSION=
-# Optional service-account file OUTSIDE the repository; otherwise use ADC/workload identity.
-GOOGLE_APPLICATION_CREDENTIALS=
+DOCUMENT_OCR_PROVIDER=vietocr
+VIETOCR_ENDPOINT=http://127.0.0.1:8000/predict
+DOCUMENT_OCR_TIMEOUT_MS=60000
 ```
 
-Enable the Document AI API, billing and OCR quota. Give the runtime identity Document AI API User access. For local ADC use `gcloud auth application-default login`; do not commit credentials. Markdown conversion needs **no Gemini API key**.
-
-Official references: [Enterprise OCR](https://docs.cloud.google.com/document-ai/docs/enterprise-document-ocr), [processor creation](https://docs.cloud.google.com/document-ai/docs/create-processor), [Document response](https://docs.cloud.google.com/document-ai/docs/reference/rest/v1/Document).
+Install the Python runtime and model using
+[the VietOCR service instructions](../services/vietocr-service/README.md), then run
+`npm run dev:all`. Verify `http://127.0.0.1:8000/health` before reading an image.
+The launcher can keep Web available when OCR startup fails; an open Web page does
+not prove that the model is ready. Windows Application Control can block PyTorch
+DLL loading before FastAPI starts; do not disable security policy to bypass it.
+Markdown conversion needs **no Gemini API key**, cloud OCR account or billing.
 
 ### Use
 
-Open `/scan-document`, choose a JPEG/PNG up to 8 MB and the matching photo/clean-scan mode, then select the Markdown conversion button. The exact OpenCV-processed PNG is displayed alongside the draft. Compare the raw OCR text, edit the Markdown if necessary, confirm review, and download the UTF-8 `.md`. Editing invalidates confirmation; changing the image, rerunning, clearing the session or its 15-minute expiry clears the draft. `/document-test` uses the same review component; its explicitly selected offline examples are synthetic, not OCR results.
+Open `/scan-document`, choose a JPEG/PNG up to 8 MB and the matching upload/camera/clean-scan mode, then select the Markdown conversion button. The primary PNG or high-quality JPEG is displayed alongside the draft, with client enhanced previews when available. Compare the raw OCR text, edit the Markdown if necessary, confirm review, and download the UTF-8 `.md`. Editing invalidates confirmation; changing the image, rerunning, clearing the session or its 15-minute expiry clears the draft. `/document-test` uses the same review component; its explicitly selected offline examples are synthetic, not OCR results.
 
 ### Assembly and validation
 
-`Document.text` is the source of truth. Raw text is retained verbatim in `rawText`. The assembler adds Markdown syntax, escapes literal punctuation/HTML and retains line order and breaks. Conservative rules recognize short uppercase document titles and existing bullet markers. Numbered markers are escaped to prevent Markdown renderers from silently renumbering them. Names, numbers, dates and leading zeros are never rewritten.
+The selected `DocumentOcrResult.fullText` is the OCR source. Raw text is retained verbatim in `rawText` and in attempt provenance. The deterministic assembler formats a review draft, escapes literal punctuation/HTML and preserves source values. Numbered markers are escaped to prevent Markdown renderers from silently renumbering them. Administrative formatting in the draft is not evidence that a name, number or date was read correctly; compare it against raw OCR and the source image.
 
-GFM tables are assembled only from provider-supplied cell text anchors when they are exact, ordered, non-overlapping, cover a complete block, have one header row, equal column counts and no merged cells. Non-whitespace gaps between cells invalidate the conversion. Ambiguous or overlapping tables fall back to the complete raw text in source order with a review warning. Enterprise OCR does not guarantee table structures; the assembler does not guess tables from multi-column prose or invent missing cells. This text export does not reconstruct logos, stamps or embedded document images.
+The shared assembler supports exact, ordered, non-overlapping table cell source ranges with one header row, equal column counts and no merged cells. Ambiguous tables fall back to source text with a warning. The current VietOCR adapter returns lines, not document table metadata, so this capability does not claim table detection by VietOCR. Draft formatting may arrange supported administrative signature text; users must review that layout. This text export does not reconstruct logos, stamps or embedded document images.
 
 Validation checks empty/oversized output, control characters, unclosed code fences, inconsistent table columns and active content. Heading jumps and replacement characters trigger warnings. The original raw OCR stays available for comparison. Preview uses React Markdown/GFM, never executes source HTML and never fetches remote images. Validation is conservative lint, not proof of OCR accuracy. Human edits require renewed confirmation before download.
 
@@ -126,11 +128,11 @@ The Markdown pipeline makes **no Gemini calls**. The separate structured busines
 
 ### API and limits
 
-`POST /api/documents/markdown` accepts multipart `file` or JSON `imageBase64`. It returns `{success:true,data:{contractVersion:1,status:"review_required",provider:"google-document-ai",rawText,markdown,validation,pageCount,confidence,warnings}}`, not an attachment. Both in-repository clients create the final file only after validation and review. Third-party callers must implement their own human-review step. Confidence is the lowest available token score (line scores only when tokens are absent), or null when incomplete; it is not measured accuracy.
+`POST /api/documents/markdown` accepts multipart `file` or JSON `imageBase64`. It returns `{success:true,data:{contractVersion:1,status:"review_required",provider:"vietocr",rawText,markdown,validation,pageCount,confidence,warnings,ocrReview}}`, not an attachment. Both in-repository clients create the final file only after validation and review. Third-party callers must implement their own human-review step. Confidence is the lowest available token score (line scores only when tokens are absent), or null when incomplete; it is not measured accuracy.
 
-One JPEG/PNG page per request; 8 MB input, 12 MB request body, 120,000 raw text characters and 4,000 raw lines. Markdown has a separate expansion limit for escape characters and table syntax. Each Google request has a 30-second deadline, no automatic retries, and cancellation propagation. Provider failures return safe error codes with no fabricated content. Responses are `no-store`; images and OCR text are not written to disk, database or browser storage by this pipeline. Google receives the processed image; application non-persistence does not control provider retention.
+One JPEG/PNG page per request; 8 MB per image, 26 MB total request body, 120,000 raw text characters and 4,000 raw lines. Markdown has a separate expansion limit for escape characters and table syntax. Up to two serial OCR attempts share `DOCUMENT_OCR_TIMEOUT_MS` (60 seconds by default), with cancellation propagation. Provider failures return safe error codes and source review information without fabricated content. Responses are `no-store`; images and OCR text are not written to disk, database or browser storage by this pipeline. The local Python service receives the processed image; model weights may be cached locally during setup, separately from citizen images.
 
-Unit tests inject OCR fixtures; browser tests use real OpenCV on synthetic images and intercepted API responses. **No live OCR accuracy benchmark has been run.** Configure Google credentials and evaluate representative Vietnamese documents against manually verified transcriptions before claiming accuracy.
+Unit tests inject OCR fixtures; browser tests use real OpenCV on synthetic images and intercepted API responses. **No representative camera-image accuracy benchmark has been run.** A successful health check or synthetic smoke test is not a measured accuracy result. Evaluate consented, redacted Vietnamese documents against manually verified transcriptions before claiming accuracy.
 
 ### Verification — 2026-10-02
 
@@ -151,13 +153,14 @@ README/architecture descriptions of ML Kit and local OpenCV OCR differ from the 
 
 ```mermaid
 flowchart TD
-  A[Selected JPEG/PNG] --> B[Existing OpenCV detection and perspective warp]
-  B --> C[Geometry and pixel quality gates]
-  C -->|Pass| D[Detached canvas to PNG Blob]
-  C -->|Fail| E[Retake with specific warning]
+  A[Selected JPEG/PNG] --> B[Validate input and document geometry]
+  B --> C[Color primary and quality analysis]
+  C --> D[Optional contrast or lighting candidates]
   D --> F[Bounded API request in RAM]
-  F --> G[Google Document AI OCR]
-  G --> H[Normalized text, lines, tokens]
+  F --> G[Local VietOCR: primary first]
+  G -->|Weak result only| R[At most one serial enhanced OCR attempt]
+  G --> H[Deterministic whole-result selection and review regions]
+  R --> H
   H --> I[Gemini text classification]
   I --> J[Traffic schema extraction only]
   J --> K[Runtime parser and deterministic validation]
@@ -166,22 +169,18 @@ flowchart TD
   M --> N[Guide via explicit field mapping]
 ```
 
-`DocumentOcrProvider` and `StructuredExtractionProvider` are injected into `DocumentExtractionService`. `server.ts` has Next's `server-only` boundary and constructs real providers only in the route; provider methods also reject browser execution. Google SDK responses stay inside the adapter. Gemini receives OCR text and line metadata, never image bytes. Classification and schema extraction are separate calls. Unsupported documents return unknown/manual review with no sample fields.
+`DocumentOcrProvider` and `StructuredExtractionProvider` are injected into `DocumentExtractionService`. `server.ts` has Next's `server-only` boundary and constructs the VietOCR adapter for both routes; provider methods also reject browser execution. Gemini receives OCR text and line metadata, never image bytes. Classification and schema extraction are separate calls. Unsupported documents return unknown/manual review with no sample fields.
 
-Google adapter maps text anchors, normalized/pixel polygons (using page dimensions), confidence, token membership and page numbers. Missing geometry uses a degenerate `[0,0,0,0]` sentinel plus warning, never a fabricated source region. Missing confidence is null. Each provider stage has a 30-second deadline; abort/deadline propagates to supported transports, Google RPC has its own timeout and retries disabled. Error messages are mapped to safe codes, with no provider exception/stack in the response.
+The VietOCR adapter maps segmented line text, normalized source coordinates and actual confidence when supplied. Missing confidence stays null, and missing or invalid geometry requires source review rather than an invented region. OCR attempts share the configured deadline; abort propagates to the microservice request. Error messages are mapped to safe codes, with no provider exception/stack in the response.
 
-## Google setup
+## Local OCR and separate text/voice configuration
 
-1. Create/select a Google Cloud project with billing and enable the Document AI API.
-2. In Document AI, create an **Enterprise Document OCR** processor in a supported location. Record project ID, processor ID and location exactly. This adapter uses the regional endpoint and the processor's default version.
-3. Give the runtime identity Document AI API User permission (`roles/documentai.apiUser`) for the required resources. Use an attached service account/workload identity in deployment.
-4. For local development, use Application Default Credentials (`gcloud auth application-default login`), or set `GOOGLE_APPLICATION_CREDENTIALS` to a credential file outside the repository. Do not paste JSON into source or public environment variables.
-5. Configure the server variables from `.env.example` in `.env.local`: `DOCUMENT_OCR_PROVIDER`, `GOOGLE_CLOUD_PROJECT_ID`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_DOCUMENT_AI_PROCESSOR_ID`, optional credential path, `GEMINI_API_KEY`, `GEMINI_DOCUMENT_MODEL`, `DOCUMENT_ACCEPTANCE_THRESHOLD`.
-6. Run `npm install`, then `npm run dev`; visit `/scan-document`. With missing credentials, the UI shows manual review, not manufactured data.
+1. Follow [VietOCR service setup](../services/vietocr-service/README.md), including dependency/import checks and model loading. Setup may download model weights; no citizen image is needed for setup.
+2. Set `DOCUMENT_OCR_PROVIDER=vietocr`, `VIETOCR_ENDPOINT=http://127.0.0.1:8000/predict` and `DOCUMENT_OCR_TIMEOUT_MS=60000` in the server environment. Restart after changes.
+3. Run `npm run dev:all`; verify `/health` on port 8000 and open `/scan-document` on port 3001. A failed model/import keeps OCR unavailable even if Web starts.
+4. Markdown requires no Gemini key. For separate structured extraction, configure `GEMINI_API_KEY` and `GEMINI_DOCUMENT_MODEL`; verify evidence before saving. For Google Cloud TTS only, `GOOGLE_APPLICATION_CREDENTIALS` may point to a credential file outside the repository. Never place credentials in public environment variables or source files.
 
-References: [Google client setup](https://docs.cloud.google.com/document-ai/docs/libraries), [create a processor](https://docs.cloud.google.com/document-ai/docs/create-processor), [Document response schema](https://docs.cloud.google.com/document-ai/docs/reference/rest/v1/Document), [Gemini structured output](https://ai.google.dev/gemini-api/docs/generate-content/structured-output).
-
-New runtime dependencies: `@google-cloud/documentai` for official ADC/regional OCR RPC and `server-only` for the Next bundle boundary. The existing `@google/genai` SDK is reused. Playwright is a development dependency for browser regressions. ESLint and eslint-config-next match Next 14 so the existing lint script can run without its initial interactive setup prompt.
+The Next server uses `server-only`, the existing `@google/genai` SDK for text, and the separate `@google-cloud/text-to-speech` SDK for voice. Playwright is a development dependency for browser regressions. OCR cloud credentials, regional processors and cloud OCR billing are no longer part of this project.
 
 ## Contract and validation
 
@@ -197,7 +196,7 @@ Automatic acceptance requires valid source, evidence, geometry, validation, agre
 
 The preview is the exact processed Blob sent to OCR. Selecting a field overlays its normalized source boxes on that image, preserving its natural aspect ratio. Users can edit and confirm each field or explicitly leave it blank. Editing invalidates the previous confirmation. Outstanding needs_review fields block saving; unreadable fields never autofill unless manually supplied and confirmed. Saving is an explicit action. Only accepted or human-confirmed non-null values enter the module's memory store, with a 15-minute absolute TTL. Reloading loses them. Changing image/type clears the old result/session and invalidates pending requests. Guide uses `sourceFieldFromPrerequisite`, including explicit legacy key aliases, never guesses from box IDs or labels. Finish/reset clears memory; expiry notifies mounted consumers.
 
-No images/raw OCR are written to database, filesystem or browser storage by this path. Image object URLs and detached canvases are released on replacement/unmount/expiry, and the existing OpenCV coordinator deletes its Mats in finally. The server retains document bytes only during processing; no payload logging or caching is used. JavaScript garbage collection/OS memory behavior cannot guarantee physical erasure. Google receives images and Gemini receives OCR text; deployment must assess the providers' data handling and configure access/region accordingly. Application non-persistence does not claim control of provider retention. Older unrelated scanner/admin storage is outside this change.
+No images/raw OCR are written to database, filesystem or browser storage by this path. Image object URLs and detached canvases are released on replacement/unmount/expiry, and the existing OpenCV coordinator deletes its Mats in finally. The server and local VietOCR retain document bytes only during processing; no payload logging or caching is used. JavaScript garbage collection/OS memory behavior cannot guarantee physical erasure. Structured extraction sends selected OCR text to Gemini, so users' consent and the provider's data handling still matter even though image OCR is local. Markdown does not send text to Gemini. Application non-persistence does not claim control of cloud text-provider retention. Older unrelated scanner/admin storage is outside this change.
 
 ## Tests and benchmark
 
@@ -211,16 +210,37 @@ npm run lint
 git diff --check
 ```
 
-Unit tests inject fake providers and never call paid services. Browser tests use synthetic images and intercepted extraction responses. With Google Chrome installed, run `npm run build`, `npm run start -- --port 3100`, then `npx playwright test --config playwright.documents.config.ts`. Set `DOCUMENT_TEST_URL` for another local port. These validate wiring/review, not cloud accuracy. Do not run build and dev concurrently against the same .next directory.
+Unit tests inject fake providers and never call paid services. Browser tests use synthetic images and intercepted extraction responses. With Google Chrome installed, run `npm run build`, `npm run start -- --port 3100`, then `npx playwright test --config playwright.documents.config.ts`. Set `DOCUMENT_TEST_URL` for another local port. These validate wiring/review, not OCR accuracy. Do not run build and dev concurrently against the same .next directory.
+
+If an existing development server must stay running, select a separate generated
+directory for production verification in PowerShell:
+
+```powershell
+$env:AFL_BUILD_DIR = 'test-results/next-vietocr-build'
+npm run build
+# Use the same AFL_BUILD_DIR for any production start using this build.
+# Remove it before starting a new ordinary development server.
+Remove-Item Env:AFL_BUILD_DIR
+```
+
+The default output directory remains `.next`. `test-results/` is ignored; keep the
+override limited to a generated build directory, not a source or data directory.
+
+With both local servers running, `npx tsx scripts/test-vietocr-integration.ts` checks
+`/health` and sends a neutral synthetic text image, generated in RAM, through the real
+HTTP Markdown route. It requires ready health, VietOCR provenance, non-empty readable
+output and a human-review draft. Endpoints must be loopback HTTP and redirects are
+rejected. It logs only character count, attempts and timing; it does not log OCR text
+or estimate camera-image accuracy. `DOCUMENT_TEST_URL` selects another local Web port.
 
 See [private dataset instructions](../tests/fixtures/documents/README.md) for the opt-in benchmark. No real images or personal data are included. The harness counts exact/normalized field matches, missing/false values, review fields, per-field accuracy and incorrect automatic acceptances. It evaluates already deskewed images; it cannot measure client gate recall. **No real-data benchmark has been run.**
 
 ## Limits and next evaluation
 
 - OCR accuracy measures text fidelity (CER/WER against transcripts). Field extraction accuracy measures mapping and normalized values. Business-safe processing measures incorrect automatic acceptance, review handling and correct downstream placement. None implies the others.
-- JPEG/PNG, one page per request, 8 MB file / 12 MB body; PDF had no safe rendering path in the old scan UI and is explicitly rejected here. A future multipage adapter needs page-aware review.
-- Geometry cannot infer semantic upright orientation or guarantee that a rectangle is a document. The extra blur/glare gates are conservative heuristics requiring real-photo calibration; partial glare or blurred text in otherwise sharp images can be missed.
-- The existing 1600 px client cap protects weaker devices but can lose small Vietnamese marks. Evaluate its recall before tuning resolution.
+- JPEG/PNG, one page per request, 8 MB file / 26 MB body including optional candidates; PDF has no safe rendering path in the scan UI and is explicitly rejected here. A future multipage adapter needs page-aware review.
+- Geometry cannot infer semantic upright orientation or guarantee that a rectangle is a document. Blur/glare analysis uses conservative soft-warning heuristics requiring real-photo calibration; partial glare or blurred text in otherwise sharp images can be missed.
+- OCR retains full source pixels within the explicit limits; detector downsampling does not cap OCR at 1600 px. Upscaling does not recover lost information. Evaluate small Vietnamese marks on real photos before tuning resolution.
 - Source substring grounding cannot prove correct semantic assignment when multiple similar values exist. Handwriting, stamps and OCR mistakes still require human review. An absent fine/decision/deadline remains null even when another document might contain it.
-- Missing cloud credentials, unavailable service or invalid model output produces manual review. Retry, retake, or ask a human to read the document; there is no fabricated fallback.
+- Unavailable VietOCR, invalid model output or missing credentials for the separate Gemini text stage produces manual review. Retry, retake, or ask a human to read the document; there is no fabricated fallback.
 - The repository initially had a lint script but no ESLint configuration; a minimal Next configuration now enables it. Existing unrelated changes from another process must not be included in this feature commit.

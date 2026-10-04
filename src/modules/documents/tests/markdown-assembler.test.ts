@@ -6,10 +6,9 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { assembleMarkdown } from '../markdown-assembler';
 import { rehypeTableLineBreaks } from '../markdown-preview';
-import { mapGoogleDocument } from '../providers/google-document-ai';
 import type { DocumentOcrResult } from '@/shared/document-extraction.types';
 
-const ocr = (fullText: string): DocumentOcrResult => ({ fullText, provider: 'google-document-ai', lines: [], tokens: [], warnings: [], pageCount: 1 });
+const ocr = (fullText: string): DocumentOcrResult => ({ fullText, provider: 'vietocr', lines: [], tokens: [], warnings: [], pageCount: 1 });
 const render = (markdown: string) => renderToStaticMarkup(createElement(ReactMarkdown, { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeTableLineBreaks] }, markdown));
 
 test('heading suffixes, strikethrough markers and spaced bullet punctuation retain their source characters', () => {
@@ -47,15 +46,14 @@ test('source punctuation, HTML, links, IDs and skipped list numbers remain liter
 function tableFixture() {
   const fullText = '😀 THÔNG TIN\nTên\nTiền\nNguyễn A\n001.000 đồng\nCuối trang';
   const chars = Array.from(fullText);
-  const layout = (text: string) => {
+  const cell = (text: string) => {
     const start = chars.join('').indexOf(text);
     const cpStart = Array.from(fullText.slice(0, start)).length;
-    return { textAnchor: { textSegments: [{ startIndex: cpStart, endIndex: cpStart + Array.from(text).length }] } };
+    return { text, sourceRanges: [{ start: cpStart, end: cpStart + Array.from(text).length }], rowSpan: 1, columnSpan: 1 };
   };
-  return mapGoogleDocument({ text: fullText, pages: [{ tables: [{
-    headerRows: [{ cells: ['Tên\n','Tiền\n'].map(text => ({ layout: layout(text), rowSpan: 1, colSpan: 1 })) }],
-    bodyRows: [{ cells: ['Nguyễn A\n','001.000 đồng\n'].map(text => ({ layout: layout(text), rowSpan: 1, colSpan: 1 })) }],
-  }] }] });
+  return { ...ocr(fullText), tables: [{ id: 'table-1', page: 1, headerRowCount: 1,
+    rows: [['Tên\n','Tiền\n'].map(cell), ['Nguyễn A\n','001.000 đồng\n'].map(cell)],
+  }] };
 }
 
 test('verified table anchors produce a GFM table without omitting surrounding text or changing numbers', () => {

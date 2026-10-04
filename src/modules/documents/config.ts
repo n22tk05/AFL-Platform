@@ -23,3 +23,5 @@ export const ADAPTIVE_IMAGE_CONFIG = Object.freeze({
   maxAttempts: 2, retryConfidence: 0.8, lowConfidenceFraction: 0.2,
   alignmentIou: 0.65,
 });
+/** Candidate debug OCR is one bounded local request, without chunk fan-out. */
+export const CANDIDATE_OCR_CONFIG = Object.freeze({ maxRegions: 70, cropPadding: 2 });

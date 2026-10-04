@@ -35,6 +35,7 @@ export default function ScanDocumentPage() {
   const [needsFullImage, setNeedsFullImage] = useState<'extract' | 'markdown' | null>(null);
   const [mode, setMode] = useState<PreparationMode>('upload-photo');
   const [hint, setHint] = useState('auto');
+  const [cloudTextConsent, setCloudTextConsent] = useState(false);
   const [result, setResult] = useState<DocumentExtractionResult | null>(null);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [confirmed, setConfirmed] = useState<FieldConfirmations>({});
@@ -45,6 +46,7 @@ export default function ScanDocumentPage() {
   const [saved, setSaved] = useState(false);
   const [markdownDraft, setMarkdownDraft] = useState<MarkdownDraft | null>(null);
   const [failedReview, setFailedReview] = useState<OcrReview | null>(null);
+  const [guideHref, setGuideHref] = useState('/scan');
   const generation = useRef(0), controller = useRef<AbortController>();
   const expiry = useRef<ReturnType<typeof setTimeout>>(), input = useRef<HTMLInputElement>(null);
   const cancelPending = useCallback(() => { generation.current++; controller.current?.abort(); }, []);
@@ -52,6 +54,12 @@ export default function ScanDocumentPage() {
   useEffect(() => () => { if (processed) URL.revokeObjectURL(processed); }, [processed]);
   useEffect(() => () => { enhancedPreviews.forEach(image => URL.revokeObjectURL(image.url)); }, [enhancedPreviews]);
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const formCode = params.get('formCode'), templateId = params.get('templateId');
+    const back = new URLSearchParams();
+    if (formCode && /^[A-Za-z0-9_-]{1,80}$/.test(formCode)) back.set('formCode', formCode);
+    if (templateId && /^[A-Za-z0-9_-]{1,120}$/.test(templateId)) back.set('templateId', templateId);
+    setGuideHref(back.size ? `/guide?${back.toString()}` : '/scan');
     try { sessionStorage.removeItem('afl_prerequisite_document_data'); } catch { /* Storage can be disabled. */ }
     const clearSaved = documentSession.subscribe(() => { if (!documentSession.read()) setSaved(false); });
     return () => { cancelPending(); clearTimeout(expiry.current); clearSaved(); };
@@ -62,7 +70,7 @@ export default function ScanDocumentPage() {
     setImageWarnings([]); setNeedsFullImage(null); setSaved(false); setBusy(false); setMessage(''); documentSession.clear();
   }
   function clearAll() {
-    invalidate(); clearTimeout(expiry.current); setFile(null); setPreview(null);
+    invalidate(); clearTimeout(expiry.current); setFile(null); setPreview(null); setCloudTextConsent(false);
     if (input.current) input.current.value = '';
   }
   function choose(next: File | null) {
@@ -82,7 +90,7 @@ export default function ScanDocumentPage() {
     return form;
   }
   async function run(action: 'extract' | 'markdown', allowFullImage = false) {
-    if (!file) return;
+    if (!file || (action === 'extract' && !cloudTextConsent)) return;
     invalidate(); const requestId = generation.current;
     const abort = new AbortController(); controller.current = abort;
     setBusy(true); setMessage('Đang tối ưu hình ảnh…');
@@ -149,7 +157,9 @@ export default function ScanDocumentPage() {
           <label className="block">Loại chứng từ<select className="block w-full bg-slate-800 p-3 min-h-14 rounded-lg" value={hint} onChange={e => { invalidate(); setHint(e.target.value); }}>
             <option value="auto">Tự nhận diện</option><option value="traffic_violation_record">Biên bản vi phạm giao thông</option><option value="unknown">Loại khác (chưa hỗ trợ)</option>
           </select></label>
-          <button className={`${button} w-full bg-emerald-800`} disabled={!file || busy} onClick={() => run('extract')}>{busy ? 'Đang xử lý…' : 'Đọc chứng từ'}</button>
+          <label className="flex items-start gap-3"><input type="checkbox" checked={cloudTextConsent} onChange={e => setCloudTextConsent(e.target.checked)} className="mt-1 h-5 w-5" />Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.</label>
+          <p className="text-sm">VietOCR đọc ảnh cục bộ. Trích xuất trường dùng Gemini text trên cloud; chuyển Markdown chỉ dùng VietOCR.</p>
+          <button className={`${button} w-full bg-emerald-800`} disabled={!file || busy || !cloudTextConsent} onClick={() => run('extract')}>{busy ? 'Đang xử lý…' : 'Đọc chứng từ'}</button>
           <button className={`${button} w-full bg-sky-800`} disabled={!file || busy} onClick={() => run('markdown')}>Chuyển ảnh sang Markdown</button>
           {needsFullImage && <button className={`${button} w-full bg-amber-900`} disabled={busy} onClick={() => run(needsFullImage, true)}>Thử đọc toàn ảnh</button>}
           <p className="flex gap-2"><ShieldCheck aria-hidden="true" />Ảnh và dữ liệu chỉ giữ tạm trong phiên, tối đa 15 phút.</p>
@@ -198,7 +208,7 @@ export default function ScanDocumentPage() {
             catch (e) { setMessage(e instanceof Error ? e.message : 'Chưa thể lưu.'); }
           }}>3. Xác nhận và lưu các trường đã duyệt</button>
             {!canSave && <p>Hãy xác nhận hoặc để trống các trường cần kiểm tra trước khi tiếp tục.</p>}
-            {saved && <Link className={`${button} block text-center`} href="/guide">Tiếp tục điền biểu mẫu</Link>}
+            {saved && <Link className={`${button} block text-center`} href={guideHref}>Tiếp tục điền biểu mẫu</Link>}
           </div>
         </>}
       </section>

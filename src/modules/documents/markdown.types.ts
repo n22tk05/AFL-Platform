@@ -15,7 +15,7 @@ export interface MarkdownValidation {
 export interface MarkdownDraft {
   contractVersion: 1;
   status: 'review_required';
-  provider: 'google-document-ai' | 'vietocr' | 'offline-demo';
+  provider: 'vietocr' | 'offline-demo';
   /** Exact provider text, before escaping or adding Markdown syntax. */
   rawText: string;
   markdown: string;

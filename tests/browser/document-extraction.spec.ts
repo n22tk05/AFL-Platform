@@ -93,7 +93,7 @@ for(const kind of ['blur','glare','empty'] as const) test(`${kind} valid image r
 
 const draftText = '# THÔNG BÁO\n\n| Họ tên | Số tiền |\n| --- | --- |\n| Nguyễn Văn A | 100.000 đồng |\n';
 const draft = (markdown = draftText) => ({ success: true, data: { contractVersion: 1, status: 'review_required', markdown,
-  provider: 'google-document-ai', rawText: 'THÔNG BÁO\nHọ tên\nSố tiền\nNguyễn Văn A\n100.000 đồng', pageCount: 1, confidence: 0.99, warnings: [], validation: validateMarkdown(markdown) } });
+  provider: 'vietocr', rawText: 'THÔNG BÁO\nHọ tên\nSố tiền\nNguyễn Văn A\n100.000 đồng', pageCount: 1, confidence: 0.99, warnings: [], validation: validateMarkdown(markdown) } });
 
 test('Markdown: OpenCV upload, table preview, edit invalidates review, download matches edited text', async ({ page }) => {
   let downloads = 0;
@@ -137,12 +137,12 @@ test('Markdown: OpenCV upload, table preview, edit invalidates review, download 
 });
 
 test('Markdown API failure displays actionable error with no stale draft or download', async ({ page }) => {
-  await page.route('**/api/documents/markdown', route => route.fulfill({ status: 503, json: { success: false, error: { code: 'OCR_NOT_CONFIGURED', message_vi: 'Chưa cấu hình Google Document AI' } } }));
+  await page.route('**/api/documents/markdown', route => route.fulfill({ status: 503, json: { success: false, error: { code: 'OCR_NOT_CONFIGURED', message_vi: 'Chưa cấu hình VietOCR' } } }));
   await page.goto('/scan-document');
   await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
   await page.getByLabel('1. Chọn ảnh').setInputFiles({ name: 'test.png', mimeType: 'image/png', buffer: await synthetic(page, 'clean') });
   await page.getByRole('button', { name: 'Chuyển ảnh sang Markdown' }).click();
-  await expect(page.getByRole('status')).toContainText('Google Document AI', { timeout: 60_000 });
+  await expect(page.getByRole('status')).toContainText('VietOCR', { timeout: 60_000 });
   await expect(page.getByRole('region', { name: 'Duyệt Markdown' })).toHaveCount(0);
 });
 

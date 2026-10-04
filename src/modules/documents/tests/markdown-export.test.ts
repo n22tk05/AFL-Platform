@@ -9,10 +9,10 @@ import type { DocumentOcrProvider, DocumentOcrResult } from '@/shared/document-e
 
 const input = { bytes: readFileSync('tests/fixtures/documents/clear.png'), mimeType: 'image/png' as const };
 const rawText = 'THÔNG BÁO\nHọ tên: Nguyễn Văn A\nSố tiền: 100.000 đồng\nNgày: 01/02/2026\nDòng cuối';
-const output: DocumentOcrResult = { fullText: rawText, provider: 'google-document-ai', tokens: [], lines: [{ id: 'l1', text: rawText, confidence: 0.99, boundingBox: [0, 0, 1, 1], page: 1, tokenIds: [] }], pageCount: 1, warnings: [] };
+const output: DocumentOcrResult = { fullText: rawText, provider: 'vietocr', tokens: [], lines: [{ id: 'l1', text: rawText, confidence: 0.99, boundingBox: [0, 0, 1, 1], page: 1, tokenIds: [] }], pageCount: 1, warnings: [] };
 const ocr: DocumentOcrProvider = { extract: async () => output };
 
-test('Google OCR plus deterministic assembly preserves names, dates and amounts; always needs review', async () => {
+test('VietOCR plus deterministic assembly preserves names, dates and amounts; always needs review', async () => {
   const result = await new MarkdownExportService(ocr).convert(input);
   assert.equal(result.rawText, rawText);
   assert.ok(result.markdown.includes('# THÔNG BÁO'));
@@ -72,11 +72,11 @@ test('API responds with no-store review JSON, never an attachment', async () => 
   const payload = await response.json();
   assert.equal(payload.data.status, 'review_required');
   assert.equal(payload.data.rawText, rawText);
-  assert.equal(payload.data.provider, 'google-document-ai');
+  assert.equal(payload.data.provider, 'vietocr');
   assert.equal(payload.data.markdown, (await new MarkdownExportService(ocr).convert(input)).markdown);
 });
 
-test('Markdown pipeline rejects non-Google providers and needs no Gemini key or call', async () => {
+test('Markdown pipeline rejects unsupported providers and needs no Gemini key or call', async () => {
   await assert.rejects(new MarkdownExportService({ extract: async () => ({ ...output, provider: 'other-provider' }) }).convert(input), /OCR_NOT_CONFIGURED/);
   let calls = 0;
   const result = await new MarkdownExportService({ extract: async value => { calls++; assert.deepEqual(value.bytes, input.bytes); return output; } }).convert(input);
@@ -99,10 +99,10 @@ test('invalid uploaded content is rejected before creating the provider', async 
   assert.equal(response.status, 400);
 });
 test('failed OCR retains safe attempt provenance in the Markdown error response', async () => {
-  const response = await handleMarkdownConversion(request(), () => new MarkdownExportService({ providerId: 'google-document-ai', extract: async () => { throw new DocumentPipelineError('OCR_NOT_CONFIGURED'); } }));
+  const response = await handleMarkdownConversion(request(), () => new MarkdownExportService({ providerId: 'vietocr', extract: async () => { throw new DocumentPipelineError('OCR_NOT_CONFIGURED'); } }));
   const body = await response.json();
   assert.equal(response.status, 503); assert.equal(body.error.ocrReview.attempts.length, 1);
-  assert.equal(body.error.ocrReview.attempts[0].provider, 'google-document-ai'); assert.equal(body.error.ocrReview.attempts[0].raw, null);
+  assert.equal(body.error.ocrReview.attempts[0].provider, 'vietocr'); assert.equal(body.error.ocrReview.attempts[0].raw, null);
   assert.equal(body.error.ocrReview.regions[0].status, 'unreadable');
 });
 
