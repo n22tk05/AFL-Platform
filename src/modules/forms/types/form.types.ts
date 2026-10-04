@@ -32,3 +32,22 @@ export interface ApprovalInput {
   performedBy: string;
   note: string;
 }
+
+export interface AdminFormSummary {
+  formId: string;
+  formCode: string;
+  formTitle: string;
+  status: string;
+  version: number;
+  stepCount: number;
+  updatedAt: string;
+}
+
+export interface ListFormsDto {
+  authorization?: string | null;
+  adminKey?: string | null;
+}
+
+export interface ReviewWorkflowDto extends ApproveWorkflowDto {}
+
+export interface SaveReviewWorkflowDto extends ApproveWorkflowDto {}
