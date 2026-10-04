@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { fetchWorkflow, workflowStorageKey } from "@/modules/forms/client";
 import type { FormWorkflow } from "@/shared/contracts";
 import bundledLptb from "../../../../assets/mock-data/mock-workflow-tpl_01_lptb.json";
@@ -16,6 +16,7 @@ import {
 const workflow: FormWorkflow = {
   formCode: "01/LPTB",
   formTitle: "Live",
+  status: "DRAFT",
   steps: [
     {
       stepIndex: 1,

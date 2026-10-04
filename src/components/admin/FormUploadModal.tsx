@@ -95,7 +95,6 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
     } else if (file) {
       setTerminalLogs(['Chỉ hỗ trợ PNG/JPEG tối đa 8 MB. PDF chưa có bộ giải mã an toàn.']);
     }
-    }
   };
 
   // Hidden canvas refs cho OpenCV WASM pipeline
