@@ -17,7 +17,8 @@ export type FieldCandidate = {
   rectangularity: number;
   parentIndex: number;
   childIndex: number;
-  source: "closed_contour";
+  source: "closed_contour" | "checkbox" | "field_row" | "phrase_cluster";
+  isContainer?: boolean;
 };
 
 export interface ContourDetectionConfig {
@@ -35,15 +36,15 @@ export interface ContourDetectionConfig {
 
 /** Starting values only; tune against representative form scans. */
 export const DEFAULT_CONTOUR_DETECTION_CONFIG: Readonly<ContourDetectionConfig> = Object.freeze({
-  minWidthRatio: 0.015,
-  minHeightRatio: 0.012,
+  minWidthRatio: 0.006,
+  minHeightRatio: 0.004,
   maxWidthRatio: 0.98,
   maxHeightRatio: 0.98,
-  minAreaRatio: 0.0002,
+  minAreaRatio: 0.00003,
   maxAreaRatio: 0.9,
-  minAspectRatio: 0.08,
-  maxAspectRatio: 25,
-  minRectangularity: 0.35,
+  minAspectRatio: 0.05,
+  maxAspectRatio: 100,
+  minRectangularity: 0.25,
   duplicateIouThreshold: 0.88,
 });
 
