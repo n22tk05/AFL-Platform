@@ -11,4 +11,5 @@ if (-not (Test-Path $pythonExe)) {
     exit 1
 }
 
-& $pythonExe -m uvicorn app:app --app-dir $serviceDir --host 0.0.0.0 --port 8000 --reload
+& $pythonExe -m uvicorn app:app --app-dir $serviceDir --host 127.0.0.1 --port 8000
+exit $LASTEXITCODE
