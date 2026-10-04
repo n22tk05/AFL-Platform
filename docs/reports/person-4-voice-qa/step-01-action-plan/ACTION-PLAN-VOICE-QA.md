@@ -89,7 +89,7 @@ export interface FormWorkflow {
   formId: string;
   formTitle: string;
   formCode: string;
-  status: 'draft' | 'pending_review' | 'active' | 'archived';
+  status: 'draft' | 'PENDING_REVIEW' | 'active' | 'archived';
   steps: WorkflowStep[];
 }
 ```

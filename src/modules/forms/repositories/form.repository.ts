@@ -1,5 +1,5 @@
 import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
-
+import type { AdminFormSummary } from '@/modules/forms/types/form.types';
 export interface FormRepository {
   saveDraft(manifest: FormGeometricManifest, workflow: FormWorkflow): Promise<{
     templateId: string;
@@ -16,5 +16,8 @@ export interface FormRepository {
     stepCount: number;
   }>;
   getWorkflowByFormCode(formCode: string): Promise<FormWorkflow | null>;
+  listForms(): Promise<AdminFormSummary[]>;
+  getWorkflowForReview(formCode: string): Promise<FormWorkflow | null>;
+  saveReviewWorkflow(formCode: string, workflow: FormWorkflow): Promise<{ workflowId: string; stepCount: number }>;
   approveWorkflow(formCode: string, performedBy: string, note?: string, reviewerName?: string): Promise<void>;
 }
