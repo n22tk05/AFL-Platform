@@ -2,10 +2,14 @@
 
 import React, { useState, useMemo, useEffect, Suspense } from "react";
 import { documentSession, prerequisiteValue } from "@/modules/documents/session";
+import { capturedFormSession, clearCitizenSession, discardLegacyCitizenStorage, type CapturedFormImage } from '@/modules/forms/citizen-session';
+import { loadCitizenWorkflow, resolveCitizenFormCode, type CitizenWorkflow } from '@/modules/forms/services/citizen-workflow.client';
+import { canonicalFormCode } from '@/modules/forms/client';
+import { APP_ROUTES } from '@/shared/routes';
 import { useSearchParams } from "next/navigation";
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { WorkflowStep, FormWorkflow } from "@/shared/contracts";
-import { getMockWorkflow } from "@/config/app.config";
 import { VisualTwin } from "@/components/mobile/VisualTwin";
 import { RedTextExample } from "@/components/mobile/RedTextExample";
 import { StepHeader } from "@/components/mobile/StepHeader";
@@ -13,63 +17,59 @@ import { VoiceAssistantPanel } from "@/components/mobile/VoiceAssistantPanel";
 
 function GuideContent() {
   const searchParams = useSearchParams();
-  const templateId = searchParams?.get("templateId") || "tpl_01_lptb";
-
-  // Lựa chọn kịch bản: Ưu tiên nạp bản mới nhất từ localStorage do Admin vừa xuất bản
-  // Match server rendering; the effect below loads browser-only published state.
-  const [workflow, setWorkflow] = useState<FormWorkflow>(() => getMockWorkflow(templateId));
-
+  const templateId = searchParams?.get("templateId") ?? null;
+  const requestedCode = searchParams?.get('formCode') ?? null;
+  const requestKey = JSON.stringify([requestedCode, templateId]);
+  const [loaded, setLoaded] = useState<{ key: string; data: CitizenWorkflow | null; code: string | null; loading: boolean; error: string }>({ key: '', data: null, code: null, loading: true, error: '' });
+  const [refresh, setRefresh] = useState(0);
+  const [capture, setCapture] = useState<CapturedFormImage | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-
-  // Tự động nạp lại kịch bản khi templateId thay đổi
   useEffect(() => {
-    let activeWorkflow = getMockWorkflow(templateId);
-    if (typeof window !== "undefined") {
-      try {
-        const savedData = localStorage.getItem(`afl_workflow_published_${templateId}`);
-        if (savedData) {
-          const parsed = JSON.parse(savedData) as FormWorkflow;
-          if (parsed && Array.isArray(parsed.steps) && parsed.steps.length > 0) {
-            activeWorkflow = parsed;
-          }
-        }
-      } catch (e) {
-        console.warn("Lỗi đọc bản lưu localStorage:", e);
-      }
-    }
-    setWorkflow(activeWorkflow);
+    const abort = new AbortController();
+    let storage: Storage | undefined;
+    try { storage = localStorage; } catch { /* Live forms remain available. */ }
+    const code = resolveCitizenFormCode(requestedCode, templateId, storage);
+    setLoaded({ key: requestKey, data: null, code, loading: !!code, error: code ? '' : 'Không tìm thấy biểu mẫu đã chọn. Bác hãy chọn lại đúng tên biểu mẫu.' });
     setCurrentStepIndex(0);
-  }, [templateId]);
-
-  // Lắng nghe sự kiện đồng bộ storage nếu Admin xuất bản ở tab khác
+    if (code) loadCitizenWorkflow(code, { templateId, storage, signal: abort.signal }).then(data => {
+      if (!abort.signal.aborted) {
+        capturedFormSession.selectForm(code);
+        setLoaded({ key: requestKey, data, code, loading: false, error: '' });
+      }
+    }).catch(() => {
+      if (!abort.signal.aborted) setLoaded({ key: requestKey, data: null, code, loading: false, error: 'Chưa có hướng dẫn đã xuất bản cho biểu mẫu này. Bác có thể thử lại hoặc chọn biểu mẫu khác.' });
+    });
+    return () => abort.abort();
+  }, [requestKey, requestedCode, templateId, refresh]);
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === `afl_workflow_published_${templateId}` && e.newValue) {
-        try {
-          const parsed = JSON.parse(e.newValue) as FormWorkflow;
-          if (parsed && Array.isArray(parsed.steps) && parsed.steps.length > 0) {
-            setWorkflow(parsed);
-          }
-        } catch (err) {
-          console.warn("Lỗi cập nhật workflow từ storage event:", err);
-        }
-      }
+      if (!e.key?.startsWith('afl_workflow_published_')) return;
+      if (templateId && e.key === `afl_workflow_published_${templateId}`) { setRefresh(value => value + 1); return; }
+      try { if (e.newValue && canonicalFormCode(JSON.parse(e.newValue).formCode) === loaded.code) setRefresh(value => value + 1); }
+      catch { /* Untrusted browser metadata is revalidated by the loader. */ }
     };
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, [templateId]);
+  }, [templateId, loaded.code]);
 
   // Đọc dữ liệu chứng từ tiên quyết (Biên bản phạt / Sổ đỏ) từ Session RAM (Nghị định 13)
   const [prerequisiteFields, setPrerequisiteFields] = useState<Record<string, string> | null>(null);
 
   useEffect(() => {
-    try { sessionStorage.removeItem("afl_prerequisite_document_data"); } catch { /* Discard legacy data. */ }
+    try { discardLegacyCitizenStorage(sessionStorage); } catch { /* Discard legacy data. */ }
     const refresh = () => setPrerequisiteFields(documentSession.read());
     refresh();
     return documentSession.subscribe(refresh);
   }, []);
 
-  const steps: WorkflowStep[] = workflow.steps || [];
+  useEffect(() => {
+    const update = () => setCapture(loaded.code ? capturedFormSession.read(loaded.code) : null);
+    update(); return capturedFormSession.subscribe(update);
+  }, [loaded.code]);
+
+  const workflow: FormWorkflow | null = loaded.key === requestKey ? loaded.data?.workflow ?? null : null;
+
+  const steps: WorkflowStep[] = workflow?.steps || [];
   const totalSteps = steps.length;
   const currentStep = steps[currentStepIndex];
 
@@ -92,15 +92,17 @@ function GuideContent() {
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      documentSession.clear();
-      alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow.formTitleVi || workflow.formTitle || "tờ khai"}!`);
+      clearCitizenSession();
+      alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow?.formTitleVi || workflow?.formTitle || "tờ khai"}!`);
     }
   };
 
-  if (!currentStep) {
+  if (!currentStep || !workflow) {
     return (
-      <div className="p-6 text-center text-slate-700">
-        Không tìm thấy dữ liệu quy trình biểu mẫu. Vui lòng kiểm tra lại.
+      <div className="p-6 text-center text-slate-700 space-y-4">
+        <p role="status">{loaded.key !== requestKey || loaded.loading ? 'Đang tải hướng dẫn đúng biểu mẫu…' : loaded.error}</p>
+        {!loaded.loading && <button className="min-h-14 font-bold underline" onClick={() => setRefresh(value => value + 1)}>Thử tải lại hướng dẫn</button>}
+        <Link className="block min-h-14 font-bold underline" href={APP_ROUTES.scan}>Chọn lại biểu mẫu</Link>
       </div>
     );
   }
@@ -111,6 +113,16 @@ function GuideContent() {
     <div className="flex flex-col flex-1 pb-24 no-scrollbar">
       {/* Khung nội dung cuộn */}
       <div className="p-4 flex flex-col gap-4">
+        <h2 className="text-xl font-bold">{workflow.formTitleVi || workflow.formTitle}</h2>
+        {loaded.data?.source !== 'live' && <p role="status" className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">
+          {loaded.data?.source === 'demo' ? 'Đang dùng hướng dẫn mẫu minh họa, chưa tải được bản xuất bản từ máy chủ.' : 'Đang dùng bản đã xuất bản trên trình duyệt này, chưa xác minh bản mới nhất trên máy chủ.'}
+        </p>}
+        {capture && <details className="rounded-xl border border-slate-300 bg-white p-3">
+          <summary className="min-h-14 font-bold cursor-pointer">Ảnh tờ khai vừa chụp, chỉ giữ trong phiên</summary>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={capture.image} alt="Ảnh tờ khai của phiên hiện tại" className="w-full h-auto" />
+          <p className="text-sm">Ảnh để bác đối chiếu. Vị trí ô hướng dẫn bên dưới thuộc bản mẫu đã chọn.</p>
+        </details>}
         {/* 1. Tiêu đề bước & Thanh tiến trình */}
         <StepHeader
           currentIndex={currentStepIndex}
@@ -132,6 +144,7 @@ function GuideContent() {
 
         {/* 3. Bộ điều khiển Trợ lý Giọng nói (Loa 0.9x + Micro Push-to-Talk + FAQ Chips) */}
         <VoiceAssistantPanel
+          key={`${workflow.formCode}:${currentStepIndex}:${refresh}`}
           voiceGuidance={currentStep.voiceGuidance}
           audioUrl={currentStep.audioUrl}
           faqs={currentStep.faqs}
@@ -143,11 +156,12 @@ function GuideContent() {
         <RedTextExample
           exampleText={effectiveExampleText}
           fieldNote={
-            currentStep.requiresPrerequisiteDoc && prerequisiteFields
-              ? "✨ Đã tự động trích xuất thông tin từ Biên bản phạt của bác (Nghị định 13)!"
+            currentStep.requiresPrerequisiteDoc && prerequisiteValue(prerequisiteFields, currentStep.sourceFieldFromPrerequisite)
+              ? "Thông tin chứng từ đã được duyệt và lưu trong phiên. Bác đối chiếu trước khi viết."
               : currentStep.faqs?.[0]?.answer
           }
         />
+        {currentStep.requiresPrerequisiteDoc && <Link className="min-h-14 rounded-xl border border-emerald-700 p-3 font-bold text-center" href={`${APP_ROUTES.scanDocument}?formCode=${encodeURIComponent(workflow.formCode)}${templateId ? `&templateId=${encodeURIComponent(templateId)}` : ''}`}>Đọc và duyệt chứng từ trước khi điền</Link>}
       </div>
 
       {/* Thanh điều hướng cố định dưới đáy (Sticky Bottom Bar >= 56dp) */}

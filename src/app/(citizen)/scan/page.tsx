@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { 
   Camera, 
@@ -11,38 +11,42 @@ import {
   ScanLine
 } from "lucide-react";
 import { CameraScannerModal } from "@/components/mobile/CameraScannerModal";
-import { FormOption } from "@/types";
-
-const AVAILABLE_FORMS: FormOption[] = [
-  {
-    id: "tpl_01_lptb",
-    code: "Mẫu 01/LPTB",
-    title: "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
-    description: "Dùng khi làm sổ đỏ, mua bán chuyển nhượng nhà đất",
-    badge: "Phổ biến nhất",
-    badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-300",
-  },
-  {
-    id: "tpl_02_vphc",
-    code: "Mẫu Nộp Phạt",
-    title: "Biểu Mẫu Nộp Tiền Phạt Vi Phạm",
-    description: "Dùng nộp phạt giao thông và vi phạm hành chính",
-    badge: "Kèm Biên bản phạt",
-    badgeColor: "bg-blue-100 text-blue-800 border-blue-300",
-  },
-  {
-    id: "tpl_03_khai_sinh",
-    code: "Mẫu Khai Sinh",
-    title: "Tờ Khai Đăng Ký Lại Khai Sinh",
-    description: "Dùng để đăng ký lại khai sinh khi mất hoặc sai thông tin",
-    badge: "Thường gặp",
-    badgeColor: "bg-amber-100 text-amber-800 border-amber-300",
-  },
-];
+import { capturedFormSession, discardLegacyCitizenStorage, type CapturedFormImage } from '@/modules/forms/citizen-session';
+import { listCitizenForms, type CitizenFormOption } from '@/modules/forms/services/citizen-workflow.client';
+import { APP_ROUTES } from '@/shared/routes';
 
 export default function CitizenScanPage() {
   const router = useRouter();
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [forms, setForms] = useState<CitizenFormOption[]>([]);
+  const [capture, setCapture] = useState<CapturedFormImage | null>(null);
+  const [message, setMessage] = useState('');
+  const [refresh, setRefresh] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    try { discardLegacyCitizenStorage(sessionStorage); } catch { /* Storage may be disabled. */ }
+    const update = () => setCapture(capturedFormSession.read());
+    update(); return capturedFormSession.subscribe(update);
+  }, []);
+  useEffect(() => {
+    const abort = new AbortController();
+    setLoading(true);
+    let storage: Storage | undefined;
+    try { storage = localStorage; } catch { /* Live forms remain available. */ }
+    listCitizenForms({ storage, signal: abort.signal }).then(data => {
+      if (abort.signal.aborted) return;
+      setForms(data.forms);
+      setMessage(data.offline ? 'Chưa kết nối thư viện máy chủ. Các bản mẫu và bản xuất bản trên trình duyệt được ghi rõ bên dưới.' : '');
+    }).catch(() => {
+      if (!abort.signal.aborted) { setForms([]); setMessage('Chưa tải được danh sách biểu mẫu. Bác có thể thử lại.'); }
+    }).finally(() => { if (!abort.signal.aborted) setLoading(false); });
+    return () => abort.abort();
+  }, [refresh]);
+  useEffect(() => {
+    const update = (event: StorageEvent) => { if (event.key?.startsWith('afl_workflow_')) setRefresh(value => value + 1); };
+    window.addEventListener('storage', update); return () => window.removeEventListener('storage', update);
+  }, []);
 
   // Mở Camera
   const handleOpenCamera = () => {
@@ -55,14 +59,17 @@ export default function CitizenScanPage() {
   };
 
   // Khi chụp và đồng ý sử dụng ảnh
-  const handleCaptureComplete = (_imageDataUrl: string) => {
+  const handleCaptureComplete = (imageDataUrl: string) => {
     setIsCameraOpen(false);
-    // Chuyển tiếp ngay vào giao diện dẫn dắt từng dòng
-    router.push("/guide?templateId=tpl_01_lptb");
+    try {
+      capturedFormSession.save(imageDataUrl);
+      setMessage('Ảnh chỉ giữ tạm trong phiên. Bác chọn đúng tên biểu mẫu bên dưới để xem hướng dẫn.');
+    } catch (error) { setMessage(error instanceof Error ? error.message : 'Chưa sử dụng được ảnh chụp.'); }
   };
 
-  const handleSelectForm = (formId: string) => {
-    router.push(`/guide?templateId=${formId}`);
+  const handleSelectForm = (form: CitizenFormOption) => {
+    capturedFormSession.selectForm(form.formCode);
+    router.push(`${APP_ROUTES.guide}?formCode=${encodeURIComponent(form.formCode)}&templateId=${encodeURIComponent(form.id)}`);
   };
 
   return (
@@ -84,9 +91,17 @@ export default function CitizenScanPage() {
           Bác cần điền tờ khai nào hôm nay ạ?
         </h2>
         <p className="text-sm text-slate-600 mt-1 font-medium">
-          Bác chỉ cần chụp ảnh tờ giấy trên bàn, hoặc chạm chọn tên biểu mẫu bên dưới để cháu hướng dẫn từng chữ nhé.
+          Bác chọn đúng tên biểu mẫu để xem hướng dẫn. Có thể chụp ảnh tờ giấy trên bàn để đối chiếu trong phiên.
         </p>
       </div>
+
+      {message && <p role="status" className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">{message}</p>}
+      {capture && <div className="rounded-xl border border-slate-300 bg-white p-3 space-y-2">
+        <p className="font-bold">Ảnh tờ khai vừa chụp — chọn tên biểu mẫu bên dưới</p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={capture.image} alt="Ảnh tờ khai giữ tạm trong phiên" className="max-h-48 w-full object-contain" />
+        <button className="min-h-14 font-bold underline" onClick={() => capturedFormSession.clear()}>Xóa ảnh chụp</button>
+      </div>}
 
       {/* 2. Nút chụp ảnh siêu lớn (Hero Button >= 64dp) */}
       <div className="flex flex-col gap-2">
@@ -127,11 +142,13 @@ export default function CitizenScanPage() {
 
       {/* 4. Danh sách các biểu mẫu có sẵn */}
       <div className="flex flex-col gap-3">
-        {AVAILABLE_FORMS.map((form) => (
+        {loading && <p role="status">Đang tải biểu mẫu đã xuất bản…</p>}
+        {!loading && !forms.length && <p>Chưa có biểu mẫu đã xuất bản để hướng dẫn.</p>}
+        {forms.map((form) => (
           <button
             key={form.id}
             type="button"
-            onClick={() => handleSelectForm(form.id)}
+            onClick={() => handleSelectForm(form)}
             className="w-full min-h-[76px] bg-white hover:bg-slate-50 active:bg-slate-100 text-left p-4 rounded-2xl border-2 border-slate-300 shadow-md flex items-center justify-between gap-3 active:scale-98 transition-all hover:border-afl-green"
           >
             <div className="flex items-start gap-3.5 flex-1">
@@ -141,19 +158,17 @@ export default function CitizenScanPage() {
               <div className="flex flex-col">
                 <div className="flex items-center gap-2 flex-wrap mb-0.5">
                   <span className="font-mono text-xs font-black text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                    {form.code}
+                    {form.formCode}
                   </span>
-                  {form.badge && (
-                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${form.badgeColor}`}>
-                      {form.badge}
-                    </span>
-                  )}
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full border border-slate-300">
+                    {form.source === 'live' ? 'Đã xuất bản' : form.source === 'local' ? 'Xuất bản trên trình duyệt' : 'Mẫu minh họa'}
+                  </span>
                 </div>
                 <h3 className="font-extrabold text-base sm:text-lg text-slate-900 leading-snug">
-                  {form.title}
+                  {form.formTitle}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 font-medium line-clamp-1 mt-0.5">
-                  {form.description}
+                  Hướng dẫn đúng biểu mẫu đã chọn
                 </p>
               </div>
             </div>
@@ -164,11 +179,12 @@ export default function CitizenScanPage() {
           </button>
         ))}
       </div>
+      <button className="min-h-14 font-bold underline" disabled={loading} onClick={() => setRefresh(value => value + 1)}>Tải lại danh sách biểu mẫu</button>
 
       {/* Nút Universal Document Scanner cho chứng từ bất kỳ */}
       <button
         type="button"
-        onClick={() => router.push('/scan-document')}
+        onClick={() => router.push(APP_ROUTES.scanDocument)}
         className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl p-4 flex items-center justify-between border-2 border-slate-700 shadow-md transition-all active:scale-98"
       >
         <div className="flex items-center gap-3">
@@ -181,7 +197,7 @@ export default function CitizenScanPage() {
               <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">MỚI</span>
             </div>
             <div className="text-xs text-slate-400 font-medium">
-              Quét Biên bản phạt, Sổ đỏ, Khai sinh, CCCD & bóc tách 100% dữ liệu
+              Đọc chữ bằng VietOCR, đối chiếu ảnh và xác nhận dữ liệu trước khi dùng
             </div>
           </div>
         </div>

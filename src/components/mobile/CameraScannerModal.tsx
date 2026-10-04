@@ -10,6 +10,7 @@ import {
   Check, 
   AlertTriangle 
 } from "lucide-react";
+import { validateImageDimensions } from '@/modules/documents/image-quality';
 
 interface CameraScannerModalProps {
   isOpen: boolean;
@@ -24,16 +25,39 @@ export function CameraScannerModal({
 }: CameraScannerModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isOpenRef = useRef(isOpen);
+  isOpenRef.current = isOpen;
+  const cameraRequest = useRef(0);
+  const captureRequest = useRef(0);
 
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [hasTorch, setHasTorch] = useState<boolean>(false);
   const [isTorchOn, setIsTorchOn] = useState<boolean>(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
 
-  // 1. Khởi động Camera sau
+  // 1. Dừng Camera & Tắt luồng an toàn
+  const stopCamera = useCallback(() => {
+    cameraRequest.current++;
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setIsTorchOn(false);
+    setHasTorch(false);
+  }, []);
+
+  // 2. Khởi động Camera sau
   const startCamera = useCallback(async () => {
     setCameraError(null);
+    stopCamera();
+    const requestId = cameraRequest.current;
+
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setCameraError(
@@ -51,7 +75,12 @@ export function CameraScannerModal({
         audio: false,
       });
 
-      setStream(mediaStream);
+      if (!isOpenRef.current || requestId !== cameraRequest.current) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        return;
+      }
+
+      streamRef.current = mediaStream;
 
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
@@ -64,23 +93,12 @@ export function CameraScannerModal({
         setHasTorch(true);
       }
     } catch (err: unknown) {
-      console.error("Lỗi truy cập Camera:", err);
+      if (!isOpenRef.current || requestId !== cameraRequest.current) return;
       setCameraError(
         "Không thể mở máy ảnh. Bác vui lòng kiểm tra lại quyền cho phép truy cập Camera của trình duyệt nhé!"
       );
     }
-  }, []);
-
-  // 2. Dừng Camera & Tắt luồng
-  const stopCamera = useCallback(() => {
-    if (stream) {
-      stream.getTracks().forEach((track) => {
-        track.stop();
-      });
-      setStream(null);
-    }
-    setIsTorchOn(false);
-  }, [stream]);
+  }, [stopCamera]);
 
   useEffect(() => {
     if (isOpen && !capturedImage) {
@@ -96,8 +114,8 @@ export function CameraScannerModal({
 
   // 3. Bật/Tắt Đèn Flash
   const toggleTorch = async () => {
-    if (!stream || !hasTorch) return;
-    const track = stream.getVideoTracks()[0];
+    if (!streamRef.current || !hasTorch) return;
+    const track = streamRef.current.getVideoTracks()[0];
     try {
       const nextState = !isTorchOn;
       await (track as any).applyConstraints({
@@ -111,12 +129,31 @@ export function CameraScannerModal({
 
   const [isDeskewing, setIsDeskewing] = useState<boolean>(false);
   const [deskewFeedback, setDeskewFeedback] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isOpen) {
+      captureRequest.current++;
+      setCapturedImage(null); setDeskewFeedback(null); setIsDeskewing(false); setCameraError(null);
+      if (canvasRef.current) { canvasRef.current.width = 0; canvasRef.current.height = 0; }
+    }
+    return () => { captureRequest.current++; };
+  }, [isOpen]);
+  const closeCamera = () => {
+    captureRequest.current++; stopCamera(); setCapturedImage(null); setDeskewFeedback(null); setIsDeskewing(false);
+    onClose();
+  };
 
   // 4. Chụp ảnh từ khung Video & Nắn thẳng phối cảnh bằng OpenCV WASM
   const handleCapture = async () => {
-    if (!videoRef.current || !canvasRef.current) return;
+    if (!videoRef.current || !canvasRef.current || isDeskewing) return;
 
     const video = videoRef.current;
+    if (video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
+      return;
+    }
+    try { validateImageDimensions(video.videoWidth, video.videoHeight); }
+    catch { setCameraError('Ảnh camera vượt giới hạn xử lý. Bác chọn ảnh JPEG/PNG tối đa 12 triệu pixel.'); return; }
+    const requestId = ++captureRequest.current;
+    const current = () => isOpenRef.current && requestId === captureRequest.current;
     const canvas = canvasRef.current;
 
     canvas.width = video.videoWidth || 1280;
@@ -134,7 +171,9 @@ export function CameraScannerModal({
 
     try {
       const { loadOpenCv, detectDocument, warpDocument } = await import("@/modules/opencv");
+      if (!current()) return;
       const cv = await loadOpenCv();
+      if (!current()) return;
 
       // Đọc ảnh vào Mat
       const sourceMat = (cv as unknown as { imread: (c: HTMLCanvasElement) => import("@/modules/opencv/types").CvMat }).imread(canvas);
@@ -144,21 +183,23 @@ export function CameraScannerModal({
 
         if (detected.quality.accepted && detected.sourceQuad) {
           const deskewResult = warpDocument(cv, sourceMat, detected.sourceQuad);
-
-          // Vẽ ảnh đã nắn thẳng ra canvas
           const dCanvas = document.createElement("canvas");
-          dCanvas.width = deskewResult.width;
-          dCanvas.height = deskewResult.height;
-          (cv as unknown as { imshow: (c: HTMLCanvasElement, m: unknown) => void }).imshow(dCanvas, deskewResult.deskewed);
-          
-          const deskewedDataUrl = dCanvas.toDataURL("image/jpeg", 0.95);
-          deskewResult.deskewed.delete();
+          try {
+            // Vẽ ảnh đã nắn thẳng ra canvas
+            dCanvas.width = deskewResult.width;
+            dCanvas.height = deskewResult.height;
+            (cv as unknown as { imshow: (c: HTMLCanvasElement, m: unknown) => void }).imshow(dCanvas, deskewResult.deskewed);
 
-          setCapturedImage(deskewedDataUrl);
-          setDeskewFeedback("✔ Đã tự động nắn thẳng tài liệu vuông vức theo chuẩn A4!");
+            const deskewedDataUrl = dCanvas.toDataURL("image/jpeg", 0.95);
+            setCapturedImage(deskewedDataUrl);
+            setDeskewFeedback("Đã nắn phối cảnh vùng giấy. Bác đối chiếu ảnh và chọn đúng tên biểu mẫu.");
+          } finally {
+            deskewResult.deskewed.delete();
+            dCanvas.width = 0; dCanvas.height = 0;
+          }
         } else {
           // Xử lý thông báo thân thiện theo mã rejection reasons
-          let warningNote = "Đã lưu ảnh chụp.";
+          let warningNote = "Ảnh chưa nắn phối cảnh. Bác vẫn có thể dùng để đối chiếu và chọn tên biểu mẫu.";
           const reasons = detected.quality.rejectionReasons || [];
           if (reasons.some(r => r.includes("area") || r.includes("tiny"))) {
             warningNote = "Tờ giấy hơi xa. Lần sau bác đưa điện thoại gần hơn một chút nhé!";
@@ -172,30 +213,26 @@ export function CameraScannerModal({
         sourceMat.delete();
       }
     } catch (cvErr) {
-      console.warn("Lưu ý OpenCV Deskew camera:", cvErr);
-      setCapturedImage(originalDataUrl);
-      setDeskewFeedback("Đã chụp thành công ảnh tờ khai!");
+      if (current()) {
+        setCapturedImage(originalDataUrl);
+        setDeskewFeedback("Chưa nắn được phối cảnh. Bác có thể đối chiếu ảnh gốc và chọn tên biểu mẫu.");
+      }
     } finally {
-      setIsDeskewing(false);
+      canvas.width = 0; canvas.height = 0;
+      if (current()) setIsDeskewing(false);
     }
   };
 
   // 5. Chụp lại
   const handleRetake = () => {
+    captureRequest.current++;
     setCapturedImage(null);
     setDeskewFeedback(null);
-    startCamera();
   };
 
   // 6. Xác nhận sử dụng ảnh
   const handleConfirmUseImage = () => {
     if (capturedImage) {
-      // Lưu vào Session RAM theo Nghị định 13
-      try {
-        sessionStorage.setItem("afl_captured_form_image", capturedImage);
-      } catch (e) {
-        console.warn("Session storage quota:", e);
-      }
       onCaptureComplete(capturedImage);
     }
   };
@@ -212,7 +249,7 @@ export function CameraScannerModal({
         {/* Nút Thoát / Quay lại */}
         <button
           type="button"
-          onClick={onClose}
+          onClick={closeCamera}
           aria-label="Đóng camera"
           className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center border border-white/30 active:scale-95 transition-all"
         >
@@ -279,7 +316,7 @@ export function CameraScannerModal({
               Đang tự động nắn phẳng góc phối cảnh...
             </span>
             <span className="text-xs text-slate-300">
-              OpenCV WASM đang chuẩn hóa ảnh theo khổ A4
+              Đang kiểm tra vùng giấy để nắn phối cảnh
             </span>
           </div>
         ) : (
@@ -343,7 +380,7 @@ export function CameraScannerModal({
             <button
               type="button"
               onClick={handleCapture}
-              disabled={!!cameraError}
+              disabled={!!cameraError || isDeskewing}
               aria-label="Chụp ảnh tờ khai"
               className="w-20 h-20 rounded-full border-4 border-white flex items-center justify-center p-1 bg-white/20 backdrop-blur-sm active:scale-90 transition-transform disabled:opacity-40"
             >

@@ -1,8 +1,13 @@
 import type { AdminAuthorizationService } from '@/modules/forms/services/admin-authorization.service';
 import type { FormPersistenceService } from '@/modules/forms/services/form-persistence.service';
+import type { FormWorkflow } from '@/shared/contracts';
 import {
+  AdminFormSummary,
   ApproveWorkflowDto,
   GetWorkflowDto,
+  ListFormsDto,
+  ReviewWorkflowDto,
+  SaveReviewWorkflowDto,
 } from '@/modules/forms/types/form.types';
 import { ControllerResult } from '@/modules/shared/types/controller-result';
 
@@ -20,6 +25,11 @@ export class FormController {
     const auth = this.authorizationService.authorize(dto.authorization, dto.adminKey);
     if (auth !== 200) return this.authorizationFailure(auth);
     try { return { status: 200, body: { success: true, data: { forms: await this.persistenceService.listForms() } } }; }
+    catch { return { status: 503, body: { success: false, error: { code: 'DATABASE_UNAVAILABLE' } } }; }
+  }
+
+  public async listActiveForms(): Promise<ControllerResult<unknown>> {
+    try { return { status: 200, body: { success: true, data: { forms: await this.persistenceService.listActiveForms() } } }; }
     catch { return { status: 503, body: { success: false, error: { code: 'DATABASE_UNAVAILABLE' } } }; }
   }
 

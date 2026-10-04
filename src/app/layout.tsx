@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { PageNavigation } from '@/components/PageNavigation';
 
 export const metadata: Metadata = {
   title: "AFL Platform - Trợ lý Điền Biểu mẫu Cho Người Cao Tuổi",
@@ -9,8 +10,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  userScalable: true,
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body className="antialiased min-h-screen">{children}</body>
+      <body className="antialiased min-h-screen"><PageNavigation />{children}</body>
     </html>
   );
 }

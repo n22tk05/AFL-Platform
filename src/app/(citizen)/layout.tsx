@@ -1,21 +1,22 @@
 "use client";
 
 import React from "react";
-import { documentSession } from "@/modules/documents/session";
+import { clearCitizenSession } from "@/modules/forms/citizen-session";
 import { useWakeLock } from "@/hooks/useWakeLock";
-import { ShieldAlert, Sun } from "lucide-react";
+import { ShieldAlert } from "lucide-react";
 
 export default function CitizenLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { isLocked } = useWakeLock();
+  useWakeLock();
 
   const handleResetSession = () => {
     if (confirm("Bác có chắc muốn hủy phiên và xóa toàn bộ dữ liệu tạm thời không?")) {
-      documentSession.clear();
-      sessionStorage.clear();
+      let storage: Storage | undefined;
+      try { storage = sessionStorage; } catch { /* Session memory is cleared regardless. */ }
+      clearCitizenSession(storage);
       window.location.reload();
     }
   };

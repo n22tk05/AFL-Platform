@@ -22,10 +22,16 @@ export function VoiceAssistantPanel({
   const [isPlaying, setIsPlaying] = useState(false);
   const [faqAnswer, setFaqAnswer] = useState<string | null>(null);
   const transcriptRef = useRef<string>("");
+  const alive = useRef(true);
+  const micReleaseTimer = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; clearTimeout(micReleaseTimer.current); };
+  }, []);
 
   // Đọc câu thoại bằng Web Speech Synthesis (tốc độ 0.9x)
   const speakText = useCallback((text: string) => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    if (alive.current && typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "vi-VN";
@@ -50,12 +56,14 @@ export function VoiceAssistantPanel({
     stopAudio,
   } = useVoiceAssistant({
     onTranscriptUpdate: (text, isFinal) => {
+      if (!alive.current) return;
       transcriptRef.current = text;
       if (isFinal && text.trim()) {
         askQuestionRef.current?.(formCode, stepIndex, text);
       }
     },
     onAnswerReceived: (answerText) => {
+      if (!alive.current) return;
       setFaqAnswer(answerText);
       speakText(answerText);
     },
@@ -91,6 +99,7 @@ export function VoiceAssistantPanel({
   };
 
   const handleMicDown = () => {
+    clearTimeout(micReleaseTimer.current);
     transcriptRef.current = "";
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
@@ -101,8 +110,9 @@ export function VoiceAssistantPanel({
 
   const handleMicUp = () => {
     stopListening();
-    setTimeout(() => {
-      if (transcriptRef.current.trim()) {
+    clearTimeout(micReleaseTimer.current);
+    micReleaseTimer.current = setTimeout(() => {
+      if (alive.current && transcriptRef.current.trim()) {
         handleSendQuestion(transcriptRef.current);
       }
     }, 300);

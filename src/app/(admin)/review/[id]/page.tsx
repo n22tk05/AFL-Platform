@@ -1,501 +1,110 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { FormWorkflow, WorkflowStep, NormalizedBoundingBox } from "@/shared/contracts";
-import { getMockWorkflow } from "@/config/app.config";
-import { AdminVisualTwinEditor } from "@/components/admin/AdminVisualTwinEditor";
-import { AdminStepEditor } from "@/components/admin/AdminStepEditor";
-import { CheckCircle2, Download, Copy, Check, FileCode, X, Database, Tag, ArrowLeft } from "lucide-react";
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import type { FormWorkflow, WorkflowStep, NormalizedBoundingBox } from '@/shared/contracts';
+import { MOCK_WORKFLOW_REGISTRY } from '@/config/app.config';
+import { APP_ROUTES } from '@/shared/routes';
+import { AdminVisualTwinEditor } from '@/components/admin/AdminVisualTwinEditor';
+import { AdminStepEditor } from '@/components/admin/AdminStepEditor';
+import { normalizeLocalWorkflow, publishLocalWorkflow, readLocalWorkflow, saveLocalDraft } from '@/modules/forms/services/local-workflow-store';
+import { approveAdminWorkflow, readAdminWorkflow, saveAdminWorkflow } from '@/modules/forms/client';
 
 export default function AdminReviewPage() {
-  const router = useRouter();
-  const params = useParams();
-  const formId = (params?.id as string) || "tpl_01_lptb";
-
-  const defaultWorkflow = useMemo(() => {
-    return getMockWorkflow(formId);
-  }, [formId]);
-
-  const [workflow, setWorkflow] = useState<FormWorkflow>(defaultWorkflow);
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-  const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
-  const [isLegalChecked, setIsLegalChecked] = useState(false);
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  // Khôi phục từ localStorage nếu có bản lưu trước đó
+  const router = useRouter(), params = useParams(), search = useSearchParams();
+  const formId = typeof params?.id === 'string' ? params.id : '';
+  const [workflow, setWorkflow] = useState<FormWorkflow | null>(null);
+  const [stepIndex, setStepIndex] = useState(0), [page, setPage] = useState(1);
+  const [reviewConfirmed, setReviewConfirmed] = useState(false), [blankConfirmed, setBlankConfirmed] = useState(false);
+  const [adminKey, setAdminKey] = useState(''), [message, setMessage] = useState('');
+  const [source, setSource] = useState(''), [busy, setBusy] = useState(false), [exportOpen, setExportOpen] = useState(false);
+  const request = useRef(0), controller = useRef<AbortController | null>(null);
   useEffect(() => {
-    let activeWorkflow = getMockWorkflow(formId);
-    if (typeof window !== "undefined") {
-      try {
-        const savedData = localStorage.getItem(`afl_workflow_published_${formId}`);
-        if (savedData) {
-          const parsed = JSON.parse(savedData) as FormWorkflow;
-          if (parsed && Array.isArray(parsed.steps) && parsed.steps.length > 0) {
-            activeWorkflow = parsed;
-            setToastMessage(`Đã nạp bản lưu v${parsed.version || 1} từ trình duyệt!`);
-            setTimeout(() => setToastMessage(null), 3000);
-          }
-        }
-      } catch (e) {
-        console.warn("Lỗi đọc localStorage:", e);
-      }
-    }
-    setWorkflow(activeWorkflow);
-    setCurrentStepIndex(0);
-    setCurrentPageNumber(activeWorkflow.steps[0]?.pageNumber || 1);
+    request.current++; controller.current?.abort();
+    setWorkflow(null); setBusy(false); setMessage(''); setAdminKey(''); setReviewConfirmed(false); setBlankConfirmed(false); setExportOpen(false);
+    const stored = readLocalWorkflow(localStorage, formId);
+    const fixture = MOCK_WORKFLOW_REGISTRY[formId];
+    const loaded = stored ?? (fixture ? normalizeLocalWorkflow({ ...fixture, templateId: formId }, formId) : null);
+    if (loaded) { setWorkflow(loaded); setSource(stored ? 'Biểu mẫu lưu trên trình duyệt này' : 'Biểu mẫu mẫu có sẵn, chưa xác minh trong database'); setPage(loaded.steps[0]?.pageNumber ?? 1); }
+    else setMessage('Chưa có bản nháp cho ID này. Hãy tải phôi hoặc nhập khóa để nạp đúng biểu mẫu từ server.');
+    setStepIndex(0);
+    return () => { request.current++; controller.current?.abort(); };
   }, [formId]);
 
-  const currentStep = workflow.steps[currentStepIndex];
-
-  // Chuẩn hóa trạng thái biểu mẫu hiện tại
-  const normalizedStatus = useMemo<"DRAFT" | "ACTIVE" | "ARCHIVED">(() => {
-    const raw = (workflow.status || "DRAFT").toUpperCase();
-    if (raw === "ACTIVE") return "ACTIVE";
-    if (raw === "ARCHIVED") return "ARCHIVED";
-    return "DRAFT";
-  }, [workflow.status]);
-
-  // Xử lý đổi trạng thái trực tiếp từ Header
-  const handleStatusChange = (newStatus: "DRAFT" | "ACTIVE" | "ARCHIVED") => {
-    const updatedWorkflow: FormWorkflow = {
-      ...workflow,
-      status: newStatus,
-    };
-    setWorkflow(updatedWorkflow);
-
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.setItem(
-          `afl_workflow_published_${workflow.templateId || formId}`,
-          JSON.stringify(updatedWorkflow)
-        );
-        localStorage.setItem(
-          `afl_workflow_draft_${workflow.templateId || formId}`,
-          JSON.stringify(updatedWorkflow)
-        );
-      } catch (e) {
-        console.warn("Lỗi lưu trạng thái vào localStorage:", e);
-      }
-    }
-
-    const labelMap: Record<"DRAFT" | "ACTIVE" | "ARCHIVED", string> = {
-      DRAFT: "Bản nháp",
-      ACTIVE: "Đang áp dụng",
-      ARCHIVED: "Lưu trữ / Hết hiệu lực",
-    };
-    setToastMessage(`Đã đổi trạng thái sang: "${labelMap[newStatus]}"!`);
-    setTimeout(() => setToastMessage(null), 3000);
+  const update = (next: FormWorkflow) => {
+    if (busy) return;
+    setWorkflow({ ...next, status: 'DRAFT', totalSteps: next.steps.length, steps: next.steps.map((s, i) => ({ ...s, stepIndex: i + 1 })) });
+    setReviewConfirmed(false); setBlankConfirmed(false); setExportOpen(false); setMessage('Có thay đổi chưa lưu. Bản đang áp dụng không bị ghi đè.');
   };
-
-  // Tự động lưu bản nháp khi bấm quay lại Thư viện
-  const handleReturnToLibrary = () => {
-    if (typeof window !== "undefined") {
-      try {
-        const draftWorkflow: FormWorkflow = {
-          ...workflow,
-          templateId: workflow.templateId || formId,
-          totalSteps: workflow.steps.length,
-          steps: workflow.steps.map((s, idx) => ({ ...s, stepIndex: idx })),
-        };
-        localStorage.setItem(
-          `afl_workflow_published_${workflow.templateId || formId}`,
-          JSON.stringify(draftWorkflow)
-        );
-        localStorage.setItem(
-          `afl_workflow_draft_${workflow.templateId || formId}`,
-          JSON.stringify(draftWorkflow)
-        );
-      } catch (e) {
-        console.warn("Lỗi lưu tự động trước khi thoát:", e);
-      }
-    }
-    router.push("/admin/library");
+  const saveDraft = () => {
+    if (!workflow || busy) return false;
+    try { setWorkflow(saveLocalDraft(localStorage, workflow)); setMessage('Đã lưu bản nháp trên trình duyệt này; chưa phê duyệt hoặc lưu vào database.'); return true; }
+    catch { setMessage('Không lưu được bản nháp. Kiểm tra ảnh, tọa độ và dung lượng trình duyệt; bản đang áp dụng vẫn được giữ.'); return false; }
   };
-
-  // 1. Cập nhật nội dung bước
-  const handleUpdateStep = (updatedStep: WorkflowStep) => {
-    const updatedSteps = [...workflow.steps];
-    updatedSteps[currentStepIndex] = updatedStep;
-    setWorkflow({ ...workflow, steps: updatedSteps });
+  const insertStep = (after: number) => {
+    if (!workflow) return;
+    const base = workflow.steps[after];
+    const newStep: WorkflowStep = { stepIndex: after + 2, boxId: `manual_${Date.now()}`, pageNumber: base?.pageNumber ?? page,
+      sectionName: base?.sectionName ?? 'Cấu hình thủ công', label: 'Ô mới — cần đặt tên',
+      voiceGuidance: 'Chuyên viên cần đối chiếu và viết hướng dẫn đúng với phôi.', audioUrl: '', exampleRedText: 'CẦN ĐỐI SOÁT',
+      highlightCoords: [0.2, 0.2, 0.3, 0.7], faqs: [] };
+    const steps = [...workflow.steps]; steps.splice(after + 1, 0, newStep); update({ ...workflow, steps }); setStepIndex(after + 1);
   };
-
-  // 2. Chèn bước mới ngay sau vị trí hiện tại theo đúng ngữ cảnh phân đoạn
-  const handleInsertStep = (insertAfterIndex: number) => {
-    const baseStep = workflow.steps[insertAfterIndex] || workflow.steps[0];
-    const newStep: WorkflowStep = {
-      stepIndex: insertAfterIndex + 1,
-      boxId: `box_custom_${Date.now()}`,
-      pageNumber: baseStep.pageNumber || 1,
-      sectionName: baseStep.sectionName,
-      label: "Mục mới bổ sung",
-      voiceGuidance: "Bác ghi rõ nội dung của mục này theo giấy tờ gốc nhé.",
-      audioUrl: baseStep.audioUrl || "/assets/audio/default.mp3",
-      exampleRedText: "NỘI DUNG MẪU",
-      highlightCoords: [0.42, 0.2, 0.46, 0.85],
-      requiresPrerequisiteDoc: false,
-      legalWarningFlag: false,
-      faqs: [],
-    };
-
-    const newSteps = [...workflow.steps];
-    newSteps.splice(insertAfterIndex + 1, 0, newStep);
-
-    // Đánh lại chỉ số index cho toàn bộ mảng chuẩn xác từ 0 đến N-1
-    const reindexedSteps = newSteps.map((s, idx) => ({ ...s, stepIndex: idx }));
-
-    setWorkflow({
-      ...workflow,
-      totalSteps: reindexedSteps.length,
-      steps: reindexedSteps,
-    });
-    setCurrentStepIndex(insertAfterIndex + 1);
-    setToastMessage(`Đã thêm bước mới vào mục "${baseStep.sectionName}"!`);
-    setTimeout(() => setToastMessage(null), 2500);
-  };
-
-  // 3. Xóa bước hiện tại và đánh số lại toàn bộ
-  const handleDeleteStep = (deleteIndex: number) => {
-    const newSteps = workflow.steps.filter((_, idx) => idx !== deleteIndex);
-    const reindexedSteps = newSteps.map((s, idx) => ({ ...s, stepIndex: idx }));
-
-    setWorkflow({
-      ...workflow,
-      totalSteps: reindexedSteps.length,
-      steps: reindexedSteps,
-    });
-    setCurrentStepIndex(Math.max(0, deleteIndex - 1));
-    setToastMessage("Đã xóa bước thành công!");
-    setTimeout(() => setToastMessage(null), 2500);
-  };
-
-  const handleCoordsChange = (newCoords: NormalizedBoundingBox) => {
-    if (!currentStep) return;
-    handleUpdateStep({ ...currentStep, highlightCoords: newCoords });
-  };
-
-  const handleSelectStep = (index: number) => {
-    setCurrentStepIndex(index);
-    const targetStep = workflow.steps[index];
-    if (targetStep && targetStep.pageNumber && targetStep.pageNumber !== currentPageNumber) {
-      setCurrentPageNumber(targetStep.pageNumber);
-    }
-  };
-
-  // 4. PHÊ DUYỆT & GỌI API LƯU FILE VÀO HỆ THỐNG
-  const handlePublishAndExport = async () => {
-    if (!isLegalChecked) return;
-    setIsPublishing(true);
-    const publishPayload: FormWorkflow = {
-      ...workflow,
-      status: "ACTIVE",
-      templateId: workflow.templateId || formId,
-    };
+  const fetcher = (signal: AbortSignal) => (input: RequestInfo | URL, init?: RequestInit) => fetch(input, { ...init, signal });
+  const loadServer = async () => {
+    const code = search?.get('formCode') || workflow?.formCode;
+    if (!code || !adminKey.trim() || busy) { setMessage('Cần mã biểu mẫu và khóa quản trị để nạp server.'); return; }
+    const id = ++request.current; controller.current?.abort(); const abort = new AbortController(); controller.current = abort; setBusy(true); setMessage('Đang nạp biểu mẫu server...');
     try {
-      // 1. Phê duyệt trong Database qua API /api/admin/forms/[formCode]/approve (chuyển trạng thái sang ACTIVE)
-      const formCode = workflow.formCode || formId;
-      try {
-        await fetch(`/api/admin/forms/${encodeURIComponent(formCode)}/approve`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-key": "afl_admin_secret_guard_key_2026",
-          },
-          body: JSON.stringify({
-            reviewConfirmed: true,
-            performedBy: "Cán bộ quản trị",
-            note: "Phê duyệt biểu mẫu qua Admin Review Portal",
-          }),
-        });
-      } catch (dbErr) {
-        console.warn("DB approve warning (offline fallback enabled):", dbErr);
-      }
-
-      // 2. Gọi API phía server để ghi file vào thư mục assets/mock-data/
-      const res = await fetch("/api/admin/publish", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(publishPayload),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        const finalWorkflow: FormWorkflow = {
-          ...data.workflow,
-          status: "ACTIVE",
-        };
-        setWorkflow(finalWorkflow);
-
-        // Lưu vào LocalStorage đồng bộ cho cả Citizen
-        localStorage.setItem(
-          `afl_workflow_published_${finalWorkflow.templateId || formId}`,
-          JSON.stringify(finalWorkflow)
-        );
-        localStorage.setItem(
-          `afl_workflow_draft_${finalWorkflow.templateId || formId}`,
-          JSON.stringify(finalWorkflow)
-        );
-        localStorage.setItem("afl_admin_last_published_time", finalWorkflow.publishedAt || new Date().toISOString());
-
-        setToastMessage(`Đã xuất bản thành công phiên bản v${data.version} (Đang áp dụng)!`);
-        setIsExportModalOpen(true);
+      const result = await readAdminWorkflow(code, adminKey, fetcher(abort.signal));
+      if (id !== request.current || abort.signal.aborted) return;
+      const checked = normalizeLocalWorkflow({ ...result, templateId: formId, status: String(result.status).toUpperCase() as FormWorkflow['status'] }, formId);
+      if (!checked) throw new Error('INVALID_WORKFLOW');
+      setWorkflow(checked); setStepIndex(0); setPage(checked.steps[0]?.pageNumber ?? 1); setSource('Database server'); setReviewConfirmed(false); setBlankConfirmed(false); setMessage('Đã nạp đúng biểu mẫu từ server.');
+    } catch { if (id === request.current && !abort.signal.aborted) setMessage('Không nạp được server. Kiểm tra khóa, mã biểu mẫu và database; dữ liệu hiện tại được giữ.'); }
+    finally { if (id === request.current) setBusy(false); }
+  };
+  const publish = async (local: boolean) => {
+    if (!workflow || !reviewConfirmed || !blankConfirmed || busy) return;
+    const id = ++request.current; controller.current?.abort(); const abort = new AbortController(); controller.current = abort; setBusy(true); setMessage('Đang kiểm tra và lưu...');
+    try {
+      if (local) {
+        const published = publishLocalWorkflow(localStorage, workflow, { reviewConfirmed, blankTemplateConfirmed: blankConfirmed });
+        if (id !== request.current) return;
+        setWorkflow(published); setSource('Bản áp dụng cục bộ trên trình duyệt này'); setMessage('Đã áp dụng cục bộ. Đây không phải phê duyệt database hoặc phát hành cho thiết bị khác.'); setExportOpen(true);
       } else {
-        throw new Error(data.error || "Không thể xuất bản");
+        if (!adminKey.trim()) throw new Error('MISSING_KEY');
+        const draft = normalizeLocalWorkflow({ ...workflow, status: 'DRAFT' }, formId, false);
+        if (!draft) throw new Error('INVALID_WORKFLOW');
+        await saveAdminWorkflow(draft.formCode, adminKey, draft, fetcher(abort.signal));
+        if (id !== request.current || abort.signal.aborted) return;
+        const approved = await approveAdminWorkflow(draft.formCode, adminKey, { performedBy: 'Chuyên viên kiểm duyệt', note: 'Đã kiểm tra nội dung, tọa độ và phôi trống.' }, fetcher(abort.signal));
+        if (id !== request.current || abort.signal.aborted) return;
+        if (approved.status.toUpperCase() !== 'ACTIVE') throw new Error('NOT_APPROVED');
+        setWorkflow({ ...draft, status: 'ACTIVE', publishedAt: approved.approvedAt }); setSource('Đã phê duyệt trong database'); setMessage('Server đã xác nhận phê duyệt ACTIVE.'); setExportOpen(true);
       }
-    } catch (err: any) {
-      console.warn("Lưu file qua API thất bại, lưu fallback vào LocalStorage:", err);
-      // Fallback lưu LocalStorage nếu API route bị lỗi
-      const nextVer = (workflow.version || 1) + 1;
-      const fallbackWorkflow: FormWorkflow = {
-        ...workflow,
-        status: "ACTIVE",
-        version: nextVer,
-        publishedAt: new Date().toISOString(),
-        totalSteps: workflow.steps.length,
-        steps: workflow.steps.map((s, idx) => ({ ...s, stepIndex: idx })),
-      };
-      setWorkflow(fallbackWorkflow);
-      localStorage.setItem(
-        `afl_workflow_published_${workflow.templateId || formId}`,
-        JSON.stringify(fallbackWorkflow)
-      );
-      localStorage.setItem(
-        `afl_workflow_draft_${workflow.templateId || formId}`,
-        JSON.stringify(fallbackWorkflow)
-      );
-      localStorage.setItem("afl_admin_last_published_time", fallbackWorkflow.publishedAt || new Date().toISOString());
-      setToastMessage(`Đã xuất bản v${nextVer} (lưu vào LocalStorage, Đang áp dụng)!`);
-      setIsExportModalOpen(true);
-    } finally {
-      setIsPublishing(false);
-      setTimeout(() => setToastMessage(null), 3500);
-    }
+    } catch { if (id === request.current && !abort.signal.aborted) setMessage('Chưa phê duyệt. Kiểm tra dữ liệu, khóa và database. Không tự chuyển sang áp dụng cục bộ khi server lỗi.'); }
+    finally { if (id === request.current) setBusy(false); }
   };
-
-  const handleDownloadJson = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(workflow, null, 2));
-    const downloadAnchor = document.createElement("a");
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute(
-      "download",
-      `${workflow.templateId || formId}_v${workflow.version || 1}.json`
-    );
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
+  const download = () => {
+    if (!workflow) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(workflow, null, 2)], { type: 'application/json;charset=utf-8' }));
+    const a = document.createElement('a'); a.href = url; a.download = `${formId}_v${workflow.version ?? 1}.json`; a.click(); URL.revokeObjectURL(url);
   };
-
-  const handleCopyJson = () => {
-    navigator.clipboard.writeText(JSON.stringify(workflow, null, 2));
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
-  };
-
-  if (!currentStep) {
-    return (
-      <div className="w-full h-full flex items-center justify-center p-8 text-slate-500 font-bold">
-        Đang tải kịch bản biểu mẫu...
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-full h-[calc(100vh-61px)] flex flex-col overflow-hidden relative">
-      {/* Toast thông báo nổi */}
-      {toastMessage && (
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 shadow-2xl border border-emerald-500 animate-bounce">
-          <Database className="w-4 h-4 text-emerald-400" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-
-      {/* Header trạng thái */}
-      <div className="bg-white border-b border-slate-300 px-6 py-2.5 flex items-center justify-between gap-4 shrink-0 shadow-sm z-10">
-        <div className="flex items-center gap-3">
-          {/* Nút quay lại danh mục thư viện admin (Tự động lưu bản nháp) */}
-          <button
-            type="button"
-            onClick={handleReturnToLibrary}
-            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-xs font-black flex items-center gap-1.5 active:scale-95 transition-all shadow-sm"
-            title="Tự động lưu bản nháp và quay lại thư viện"
-          >
-            <ArrowLeft className="w-4 h-4 text-emerald-700" />
-            <span>Thư viện</span>
-          </button>
-
-          <div className="h-4 w-px bg-slate-300" />
-
-          <span className="font-mono text-xs font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
-            {workflow.formCode}
-          </span>
-          <h2 className="text-base font-black text-slate-900">
-            {workflow.formTitleVi || workflow.formTitle}
-          </h2>
-          <span className="inline-flex items-center gap-1 bg-amber-100 text-amber-900 text-xs font-black px-2 py-0.5 rounded-full border border-amber-300">
-            <Tag className="w-3 h-3" />
-            <span>Bản ban hành: v{workflow.version || 1}</span>
-          </span>
-
-          {/* Ô chọn Trạng thái Biểu mẫu trực tiếp (Status Selector) */}
-          <div
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-black transition-all ${
-              normalizedStatus === "ACTIVE"
-                ? "bg-emerald-50 text-emerald-900 border-emerald-300"
-                : normalizedStatus === "ARCHIVED"
-                ? "bg-slate-100 text-slate-700 border-slate-300"
-                : "bg-amber-50 text-amber-900 border-amber-300"
-            }`}
-          >
-            <span
-              className={`w-2 h-2 rounded-full ${
-                normalizedStatus === "ACTIVE"
-                  ? "bg-emerald-500 animate-pulse"
-                  : normalizedStatus === "ARCHIVED"
-                  ? "bg-slate-400"
-                  : "bg-amber-500 animate-pulse"
-              }`}
-            />
-            <select
-              value={normalizedStatus}
-              onChange={(e) =>
-                handleStatusChange(e.target.value as "DRAFT" | "ACTIVE" | "ARCHIVED")
-              }
-              className="bg-transparent font-black cursor-pointer focus:outline-none pr-1 text-xs"
-              aria-label="Chọn trạng thái biểu mẫu"
-            >
-              <option value="DRAFT" className="bg-white text-amber-900 font-bold">
-                Bản nháp (DRAFT)
-              </option>
-              <option value="ACTIVE" className="bg-white text-emerald-900 font-bold">
-                Đang áp dụng (ACTIVE)
-              </option>
-              <option value="ARCHIVED" className="bg-white text-slate-700 font-bold">
-                Lưu trữ (ARCHIVED)
-              </option>
-            </select>
-          </div>
-        </div>
-
-        {/* Cam kết pháp lý & Nút xuất bản */}
-        <div className="flex items-center gap-4">
-          <label className="flex items-center gap-2 cursor-pointer bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-100 transition-colors">
-            <input
-              type="checkbox"
-              checked={isLegalChecked}
-              onChange={(e) => setIsLegalChecked(e.target.checked)}
-              className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer"
-            />
-            <span className="text-xs font-bold text-slate-800 select-none">
-              Tôi đã đối soát kỹ lưỡng căn cứ pháp lý & tọa độ ô
-            </span>
-          </label>
-
-          <button
-            type="button"
-            disabled={!isLegalChecked || isPublishing}
-            onClick={handlePublishAndExport}
-            className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-black rounded-lg flex items-center gap-2 active:scale-95 transition-all shadow-md"
-          >
-            <CheckCircle2 className="w-4 h-4" />
-            <span>{isPublishing ? "ĐANG LƯU FILE..." : "PHÊ DUYỆT & XUẤT FILE JSON"}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Khung chia đôi 60/40 */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Cột trái: Document Viewer & Bounding Box Editor */}
-        <div className="w-[60%] h-full">
-          <AdminVisualTwinEditor
-            pages={
-              workflow.pages && workflow.pages.length > 0
-                ? workflow.pages
-                : [
-                    {
-                      pageNumber: 1,
-                      imageUrl: "/assets/forms/01-lptb/page-1.jpg",
-                      width: 1200,
-                      height: 1700,
-                    },
-                  ]
-            }
-            currentPageNumber={currentPageNumber}
-            onPageChange={setCurrentPageNumber}
-            highlightCoords={currentStep.highlightCoords}
-            onCoordsChange={handleCoordsChange}
-            fieldLabel={currentStep.label}
-          />
-        </div>
-
-        {/* Cột phải: Step Inspector */}
-        <div className="w-[40%] h-full">
-          <AdminStepEditor
-            steps={workflow.steps}
-            currentStepIndex={currentStepIndex}
-            onSelectStep={handleSelectStep}
-            onUpdateStep={handleUpdateStep}
-            onInsertStep={handleInsertStep}
-            onDeleteStep={handleDeleteStep}
-          />
-        </div>
-      </div>
-
-      {/* Modal Xuất bản JSON hoàn chỉnh */}
-      {isExportModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6">
-          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl border border-slate-300 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FileCode className="w-5 h-5 text-emerald-400" />
-                <h3 className="font-black text-sm uppercase tracking-wide">
-                  Đã Lưu Vào Thư Mục assets/mock-data/ (Phiên bản: v{workflow.version || 1})
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsExportModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
-                aria-label="Đóng modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 flex-1 overflow-y-auto bg-slate-950 font-mono text-xs text-emerald-300 leading-relaxed no-scrollbar">
-              <pre className="whitespace-pre-wrap">{JSON.stringify(workflow, null, 2)}</pre>
-            </div>
-
-            <div className="px-6 py-3.5 bg-slate-100 border-t border-slate-300 flex items-center justify-between">
-              <span className="text-xs text-slate-600 font-bold flex items-center gap-1.5">
-                <Database className="w-4 h-4 text-emerald-600" />
-                <span>Phiên bản v{workflow.version || 1} sẽ được Citizen tự động ưu tiên nạp</span>
-              </span>
-              <div className="flex items-center gap-2.5">
-                <button
-                  type="button"
-                  onClick={handleCopyJson}
-                  className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
-                >
-                  {isCopied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
-                  <span>{isCopied ? "Đã sao chép!" : "Sao chép JSON"}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDownloadJson}
-                  className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-md active:scale-95 transition-all"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Tải File .json Về Máy</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+  const current = workflow?.steps[stepIndex];
+  return <div className="w-full flex flex-col min-h-[calc(100vh-120px)]">
+    <div className="p-4 bg-white border-b space-y-3">
+      <div className="flex flex-wrap gap-3 items-center"><button disabled={busy} onClick={() => { if (!workflow || saveDraft()) router.push(APP_ROUTES.library); }}>Lưu nháp & về thư viện</button><h2 className="font-bold">{workflow?.formTitleVi || workflow?.formTitle || 'Đối soát biểu mẫu'}</h2><span>{workflow?.status ?? 'CHƯA NẠP'} · {source}</span></div>
+      <p role="status" className="text-amber-900">{message}</p>
+      <div className="flex flex-wrap gap-2"><input type="password" autoComplete="off" aria-label="Khóa quản trị" placeholder="Khóa quản trị (không lưu)" value={adminKey} onChange={e => setAdminKey(e.target.value)} disabled={busy} className="border p-2 rounded"/><button disabled={busy || !adminKey} onClick={loadServer}>Nạp từ server</button><button disabled={busy || !workflow} onClick={saveDraft}>Lưu bản nháp cục bộ</button></div>
+      <label className="flex gap-2"><input type="checkbox" disabled={busy} checked={reviewConfirmed} onChange={e => setReviewConfirmed(e.target.checked)}/>Tôi đã đối soát nội dung, căn cứ pháp lý và tọa độ.</label>
+      <label className="flex gap-2"><input type="checkbox" disabled={busy} checked={blankConfirmed} onChange={e => setBlankConfirmed(e.target.checked)}/>Đây là phôi trống không chứa dữ liệu công dân; cho phép lưu biểu mẫu.</label>
+      <div className="flex gap-3 flex-wrap"><button className="bg-emerald-700 text-white p-2 rounded" disabled={busy || !current || !reviewConfirmed || !blankConfirmed || !adminKey} onClick={() => publish(false)}>Lưu & phê duyệt trên server</button><button className="border p-2 rounded" disabled={busy || !current || !reviewConfirmed || !blankConfirmed} onClick={() => publish(true)}>Áp dụng cục bộ trên trình duyệt này</button></div>
     </div>
-  );
+    {!workflow ? <p className="p-8">ID này chưa có kịch bản. <button onClick={() => router.push(APP_ROUTES.library)}>Về thư viện tải phôi</button></p> : !current ? <div className="p-8"><p>Chưa có ô được cấu hình. Phôi được giữ để chuyên viên thêm bước và đặt tọa độ.</p>{workflow.pages?.[0] && <img src={workflow.pages[0].imageUrl} alt="Phôi trống cần cấu hình" className="max-h-96"/>}<button onClick={() => insertStep(-1)}>Thêm bước đầu tiên</button></div> : <div className="flex flex-col lg:flex-row flex-1 min-h-[600px]" aria-busy={busy}>
+      <div className={`lg:w-3/5 min-h-[500px] ${busy ? 'pointer-events-none opacity-60' : ''}`}><AdminVisualTwinEditor pages={workflow.pages ?? []} currentPageNumber={page} onPageChange={setPage} highlightCoords={current.highlightCoords} onCoordsChange={(coords: NormalizedBoundingBox) => { const steps = [...workflow.steps]; steps[stepIndex] = { ...current, highlightCoords: coords }; update({ ...workflow, steps }); }} fieldLabel={current.label}/></div>
+      <div className={`lg:w-2/5 min-h-[500px] ${busy ? 'pointer-events-none opacity-60' : ''}`}><AdminStepEditor steps={workflow.steps} currentStepIndex={stepIndex} onSelectStep={index => { setStepIndex(index); setPage(workflow.steps[index]?.pageNumber ?? 1); }} onUpdateStep={step => { const steps = [...workflow.steps]; steps[stepIndex] = step; update({ ...workflow, steps }); }} onInsertStep={insertStep} onDeleteStep={index => { update({ ...workflow, steps: workflow.steps.filter((_, i) => i !== index) }); setStepIndex(Math.max(0, index - 1)); }}/></div>
+    </div>}
+    {exportOpen && workflow && <div role="dialog" aria-label="Xuất kịch bản" className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"><div className="bg-white p-5 rounded-xl max-w-3xl w-full"><h3>{source}</h3><textarea aria-label="Kịch bản JSON" readOnly value={JSON.stringify(workflow, null, 2)} className="w-full h-72 border text-xs"/><div className="flex gap-3"><button onClick={download}>Tải JSON</button><button onClick={async () => { try { await navigator.clipboard.writeText(JSON.stringify(workflow, null, 2)); setMessage('Đã sao chép JSON.'); } catch { setMessage('Không sao chép được. Hãy tải JSON.'); } }}>Sao chép JSON</button><button onClick={() => setExportOpen(false)}>Đóng</button></div></div></div>}
+  </div>;
 }
