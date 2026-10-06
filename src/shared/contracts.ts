@@ -46,7 +46,7 @@ export interface AdminFormTemplate {
  */
 export interface DetectedLineText {
   lineId: string;
-  coordinates: NormalizedBoundingBox; // [ymin, xmin, ymax, xmax] thang 0.0 - 1.0
+  coordinates: NormalizedBoundingBox | null; // Missing detector coordinates stay null.
   rawText: string;
   confidence: number | null;
 }
@@ -122,3 +122,4 @@ export interface FormWorkflow {
 }
 
 export * from './document-extraction.types';
+export type * from './document-export.types';
