@@ -29,12 +29,13 @@ import type {
 } from '@/shared/document-extraction.types';
 import { FullImageConsentRequired, prepareDocumentImage, type PreparationMode, type PreparedDocumentImage } from '@/modules/documents/prepare-image';
 import { documentSession, reviewedFields, type FieldConfirmations } from '@/modules/documents/session';
-import { MarkdownReview } from '@/components/documents/MarkdownReview';
+import { JsonReview } from '@/components/documents/JsonReview';
 import { OcrAttemptReview } from '@/components/documents/OcrAttemptReview';
 import { IMAGE_WARNING_MESSAGES } from '@/modules/documents/image-quality';
-import { validateMarkdown } from '@/modules/documents/markdown-validator';
-import type { MarkdownDraft } from '@/modules/documents/markdown.types';
+import type { DocumentJsonExport } from '@/shared/document-export.types';
 import { DOCUMENT_LIMITS } from '@/modules/documents/config';
+import { parseJsonExport } from '@/modules/documents/json-validator';
+import { assembleJson } from '@/modules/documents/json-assembler';
 import { normalizeField, valueErrors } from '@/modules/documents/validation';
 import { TRAFFIC_FIELDS } from '@/modules/documents/schema';
 
@@ -330,7 +331,7 @@ export default function DocumentTestPage() {
   const [processedUrl, setProcessedUrl] = useState<string | null>(null);
   const [mode, setMode] = useState<PreparationMode>('upload-photo');
   const [engineMode, setEngineMode] = useState<'live' | 'mock'>('live');
-  const [activeTab, setActiveTab] = useState<'structured' | 'markdown' | 'diagnostics'>('structured');
+  const [activeTab, setActiveTab] = useState<'structured' | 'json' | 'diagnostics'>('structured');
   const [selectedFieldKey, setSelectedFieldKey] = useState<string | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [enhancedPreviews, setEnhancedPreviews] = useState<{ variant: string; url: string }[]>([]);
@@ -338,13 +339,14 @@ export default function DocumentTestPage() {
   const [imageWarnings, setImageWarnings] = useState<string[]>([]);
   const [deskewApplied, setDeskewApplied] = useState(false);
   const [failedReview, setFailedReview] = useState<OcrReview | undefined>();
-  const [needsFullImage, setNeedsFullImage] = useState<'structured' | 'markdown' | null>(null);
+  const [needsFullImage, setNeedsFullImage] = useState<'structured' | 'json' | null>(null);
   const [textConsent, setTextConsent] = useState(false);
   const [syntheticInput, setSyntheticInput] = useState(false);
 
   // Results state
   const [extractionResult, setExtractionResult] = useState<DocumentExtractionResult | null>(null);
-  const [markdownDraft, setMarkdownDraft] = useState<MarkdownDraft | null>(null);
+  const [jsonBox, setJsonBox] = useState<NormalizedBoundingBox | null>(null);
+  const [jsonDraft, setJsonDraft] = useState<DocumentJsonExport | null>(null);
 
   // Review & Session state
   const [draftValues, setDraftValues] = useState<Record<string, string>>({});
@@ -368,7 +370,7 @@ export default function DocumentTestPage() {
   const invalidate = useCallback(() => {
     generation.current++;
     abortControllerRef.current?.abort();
-    setExtractionResult(null); setMarkdownDraft(null); setDraftValues({}); setConfirmations({});
+    setExtractionResult(null); setJsonDraft(null); setJsonBox(null); setDraftValues({}); setConfirmations({});
     setSelectedFieldKey(null); setSelectedRegion(null); setProcessedUrl(null); setEnhancedPreviews([]);
     setShownVariant('primary'); setImageWarnings([]); setDeskewApplied(false); setFailedReview(undefined);
     setNeedsFullImage(null); setIsProcessing(false); setCurrentStepText(''); setStatusMessage(null);
@@ -447,7 +449,7 @@ export default function DocumentTestPage() {
   };
 
   // Run full extraction pipeline
-  const runPipeline = async (target: 'structured' | 'markdown', allowFullImage = false) => {
+  const runPipeline = async (target: 'structured' | 'json', allowFullImage = false) => {
     if (!file) return;
     if (engineMode === 'live' && target === 'structured' && !textConsent) return;
     if (engineMode === 'mock' && !syntheticInput) {
@@ -495,29 +497,9 @@ export default function DocumentTestPage() {
           );
         }
 
-        if (target === 'markdown') {
-          const mockMarkdown = `# CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
-Độc lập - Tự do - Hạnh phúc
-
-CÔNG AN TP. HÀ NỘI
-PHÒNG CSGT ĐƯỜNG BỘ
-
-# BIÊN BẢN VI PHẠM HÀNH CHÍNH
-Về trật tự an toàn giao thông đường bộ
-
-## Thông tin biên bản
-- **Số biên bản:** 004821/BB-VPHC
-- **Ngày lập:** 15/09/2026
-- **Họ và tên:** NGUYỄN VĂN AN
-- **Số CCCD:** 001085012345
-- **Địa chỉ:** Số 12 phố Hàng Bông, Q. Hoàn Kiếm, TP. Hà Nội
-- **Biển số xe:** 29A-888.88
-- **Hành vi:** Không chấp hành hiệu lệnh của đèn tín hiệu giao thông
-- **Số quyết định:** 9042/QĐ-XPHC
-- **Số tiền phạt:** 900.000 đồng
-- **Thời hạn nộp:** 30/09/2026
-`;
-          setMarkdownDraft({ contractVersion: 1, status: 'review_required', rawText: sampleText, markdown: mockMarkdown, validation: validateMarkdown(mockMarkdown), provider: 'offline-demo', pageCount: 1, confidence: null, warnings: ['OFFLINE DEMO: synthetic content, not OCR output.'] });
+        if (target === 'json') {
+          setJsonDraft(assembleJson({ provider: 'offline-demo', fullText: sampleText, lines: [], tokens: [], pageCount: 1, warnings: ['OFFLINE_DEMO_NOT_OCR'] },
+            { documentId: 'synthetic-demo', mimeType: 'image/png', imageDimensions: { width: prepared.width, height: prepared.height }, deskewApplied: prepared.deskewApplied }));
         }
 
         const totalTime = Math.round(performance.now() - startTotal);
@@ -525,7 +507,7 @@ Về trật tự an toàn giao thông đường bộ
         setStatusMessage({ type: 'warning', text: `Dữ liệu mẫu mô phỏng trong ${totalTime}ms; chưa thực hiện OCR. Không thể lưu dữ liệu mẫu vào Session RAM hoặc dùng trong hướng dẫn.` });
       } else {
         setCurrentStepText('Đang đọc nội dung…');
-        const response = await fetch(`/api/documents/${target === 'structured' ? 'extract' : 'markdown'}`, {
+        const response = await fetch(`/api/documents/${target === 'structured' ? 'extract' : 'json'}`, {
           method: 'POST', body: preparedForm(prepared), signal: abort.signal, cache: 'no-store',
         });
         if (requestId !== generation.current) return;
@@ -533,6 +515,7 @@ Về trật tự an toàn giao thông đường bộ
         const payload = await response.json();
         if (requestId !== generation.current) return;
         if (!response.ok || !payload.success) {
+          if (target === 'json' && payload.data) setJsonDraft(parseJsonExport(payload.data));
           if (payload.error?.ocrReview?.attempts && payload.error?.ocrReview?.regions) setFailedReview(payload.error.ocrReview);
           throw new Error(payload.error?.message_vi || 'Không đọc được phản hồi. Hãy thử lại.');
         }
@@ -544,8 +527,8 @@ Về trật tự an toàn giao thông đường bộ
           setDraftValues(Object.fromEntries(Object.entries(data.fields).map(([key, field]) => [key, field.value === null ? '' : String(field.value)])));
           requiresReview = data.requiresReview || data.status === 'manual_review_required' || !data.fullText.trim();
         } else {
-          if (payload.data?.contractVersion !== 1 || payload.data?.status !== 'review_required') throw new Error('Phản hồi Markdown không hợp lệ.');
-          setMarkdownDraft(payload.data);
+          if (!payload.data || !parseJsonExport(payload.data)) throw new Error('Phản hồi JSON không hợp lệ.');
+          setJsonDraft(parseJsonExport(payload.data));
         }
         const totalTime = Math.round(performance.now() - startTotal);
         setTimings({ deskewMs: deskewTime, extractionMs: Math.round(performance.now() - startExtraction), totalMs: totalTime });
@@ -622,9 +605,9 @@ Về trật tự an toàn giao thông đường bộ
   };
 
   // Bounding boxes of the currently selected field
-  const review = extractionResult?.ocrReview ?? markdownDraft?.ocrReview ?? failedReview;
-  const activeBoxes: NormalizedBoundingBox[] = selectedRegion !== null && review?.regions[selectedRegion]
-    ? [review.regions[selectedRegion].boundingBox ?? [0, 0, 1, 1]]
+  const review = extractionResult?.ocrReview ?? failedReview;
+  const activeBoxes: NormalizedBoundingBox[] = jsonDraft ? (jsonBox ? [jsonBox] : []) : selectedRegion !== null && review?.regions[selectedRegion]
+    ? (review.regions[selectedRegion].boundingBox ? [review.regions[selectedRegion].boundingBox!] : [])
     : selectedFieldKey && extractionResult?.fields[selectedFieldKey]
       ? extractionResult.fields[selectedFieldKey].sourceBoundingBoxes || []
       : [];
@@ -652,11 +635,11 @@ Về trật tự an toàn giao thông đường bộ
                 AFL Document Intelligence Test Workbench
               </h1>
               <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                FR-6 & Markdown Engine
+                FR-6 & JSON Engine
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              Kiểm thử & đối chiếu: VietOCR cục bộ → Trích xuất trường hoặc ghép Markdown → Kiểm tra → Duyệt
+              Kiểm thử & đối chiếu: VietOCR cục bộ → Trích xuất trường hoặc ghép JSON → Kiểm tra → Duyệt
             </p>
           </div>
         </div>
@@ -670,7 +653,7 @@ Về trật tự an toàn giao thông đường bộ
               className={`px-3 py-1 rounded-lg transition-all ${
                 engineMode === 'live' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
-              title="Gọi trực tiếp API backend (/api/documents/extract & /api/documents/markdown)"
+              title="Gọi trực tiếp API backend (/api/documents/extract & /api/documents/json)"
             >
               Live API
             </button>
@@ -778,7 +761,7 @@ Về trật tự an toàn giao thông đường bộ
               Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.
             </label>}
             {engineMode === 'mock' && <p className="text-sm text-amber-300" role="note">Dữ liệu mô phỏng chỉ để thử giao diện trên ảnh tổng hợp, không phải OCR. Không lưu vào phiên hướng dẫn.</p>}
-            <p className="text-xs text-slate-400">JSON dùng VietOCR cục bộ và Gemini text; Markdown dùng VietOCR cục bộ. Mỗi thao tác thử tối đa hai lần đọc.</p>
+            <p className="text-xs text-slate-400">Trích xuất trường dùng Gemini text; xuất tài liệu JSON chỉ dùng VietOCR cục bộ. Mỗi thao tác thử tối đa hai lần đọc.</p>
             <div className="grid grid-cols-2 gap-2.5 pt-2">
               <button
                 onClick={() => runPipeline('structured')}
@@ -789,11 +772,11 @@ Về trật tự an toàn giao thông đường bộ
               </button>
 
               <button
-                onClick={() => runPipeline('markdown')}
+                onClick={() => runPipeline('json')}
                 disabled={!file || isProcessing}
                 className="px-3 py-2.5 rounded-xl font-bold text-xs bg-sky-700 hover:bg-sky-600 disabled:opacity-40 text-white shadow-sm flex items-center justify-center gap-1.5 transition-all"
               >
-                <FileText className="w-3.5 h-3.5" /> Xuất Markdown
+                <FileText className="w-3.5 h-3.5" /> Xuất JSON
               </button>
 
             </div>
@@ -901,7 +884,7 @@ Về trật tự an toàn giao thông đường bộ
           </div>
         </div>
 
-        {/* Right Column: Tabbed Outputs (Structured Fields / Markdown / Diagnostics) */}
+        {/* Right Column: Tabbed Outputs (Structured Fields / JSON / Diagnostics) */}
         <div className="lg:col-span-6 flex flex-col gap-4">
           <OcrAttemptReview review={review} onRegion={index => { setSelectedRegion(index); setSelectedFieldKey(null); setShownVariant('primary'); }} />
           {/* Tab Navigation */}
@@ -924,18 +907,18 @@ Về trật tự an toàn giao thông đường bộ
             </button>
 
             <button
-              onClick={() => setActiveTab('markdown')}
+              onClick={() => setActiveTab('json')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
-                activeTab === 'markdown'
+                activeTab === 'json'
                   ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
               }`}
             >
               <FileText className="w-4 h-4" />
-              <span>Duyệt Markdown</span>
-              {markdownDraft && (
+              <span>Duyệt JSON</span>
+              {jsonDraft && (
                 <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-400 font-mono">
-                  {markdownDraft.markdown.length} chars
+                  {jsonDraft.rawText.length} chars
                 </span>
               )}
             </button>
@@ -1104,10 +1087,10 @@ Về trật tự an toàn giao thông đường bộ
             </div>
           )}
 
-          {activeTab === 'markdown' && (
+          {activeTab === 'json' && (
             <div className="p-4">
-              {markdownDraft ? <MarkdownReview key={markdownDraft.markdown} draft={markdownDraft} filename={file?.name || 'document'} disabled={isProcessing} />
-                : <p className="text-slate-400">Chuyển ảnh sang Markdown để tạo bản nháp và duyệt trước khi tải.</p>}
+              {jsonDraft ? <JsonReview key={generation.current} draft={jsonDraft} filename={file?.name || 'document'} disabled={isProcessing} onSelect={box => { setJsonBox(box ? [box[1], box[0], box[3], box[2]] : null); setShownVariant("primary"); }} />
+                : <p className="text-slate-400">Chuyển ảnh sang JSON để tạo bản nháp và duyệt trước khi tải.</p>}
             </div>
           )}
 

@@ -57,8 +57,8 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <BookOpen className="w-8 h-8" aria-hidden="true" />
               <div className="text-left">
-                <div className="font-bold text-base">Chuyển ảnh thành Markdown</div>
-                <div className="text-xs">OpenCV → VietOCR cục bộ → Ghép Markdown → Duyệt → .md</div>
+                <div className="font-bold text-base">Chuyển ảnh thành JSON</div>
+                <div className="text-xs">OpenCV → VietOCR cục bộ → Ghép JSON → Duyệt → .json</div>
               </div>
             </div>
           </Link>
@@ -75,7 +75,7 @@ export default function HomePage() {
               <div className="text-left">
                 <div className="font-bold text-base">Bàn Làm Việc Kiểm Thử (Workbench)</div>
                 <div className="text-xs text-amber-800 font-medium">
-                  Soi Bounding Box, test trích xuất JSON & Markdown
+                  Soi Bounding Box, test trích xuất JSON & JSON
                 </div>
               </div>
             </div>

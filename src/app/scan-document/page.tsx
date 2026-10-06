@@ -8,8 +8,9 @@ import { IMAGE_WARNING_MESSAGES } from '@/modules/documents/image-quality';
 import { OcrAttemptReview } from '@/components/documents/OcrAttemptReview';
 import { documentSession, reviewedFields, type FieldConfirmations } from '@/modules/documents/session';
 import { DOCUMENT_LIMITS } from '@/modules/documents/config';
-import { MarkdownReview } from '@/components/documents/MarkdownReview';
-import type { MarkdownDraft } from '@/modules/documents/markdown.types';
+import { JsonReview } from '@/components/documents/JsonReview';
+import type { DocumentJsonExport } from '@/shared/document-export.types';
+import { parseJsonExport } from '@/modules/documents/json-validator';
 import { normalizeField, valueErrors } from '@/modules/documents/validation';
 
 const button = 'min-h-14 px-4 py-3 rounded-xl border border-slate-600 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-lg font-bold';
@@ -32,7 +33,7 @@ export default function ScanDocumentPage() {
   const [enhancedPreviews, setEnhancedPreviews] = useState<{ variant: string; url: string }[]>([]);
   const [shownVariant, setShownVariant] = useState('primary');
   const [imageWarnings, setImageWarnings] = useState<string[]>([]);
-  const [needsFullImage, setNeedsFullImage] = useState<'extract' | 'markdown' | null>(null);
+  const [needsFullImage, setNeedsFullImage] = useState<'extract' | 'json' | null>(null);
   const [mode, setMode] = useState<PreparationMode>('upload-photo');
   const [hint, setHint] = useState('auto');
   const [cloudTextConsent, setCloudTextConsent] = useState(false);
@@ -44,7 +45,8 @@ export default function ScanDocumentPage() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [saved, setSaved] = useState(false);
-  const [markdownDraft, setMarkdownDraft] = useState<MarkdownDraft | null>(null);
+  const [jsonBox, setJsonBox] = useState<NormalizedBoundingBox | null>(null);
+  const [jsonDraft, setJsonDraft] = useState<DocumentJsonExport | null>(null);
   const [failedReview, setFailedReview] = useState<OcrReview | null>(null);
   const [guideHref, setGuideHref] = useState('/scan');
   const generation = useRef(0), controller = useRef<AbortController>();
@@ -65,7 +67,7 @@ export default function ScanDocumentPage() {
     return () => { cancelPending(); clearTimeout(expiry.current); clearSaved(); };
   }, [cancelPending]);
   function invalidate() {
-    cancelPending(); setMarkdownDraft(null); setFailedReview(null); setResult(null); setDrafts({}); setConfirmed({});
+    cancelPending(); setJsonDraft(null); setJsonBox(null); setFailedReview(null); setResult(null); setDrafts({}); setConfirmed({});
     setSelected(null); setSelectedRegion(null); setProcessed(null); setEnhancedPreviews([]); setShownVariant('primary');
     setImageWarnings([]); setNeedsFullImage(null); setSaved(false); setBusy(false); setMessage(''); documentSession.clear();
   }
@@ -89,7 +91,7 @@ export default function ScanDocumentPage() {
     for (const image of prepared.enhancements) form.set(image.variant, image.blob, `${image.variant}.${image.blob.type === 'image/png' ? 'png' : 'jpg'}`);
     return form;
   }
-  async function run(action: 'extract' | 'markdown', allowFullImage = false) {
+  async function run(action: 'extract' | 'json', allowFullImage = false) {
     if (!file || (action === 'extract' && !cloudTextConsent)) return;
     invalidate(); const requestId = generation.current;
     const abort = new AbortController(); controller.current = abort;
@@ -105,13 +107,14 @@ export default function ScanDocumentPage() {
       if (requestId !== generation.current) return;
       setMessage('Đang kiểm tra kết quả…');
       if (!response.ok || !payload.success) {
+        if (action === 'json' && payload.data) setJsonDraft(parseJsonExport(payload.data));
         if (payload.error?.ocrReview?.attempts && payload.error?.ocrReview?.regions) setFailedReview(payload.error.ocrReview);
         throw new Error(payload.error?.message_vi || 'Không đọc được phản hồi. Hãy thử lại.');
       }
-      if (action === 'markdown') {
-        if (payload.data?.contractVersion !== 1 || payload.data?.status !== 'review_required') throw new Error('Phản hồi Markdown không hợp lệ.');
-        setMarkdownDraft(payload.data);
-        setMessage(payload.data.rawText?.trim() && payload.data.validation?.valid ? 'Bản nháp đã sẵn sàng. Hãy đối chiếu với ảnh, sửa nếu cần và xác nhận trước khi tải.' : 'Chưa đọc được vùng này. Bác vẫn có thể xem ảnh nguồn và kết quả từng lần đọc.');
+      if (action === 'json') {
+        if (!payload.data || !parseJsonExport(payload.data)) throw new Error('Phản hồi JSON không hợp lệ.');
+        setJsonDraft(parseJsonExport(payload.data));
+        setMessage(payload.data.rawText?.trim() && payload.data.status !== 'failed' ? 'Bản nháp đã sẵn sàng. Hãy đối chiếu với ảnh, sửa nếu cần và xác nhận trước khi tải.' : 'Chưa đọc được vùng này. Bác vẫn có thể xem ảnh nguồn và kết quả từng lần đọc.');
       } else {
         if (payload.data?.contractVersion !== 2) throw new Error('Phản hồi trích xuất không hợp lệ.');
         const data: DocumentExtractionResult = payload.data; setResult(data);
@@ -135,9 +138,9 @@ export default function ScanDocumentPage() {
   }
   let canSave = false;
   try { canSave = !!result && Object.keys(reviewedFields(result, confirmed)).length > 0; } catch { /* Outstanding review blocks saving. */ }
-  const review = result?.ocrReview ?? markdownDraft?.ocrReview ?? failedReview ?? undefined;
-  const boxes: NormalizedBoundingBox[] = selectedRegion !== null && review?.regions[selectedRegion]
-    ? [review.regions[selectedRegion].boundingBox ?? [0, 0, 1, 1]]
+  const review = result?.ocrReview ?? failedReview ?? undefined;
+  const boxes: NormalizedBoundingBox[] = jsonDraft ? (jsonBox ? [jsonBox] : []) : selectedRegion !== null && review?.regions[selectedRegion]
+    ? (review.regions[selectedRegion].boundingBox ? [review.regions[selectedRegion].boundingBox!] : [])
     : (selected && result && selected in result.fields) ? (result.fields[selected].sourceBoundingBoxes || []) : [];
   const reviewBoxes = review?.regions.flatMap(region => region.boundingBox ? [region.boundingBox] : []) ?? [];
   const displayImage = shownVariant === 'primary' ? processed : enhancedPreviews.find(image => image.variant === shownVariant)?.url ?? processed;
@@ -158,9 +161,9 @@ export default function ScanDocumentPage() {
             <option value="auto">Tự nhận diện</option><option value="traffic_violation_record">Biên bản vi phạm giao thông</option><option value="unknown">Loại khác (chưa hỗ trợ)</option>
           </select></label>
           <label className="flex items-start gap-3"><input type="checkbox" checked={cloudTextConsent} onChange={e => setCloudTextConsent(e.target.checked)} className="mt-1 h-5 w-5" />Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.</label>
-          <p className="text-sm">VietOCR đọc ảnh cục bộ. Trích xuất trường dùng Gemini text trên cloud; chuyển Markdown chỉ dùng VietOCR.</p>
+          <p className="text-sm">VietOCR đọc ảnh cục bộ. Trích xuất trường dùng Gemini text trên cloud; chuyển JSON chỉ dùng VietOCR.</p>
           <button className={`${button} w-full bg-emerald-800`} disabled={!file || busy || !cloudTextConsent} onClick={() => run('extract')}>{busy ? 'Đang xử lý…' : 'Đọc chứng từ'}</button>
-          <button className={`${button} w-full bg-sky-800`} disabled={!file || busy} onClick={() => run('markdown')}>Chuyển ảnh sang Markdown</button>
+          <button className={`${button} w-full bg-sky-800`} disabled={!file || busy} onClick={() => run('json')}>Chuyển ảnh sang JSON</button>
           {needsFullImage && <button className={`${button} w-full bg-amber-900`} disabled={busy} onClick={() => run(needsFullImage, true)}>Thử đọc toàn ảnh</button>}
           <p className="flex gap-2"><ShieldCheck aria-hidden="true" />Ảnh và dữ liệu chỉ giữ tạm trong phiên, tối đa 15 phút.</p>
         </div>
@@ -184,7 +187,7 @@ export default function ScanDocumentPage() {
         <p role="status" aria-live="polite" className={panel}>{message || 'Chưa có kết quả.'}</p>
         {!busy && imageWarnings.length > 0 && <div className={panel} aria-label="Lưu ý chất lượng ảnh">{imageWarnings.map(code => <p key={code}>{IMAGE_WARNING_MESSAGES[code] || code}</p>)}</div>}
         <OcrAttemptReview review={review} onRegion={index => { setSelectedRegion(index); setSelected(null); setShownVariant('primary'); }} />
-        {markdownDraft && <MarkdownReview key={generation.current} draft={markdownDraft} filename={file?.name || 'document'} disabled={busy} />}
+        {jsonDraft && <JsonReview key={generation.current} draft={jsonDraft} filename={file?.name || 'document'} disabled={busy} onSelect={box => { setJsonBox(box ? [box[1], box[0], box[3], box[2]] : null); setShownVariant("primary"); }} />}
         {result && <>
           {result.warnings.length > 0 && <div className={panel}><h2 className="font-bold">Lưu ý</h2>{result.warnings.map((w,i) => <p key={i}>{warnings[w] || `Cần đối chiếu chất lượng nguồn (${w}).`}</p>)}</div>}
           <div className={panel}><h2 className="text-2xl font-bold">2. Đối chiếu từng trường</h2><p>Độ tin cậy là điểm của hệ thống, chưa phải tỷ lệ chính xác đã đo. Để trống rồi xác nhận nếu không đọc được.</p>

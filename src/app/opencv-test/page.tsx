@@ -11,13 +11,9 @@ import {
   type DocumentQuality,
   type DocumentQuad,
 } from '@/modules/opencv';
-import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { rehypeTableLineBreaks } from '@/modules/documents/markdown-preview';
-import {
-  assembleCandidatesToMarkdown,
-  type RecognizedCandidate,
-} from '@/modules/documents/candidate-markdown-assembler';
+import { JsonReview } from '@/components/documents/JsonReview';
+import { assembleCandidatesToJson, type RecognizedCandidate } from '@/modules/documents/candidate-json-assembler';
+import type { DocumentJsonExport, ExportBox } from '@/shared/document-export.types';
 import type { PixelRect } from '@/modules/opencv/field-types';
 import { DOCUMENT_LIMITS, ADAPTIVE_IMAGE_CONFIG, CANDIDATE_OCR_CONFIG } from '@/modules/documents/config';
 import { validateImageDimensions } from '@/modules/documents/image-quality';
@@ -25,7 +21,6 @@ import { mapCandidateRect } from '@/modules/documents/candidate-frame';
 import { loadOpenCv } from '@/modules/opencv/loader';
 import { warpDocument } from '@/modules/opencv/perspective-transform';
 import type { CvMat } from '@/modules/opencv/types';
-import { validateMarkdown } from '@/modules/documents/markdown-validator';
 
 const MAX_LONG_SIDE = 1600;
 type Status = 'idle' | 'decoding' | 'ready' | 'loading' | 'processing' | 'success' | 'error';
@@ -55,9 +50,9 @@ function cropCandidateToDataUrl(sourceCanvas: HTMLCanvasElement, rect: PixelRect
   finally { cropCanvas.width = 0; cropCanvas.height = 0; }
 }
 
-function isCheckboxChecked(sourceCanvas: HTMLCanvasElement, rect: PixelRect): boolean {
+function isCheckboxChecked(sourceCanvas: HTMLCanvasElement, rect: PixelRect): boolean | null {
   const ctx = sourceCanvas.getContext('2d');
-  if (!ctx) return false;
+  if (!ctx) return null;
   const innerX = Math.round(rect.x + rect.width * 0.2);
   const innerY = Math.round(rect.y + rect.height * 0.2);
   const innerW = Math.max(1, Math.round(rect.width * 0.6));
@@ -180,21 +175,22 @@ export default function OpenCvTestPage() {
   const [isOcrRunning, setIsOcrRunning] = useState(false);
   const [ocrStepText, setOcrStepText] = useState('');
   const [ocrResult, setOcrResult] = useState<{
-    markdown: string;
+    document: DocumentJsonExport;
+    sourcePreview: string;
     rawText: string;
     candidates: (RecognizedCandidate & { cropDataUrl?: string })[];
     warnings: string[];
   } | null>(null);
-  const [ocrTab, setOcrTab] = useState<'preview' | 'markdown' | 'candidates'>('preview');
+  const [ocrTab, setOcrTab] = useState<'preview' | 'candidates'>('preview');
   const [ocrNotice, setOcrNotice] = useState<string | null>(null);
-  const [ocrConfirmed, setOcrConfirmed] = useState(false);
+  const [selectedJsonBox, setSelectedJsonBox] = useState<ExportBox | null>(null);
   const nativeCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const ocrController = useRef<AbortController>();
   const ocrGeneration = useRef(0);
   const expiryRef = useRef<ReturnType<typeof setTimeout>>();
   const cancelOcr = useCallback(() => {
     ocrGeneration.current++; ocrController.current?.abort();
-    setIsOcrRunning(false); setOcrResult(null); setOcrConfirmed(false); setOcrNotice(null); setOcrStepText('');
+    setIsOcrRunning(false); setOcrResult(null); setSelectedJsonBox(null); setOcrNotice(null); setOcrStepText('');
   }, []);
 
   const inputCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -480,7 +476,8 @@ export default function OpenCvTestPage() {
             rect: candidate.rect,
             source: candidate.source,
             isContainer: false,
-            text: checked ? '☑' : '☐',
+            text: '',
+            checkboxState: checked === null ? 'unknown' : checked ? 'checked' : 'unchecked',
             confidence: null,
             cropDataUrl: cropCandidateToDataUrl(canvas, candidate.rect),
           });
@@ -552,8 +549,8 @@ export default function OpenCvTestPage() {
 
       setOcrStepText('Đang kiểm tra kết quả…');
 
-      // Assemble into Markdown
-      const assembled = assembleCandidatesToMarkdown(recognizedCandidates, {
+      // Assemble into JSON
+      const assembled = assembleCandidatesToJson(recognizedCandidates, {
         width: canvas.width,
         height: canvas.height,
       });
@@ -562,7 +559,8 @@ export default function OpenCvTestPage() {
       const reviewWarnings = recognizedCandidates.filter(c => !c.text.trim() || c.confidence === null || (c.confidence ?? 0) < ADAPTIVE_IMAGE_CONFIG.retryConfidence)
         .map(c => `${c.candidateId}: ${!c.text.trim() ? 'Chưa đọc được vùng này' : 'Cần kiểm tra với ảnh nguồn'}`);
       setOcrResult({
-        markdown: assembled.markdown,
+        document: assembled,
+        sourcePreview: canvas.toDataURL('image/png'),
         rawText: assembled.rawText,
         candidates: recognizedCandidates,
         warnings: [...assembled.warnings, 'OCR theo vùng không đảm bảo đã đọc toàn bộ trang. Checkbox là phân tích ảnh và cần xác nhận.', ...reviewWarnings],
@@ -577,33 +575,6 @@ export default function OpenCvTestPage() {
       if (requestId === ocrGeneration.current) { setIsOcrRunning(false); setOcrStepText(''); }
     }
   }, [isOcrRunning, result, cancelOcr]);
-
-  const handleDownloadMarkdown = useCallback(() => {
-    if (!ocrResult?.markdown || !ocrConfirmed || !validateMarkdown(ocrResult.markdown).valid) return;
-    const blob = new Blob([ocrResult.markdown], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    const baseName = currentFile?.name?.replace(/\.[^.]+$/, '') || 'tai-lieu-ocr';
-    link.download = `${baseName}.md`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setOcrNotice(`Đã tải xuống file "${baseName}.md" thành công.`);
-  }, [currentFile?.name, ocrResult?.markdown, ocrConfirmed]);
-
-  const handleCopyMarkdown = useCallback(async () => {
-    if (!ocrResult?.markdown) return;
-    const requestId = ocrGeneration.current;
-    try {
-      await navigator.clipboard.writeText(ocrResult.markdown);
-      if (requestId !== ocrGeneration.current) return;
-      setOcrNotice('Đã sao chép nội dung Markdown vào clipboard!');
-    } catch {
-      if (requestId === ocrGeneration.current) setOcrNotice('Không thể sao chép tự động; vui lòng chọn và sao chép thủ công.');
-    }
-  }, [ocrResult?.markdown]);
 
   const isBusy = status === 'loading' || status === 'processing';
   const buttonDisabled = !imageReady || isBusy;
@@ -685,7 +656,7 @@ export default function OpenCvTestPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
             <div>
               <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 4px', color: '#0f172a' }}>
-                3. Áp dụng VietOCR & Chuyển đổi sang Markdown (.md)
+                3. Áp dụng VietOCR & Chuyển đổi sang JSON (.json)
               </h2>
               <p style={{ margin: 0, fontSize: 13, color: '#64748b' }}>
                 VietOCR cục bộ đọc các vùng từ ảnh màu gốc, một lần gọi có giới hạn. Đối chiếu ảnh nguồn; chưa kiểm chứng độ đầy đủ hoặc định dạng pháp lý.
@@ -707,7 +678,7 @@ export default function OpenCvTestPage() {
                   padding: '10px 18px',
                 }}
               >
-                {isOcrRunning ? '⏳ ' + (ocrStepText || 'Đang nhận diện...') : '⚡ Áp dụng VietOCR & Xem trước Markdown'}
+                {isOcrRunning ? '⏳ ' + (ocrStepText || 'Đang nhận diện...') : '⚡ Áp dụng VietOCR & Xem trước JSON'}
               </button>
             </div>
           </div>
@@ -723,144 +694,13 @@ export default function OpenCvTestPage() {
           {/* Result Preview Container */}
           {ocrResult && (
             <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, overflow: 'hidden' }}>
-              <div role="status" style={{ padding: 16 }}><details><summary>Văn bản OCR nguyên bản và lưu ý</summary><pre style={{ whiteSpace: 'pre-wrap' }}>{ocrResult.rawText}</pre>{ocrResult.warnings.map((warning,i) => <p key={i}>{warning}</p>)}</details></div>
-              <label style={{ display: 'block', padding: 16 }}><input type="checkbox" checked={ocrConfirmed} disabled={!validateMarkdown(ocrResult.markdown).valid} onChange={e => setOcrConfirmed(e.target.checked)} /> Tôi đã đối chiếu nội dung với ảnh nguồn trước khi tải.</label>
-              {/* Sub-header with Tabs and Actions */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, padding: '10px 16px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0' }}>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <button
-                    type="button"
-                    onClick={() => setOcrTab('preview')}
-                    style={{
-                      background: ocrTab === 'preview' ? '#ffffff' : 'transparent',
-                      color: ocrTab === 'preview' ? '#1d4ed8' : '#475569',
-                      border: ocrTab === 'preview' ? '1px solid #cbd5e1' : '1px solid transparent',
-                      borderRadius: 6,
-                      fontWeight: 650,
-                      fontSize: 13,
-                      padding: '6px 12px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    📄 Xem trước văn bản
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOcrTab('markdown')}
-                    style={{
-                      background: ocrTab === 'markdown' ? '#ffffff' : 'transparent',
-                      color: ocrTab === 'markdown' ? '#1d4ed8' : '#475569',
-                      border: ocrTab === 'markdown' ? '1px solid #cbd5e1' : '1px solid transparent',
-                      borderRadius: 6,
-                      fontWeight: 650,
-                      fontSize: 13,
-                      padding: '6px 12px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    📝 Mã nguồn Markdown (.md)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOcrTab('candidates')}
-                    style={{
-                      background: ocrTab === 'candidates' ? '#ffffff' : 'transparent',
-                      color: ocrTab === 'candidates' ? '#1d4ed8' : '#475569',
-                      border: ocrTab === 'candidates' ? '1px solid #cbd5e1' : '1px solid transparent',
-                      borderRadius: 6,
-                      fontWeight: 650,
-                      fontSize: 13,
-                      padding: '6px 12px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    🔍 Chi tiết từng Candidate ({ocrResult.candidates.length})
-                  </button>
-                </div>
-
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button
-                    type="button"
-                    onClick={handleCopyMarkdown}
-                    style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 6, padding: '6px 12px', fontSize: 13, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
-                  >
-                    📋 Sao chép
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleDownloadMarkdown}
-                    disabled={!ocrConfirmed || !validateMarkdown(ocrResult.markdown).valid}
-                    style={{ background: '#2563eb', border: 0, color: '#fff', borderRadius: 6, padding: '6px 14px', fontSize: 13, fontWeight: 650, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                  >
-                    📥 Tải file .md đã duyệt
-                  </button>
-                </div>
+              <div style={{ position: 'relative', width: 'min(100%, 680px)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={ocrResult.sourcePreview} alt="Ảnh nguồn OCR theo vùng" style={{ width: '100%', display: 'block' }} />
+                {selectedJsonBox && <div data-testid="candidate-json-source-box" style={{ position: 'absolute', pointerEvents: 'none', border: '3px solid #ef4444', left: selectedJsonBox[0] * 100 + '%', top: selectedJsonBox[1] * 100 + '%', width: (selectedJsonBox[2] - selectedJsonBox[0]) * 100 + '%', height: (selectedJsonBox[3] - selectedJsonBox[1]) * 100 + '%' }} />}
               </div>
-
-              {/* Tab 1: Rendered HTML Preview */}
-              {ocrTab === 'preview' && (
-                <div style={{ padding: '24px 32px', background: '#fafafa', display: 'flex', justifyContent: 'center' }}>
-                  <div
-                    style={{
-                      width: '100%',
-                      maxWidth: 850,
-                      background: '#ffffff',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: 8,
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
-                      padding: '40px 48px',
-                      color: '#0f172a',
-                      lineHeight: 1.6,
-                      fontSize: 14,
-                      fontFamily: 'Times New Roman, serif',
-                    }}
-                  >
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      rehypePlugins={[rehypeTableLineBreaks]}
-                      urlTransform={(url, key) => key === 'src'
-                        ? (/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(url) ? url : '') : defaultUrlTransform(url)}
-                      components={{
-                        h1: ({ children }) => <h1 style={{ fontSize: 18, fontWeight: 700, textAlign: 'center', margin: '14px 0 6px', textTransform: 'uppercase' }}>{children}</h1>,
-                        h2: ({ children }) => <h2 style={{ fontSize: 15, fontWeight: 700, margin: '12px 0 6px' }}>{children}</h2>,
-                        hr: () => <hr style={{ border: 0, borderTop: '1px solid #0f172a', margin: '8px auto 16px', maxWidth: 220 }} />,
-                        p: ({ children }) => <p style={{ margin: '6px 0' }}>{children}</p>,
-                        table: ({ children }) => <table style={{ borderCollapse: 'collapse', width: '100%', margin: '14px 0', border: '1px solid #334155' }}>{children}</table>,
-                        th: ({ children }) => <th style={{ border: '1px solid #334155', padding: '6px 8px', background: '#f8fafc', fontWeight: 700, textAlign: 'left' }}>{children}</th>,
-                        td: ({ children }) => <td style={{ border: '1px solid #334155', padding: '6px 8px' }}>{children}</td>,
-                        strong: ({ children }) => <strong style={{ fontWeight: 700 }}>{children}</strong>,
-                      }}
-                    >
-                      {ocrResult.markdown}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              )}
-
-              {/* Tab 2: Raw Markdown Editor */}
-              {ocrTab === 'markdown' && (
-                <div style={{ padding: 16 }}>
-                  <textarea
-                    value={ocrResult.markdown}
-                    onChange={(e) => { setOcrResult({ ...ocrResult, markdown: e.target.value }); setOcrConfirmed(false); setOcrNotice(null); }}
-                    style={{
-                      width: '100%',
-                      minHeight: 480,
-                      fontFamily: 'ui-monospace, monospace',
-                      fontSize: 13,
-                      lineHeight: 1.6,
-                      padding: 14,
-                      border: '1px solid #cbd5e1',
-                      borderRadius: 6,
-                      background: '#f8fafc',
-                      color: '#1e293b',
-                      boxSizing: 'border-box',
-                    }}
-                    spellCheck={false}
-                  />
-                </div>
-              )}
-
+              <JsonReview key={ocrGeneration.current} draft={ocrResult.document} filename={currentFile?.name || 'document'} disabled={isOcrRunning} onSelect={setSelectedJsonBox} />
+              <button style={modalBtnStyle} onClick={() => setOcrTab(ocrTab === 'candidates' ? 'preview' : 'candidates')}>Chi tiết từng Candidate</button>
               {/* Tab 3: Candidate OCR Breakdown */}
               {ocrTab === 'candidates' && (
                 <div style={{ maxHeight: 460, overflow: 'auto' }}>
