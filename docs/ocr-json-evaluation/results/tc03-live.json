@@ -1,0 +1,1571 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "4b1e6339-ab7f-42f5-846a-e95d59073580",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nTỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ\n\n1. Họ và tên: Lê Thị MAI\n2. Giới tính: nữ\n\n3. Ngày sinh: 20/11/1965\n4. Dân tộc: Kinh\n5. Quốc tịch: Việt Nam\n\n6. Số định danh cá nhân: 036165004321\n7. Số điện thoại: 0912345678\n\n8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội\n\n9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh\n10. Quan hệ: chủ hộ",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 850,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "newline": "\n",
+      "start": 0,
+      "end": 34,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "newline": "\n",
+      "start": 35,
+      "end": 62,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "",
+      "newline": "\n",
+      "start": 63,
+      "end": 63,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-3",
+      "page": 1,
+      "order": 3,
+      "text": "TỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ",
+      "newline": "\n",
+      "start": 64,
+      "end": 97,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-4",
+      "page": 1,
+      "order": 4,
+      "text": "",
+      "newline": "\n",
+      "start": 98,
+      "end": 98,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-5",
+      "page": 1,
+      "order": 5,
+      "text": "1. Họ và tên: Lê Thị MAI",
+      "newline": "\n",
+      "start": 99,
+      "end": 123,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-6",
+      "page": 1,
+      "order": 6,
+      "text": "2. Giới tính: nữ",
+      "newline": "\n",
+      "start": 124,
+      "end": 140,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-7",
+      "page": 1,
+      "order": 7,
+      "text": "",
+      "newline": "\n",
+      "start": 141,
+      "end": 141,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-8",
+      "page": 1,
+      "order": 8,
+      "text": "3. Ngày sinh: 20/11/1965",
+      "newline": "\n",
+      "start": 142,
+      "end": 166,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-9",
+      "page": 1,
+      "order": 9,
+      "text": "4. Dân tộc: Kinh",
+      "newline": "\n",
+      "start": 167,
+      "end": 183,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-10",
+      "page": 1,
+      "order": 10,
+      "text": "5. Quốc tịch: Việt Nam",
+      "newline": "\n",
+      "start": 184,
+      "end": 206,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-11",
+      "page": 1,
+      "order": 11,
+      "text": "",
+      "newline": "\n",
+      "start": 207,
+      "end": 207,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-12",
+      "page": 1,
+      "order": 12,
+      "text": "6. Số định danh cá nhân: 036165004321",
+      "newline": "\n",
+      "start": 208,
+      "end": 245,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-13",
+      "page": 1,
+      "order": 13,
+      "text": "7. Số điện thoại: 0912345678",
+      "newline": "\n",
+      "start": 246,
+      "end": 274,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-14",
+      "page": 1,
+      "order": 14,
+      "text": "",
+      "newline": "\n",
+      "start": 275,
+      "end": 275,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-15",
+      "page": 1,
+      "order": 15,
+      "text": "8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+      "newline": "\n",
+      "start": 276,
+      "end": 349,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-16",
+      "page": 1,
+      "order": 16,
+      "text": "",
+      "newline": "\n",
+      "start": 350,
+      "end": 350,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-17",
+      "page": 1,
+      "order": 17,
+      "text": "9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh",
+      "newline": "\n",
+      "start": 351,
+      "end": 395,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-18",
+      "page": 1,
+      "order": 18,
+      "text": "10. Quan hệ: chủ hộ",
+      "newline": "",
+      "start": 396,
+      "end": 415,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_001",
+      "page": 1,
+      "order": 0,
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "bbox": [
+        0.2964705882352941,
+        0.038181818181818185,
+        0.7023529411764706,
+        0.060909090909090906
+      ],
+      "confidence": 0.6710992110046473,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_002",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "bbox": [
+        0.36705882352941177,
+        0.06454545454545454,
+        0.6317647058823529,
+        0.08363636363636363
+      ],
+      "confidence": 0.9258042507701449,
+      "kind": "line"
+    },
+    {
+      "id": "block-2",
+      "providerId": "line_003",
+      "page": 1,
+      "order": 2,
+      "text": "TỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ",
+      "bbox": [
+        0.2611764705882353,
+        0.11727272727272728,
+        0.7376470588235294,
+        0.1409090909090909
+      ],
+      "confidence": 0.7351356155815578,
+      "kind": "line"
+    },
+    {
+      "id": "block-3",
+      "providerId": "line_004",
+      "page": 1,
+      "order": 3,
+      "text": "1. Họ và tên: Lê Thị MAI",
+      "bbox": [
+        0.07058823529411765,
+        0.19363636363636363,
+        0.29411764705882354,
+        0.21545454545454545
+      ],
+      "confidence": 0.8497392497956753,
+      "kind": "line"
+    },
+    {
+      "id": "block-4",
+      "providerId": "line_005",
+      "page": 1,
+      "order": 4,
+      "text": "2. Giới tính: nữ",
+      "bbox": [
+        0.5976470588235294,
+        0.19636363636363635,
+        0.7482352941176471,
+        0.21363636363636362
+      ],
+      "confidence": 0.8531905836180637,
+      "kind": "line"
+    },
+    {
+      "id": "block-5",
+      "providerId": "line_006",
+      "page": 1,
+      "order": 5,
+      "text": "3. Ngày sinh: 20/11/1965",
+      "bbox": [
+        0.06941176470588235,
+        0.2509090909090909,
+        0.2917647058823529,
+        0.27
+      ],
+      "confidence": 0.8839359112359859,
+      "kind": "line"
+    },
+    {
+      "id": "block-6",
+      "providerId": "line_007",
+      "page": 1,
+      "order": 6,
+      "text": "4. Dân tộc: Kinh",
+      "bbox": [
+        0.40941176470588236,
+        0.2509090909090909,
+        0.5658823529411765,
+        0.2690909090909091
+      ],
+      "confidence": 0.9082626551389694,
+      "kind": "line"
+    },
+    {
+      "id": "block-7",
+      "providerId": "line_008",
+      "page": 1,
+      "order": 7,
+      "text": "5. Quốc tịch: Việt Nam",
+      "bbox": [
+        0.6694117647058824,
+        0.24909090909090909,
+        0.8752941176470588,
+        0.27
+      ],
+      "confidence": 0.9147219143130563,
+      "kind": "line"
+    },
+    {
+      "id": "block-8",
+      "providerId": "line_009",
+      "page": 1,
+      "order": 8,
+      "text": "6. Số định danh cá nhân: 036165004321",
+      "bbox": [
+        0.06823529411764706,
+        0.30363636363636365,
+        0.41294117647058826,
+        0.3236363636363636
+      ],
+      "confidence": 0.7639732382753316,
+      "kind": "line"
+    },
+    {
+      "id": "block-9",
+      "providerId": "line_010",
+      "page": 1,
+      "order": 9,
+      "text": "7. Số điện thoại: 0912345678",
+      "bbox": [
+        0.5517647058823529,
+        0.30363636363636365,
+        0.8094117647058824,
+        0.3236363636363636
+      ],
+      "confidence": 0.9207503157002586,
+      "kind": "line"
+    },
+    {
+      "id": "block-10",
+      "providerId": "line_011",
+      "page": 1,
+      "order": 10,
+      "text": "8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+      "bbox": [
+        0.06823529411764706,
+        0.3572727272727273,
+        0.7388235294117647,
+        0.3790909090909091
+      ],
+      "confidence": 0.9219458870691796,
+      "kind": "line"
+    },
+    {
+      "id": "block-11",
+      "providerId": "line_012",
+      "page": 1,
+      "order": 11,
+      "text": "9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh",
+      "bbox": [
+        0.06823529411764706,
+        0.41454545454545455,
+        0.48470588235294115,
+        0.43363636363636365
+      ],
+      "confidence": 0.7559709233650262,
+      "kind": "line"
+    },
+    {
+      "id": "block-12",
+      "providerId": "line_013",
+      "page": 1,
+      "order": 12,
+      "text": "10. Quan hệ: chủ hộ",
+      "bbox": [
+        0.6,
+        0.41454545454545455,
+        0.7929411764705883,
+        0.43363636363636365
+      ],
+      "confidence": 0.895546168088913,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "motto",
+      "evidence": {
+        "method": "regex",
+        "rule": "motto",
+        "verified": false
+      },
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-3",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "TỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ",
+      "page": 1,
+      "order": 3,
+      "sourceLineIds": [
+        "line-3"
+      ],
+      "sourceBlockIds": [
+        "block-2"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-4",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 4,
+      "sourceLineIds": [
+        "line-4"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-5",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "1. Họ và tên: Lê Thị MAI",
+      "page": 1,
+      "order": 5,
+      "sourceLineIds": [
+        "line-5"
+      ],
+      "sourceBlockIds": [
+        "block-3"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-6",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "2. Giới tính: nữ",
+      "page": 1,
+      "order": 6,
+      "sourceLineIds": [
+        "line-6"
+      ],
+      "sourceBlockIds": [
+        "block-4"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-7",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 7,
+      "sourceLineIds": [
+        "line-7"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-8",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "3. Ngày sinh: 20/11/1965",
+      "page": 1,
+      "order": 8,
+      "sourceLineIds": [
+        "line-8"
+      ],
+      "sourceBlockIds": [
+        "block-5"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-9",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "4. Dân tộc: Kinh",
+      "page": 1,
+      "order": 9,
+      "sourceLineIds": [
+        "line-9"
+      ],
+      "sourceBlockIds": [
+        "block-6"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-10",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "5. Quốc tịch: Việt Nam",
+      "page": 1,
+      "order": 10,
+      "sourceLineIds": [
+        "line-10"
+      ],
+      "sourceBlockIds": [
+        "block-7"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-11",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 11,
+      "sourceLineIds": [
+        "line-11"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-12",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "6. Số định danh cá nhân: 036165004321",
+      "page": 1,
+      "order": 12,
+      "sourceLineIds": [
+        "line-12"
+      ],
+      "sourceBlockIds": [
+        "block-8"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-13",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "7. Số điện thoại: 0912345678",
+      "page": 1,
+      "order": 13,
+      "sourceLineIds": [
+        "line-13"
+      ],
+      "sourceBlockIds": [
+        "block-9"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-14",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 14,
+      "sourceLineIds": [
+        "line-14"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-15",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+      "page": 1,
+      "order": 15,
+      "sourceLineIds": [
+        "line-15"
+      ],
+      "sourceBlockIds": [
+        "block-10"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-16",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 16,
+      "sourceLineIds": [
+        "line-16"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-17",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh",
+      "page": 1,
+      "order": 17,
+      "sourceLineIds": [
+        "line-17"
+      ],
+      "sourceBlockIds": [
+        "block-11"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-18",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "10. Quan hệ: chủ hộ",
+      "page": 1,
+      "order": 18,
+      "sourceLineIds": [
+        "line-18"
+      ],
+      "sourceBlockIds": [
+        "block-12"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [
+      "node-1"
+    ],
+    "titles": [
+      "node-3"
+    ],
+    "dateLines": [],
+    "sections": [],
+    "fields": [
+      {
+        "id": "field-node-5-0",
+        "nodeId": "node-5",
+        "label": "1. Họ và tên",
+        "rawValue": " Lê Thị MAI",
+        "valueState": "observed",
+        "normalizedValue": " Lê Thị MAI",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-5"
+        ],
+        "sourceBlockIds": [
+          "block-3"
+        ]
+      },
+      {
+        "id": "field-node-6-0",
+        "nodeId": "node-6",
+        "label": "2. Giới tính",
+        "rawValue": " nữ",
+        "valueState": "observed",
+        "normalizedValue": " nữ",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-6"
+        ],
+        "sourceBlockIds": [
+          "block-4"
+        ]
+      },
+      {
+        "id": "field-node-8-0",
+        "nodeId": "node-8",
+        "label": "3. Ngày sinh",
+        "rawValue": " 20/11/1965",
+        "valueState": "observed",
+        "normalizedValue": " 20/11/1965",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-8"
+        ],
+        "sourceBlockIds": [
+          "block-5"
+        ]
+      },
+      {
+        "id": "field-node-9-0",
+        "nodeId": "node-9",
+        "label": "4. Dân tộc",
+        "rawValue": " Kinh",
+        "valueState": "observed",
+        "normalizedValue": " Kinh",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-9"
+        ],
+        "sourceBlockIds": [
+          "block-6"
+        ]
+      },
+      {
+        "id": "field-node-10-0",
+        "nodeId": "node-10",
+        "label": "5. Quốc tịch",
+        "rawValue": " Việt Nam",
+        "valueState": "observed",
+        "normalizedValue": " Việt Nam",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-10"
+        ],
+        "sourceBlockIds": [
+          "block-7"
+        ]
+      },
+      {
+        "id": "field-node-12-0",
+        "nodeId": "node-12",
+        "label": "6. Số định danh cá nhân",
+        "rawValue": " 036165004321",
+        "valueState": "observed",
+        "normalizedValue": " 036165004321",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-12"
+        ],
+        "sourceBlockIds": [
+          "block-8"
+        ]
+      },
+      {
+        "id": "field-node-13-0",
+        "nodeId": "node-13",
+        "label": "7. Số điện thoại",
+        "rawValue": " 0912345678",
+        "valueState": "observed",
+        "normalizedValue": " 0912345678",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-13"
+        ],
+        "sourceBlockIds": [
+          "block-9"
+        ]
+      },
+      {
+        "id": "field-node-15-0",
+        "nodeId": "node-15",
+        "label": "8. Nơi thường trú",
+        "rawValue": " Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+        "valueState": "observed",
+        "normalizedValue": " Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-15"
+        ],
+        "sourceBlockIds": [
+          "block-10"
+        ]
+      },
+      {
+        "id": "field-node-17-0",
+        "nodeId": "node-17",
+        "label": "9. Nơi tạm trú",
+        "rawValue": " Xã Kim Chung, huyện Đông Anh",
+        "valueState": "observed",
+        "normalizedValue": " Xã Kim Chung, huyện Đông Anh",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-17"
+        ],
+        "sourceBlockIds": [
+          "block-11"
+        ]
+      },
+      {
+        "id": "field-node-18-0",
+        "nodeId": "node-18",
+        "label": "10. Quan hệ",
+        "rawValue": " chủ hộ",
+        "valueState": "observed",
+        "normalizedValue": " chủ hộ",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-18"
+        ],
+        "sourceBlockIds": [
+          "block-12"
+        ]
+      }
+    ],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [
+      "node-0",
+      "node-2",
+      "node-4",
+      "node-7",
+      "node-11",
+      "node-14",
+      "node-16"
+    ],
+    "unclassified": [
+      "node-0"
+    ]
+  },
+  "warnings": [
+    "OCR_TEXT_DISAGREEMENT",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nTỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ\n\n1. Họ và tên: Lê Thị MAI\n2. Giới tính: nữ\n\n3. Ngày sinh: 20/11/1965\n4. Dân tộc: Kinh\n5. Quốc tịch: Việt Nam\n\n6. Số định danh cá nhân: 036165004321\n7. Số điện thoại: 0912345678\n\n8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội\n\n9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh\n10. Quan hệ: chủ hộ",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.2964705882352941,
+              0.038181818181818185,
+              0.7023529411764706,
+              0.060909090909090906
+            ],
+            "confidence": 0.6710992110046473,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.36705882352941177,
+              0.06454545454545454,
+              0.6317647058823529,
+              0.08363636363636363
+            ],
+            "confidence": 0.9258042507701449,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "TỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ",
+            "bbox": [
+              0.2611764705882353,
+              0.11727272727272728,
+              0.7376470588235294,
+              0.1409090909090909
+            ],
+            "confidence": 0.7351356155815578,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "1. Họ và tên: Lê Thị MAI",
+            "bbox": [
+              0.07058823529411765,
+              0.19363636363636363,
+              0.29411764705882354,
+              0.21545454545454545
+            ],
+            "confidence": 0.8497392497956753,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "2. Giới tính: nữ",
+            "bbox": [
+              0.5976470588235294,
+              0.19636363636363635,
+              0.7482352941176471,
+              0.21363636363636362
+            ],
+            "confidence": 0.8531905836180637,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "3. Ngày sinh: 20/11/1965",
+            "bbox": [
+              0.06941176470588235,
+              0.2509090909090909,
+              0.2917647058823529,
+              0.27
+            ],
+            "confidence": 0.8839359112359859,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "4. Dân tộc: Kinh",
+            "bbox": [
+              0.40941176470588236,
+              0.2509090909090909,
+              0.5658823529411765,
+              0.2690909090909091
+            ],
+            "confidence": 0.9082626551389694,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "5. Quốc tịch: Việt Nam",
+            "bbox": [
+              0.6694117647058824,
+              0.24909090909090909,
+              0.8752941176470588,
+              0.27
+            ],
+            "confidence": 0.9147219143130563,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "6. Số định danh cá nhân: 036165004321",
+            "bbox": [
+              0.06823529411764706,
+              0.30363636363636365,
+              0.41294117647058826,
+              0.3236363636363636
+            ],
+            "confidence": 0.7639732382753316,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "7. Số điện thoại: 0912345678",
+            "bbox": [
+              0.5517647058823529,
+              0.30363636363636365,
+              0.8094117647058824,
+              0.3236363636363636
+            ],
+            "confidence": 0.9207503157002586,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+            "bbox": [
+              0.06823529411764706,
+              0.3572727272727273,
+              0.7388235294117647,
+              0.3790909090909091
+            ],
+            "confidence": 0.9219458870691796,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh",
+            "bbox": [
+              0.06823529411764706,
+              0.41454545454545455,
+              0.48470588235294115,
+              0.43363636363636365
+            ],
+            "confidence": 0.7559709233650262,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_013",
+            "page": 1,
+            "order": 12,
+            "text": "10. Quan hệ: chủ hộ",
+            "bbox": [
+              0.6,
+              0.41454545454545455,
+              0.7929411764705883,
+              0.43363636363636365
+            ],
+            "confidence": 0.895546168088913,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      },
+      {
+        "attempt": 2,
+        "variant": "contrast",
+        "provider": "vietocr",
+        "rawText": "CỌNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nTỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ\n\n1. Họ và tên: Lê Thị MAi\n2. Giới tính: nữ\n\n3. Ngày sinh: 20/11/1965\n4. Dân tộc: Kinh\n5. Quốc tịch: Việt Nam\n\n6. Số định danh cá nhân: 036165004321\n7. Số điện thoại: 0912345678\n\n8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội\n\n9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh\n10. Quan hệ: chủ hộ",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "CỌNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.2964705882352941,
+              0.038181818181818185,
+              0.7023529411764706,
+              0.060909090909090906
+            ],
+            "confidence": 0.6558902784102205,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.36823529411764705,
+              0.06454545454545454,
+              0.6317647058823529,
+              0.08363636363636363
+            ],
+            "confidence": 0.9288312638247455,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "TỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ",
+            "bbox": [
+              0.26235294117647057,
+              0.11727272727272728,
+              0.7364705882352941,
+              0.14
+            ],
+            "confidence": 0.7766155855586896,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "1. Họ và tên: Lê Thị MAi",
+            "bbox": [
+              0.07058823529411765,
+              0.19363636363636363,
+              0.29411764705882354,
+              0.21545454545454545
+            ],
+            "confidence": 0.8488618892927965,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "2. Giới tính: nữ",
+            "bbox": [
+              0.5976470588235294,
+              0.19636363636363635,
+              0.7482352941176471,
+              0.21272727272727274
+            ],
+            "confidence": 0.8638253321773127,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "3. Ngày sinh: 20/11/1965",
+            "bbox": [
+              0.06941176470588235,
+              0.2509090909090909,
+              0.2917647058823529,
+              0.27
+            ],
+            "confidence": 0.8838151825798882,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "4. Dân tộc: Kinh",
+            "bbox": [
+              0.40941176470588236,
+              0.2509090909090909,
+              0.5658823529411765,
+              0.2690909090909091
+            ],
+            "confidence": 0.9085713438689709,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "5. Quốc tịch: Việt Nam",
+            "bbox": [
+              0.6694117647058824,
+              0.24909090909090909,
+              0.8752941176470588,
+              0.27
+            ],
+            "confidence": 0.9143093905665658,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "6. Số định danh cá nhân: 036165004321",
+            "bbox": [
+              0.06823529411764706,
+              0.30363636363636365,
+              0.41294117647058826,
+              0.3236363636363636
+            ],
+            "confidence": 0.7639189882605684,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "7. Số điện thoại: 0912345678",
+            "bbox": [
+              0.5517647058823529,
+              0.30363636363636365,
+              0.8094117647058824,
+              0.3236363636363636
+            ],
+            "confidence": 0.9214647689035961,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+            "bbox": [
+              0.06823529411764706,
+              0.3572727272727273,
+              0.7388235294117647,
+              0.3790909090909091
+            ],
+            "confidence": 0.9208469741964993,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh",
+            "bbox": [
+              0.06823529411764706,
+              0.41454545454545455,
+              0.4835294117647059,
+              0.43363636363636365
+            ],
+            "confidence": 0.7566809876673464,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_013",
+            "page": 1,
+            "order": 12,
+            "text": "10. Quan hệ: chủ hộ",
+            "bbox": [
+              0.6,
+              0.41454545454545455,
+              0.7929411764705883,
+              0.43363636363636365
+            ],
+            "confidence": 0.8944257560529207,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": [
+          0.2964705882352941,
+          0.038181818181818185,
+          0.7023529411764706,
+          0.060909090909090906
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.2611764705882353,
+          0.11727272727272728,
+          0.7376470588235294,
+          0.1409090909090909
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06823529411764706,
+          0.30363636363636365,
+          0.41294117647058826,
+          0.3236363636363636
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06823529411764706,
+          0.41454545454545455,
+          0.48470588235294115,
+          0.43363636363636365
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.2964705882352941,
+          0.038181818181818185,
+          0.7023529411764706,
+          0.060909090909090906
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.07058823529411765,
+          0.19363636363636363,
+          0.29411764705882354,
+          0.21545454545454545
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": null,
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}

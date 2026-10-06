@@ -1,0 +1,296 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "95bb33c5-442a-43c0-9817-82e420364bff",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\n\nLIES",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 900,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+      "newline": "\n",
+      "start": 0,
+      "end": 32,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "",
+      "newline": "\n",
+      "start": 33,
+      "end": 33,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "LIES",
+      "newline": "",
+      "start": 34,
+      "end": 38,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_001",
+      "page": 1,
+      "order": 0,
+      "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+      "bbox": [
+        0.28,
+        0.034545454545454546,
+        0.7222222222222222,
+        0.06181818181818182
+      ],
+      "confidence": 0.934822928160429,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_002",
+      "page": 1,
+      "order": 1,
+      "text": "LIES",
+      "bbox": [
+        0.052222222222222225,
+        0.09636363636363636,
+        0.9488888888888889,
+        0.32727272727272727
+      ],
+      "confidence": 0.6042819693684578,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "LIES",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [],
+    "titles": [
+      "node-0"
+    ],
+    "dateLines": [],
+    "sections": [],
+    "fields": [],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [
+      "node-1",
+      "node-2"
+    ],
+    "unclassified": [
+      "node-2"
+    ]
+  },
+  "warnings": [
+    "OCR_TEXT_DISAGREEMENT",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\n\nLIES",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+            "bbox": [
+              0.28,
+              0.034545454545454546,
+              0.7222222222222222,
+              0.06181818181818182
+            ],
+            "confidence": 0.934822928160429,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "LIES",
+            "bbox": [
+              0.052222222222222225,
+              0.09636363636363636,
+              0.9488888888888889,
+              0.32727272727272727
+            ],
+            "confidence": 0.6042819693684578,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      },
+      {
+        "attempt": 2,
+        "variant": "contrast",
+        "provider": "vietocr",
+        "rawText": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\n\nLIF",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+            "bbox": [
+              0.28,
+              0.034545454545454546,
+              0.7222222222222222,
+              0.06272727272727273
+            ],
+            "confidence": 0.9224313162267208,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "LIF",
+            "bbox": [
+              0.052222222222222225,
+              0.09636363636363636,
+              0.9488888888888889,
+              0.32727272727272727
+            ],
+            "confidence": 0.6276530027389526,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": [
+          0.052222222222222225,
+          0.09636363636363636,
+          0.9488888888888889,
+          0.32727272727272727
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.052222222222222225,
+          0.09636363636363636,
+          0.9488888888888889,
+          0.32727272727272727
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": null,
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}
