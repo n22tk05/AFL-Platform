@@ -30,7 +30,12 @@
     "generate:audio": "tsx src/modules/voice-ai/tests/generate-full-audio.ts",
     "test:supervise": "npm run test:opencv && tsx --test src/modules/documents/tests/*.test.ts && npm run test:local && tsc --noEmit",
     "vietocr:start": "powershell -ExecutionPolicy Bypass -File services/vietocr-service/start.ps1",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "typecheck": "tsc --noEmit --incremental false",
+    "test:documents:inprocess": "node --import ./scripts/register-typescript.mjs --test --test-isolation=none src/modules/documents/tests/*.test.ts",
+    "evaluate:documents": "node --import ./scripts/register-typescript.mjs scripts/evaluate-ocr-json.ts",
+    "evaluate:documents:local": "node --import ./scripts/register-typescript.mjs scripts/evaluate-ocr-json.ts --live",
+    "test:documents:server": "node scripts/start-document-test-server.mjs"
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^7.1.0",
@@ -38,6 +43,7 @@
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "@techstark/opencv-js": "^5.0.0-release.1",
+    "ajv": "^8.20.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.47.0",
     "next": "^14.2.24",
@@ -45,8 +51,6 @@
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1",
     "sharp": "^0.34.5",
     "tailwind-merge": "^3.7.0"

@@ -168,3 +168,22 @@ test('VietOcrAdapter rejects unsafe cropped-response alignment even when a mock 
     await assert.rejects(() => adapter.recognizeLines(croppedLines), /reliable.*alignment/);
   }
 });
+
+test('full document source remains verbatim with missing bbox and malformed IDs are rejected', async t => {
+  let predictions: unknown[] = [{ lineId: 'source', text: ' 00100\n原文 ', confidence: null }];
+  t.mock.method(globalThis, 'fetch', async () => Response.json({ predictions }));
+  const adapter = new VietOcrAdapter({ endpoint: 'http://fake-vietocr/predict' });
+  const result = await adapter.recognizeDocument(sourceImage);
+  assert.equal(result[0].rawText,' 00100\n原文 '); assert.equal(result[0].coordinates,null);
+  for (const invalid of [[null], [{ text: 123 }], [{ lineId: 'same', text: 'A' }, { lineId: 'same', text: 'B' }]]) {
+    predictions = invalid;
+    await assert.rejects(() => adapter.recognizeDocument(sourceImage), /Invalid|Duplicate/);
+  }
+});
+test('adapter timeout is a service error rather than image quality', async t => {
+  t.mock.method(globalThis, 'fetch', async (_url: string | URL | Request, init?: RequestInit) => new Promise((_resolve,reject) => {
+    init?.signal?.addEventListener('abort', () => reject(new DOMException('aborted','AbortError')), { once: true });
+  }));
+  const adapter = new VietOcrAdapter({ endpoint: 'http://fake-vietocr/predict', timeoutMs: 10 });
+  await assert.rejects(() => adapter.recognizeDocument(sourceImage), /timed out/);
+});

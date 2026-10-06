@@ -181,7 +181,7 @@ function printSummary(ocrReady, provider) {
   console.log(`  🏠 ${colors.bright}Trang chủ Kê khai:${colors.reset}           ${colors.cyan}http://localhost:3001${colors.reset}`);
   console.log(`  📸 ${colors.bright}Chụp & Nắn phôi giấy (WASM):${colors.reset} ${colors.cyan}http://localhost:3001/scan${colors.reset}`);
   console.log(`  🎙️  ${colors.bright}Hướng dẫn Điền phôi (Chữ đỏ):${colors.reset}${colors.cyan}http://localhost:3001/guide${colors.reset}`);
-  console.log(`  📝 ${colors.bright}Bóc tách OCR & Xuất Markdown:${colors.reset}${colors.cyan}http://localhost:3001/scan-document${colors.reset}`);
+  console.log(`  📝 ${colors.bright}Bóc tách OCR & Xuất JSON:${colors.reset}${colors.cyan}http://localhost:3001/scan-document${colors.reset}`);
   console.log(`  🏛️  ${colors.bright}Cổng Quản trị Biểu mẫu:${colors.reset}       ${colors.cyan}http://localhost:3001/admin/library${colors.reset}`);
   if (provider === 'vietocr' && ocrReady) {
     console.log(`  ⚙️  ${colors.bright}VietOCR Microservice API:${colors.reset}     ${colors.cyan}http://localhost:8000/docs${colors.reset}`);
@@ -289,7 +289,7 @@ export async function main() {
           stderrTail = (stderrTail + chunk.toString()).slice(-8192);
           if (!policyLogged && /WinError 4551|Application Control policy/.test(stderrTail)) {
             policyLogged = true;
-            logErr('Windows Application Control chặn DLL PyTorch. Xem services/vietocr-service/README.md; launcher không thay đổi policy bảo mật.');
+            logErr('Windows Application Control chặn DLL PyTorch. Xem services/vietocr-service/README.json; launcher không thay đổi policy bảo mật.');
           }
           const line = chunk.toString().trim();
           if (line && !line.includes('GET /health')) {

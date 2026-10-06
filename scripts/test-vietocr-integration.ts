@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
+import { parseJsonExport } from '../src/modules/documents/json-validator';
 
 /** Local-only smoke test with synthetic text; never sends a real document. */
 function localUrl(value: string): URL {
@@ -36,26 +37,25 @@ async function main(): Promise<void> {
 
   const image = await sharp(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800"><rect width="100%" height="100%" fill="white"/><g fill="black" font-family="Arial, sans-serif" font-size="64"><text x="100" y="200">KIEM TRA OCR</text><text x="100" y="360">MAU SO 123456</text><text x="100" y="520">AFL PLATFORM</text></g></svg>')).png().toBuffer();
   const start = performance.now();
-  const payload = object(await checkedJson(new URL('/api/documents/markdown', web), {
+  const payload = object(await checkedJson(new URL('/api/documents/json', web), {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ imageBase64: `data:image/png;base64,${image.toString('base64')}`, deskewApplied: false }),
   }, 90_000));
-  assert.equal(payload.success, true, 'Markdown API returned a failure.');
-  const data = object(payload.data);
-  assert.equal(data.provider, 'vietocr', 'The API must use the real local VietOCR provider.');
-  assert.equal(data.status, 'review_required', 'OCR output must remain a human-review draft.');
+  assert.equal(payload.success, true, 'JSON API returned a failure.');
+  const data = parseJsonExport(payload.data);
+  assert.equal(data.provider.name, 'vietocr', 'The API must use the real local VietOCR provider.');
+  assert.ok(['success', 'partial'].includes(data.status));
+  assert.equal(data.requiresReview, true, 'OCR output requires review.');
   assert.equal(typeof data.rawText, 'string', 'Expected raw OCR text.');
   assert.ok((data.rawText as string).trim().length > 0, 'An empty OCR result is not a successful smoke test.');
   const knownTokens = new Set((data.rawText as string).normalize('NFKC').toUpperCase().match(/\b(?:OCR|123456|AFL)\b/g) ?? []);
   assert.ok(knownTokens.size >= 2, 'The synthetic OCR must preserve at least two expected tokens; non-empty noise is not success.');
-  assert.ok(typeof data.markdown === 'string' && data.markdown.trim().length > 0, 'Markdown is empty.');
-  assert.equal(object(data.validation).valid, true, 'Markdown validation did not pass.');
-  const review = object(data.ocrReview);
+  const review = data.review;
   assert.ok(Array.isArray(review.attempts) && review.attempts.length > 0 && review.attempts.length <= 2, 'OCR attempt provenance is missing or exceeds the limit.');
   assert.ok(review.attempts.every(value => object(value).provider === 'vietocr'), 'Unexpected OCR provider in provenance.');
   assert.ok(Array.isArray(review.regions) && !review.regions.some(value => object(value).status === 'unreadable'), 'The synthetic source is still marked unreadable.');
 
-  console.log(`Local VietOCR -> Markdown smoke test passed: ${review.attempts.length} OCR attempt(s), ${Math.round(performance.now() - start)} ms, ${Array.from(data.rawText as string).length} raw characters.`);
+  console.log(`Local VietOCR -> JSON smoke test passed: ${review.attempts.length} OCR attempt(s), ${Math.round(performance.now() - start)} ms, ${Array.from(data.rawText as string).length} raw characters.`);
   console.log('Synthetic smoke test only; review is still required and camera-image accuracy is not measured.');
 }
 
