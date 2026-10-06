@@ -7,7 +7,7 @@ Dịch vụ nhận diện chữ tiếng Việt phục vụ pipeline OCR dòng ch
 [Client Image] -> [OpenCV Deskew / Line Segmentation] 
                -> [HTTP POST /predict] 
                -> [FastAPI VietOCR Microservice] 
-               -> [Deterministic Assembler / Markdown Export]
+               -> [Immutable OCR sources / Grounded JSON Export]
 ```
 
 ## Yêu cầu môi trường
@@ -149,3 +149,5 @@ không chứng minh accuracy trên ảnh camera thật.
   ]
 }
 ```
+
+Document export now uses [JSON schema 1.0.0](../../docs/DOCUMENT-JSON-EXPORT.md). This service recognizes segmented lines; it does not provide table, checkbox or signature semantics.

@@ -14,7 +14,7 @@ OCR now uses **VietOCR only**, through the local Python microservice at
 rejected as invalid configuration. The former cloud OCR adapter and dependency have
 been removed. **Gemini text** remains separate for structured classification and
 field extraction, and Google Cloud Text-to-Speech remains separate for voice.
-Markdown makes no Gemini calls. Citizen document processing disables VietOCR's
+JSON export makes no Gemini calls. Citizen document processing disables VietOCR's
 test-only synthesizer; absent OCR confidence remains null. Reports under
 `docs/reports/` record earlier implementation states and are superseded by this
 document for current runtime configuration.
@@ -73,7 +73,7 @@ After reading, the page exposes raw attempts, source-region overlays, editable
 fields and primary/enhanced previews. Unknown coordinates require checking the
 whole source page; they never become invented boxes. Empty OCR shows **Chưa đọc
 được vùng này**, retains the source and cannot be extraction success or a valid
-empty Markdown download. Possible blankness also forces manual review, even if
+empty JSON download. Possible blankness also forces manual review, even if
 the provider returns text. Retaking is optional. Request IDs plus AbortController
 prevent stale responses from overwriting new output; replacing image/mode clears
 all prior output and review state.
@@ -86,60 +86,19 @@ Synthetic tests do not measure camera OCR accuracy. The prior adaptive-preproces
 implementation and its historical verification evidence are recorded in
 [the delivery report](reports/person-3-opencv/step-06-adaptive-ocr/ADAPTIVE-OCR-REPORT.md).
 
-## Image to Markdown: VietOCR
+## Image to grounded JSON: VietOCR (2026-10-06)
 
-Required pipeline: **OpenCV-prepared primary image -> local VietOCR -> optional bounded enhanced retry -> deterministic Markdown assembler -> validation -> human review -> download .md**. Whole-image fallback is marked as not deskewed.
+Document export now uses **OpenCV-prepared primary image → local VietOCR → bounded
+adaptive attempt selection → immutable source/classification → JSON assembly → Ajv
+runtime validation → human review → download .json**. The Markdown route and its
+export-only formatting/preview code have been removed after migrating scan,
+workbench, candidate debug, scripts and tests. No parallel export pipeline remains.
 
-### Configuration
-
-Set server-only variables in `.env` or `.env.local` and restart the application:
-
-```dotenv
-DOCUMENT_OCR_PROVIDER=vietocr
-VIETOCR_ENDPOINT=http://127.0.0.1:8000/predict
-DOCUMENT_OCR_TIMEOUT_MS=60000
-```
-
-Install the Python runtime and model using
-[the VietOCR service instructions](../services/vietocr-service/README.md), then run
-`npm run dev:all`. Verify `http://127.0.0.1:8000/health` before reading an image.
-The launcher can keep Web available when OCR startup fails; an open Web page does
-not prove that the model is ready. Windows Application Control can block PyTorch
-DLL loading before FastAPI starts; do not disable security policy to bypass it.
-Markdown conversion needs **no Gemini API key**, cloud OCR account or billing.
-
-### Use
-
-Open `/scan-document`, choose a JPEG/PNG up to 8 MB and the matching upload/camera/clean-scan mode, then select the Markdown conversion button. The primary PNG or high-quality JPEG is displayed alongside the draft, with client enhanced previews when available. Compare the raw OCR text, edit the Markdown if necessary, confirm review, and download the UTF-8 `.md`. Editing invalidates confirmation; changing the image, rerunning, clearing the session or its 15-minute expiry clears the draft. `/document-test` uses the same review component; its explicitly selected offline examples are synthetic, not OCR results.
-
-### Assembly and validation
-
-The selected `DocumentOcrResult.fullText` is the OCR source. Raw text is retained verbatim in `rawText` and in attempt provenance. The deterministic assembler formats a review draft, escapes literal punctuation/HTML and preserves source values. Numbered markers are escaped to prevent Markdown renderers from silently renumbering them. Administrative formatting in the draft is not evidence that a name, number or date was read correctly; compare it against raw OCR and the source image.
-
-The shared assembler supports exact, ordered, non-overlapping table cell source ranges with one header row, equal column counts and no merged cells. Ambiguous tables fall back to source text with a warning. The current VietOCR adapter returns lines, not document table metadata, so this capability does not claim table detection by VietOCR. Draft formatting may arrange supported administrative signature text; users must review that layout. This text export does not reconstruct logos, stamps or embedded document images.
-
-Validation checks empty/oversized output, control characters, unclosed code fences, inconsistent table columns and active content. Heading jumps and replacement characters trigger warnings. The original raw OCR stays available for comparison. Preview uses React Markdown/GFM, never executes source HTML and never fetches remote images. Validation is conservative lint, not proof of OCR accuracy. Human edits require renewed confirmation before download.
-
-Literal heading suffixes and strikethrough punctuation are escaped so source characters remain visible. Multiline table cells use `<br>`; the preview recognizes only this exact tag as a line break. Other HTML stays inert, including tags with attributes. A literal `<br>` in OCR is escaped and remains visible as source text.
-
-### Gemini boundary
-
-The Markdown pipeline makes **no Gemini calls**. The separate structured business-field pipeline may classify the document and select evidence from raw OCR text. Its schema requires `value` to be a verbatim string identical to `rawText`, or `null` if unsupported. Runtime checks reject fabricated evidence and any rewrite, including numerically equivalent amount/date reformatting. Only deterministic application code normalizes verified business values into separate typed fields; it never mutates raw OCR text or Markdown. Gemini receives no images for this path and is never asked to transcribe the full document or produce Markdown. Optional structural assistance is not implemented; uncertain structure stays available for human review.
-
-### API and limits
-
-`POST /api/documents/markdown` accepts multipart `file` or JSON `imageBase64`. It returns `{success:true,data:{contractVersion:1,status:"review_required",provider:"vietocr",rawText,markdown,validation,pageCount,confidence,warnings,ocrReview}}`, not an attachment. Both in-repository clients create the final file only after validation and review. Third-party callers must implement their own human-review step. Confidence is the lowest available token score (line scores only when tokens are absent), or null when incomplete; it is not measured accuracy.
-
-One JPEG/PNG page per request; 8 MB per image, 26 MB total request body, 120,000 raw text characters and 4,000 raw lines. Markdown has a separate expansion limit for escape characters and table syntax. Up to two serial OCR attempts share `DOCUMENT_OCR_TIMEOUT_MS` (60 seconds by default), with cancellation propagation. Provider failures return safe error codes and source review information without fabricated content. Responses are `no-store`; images and OCR text are not written to disk, database or browser storage by this pipeline. The local Python service receives the processed image; model weights may be cached locally during setup, separately from citizen images.
-
-Unit tests inject OCR fixtures; browser tests use real OpenCV on synthetic images and intercepted API responses. **No representative camera-image accuracy benchmark has been run.** A successful health check or synthetic smoke test is not a measured accuracy result. Evaluate consented, redacted Vietnamese documents against manually verified transcriptions before claiming accuracy.
-
-### Verification — 2026-10-02
-
-- `npm run test:supervise`: 41 OpenCV tests, 57 document tests, integration checks and TypeScript passed.
-- `npm run build`: production build, lint and type validation passed.
-- `npm run test:documents:browser`: 7 tests passed against the production server, including review before download, edits invalidating confirmation, exact downloaded content, API failure and replacing the source image.
-- Windows sandbox restrictions blocked child processes (`spawn EPERM`); these checks passed when rerun with permission outside the sandbox. OCR responses remained fixtures; no live OCR benchmark was performed.
+See [the versioned contract, coordinates, API, review and limits](DOCUMENT-JSON-EXPORT.md).
+Export coordinates are normalized XYXY; existing business extraction/form
+coordinates stay YXYX. Export does not call Gemini or write Session RAM/guide.
+The independent report contains actual synthetic local OCR measurements and
+separates those from source preservation and from browser checks still blocked.
 
 ## Audit before implementation
 
@@ -178,7 +137,7 @@ The VietOCR adapter maps segmented line text, normalized source coordinates and 
 1. Follow [VietOCR service setup](../services/vietocr-service/README.md), including dependency/import checks and model loading. Setup may download model weights; no citizen image is needed for setup.
 2. Set `DOCUMENT_OCR_PROVIDER=vietocr`, `VIETOCR_ENDPOINT=http://127.0.0.1:8000/predict` and `DOCUMENT_OCR_TIMEOUT_MS=60000` in the server environment. Restart after changes.
 3. Run `npm run dev:all`; verify `/health` on port 8000 and open `/scan-document` on port 3001. A failed model/import keeps OCR unavailable even if Web starts.
-4. Markdown requires no Gemini key. For separate structured extraction, configure `GEMINI_API_KEY` and `GEMINI_DOCUMENT_MODEL`; verify evidence before saving. For Google Cloud TTS only, `GOOGLE_APPLICATION_CREDENTIALS` may point to a credential file outside the repository. Never place credentials in public environment variables or source files.
+4. JSON export requires no Gemini key. For separate structured extraction, configure `GEMINI_API_KEY` and `GEMINI_DOCUMENT_MODEL`; verify evidence before saving. For Google Cloud TTS only, `GOOGLE_APPLICATION_CREDENTIALS` may point to a credential file outside the repository. Never place credentials in public environment variables or source files.
 
 The Next server uses `server-only`, the existing `@google/genai` SDK for text, and the separate `@google-cloud/text-to-speech` SDK for voice. Playwright is a development dependency for browser regressions. OCR cloud credentials, regional processors and cloud OCR billing are no longer part of this project.
 
@@ -196,7 +155,7 @@ Automatic acceptance requires valid source, evidence, geometry, validation, agre
 
 The preview is the exact processed Blob sent to OCR. Selecting a field overlays its normalized source boxes on that image, preserving its natural aspect ratio. Users can edit and confirm each field or explicitly leave it blank. Editing invalidates the previous confirmation. Outstanding needs_review fields block saving; unreadable fields never autofill unless manually supplied and confirmed. Saving is an explicit action. Only accepted or human-confirmed non-null values enter the module's memory store, with a 15-minute absolute TTL. Reloading loses them. Changing image/type clears the old result/session and invalidates pending requests. Guide uses `sourceFieldFromPrerequisite`, including explicit legacy key aliases, never guesses from box IDs or labels. Finish/reset clears memory; expiry notifies mounted consumers.
 
-No images/raw OCR are written to database, filesystem or browser storage by this path. Image object URLs and detached canvases are released on replacement/unmount/expiry, and the existing OpenCV coordinator deletes its Mats in finally. The server and local VietOCR retain document bytes only during processing; no payload logging or caching is used. JavaScript garbage collection/OS memory behavior cannot guarantee physical erasure. Structured extraction sends selected OCR text to Gemini, so users' consent and the provider's data handling still matter even though image OCR is local. Markdown does not send text to Gemini. Application non-persistence does not claim control of cloud text-provider retention. Older unrelated scanner/admin storage is outside this change.
+No images/raw OCR are written to database, filesystem or browser storage by this path. Image object URLs and detached canvases are released on replacement/unmount/expiry, and the existing OpenCV coordinator deletes its Mats in finally. The server and local VietOCR retain document bytes only during processing; no payload logging or caching is used. JavaScript garbage collection/OS memory behavior cannot guarantee physical erasure. Structured extraction sends selected OCR text to Gemini, so users' consent and the provider's data handling still matter even though image OCR is local. JSON export does not send text to Gemini. Application non-persistence does not claim control of cloud text-provider retention. Older unrelated scanner/admin storage is outside this change.
 
 ## Tests and benchmark
 
@@ -228,7 +187,7 @@ override limited to a generated build directory, not a source or data directory.
 
 With both local servers running, `npx tsx scripts/test-vietocr-integration.ts` checks
 `/health` and sends a neutral synthetic text image, generated in RAM, through the real
-HTTP Markdown route. It requires ready health, VietOCR provenance, non-empty readable
+HTTP JSON route. It requires ready health, VietOCR provenance, non-empty readable
 output and a human-review draft. Endpoints must be loopback HTTP and redirects are
 rejected. It logs only character count, attempts and timing; it does not log OCR text
 or estimate camera-image accuracy. `DOCUMENT_TEST_URL` selects another local Web port.

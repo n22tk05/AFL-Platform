@@ -13,7 +13,7 @@ Các báo cáo trong `docs/reports/` ghi lại trạng thái lịch sử; cấu 
 
 **FR-6 hiện tại:** `/scan-document` dùng OpenCV → VietOCR → Gemini text theo schema → kiểm chứng bằng chứng → người dùng duyệt → lưu Session RAM bằng hành động rõ ràng. Chưa có benchmark độ chính xác trên ảnh thật. Xem [cấu hình, audit và kiểm thử](docs/DOCUMENT-EXTRACTION.md).
 
-**Ảnh → `.md`:** OpenCV → **VietOCR cục bộ** → ghép Markdown bằng quy tắc cố định → kiểm tra → người dùng duyệt → tải file. Cấu hình `VIETOCR_ENDPOINT` và khởi động microservice VietOCR rồi chọn **Chuyển ảnh sang Markdown** tại `/scan-document`. Gemini không tạo hoặc chép lại Markdown. Xem [hướng dẫn và giới hạn](docs/DOCUMENT-EXTRACTION.md#image-to-markdown-vietocr).
+**Ảnh → JSON:** OpenCV → VietOCR cục bộ → bảo toàn nguồn OCR → phân loại tất định → JSON schema 1.0.0 → duyệt → tải `.json`. Chọn **Chuyển ảnh sang JSON** tại `/scan-document`. Export không gọi Gemini và không tự lưu Session RAM. Đã chạy 10 ảnh synthetic với OCR local; chưa có benchmark tài liệu cá nhân/camera đại diện. Xem [contract, API và giới hạn](docs/DOCUMENT-JSON-EXPORT.md) và [kết quả độc lập](docs/ocr-json-evaluation/migration-report.md).
 ## Hệ thống Hỗ trợ Điền Biểu mẫu Thông minh & Quản trị Quy trình cho Người cao tuổi tại Việt Nam
 
 > 📖 **HƯỚNG DẪN VẬN HÀNH:** Xem cẩm nang chi tiết [Hướng Dẫn Khởi Chạy & Vận Hành Toàn Bộ Chức Năng (Kèm VietOCR Server)](docs/HUONG-DAN-CHAY-TAT-CA-CHUC-NANG.md).

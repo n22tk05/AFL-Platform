@@ -271,3 +271,16 @@ afl-platform/
 * **Tích hợp Cổng Định danh Điện tử Quốc gia VNeID:** Tạm hoãn đến giai đoạn 2 khi hệ thống triển khai chính thức cấp quận/huyện để kết nối qua trục liên thông quốc gia (LGSP).
 * **Chế độ Ngoại tuyến Hoàn toàn (Offline-first Mode):** Tạm hoãn; bản MVP yêu cầu thiết bị có kết nối mạng (4G/Wifi) để đảm bảo độ chính xác tối đa từ mô hình AI đám mây.
 * **Thanh toán Trực tuyến:** Chưa tích hợp cổng thanh toán phí/lệ phí điện tử; tập trung giải quyết trọn vẹn khâu kê khai giấy tờ chính xác tại chỗ.
+
+
+## Document export migration — 2026-10-06
+
+Document scan/export now returns only grounded JSON schema 1.0.0 via
+POST /api/documents/json. The source layer preserves raw OCR and provider blocks;
+interpretations use source references, explicit evidence and review states.
+Export boxes are normalized XYXY, converted from the existing YXYX extraction
+contract. The separate approved business-field Session RAM workflow remains.
+VietOCR recognizes lines; Python OpenCV supplies segmentation and heuristic order.
+No verified table/checkbox/signature detector is added by this migration.
+See [the current contract and API](DOCUMENT-JSON-EXPORT.md) and
+[the independent evaluation](ocr-json-evaluation/migration-report.md).

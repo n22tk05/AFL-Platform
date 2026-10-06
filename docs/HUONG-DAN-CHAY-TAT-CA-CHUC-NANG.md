@@ -56,11 +56,11 @@ flowchart TD
     end
 
     subgraph NodeServer ["Next.js 14 App Router (Port 3001)"]
-        RouteDoc["POST /api/documents/markdown"]
+        RouteDoc["POST /api/documents/json"]
         RouteExtract["POST /api/documents/extract"]
         RouteForms["/api/forms & /api/admin/forms"]
         RouteLLM["POST /api/llm/prompt & /api/llm/qa"]
-        Assembler["Deterministic AST Markdown Normalizer"]
+        Assembler["Grounded JSON Classifier / Assembler / Ajv"]
         Prisma["Prisma ORM & PostgreSQL"]
     end
 
@@ -150,7 +150,7 @@ ADMIN_SECRET_KEY=afl_admin_secret_key_2026
 ```
 
 > [!NOTE]
-> VietOCR là provider OCR duy nhất. Ảnh được xử lý bằng microservice Python cục bộ. Markdown không gọi Gemini; trích xuất trường riêng gửi OCR text đã chọn sang Gemini khi người dùng yêu cầu và có cấu hình API key. Google TTS vẫn là dịch vụ giọng nói độc lập.
+> VietOCR là provider OCR duy nhất. Ảnh được xử lý bằng microservice Python cục bộ. JSON export không gọi Gemini; trích xuất trường riêng gửi OCR text đã chọn sang Gemini khi người dùng yêu cầu và có cấu hình API key. Google TTS vẫn là dịch vụ giọng nói độc lập.
 
 ---
 
@@ -187,7 +187,7 @@ Kiểm tra kết nối trước bằng PowerShell:
 ```powershell
 Invoke-RestMethod http://127.0.0.1:8000/health
 ```
-Sau đó mở `/scan-document`, tải một ảnh chữ mẫu không chứa dữ liệu thật và chọn **Chuyển ảnh sang Markdown**. Phải thấy nội dung đọc được, provider `vietocr`, raw attempts và bước duyệt. HTTP 200 hoặc một bản nháp rỗng chưa chứng minh OCR thành công. Thời gian đọc phụ thuộc ảnh, số dòng, CPU và model; không có cam kết 300 ms.
+Sau đó mở `/scan-document`, tải một ảnh chữ mẫu không chứa dữ liệu thật và chọn **Chuyển ảnh sang JSON**. Phải thấy nội dung đọc được, provider `vietocr`, raw attempts và bước duyệt. HTTP 200 hoặc một bản nháp rỗng chưa chứng minh OCR thành công. Thời gian đọc phụ thuộc ảnh, số dòng, CPU và model; không có cam kết 300 ms.
 
 Hoặc chạy smoke test HTTP cục bộ: script tạo ảnh chữ tổng hợp trong RAM, kiểm tra model ready, kết quả không rỗng, đúng provider, provenance tối đa hai attempts và trạng thái cần duyệt. Không gửi giấy tờ thật, không log toàn văn OCR và không suy ra accuracy ảnh camera:
 
@@ -248,31 +248,23 @@ Mở trình duyệt và truy cập: **`http://localhost:3001`**.
 
 ---
 
-### Chức năng 2: Bóc tách Toàn văn & Xuất Markdown Hành chính (OCR to Markdown)
+### Chức năng 2: Quét tài liệu và xuất JSON có nguồn
 
-#### 1. Màn hình Bóc tách Văn bản (`/scan-document`)
-- **Đường dẫn:** `http://localhost:3001/scan-document`
-- **Các bước thao tác:**
-  1. Chọn **Nguồn ảnh**:
-     - `Ảnh chụp camera (cần nắn phối cảnh)`: Hệ thống sẽ tự động tìm 4 góc và nắn thẳng.
-     - `Ảnh scan phẳng tiêu chuẩn`: Bỏ qua nắn góc, giữ nguyên tỷ lệ quét.
-  2. Bấm **"Chọn ảnh"** và tải lên file JPEG/PNG (dung lượng tối đa 8 MB).
-  3. Bấm nút **"Chuyển ảnh sang Markdown"**.
-  4. Pipeline sẽ thực thi:
-     - Nắn góc xiên bằng OpenCV WASM.
-     - Giữ primary màu, phân tích chất lượng và tạo tối đa hai bản enhanced khi cần.
-     - Đọc primary bằng **VietOCR Microservice**; chỉ thử thêm một bản enhanced khi kết quả yếu, tối đa hai OCR attempts tuần tự.
-     - Đưa qua bộ **Deterministic Administrative AST Normalizer**:
-       + Chuẩn hóa Quốc hiệu & Tiêu ngữ chuẩn Nghị định 30/2020/NĐ-CP (`# CỘNG HÒA...`, `## Độc lập...`, `---`).
-       + Chuẩn hóa Tiêu đề văn bản (`# TỜ KHAI...`) và phân cấp mục La Mã (`## I. ...`).
-       + Tự động in đậm nhãn trường (`**Họ và tên:** NGUYỄN VĂN A`, `**Số CCCD:** ...`).
-       + Bảo toàn dòng chấm điền khuyết (`................`).
-       + Ghép khối chữ ký 2 bên thành bảng Markdown 2 cột cân xứng.
-       + Chuẩn hóa ô tích checkbox (`☐`, `☑`).
-  5. **Màn hình Review đối chiếu (Split Screen):**
-     - Bên trái: Ảnh primary và enhanced nếu có. Nếu không tìm được giấy, upload có thể đọc toàn ảnh với cờ chưa deskew; camera cần hành động rõ ràng **Thử đọc toàn ảnh**.
-     - Bên phải: Bản nháp Markdown đã được định dạng và kiểm tra cú pháp AST an toàn.
-  6. Chuyên viên/Người dùng có thể chỉnh sửa trực tiếp nội dung nếu cần, sau đó bấm **"Xác nhận duyệt"** và nhấn **"Tải về .md"** (1-click UTF-8 Download).
+Mở /scan-document, chọn JPEG/PNG và chế độ ảnh, rồi bấm **Chuyển ảnh sang JSON**.
+Ảnh nguồn bên trái, kết quả bên phải có Cấu trúc, JSON raw và Raw OCR. Xem
+Unknown/warnings; chọn dòng hoặc trường để xem bbox thật nếu provider có trả.
+Sửa giá trị sử dụng và xác nhận; raw OCR luôn giữ nguyên. Đối chiếu ảnh rồi bấm
+**Copy JSON** hoặc **Tải .json**. Đổi ảnh/rerun xóa output cũ. Kết quả export không
+tự đi vào /guide hay Session RAM. Không còn nút tải .md hoặc route /markdown.
+
+Pipeline: OpenCV xử lý ảnh thích ứng → Python OpenCV phát hiện vùng chữ → VietOCR
+nhận dạng từng dòng → phân loại tất định → JSON schema 1.0.0 → validation/review.
+Bảng/checkbox/chữ ký không được coi đã xác minh bằng regex. Xem
+[contract/API/tọa độ và giới hạn](DOCUMENT-JSON-EXPORT.md).
+
+Luồng **Đọc chứng từ / Trích Xuất JSON** nghiệp vụ vẫn riêng: chỉ gửi OCR text tới
+Gemini sau đồng ý, rồi duyệt trường trước hành động lưu Session RAM. Export tài
+liệu không cần Gemini key và không dùng LLM để bổ sung chữ thiếu.
 
 ---
 
@@ -318,7 +310,7 @@ Mở trình duyệt và truy cập: **`http://localhost:3001`**.
 * **`/opencv-test`:**
   - Hiển thị trực quan 9 canvas xử lý thị giác máy tính: *Ảnh đầu vào, Phối cảnh nắn phẳng, Đường viền tài liệu, Ảnh xám, Ảnh nhị phân (Binary), Đường kẻ ngang (Horizontal), Đường kẻ dọc (Vertical), Mặt nạ kết hợp (Combined), và Khung ô trích xuất (Candidates)*.
 * **`/document-test`:**
-  - Môi trường thử nghiệm độc lập cho pipeline Markdown với các tập dữ liệu tổng hợp sẵn có trong repo.
+  - Môi trường thử nghiệm độc lập cho pipeline JSON với các tập dữ liệu tổng hợp sẵn có trong repo.
 
 ---
 
@@ -330,9 +322,9 @@ Dùng các lệnh bên dưới để kiểm tra trạng thái hiện tại. Các
 | :--- | :--- | :---: |
 | **Tổng kiểm tra Giám sát (Toàn diện)** | `npm run test:supervise` | Toàn bộ hệ thống |
 | **Kiểm tra Thuật toán OpenCV WASM** | `npm run test:opencv` | Xem kết quả chạy |
-| **Kiểm tra Bóc tách Tài liệu & Markdown** | `npm run test:documents` | Xem kết quả chạy |
+| **Kiểm tra Bóc tách Tài liệu & JSON** | `npm run test:documents` | Xem kết quả chạy |
 | **Kiểm tra Line Segmentation & VietOCR** | `npx tsx --test src/modules/opencv/tests/line-segmentation.test.ts src/modules/ocr/tests/vietocr-adapter.test.ts` | Xem kết quả chạy |
-| **Kiểm tra Chuẩn hóa AST Markdown** | `npx tsx --test src/modules/documents/tests/markdown-normalizer.test.ts` | Xem kết quả chạy |
+| **Kiểm tra JSON độc lập** | `npm run evaluate:documents` | Fixed OCR, không gọi provider |
 | **Kiểm tra Đấu nối P2P & Form API** | `npm run test:p2p` | Toàn bộ luồng |
 | **Kiểm tra Voice AI & Audio** | `npm run test:voice` | Xem kết quả chạy |
 | **Kiểm tra TypeScript Typecheck** | `npx tsc --noEmit` | Xem kết quả chạy |
