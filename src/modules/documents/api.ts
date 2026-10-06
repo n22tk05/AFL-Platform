@@ -94,7 +94,7 @@ export async function parseDocumentImage(req: Request): Promise<ParsedDocument> 
     enhancements.push({ variant, bytes: variantBytes, mimeType: file.type as DocumentOcrInput['mimeType'], width: image.width, height: image.height, scaleX, scaleY });
   }
   const imageWarnings = Array.from(new Set([...primary.quality.warnings, ...suppliedWarnings as string[], ...(documentDetectionFailed ? ['DOCUMENT_DETECTION_FAILED'] : [])]));
-  return { bytes, mimeType: mime as DocumentOcrInput['mimeType'], signal: req.signal, enhancements, imageWarnings, documentDetectionFailed, deskewApplied, documentHint };
+  return { bytes, mimeType: mime as DocumentOcrInput['mimeType'], imageDimensions: { width: primary.width, height: primary.height }, signal: req.signal, enhancements, imageWarnings, documentDetectionFailed, deskewApplied, documentHint };
 }
 const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store, max-age=0', 'X-Content-Type-Options': 'nosniff' } });
 export async function handleDocumentExtraction(req: Request, factory: () => DocumentExtractionService): Promise<Response> {

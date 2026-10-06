@@ -28,6 +28,7 @@ export const DEFAULT_VIETOCR_CONFIG: Readonly<VietOcrConfig> = Object.freeze({
 });
 
 class VietOcrResponseError extends Error {}
+export class VietOcrTimeoutError extends Error {}
 
 /**
  * Normalizes line image dimensions for VietOCR:
@@ -75,6 +76,7 @@ export class VietOcrAdapter {
       } catch (error) {
         // A malformed response cannot be replaced with plausible-looking mock text.
         if (error instanceof VietOcrResponseError) throw error;
+        if (error instanceof VietOcrTimeoutError) throw error;
         if (!this.config.allowOfflineFallback) {
           throw new Error(
             `VietOCR service unavailable at ${endpoint}: ${error instanceof Error ? error.message : String(error)}`,
@@ -156,6 +158,11 @@ export class VietOcrAdapter {
       }
 
       if (!data.predictions.length) return [];
+      if (data.predictions.some((pred: unknown) => !pred || typeof pred !== 'object' || Array.isArray(pred)
+        || ('text' in pred && typeof pred.text !== 'string' && pred.text !== null)
+        || ('lineId' in pred && typeof pred.lineId !== 'string' && pred.lineId !== null))) {
+        throw new VietOcrResponseError('Invalid prediction item from VietOCR service.');
+      }
 
       if (
         data.predictions.length > 0 &&
@@ -165,6 +172,8 @@ export class VietOcrAdapter {
         lines[0].coordinates[2] === 1 &&
         lines[0].coordinates[3] === 1
       ) {
+        const ids = data.predictions.map((pred: { lineId?: string }, idx: number) => pred.lineId || `line_${String(idx + 1).padStart(3, '0')}`);
+        if (new Set(ids).size !== ids.length) throw new VietOcrResponseError('Duplicate full-document line IDs prevent reliable OCR alignment.');
         return data.predictions.map(
           (
             pred: {
@@ -179,8 +188,8 @@ export class VietOcrAdapter {
             coordinates:
               Array.isArray(pred.coordinates) && pred.coordinates.length === 4
                 ? (pred.coordinates as NormalizedBoundingBox)
-                : lines[0].coordinates,
-            rawText: String(pred.text ?? '').trim(),
+                : null,
+            rawText: String(pred.text ?? ''),
             confidence:
               typeof pred.confidence === 'number' && Number.isFinite(pred.confidence) && pred.confidence >= 0 && pred.confidence <= 1 ? pred.confidence : null,
           }),
@@ -223,11 +232,14 @@ export class VietOcrAdapter {
             Array.isArray(pred.coordinates) && pred.coordinates.length === 4
               ? (pred.coordinates as NormalizedBoundingBox)
               : line.coordinates,
-          rawText: String(pred.text ?? '').trim(),
+          rawText: String(pred.text ?? ''),
           confidence:
             typeof pred.confidence === 'number' && Number.isFinite(pred.confidence) && pred.confidence >= 0 && pred.confidence <= 1 ? pred.confidence : null,
         };
       });
+    } catch (error) {
+      if (controller.signal.aborted) throw new VietOcrTimeoutError('VietOCR request timed out or was cancelled.');
+      throw error;
     } finally {
       clearTimeout(timeout);
       signal?.removeEventListener('abort', abort);

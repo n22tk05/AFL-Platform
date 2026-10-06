@@ -51,10 +51,13 @@ export function reconcileOcr(review: OcrReview): DocumentOcrResult | null {
     const a = primary.raw, b = second.raw;
     for (const line of a.lines) {
       if (!validBox(line.boundingBox)) continue;
-      const matches = b.lines.filter(other => validBox(other.boundingBox) && iou(line.boundingBox, other.boundingBox) >= CONFIG.alignmentIou);
+      const lineBox = line.boundingBox;
+      const matches = b.lines.filter(other => validBox(other.boundingBox) && iou(lineBox, other.boundingBox) >= CONFIG.alignmentIou);
       if (matches.length !== 1) continue;
       const other = matches[0];
-      const reverse = a.lines.filter(candidate => validBox(candidate.boundingBox) && iou(candidate.boundingBox, other.boundingBox) >= CONFIG.alignmentIou);
+      if (!validBox(other.boundingBox)) continue;
+      const otherBox = other.boundingBox;
+      const reverse = a.lines.filter(candidate => validBox(candidate.boundingBox) && iou(candidate.boundingBox, otherBox) >= CONFIG.alignmentIou);
       if (reverse.length !== 1 || spaces(line.text) === spaces(other.text)) continue;
       const reason = signature(line.text) !== signature(other.text) ? 'OCR_NUMERIC_DISAGREEMENT' : 'OCR_TEXT_DISAGREEMENT';
       region(chosen === primary ? line.boundingBox : other.boundingBox, reason, [
