@@ -135,7 +135,7 @@ graph TD
     A --> D[Mục tiêu Giao diện Trợ năng WCAG AAA & Wake Lock]
     A --> E[Mục tiêu Thử nghiệm & Xã hội]
 
-    B --> B1[Số hóa 2 nhóm biểu mẫu MVP phức tạp có liên chứng từ Sổ đỏ & Biên bản phạt]
+    B --> B1[Số hóa các biểu mẫu hành chính chuẩn hóa từ Cổng DVC Quốc gia có liên chứng từ]
     B --> B2[Từ điển thuật ngữ bình dân & Quản lý vòng đời biểu mẫu valid_until]
     C --> C1[OpenCV WASM / Cloud Hybrid: Căn chỉnh phối cảnh & Bóc tách ô chuẩn hóa]
     C --> C2[Gemini 3.6 Pure-Text + Split-Screen Review Gate có Legal Checkbox]
@@ -256,16 +256,15 @@ Hệ thống được kiểm thử đa tầng dựa trên bảng chỉ số kỹ
 ### 1. Nguồn dữ liệu
 
 #### 1.1. Dữ liệu văn bản quy phạm và biểu mẫu hành chính chuẩn (Theo chuẩn PRD)
-Tập trung giải quyết trọng tâm **02 nhóm biểu mẫu phức tạp trong phạm vi MVP có liên chứng từ**:
-1. *Tờ khai lệ phí trước bạ nhà, đất (Mẫu 01/LPTB theo Thông tư 80/2021/TT-BTC)* — bóc tách đối chiếu từ Sổ đỏ/Hợp đồng chuyển nhượng.
-2. *Biểu mẫu nộp tiền phạt vi phạm hành chính* — bóc tách đối chiếu từ Biên bản xử phạt vi phạm hành chính.
-*(Lộ trình mở rộng đợt tiếp theo: Các biểu mẫu hộ tịch phổ biến gồm Tờ khai đăng ký khai sinh và Tờ khai đăng ký kết hôn theo Thông tư 04/2020/TT-BTP).*
+* **Căn cứ pháp lý & Mã định danh thủ tục:** Được đối chiếu và đồng bộ chính thống từ **Cổng Dịch vụ công Quốc gia** (https://dichvucong.gov.vn/) theo Cơ sở dữ liệu quốc gia về thủ tục hành chính, bao gồm danh mục các thủ tục hành chính công phục vụ người dân tại Bộ phận Một cửa các cấp (thuế, đất đai, tư pháp - hộ tịch, giao thông, bảo trợ xã hội...).
+* **Kho dữ liệu phôi biểu mẫu & Hình ảnh đối soát:** Để phục vụ việc tìm kiếm phôi giấy scan chất lượng cao, các phụ lục văn bản quy phạm pháp luật và mẫu hướng dẫn điền thực tế, hệ thống tiến hành tra cứu, thu thập từ kho dữ liệu văn bản pháp luật trên **Thư Viện Pháp Luật** (https://thuvienphapluat.vn/) kết hợp cùng phôi khai thực tế thu thập tại Bộ phận Một cửa địa phương.
+* **Chuẩn hóa & Gắn siêu dữ liệu:** Toàn bộ biểu mẫu được số hóa, gán siêu dữ liệu pháp lý và định danh chuẩn hóa theo đúng mã số thủ tục hành chính công bố trên Cổng DVCQG, hỗ trợ bóc tách đối chiếu thông tin từ các chứng từ đính kèm (giấy tờ tùy thân, giấy chứng nhận quyền sử dụng, biên bản, hợp đồng liên quan).
 
 #### 1.2. Dữ liệu hình ảnh phôi khai và bộ nhãn hình học Bounding Box
 Bộ dữ liệu gồm 500+ ảnh chụp phôi tờ khai thực tế thu thập từ Bộ phận Một cửa địa phương, chụp trong nhiều điều kiện ánh sáng, góc nghiêng và bề mặt bàn khác nhau; toàn bộ được gán nhãn chuẩn hóa tọa độ `[0.0 - 1.0]`.
 
 ### 2. Quy mô dữ liệu
-* 02 nhóm biểu mẫu hành chính MVP cốt lõi (kèm tài liệu liên chứng từ) với hơn 60 trường thông tin được chuẩn hóa hoàn toàn.
+* Hệ thống biểu mẫu hành chính công chuẩn hóa từ Cổng Dịch vụ công Quốc gia (kèm dữ liệu liên chứng từ đối soát) với cấu trúc trường thông tin được chuẩn hóa hoàn toàn.
 * 500+ mẫu ảnh chụp thử nghiệm đa điều kiện ánh sáng và góc nghiêng.
 * Kho ngữ liệu 100+ thuật ngữ hành chính công được biên soạn sang văn nói đàm thoại bình dân.
 
@@ -329,7 +328,7 @@ gantt
 ```
 
 ### 1. Giai đoạn 1 - Khảo sát và thu thập dữ liệu *(Đã hoàn thành)*
-* **Tuần 1:** Khảo sát thực tế tại Bộ phận Một cửa cấp phường/xã; phỏng vấn chuyên sâu 10 người cao tuổi và 05 cán bộ tiếp dân; thu thập mẫu phôi scan chuẩn của 02 nhóm biểu mẫu MVP phức tạp: Lệ phí trước bạ (kèm Sổ đỏ/Hợp đồng) và Nộp phạt VPHC (kèm Biên bản xử phạt).
+* **Tuần 1:** Khảo sát thực tế tại Bộ phận Một cửa cấp phường/xã; phỏng vấn chuyên sâu 10 người cao tuổi và 05 cán bộ tiếp dân; thu thập mẫu phôi scan chuẩn của các biểu mẫu hành chính phức tạp có kèm chứng từ đối soát theo quy chuẩn Cổng Dịch vụ công Quốc gia.
 * **Tuần 2:** Hoàn thiện Tài liệu Yêu cầu Sản phẩm (`PRD.md`) và Kiến trúc Hệ thống chi tiết (`ARCHITECTURE.md`); thiết lập khung pháp lý bảo vệ dữ liệu cá nhân theo Nghị định 13/2023/NĐ-CP (DPIA Draft).
 * **Tuần 3:** Tiến hành chụp 500+ ảnh biểu mẫu trong các điều kiện thực tế (chụp xiên, rung, bóng mờ); sử dụng công cụ gán nhãn tọa độ bounding box chuẩn hóa `[0.0 - 1.0]` cho từng ô khai (`dataset_forms_v1.json`); xây dựng kho ngữ liệu giải nghĩa thuật ngữ pháp lý.
 
@@ -431,10 +430,11 @@ flowchart TD
 
 ### Phụ lục B. Nguồn dữ liệu & Căn cứ kiểm chứng
 
-#### 1. Danh mục biểu mẫu hành chính chuẩn hóa MVP (Theo chuẩn PRD):
-1. *Tờ khai lệ phí trước bạ (nhà, đất)* — Mẫu 01/LPTB ban hành kèm theo Thông tư số 80/2021/TT-BTC ngày 29/09/2021 của Bộ Tài chính (có quan hệ liên chứng từ bóc tách đối chiếu từ Sổ đỏ/Hợp đồng chuyển nhượng).
-2. *Biểu mẫu nộp tiền phạt vi phạm hành chính* — Quy định tại Nghị định 118/2021/NĐ-CP (có quan hệ liên chứng từ bóc tách đối chiếu từ Biên bản xử phạt vi phạm hành chính).
-*(Lộ trình mở rộng đợt tiếp theo: Tờ khai đăng ký khai sinh và Tờ khai đăng ký kết hôn ban hành kèm theo Thông tư số 04/2020/TT-BTP của Bộ Tư pháp).*
+#### 1. Danh mục biểu mẫu hành chính chuẩn hóa (Theo chuẩn PRD):
+Được công bố, đối chiếu chuẩn hóa từ **Cổng Dịch vụ công Quốc gia (https://dichvucong.gov.vn/)** và tra cứu phôi mẫu, phụ lục từ **Thư Viện Pháp Luật (https://thuvienphapluat.vn/)**:
+* Hệ thống các biểu mẫu thủ tục hành chính công trực tuyến và tại chỗ phục vụ công dân (thuế, đất đai, tư pháp - hộ tịch, giao thông, bảo trợ xã hội...).
+* Các biểu mẫu có quan hệ liên chứng từ (đối soát thông tin từ căn cước công dân, giấy chứng nhận quyền sử dụng đất, biên bản xử phạt, hồ sơ chứng từ liên quan).
+* Quy chuẩn mã thủ tục, tên mẫu biểu, thẩm quyền ban hành và văn bản quy phạm pháp luật đính kèm được đồng bộ theo cơ sở dữ liệu quốc gia về thủ tục hành chính.
 
 #### 2. Quy chuẩn Vòng đời Biểu mẫu & Bảng Hướng Dẫn Vật Lý (PRD FR-11):
 * **Cơ chế Hạn Hiệu Lực Văn Bản (`valid_until`):** Mỗi biểu mẫu được gắn hạn hiệu lực theo quy định pháp luật. Khi văn bản bị sửa đổi/thay thế, hệ thống tự động cảnh báo công dân trên Web di động để tránh nộp nhầm phôi cũ.
