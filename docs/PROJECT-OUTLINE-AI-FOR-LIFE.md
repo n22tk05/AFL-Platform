@@ -264,14 +264,16 @@ Hệ thống được kiểm thử đa tầng dựa trên bảng chỉ số kỹ
 Bộ dữ liệu gồm 500+ ảnh chụp phôi tờ khai thực tế thu thập từ Bộ phận Một cửa địa phương, chụp trong nhiều điều kiện ánh sáng, góc nghiêng và bề mặt bàn khác nhau; toàn bộ được gán nhãn chuẩn hóa tọa độ `[0.0 - 1.0]`.
 
 ### 2. Quy mô dữ liệu
-* Hệ thống biểu mẫu hành chính công chuẩn hóa từ Cổng Dịch vụ công Quốc gia (kèm dữ liệu liên chứng từ đối soát) với cấu trúc trường thông tin được chuẩn hóa hoàn toàn.
-* 500+ mẫu ảnh chụp thử nghiệm đa điều kiện ánh sáng và góc nghiêng.
-* Kho ngữ liệu 100+ thuật ngữ hành chính công được biên soạn sang văn nói đàm thoại bình dân.
+* **Danh mục biểu mẫu & Trường thông tin chuẩn hóa:** Hệ thống chuẩn hóa danh mục các biểu mẫu thủ tục hành chính công cấp thiết tại Bộ phận Một cửa (thuế, đất đai, tư pháp - hộ tịch, xác nhận dân sự...) với cấu trúc lưới hình học và hơn 100+ trường thông tin được gán nhãn chuẩn hóa tọa độ `[0.0 - 1.0]` (kèm siêu dữ liệu đối chiếu liên chứng từ: CCCD/VNeID, GCN quyền sử dụng đất, biên bản/giấy tờ liên quan).
+* **Tập dữ liệu hình ảnh (Visual Dataset):** 500+ mẫu ảnh chụp phôi tờ khai và tài liệu thực tế thu thập từ Bộ phận Một cửa địa phương, chụp trong đa dạng điều kiện thực tế (ánh sáng phức tạp, chụp xiên, bóng đổ mờ, bề mặt bàn Một cửa).
+* **Kho ngữ liệu đàm thoại & Trợ năng giọng nói:** 200+ thuật ngữ hành chính công được biên soạn song ngữ "hành chính chuyên ngành $\to$ đàm thoại bình dân" (dành riêng cho người cao tuổi, tốc độ chuẩn 0.9x) kèm bộ câu hỏi thường gặp FAQ ngữ cảnh cho từng ô khai.
 
-### 3. Tính hợp pháp & Bảo vệ dữ liệu cá nhân (Nghị định 13/2023/NĐ-CP)
-* Hệ thống tuân thủ nghiêm ngặt **Nghị định 13/2023/NĐ-CP** [10] về bảo vệ dữ liệu cá nhân.
-* **Chính sách Không lưu vết (Zero-Retention Policy):** Không lưu ảnh chụp của người dân lên ổ cứng máy chủ; xử lý tạm thời trên RAM và hủy phiên ngay lập tức khi hoàn thành hoặc sau **15 phút** không tương tác (theo đúng NFR-3 PRD).
-* **Giới hạn pháp lý:** Hệ thống không thay thế chữ ký của công dân và không can thiệp vào thẩm quyền xét duyệt của cán bộ nhà nước.
+### 3. Tính hợp pháp, Quyền sử dụng & Bảo vệ dữ liệu cá nhân
+* **Căn cứ quyền sử dụng biểu mẫu hành chính công:** Căn cứ theo **Khoản 2 Điều 19 Luật Sở hữu trí tuệ** và **Luật Tiếp cận thông tin 2016**, các văn bản quy phạm pháp luật, văn bản hành chính và biểu mẫu thủ tục hành chính nhà nước thuộc danh mục thông tin công khai, **không thuộc đối tượng bảo hộ quyền tác giả**. Đội thi được quyền tự do tiếp cận, trích xuất, số hóa và sử dụng hợp pháp nhằm mục đích nghiên cứu khoa học và phục vụ lợi ích cộng đồng.
+* **Quyền sử dụng công nghệ & Giấy phép mã nguồn mở:** Toàn bộ công nghệ nền tảng và thư viện sử dụng (Next.js, OpenCV, PostgreSQL, Prisma, Tailwind CSS) đều tuân thủ giấy phép phần mềm tự do nguồn mở thương mại (MIT License, Apache 2.0).
+* **Tuân thủ Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân:**
+  * **Chính sách Không lưu vết (Zero-Retention Policy):** Không lưu ảnh chụp của người dân lên ổ cứng máy chủ; xử lý tạm thời trên RAM và hủy phiên ngay lập tức khi hoàn thành hoặc sau **15 phút** không tương tác (theo đúng NFR-3 PRD).
+  * **Giới hạn pháp lý:** Hệ thống đóng vai trò trợ lý dẫn hướng thị giác và giọng nói, không thay thế chữ ký của công dân và không can thiệp vào thẩm quyền xét duyệt của cán bộ nhà nước.
 
 ### 4. Mức độ sẵn sàng
 * Đã thu thập và chuẩn hóa xong phôi scan độ phân giải cao của 03 biểu mẫu chuẩn.
@@ -346,6 +348,21 @@ gantt
 * **Tuần 10:** Thu thập dữ liệu vận hành: Bấm giờ hoàn thành biểu mẫu, kiểm đếm số lần tờ khai bị viết sai, đo tỷ lệ First-Time Right; khảo sát mức độ hài lòng của công dân cao tuổi theo thang điểm SUS.
 * **Tuần 11:** Triển khai thử nghiệm Pilot Bước 2 tại **Bộ phận Một cửa UBND Phường** dưới sự phối hợp của cán bộ Tư pháp; hiệu chỉnh các lỗi phát sinh (tinh chỉnh bộ lọc bóng đổ và độ nhạy của nút bấm giữ Mic).
 * **Tuần 12:** Viết Báo cáo tổng kết đề tài nghiên cứu khoa học chi tiết; đóng gói mã nguồn, quay video demo quy trình vận hành và chuẩn bị bảo vệ nghiệm thu đề tài.
+
+### 5. Phân bổ nguồn lực nhân sự & Dự toán kinh phí thực hiện
+
+#### 5.1. Ma trận phân công nhân sự (Team Capacity & Roles)
+Kế hoạch 12 tuần được phân bổ chặt chẽ theo năng lực chuyên môn của đội thi, bảo đảm tiến độ và chất lượng:
+| Thành viên & Vai trò | Trách nhiệm chuyên môn chính | Tỷ trọng đóng góp |
+| :--- | :--- | :---: |
+| **Thành viên 1:** Trưởng nhóm & Kỹ sư AI / Computer Vision | Phát triển pipeline OpenCV WASM / Cloud Hybrid, thuật toán biến đổi phối cảnh, tích hợp Gemini 3.6 Pure-Text, tối ưu độ trễ $\le 100\text{ms}$. | 35% |
+| **Thành viên 2:** Kỹ sư Full-stack & Accessibility UI/UX | Phát triển Citizen Web App theo chuẩn WCAG AAA, Web Wake Lock API, Cổng Admin Portal đối soát chia đôi màn hình và kiến trúc In-Memory Zero-retention. | 35% |
+| **Thành viên 3:** Chuyên viên Nghiệp vụ TTHC & Khảo sát Người dùng | Thu thập phôi mẫu DVCQG và Thư Viện Pháp Luật, biên soạn kho ngữ liệu đàm thoại bình dân, điều phối 2 đợt thử nghiệm Pilot tại CLB Hưu trí và UBND Phường. | 30% |
+
+#### 5.2. Dự toán tài nguyên & Căn cứ kinh phí thực hiện (Frugal Engineering)
+* **Chi phí máy chủ & Hạ tầng:** $\approx 0\text{ VNĐ}$ trong giai đoạn thử nghiệm MVP nhờ kiến trúc phi máy chủ (Client-side WASM xử lý hình ảnh trực tiếp trên trình duyệt thiết bị công dân, giảm 90% tải server) kết hợp hạ tầng Cloud miễn phí (Vercel, Supabase/Neon PostgreSQL).
+* **Chi phí AI API (Gemini & Google TTS):** $\approx 0\text{ VNĐ}$ nhờ tối ưu hóa Pure-Text (chỉ gửi văn bản ô, không gửi ảnh, tiết kiệm 95% token) kết hợp cơ chế Cache âm thanh cục bộ (chỉ sinh giọng nói một lần cho mỗi ô, tái sử dụng vĩnh viễn), nằm hoàn toàn trong hạn mức tài trợ miễn phí (Free Tier / Research Credits).
+* **Trang thiết bị thử nghiệm thực địa:** Tận dụng thiết bị sẵn có của nhóm nghiên cứu (điện thoại thông minh Android/iOS, giá đỡ điện thoại bằng mica/gỗ chi phí dưới 100.000 VNĐ/bàn).
 
 ---
 
