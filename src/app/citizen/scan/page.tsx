@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { listCitizenForms, type CitizenFormOption } from '@/modules/forms/services/citizen-workflow.client';
+import { capturedFormSession } from '@/modules/forms/citizen-session';
+import { APP_ROUTES } from '@/shared/routes';
 import {
   Camera,
   ArrowLeft,
@@ -20,9 +23,35 @@ export default function CitizenScanPage() {
   const [hasCamera, setHasCamera] = useState(true);
   const [isFlashOn, setIsFlashOn] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [forms, setForms] = useState<CitizenFormOption[]>([]);
+  const [formCode, setFormCode] = useState('');
+  const [error, setError] = useState('');
+  const fileReader = useRef<FileReader | null>(null);
+  const readGeneration = useRef(0);
+  const cancelRead = useCallback(() => { readGeneration.current++; fileReader.current?.abort(); }, []);
+  useEffect(() => {
+    cancelRead(); setIsProcessing(false);
+    return cancelRead;
+  }, [formCode, cancelRead]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void listCitizenForms({ signal: controller.signal }).then(result => {
+      if (!controller.signal.aborted) { setForms(result.forms); if (result.offline) setError('Máy chủ danh sách biểu mẫu chưa khả dụng.'); }
+    }).catch(() => { if (!controller.signal.aborted) setError('Không nạp được biểu mẫu.'); });
+    return () => controller.abort();
+  }, []);
+
+  const openGuide = (image: string) => {
+    if (!formCode) throw new Error('Bác chọn đúng biểu mẫu đã ban hành trước nhé.');
+    capturedFormSession.save(image);
+    capturedFormSession.selectForm(formCode);
+    router.push(APP_ROUTES.citizenGuide(formCode));
+  };
 
   useEffect(() => {
     let activeStream: MediaStream | null = null;
+    let cancelled = false;
 
     async function startCamera() {
       try {
@@ -34,12 +63,14 @@ export default function CitizenScanPage() {
           },
           audio: false,
         });
+        if (cancelled) { mediaStream.getTracks().forEach(track => track.stop()); return; }
         activeStream = mediaStream;
         setStream(mediaStream);
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
         }
       } catch (err) {
+        if (cancelled) return;
         console.warn(
           "Không thể mở camera thiết bị, chuyển sang chế độ tải tệp:",
           err,
@@ -51,6 +82,7 @@ export default function CitizenScanPage() {
     startCamera();
 
     return () => {
+      cancelled = true;
       if (activeStream) {
         activeStream.getTracks().forEach((track) => track.stop());
       }
@@ -58,27 +90,49 @@ export default function CitizenScanPage() {
   }, []);
 
   const handleCapture = () => {
-    setIsProcessing(true);
-    // Giả lập phân tích ảnh và chuyển thẳng vào bước hướng dẫn
-    setTimeout(() => {
-      setIsProcessing(false);
-      router.push("/citizen/guide?templateId=tpl_01_lptb");
-    }, 1200);
+    try {
+      const video = videoRef.current;
+      if (!video?.videoWidth || !video.videoHeight) throw new Error('Camera chưa có ảnh.');
+      const canvas = document.createElement('canvas');
+      const scale = Math.min(1, 2048 / Math.max(video.videoWidth, video.videoHeight));
+      canvas.width = Math.round(video.videoWidth * scale); canvas.height = Math.round(video.videoHeight * scale);
+      canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height);
+      openGuide(canvas.toDataURL('image/jpeg', 0.9));
+    } catch (reason) { setError(reason instanceof Error ? reason.message : 'Không chụp được ảnh.'); }
   };
 
   const handleFileFallback = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsProcessing(true);
-      setTimeout(() => {
-        setIsProcessing(false);
-        router.push("/citizen/guide?templateId=tpl_01_lptb");
-      }, 1000);
+      if (!['image/jpeg', 'image/png'].includes(file.type) || file.size > 8 * 1024 * 1024) {
+        setError('Chọn JPEG/PNG tối đa 8 MB.'); return;
+      }
+      setIsProcessing(true); setError('');
+      const current = ++readGeneration.current;
+      fileReader.current?.abort();
+      const reader = new FileReader();
+      fileReader.current = reader;
+      reader.onload = () => {
+        if (current !== readGeneration.current) return;
+        try { openGuide(String(reader.result)); }
+        catch (reason) { setError(reason instanceof Error ? reason.message : 'Ảnh chưa hợp lệ.'); }
+        finally { setIsProcessing(false); }
+      };
+      reader.onerror = () => { if (current === readGeneration.current) { setIsProcessing(false); setError('Không đọc được ảnh.'); } };
+      reader.readAsDataURL(file);
     }
   };
 
   return (
     <div className="flex-1 flex flex-col bg-black text-white relative overflow-hidden select-none min-h-[calc(100vh-65px)]">
+      <label className="p-3">Biểu mẫu đã ban hành
+        <select className="block w-full text-slate-900 p-2" value={formCode} onChange={event => setFormCode(event.target.value)}>
+          <option value="">Chọn biểu mẫu đúng với phôi</option>
+          {forms.map(form => <option key={form.formCode} value={form.formCode}>{form.formCode} — {form.formTitle}</option>)}
+        </select>
+      </label>
+      <p className="px-3 text-sm">Hiện đối chiếu mẫu bằng lựa chọn của bác; chưa tự nhận diện loại biểu mẫu từ ảnh. Ảnh không lưu vào Web Storage.</p>
+      {error && <p role="alert" className="p-3 text-red-300">{error}</p>}
       {/* Top Bar: Nút quay lại /citizen & Đèn flash */}
       <div className="p-4 flex items-center justify-between z-20 bg-gradient-to-b from-black/80 to-transparent">
         <button
@@ -152,7 +206,7 @@ export default function CitizenScanPage() {
           <div className="absolute inset-0 bg-black/80 z-30 flex flex-col items-center justify-center gap-3">
             <RefreshCcw className="w-8 h-8 text-emerald-400 animate-spin" />
             <p className="text-sm font-black text-white">
-              Đang nhận diện tờ khai...
+              Đang đọc ảnh đã chọn...
             </p>
           </div>
         )}

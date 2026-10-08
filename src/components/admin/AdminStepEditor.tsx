@@ -21,6 +21,7 @@ interface AdminStepEditorProps {
   onUpdateStep: (updatedStep: WorkflowStep) => void;
   onInsertStep: (insertAfterIndex: number) => void;
   onDeleteStep: (deleteIndex: number) => void;
+  allowStructureChanges?: boolean;
 }
 
 export function AdminStepEditor({
@@ -30,6 +31,7 @@ export function AdminStepEditor({
   onUpdateStep,
   onInsertStep,
   onDeleteStep,
+  allowStructureChanges = true,
 }: AdminStepEditorProps) {
   const currentStep = steps[currentStepIndex];
   const tabsContainerRef = useRef<HTMLDivElement>(null);
@@ -105,6 +107,7 @@ export function AdminStepEditor({
             <button
               type="button"
               onClick={() => onInsertStep(currentStepIndex)}
+              disabled={!allowStructureChanges}
               className="px-2.5 py-1 text-xs font-black bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg flex items-center gap-1 shadow-sm active:scale-95 transition-all"
               title="Thêm bước điền mới vào đúng vị trí này"
             >
@@ -116,6 +119,7 @@ export function AdminStepEditor({
             <button
               type="button"
               onClick={handleDeleteCurrentStep}
+              disabled={!allowStructureChanges}
               className="p-1 text-xs font-bold bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-lg active:scale-95 transition-all"
               title="Xóa bước này"
             >
@@ -222,6 +226,7 @@ export function AdminStepEditor({
             </label>
             <select
               value={currentStep.pageNumber || 1}
+              disabled={!allowStructureChanges}
               onChange={(e) => handleFieldChange("pageNumber", parseInt(e.target.value, 10))}
               className="w-full text-xs font-bold px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600"
             >

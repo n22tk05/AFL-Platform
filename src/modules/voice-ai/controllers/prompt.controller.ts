@@ -40,7 +40,7 @@ export class PromptController {
         status: 200,
         body: {
           success: true,
-          data: workflow,
+          data: { ...workflow, formId: persistResult.templateId, templateId: persistResult.templateId },
           meta: {
             persisted: Boolean(persistResult.workflowId),
             source: 'database',
@@ -51,11 +51,11 @@ export class PromptController {
       console.error('[PromptController] Lỗi xử lý:', error);
       const code = error instanceof Error ? error.message : '';
       return {
-        status: code === 'FORM_ACTIVE' ? 409 : code === 'DATABASE_UNAVAILABLE' ? 503 : 502,
+        status: code === 'FORM_ACTIVE' ? 409 : ['DATABASE_UNAVAILABLE', 'FORM_ASSET_UNAVAILABLE'].includes(code) ? 503 : code === 'INVALID_WORKFLOW' ? 400 : 502,
         body: {
           success: false,
           error: {
-            code: code === 'FORM_ACTIVE' ? 'FORM_ACTIVE' : code === 'DATABASE_UNAVAILABLE' ? 'DATABASE_UNAVAILABLE' : 'PROMPT_GENERATION_FAILED',
+            code: ['FORM_ACTIVE', 'DATABASE_UNAVAILABLE', 'FORM_ASSET_UNAVAILABLE', 'INVALID_WORKFLOW'].includes(code) ? code : 'PROMPT_GENERATION_FAILED',
             message_vi: 'Không thể tạo và lưu kịch bản biểu mẫu.',
           },
         },

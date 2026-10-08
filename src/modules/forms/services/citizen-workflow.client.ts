@@ -1,7 +1,7 @@
 import type { FormWorkflow } from '@/shared/contracts';
-import { APP_CONFIG, MOCK_WORKFLOW_REGISTRY } from '@/config/app.config';
-import { canonicalFormCode, fetchWorkflow, prepareWorkflowFixture, type WorkflowFetch } from '../client';
-import { listLocalWorkflows, readLocalWorkflow } from './local-workflow-store';
+import { MOCK_WORKFLOW_REGISTRY } from '@/config/app.config';
+import { canonicalFormCode, fetchWorkflow, prepareWorkflowFixture, WorkflowReadError, type WorkflowFetch } from '../client';
+import { readLocalWorkflow } from './local-workflow-store';
 import { capturedFormSession } from '../citizen-session';
 
 type CitizenStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem' | 'key' | 'length'>;
@@ -25,26 +25,21 @@ export async function loadCitizenWorkflow(formCode: string, options: {
   abortIfNeeded(options.signal);
   const code = canonicalFormCode(formCode);
   let live: FormWorkflow | undefined;
+  let failure: unknown;
   try {
     live = await fetchWorkflow(code, { fetcher: (input, init) => (options.fetcher ?? fetch)(input, { ...init, signal: options.signal, cache: 'no-store' }) });
-  } catch { abortIfNeeded(options.signal); }
+  } catch (reason) { abortIfNeeded(options.signal); failure = reason; }
   abortIfNeeded(options.signal);
   if (live) {
-    if (!active(live)) throw new Error('WORKFLOW_NOT_PUBLISHED');
+    if (!active(live)) throw new WorkflowReadError(404, 'WORKFLOW_NOT_PUBLISHED');
     return { workflow: live, source: 'live' };
   }
-  const local = options.storage ? listLocalWorkflows(options.storage, { publishedOnly: true })
-    .find(workflow => canonicalFormCode(workflow.formCode) === code) : undefined;
-  if (local) {
-    const prepared = prepareWorkflowFixture(local, code);
-    if (prepared && active(prepared)) return { workflow: prepared, source: 'local' };
-  }
-  if (options.allowDemo ?? APP_CONFIG.useMockData) {
+  if (options.allowDemo === true) {
     const fixture = Object.values(MOCK_WORKFLOW_REGISTRY).find(workflow => canonicalFormCode(workflow.formCode) === code);
     const prepared = fixture && prepareWorkflowFixture(fixture, code);
-    if (prepared) return { workflow: prepared, source: 'demo' };
+    if (prepared && active(prepared)) return { workflow: prepared, source: 'demo' };
   }
-  throw new Error('WORKFLOW_UNAVAILABLE');
+  throw failure ?? new WorkflowReadError(404, 'WORKFLOW_NOT_PUBLISHED');
 }
 
 export async function listCitizenForms(options: {
@@ -65,11 +60,7 @@ export async function listCitizenForms(options: {
     }
   } catch { abortIfNeeded(options.signal); offline = true; }
   abortIfNeeded(options.signal);
-  for (const workflow of options.storage ? listLocalWorkflows(options.storage, { publishedOnly: true }) : []) {
-    const code = canonicalFormCode(workflow.formCode);
-    if (!byCode.has(code)) byCode.set(code, { id: workflow.templateId ?? code, formCode: code, formTitle: workflow.formTitle, source: 'local' });
-  }
-  if (offline && (options.allowDemo ?? APP_CONFIG.useMockData)) for (const [id, workflow] of Object.entries(MOCK_WORKFLOW_REGISTRY)) {
+  if (offline && options.allowDemo === true) for (const [id, workflow] of Object.entries(MOCK_WORKFLOW_REGISTRY)) {
     const code = canonicalFormCode(workflow.formCode);
     if (!byCode.has(code)) byCode.set(code, { id, formCode: code, formTitle: workflow.formTitle, source: 'demo' });
   }

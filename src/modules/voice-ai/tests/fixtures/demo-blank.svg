@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1400" viewBox="0 0 1000 1400">
+  <rect width="1000" height="1400" fill="white"/>
+  <g font-family="Arial, sans-serif" fill="black">
+    <text x="80" y="110" font-size="36" font-weight="bold">PHIẾU DEMO HƯỚNG DẪN ĐIỀN</text>
+    <text x="80" y="165" font-size="26">Phôi trống thử nghiệm - không dùng làm thủ tục</text>
+    <text x="80" y="275" font-size="36">Họ và tên:</text>
+    <text x="80" y="495" font-size="36">Địa chỉ liên hệ:</text>
+    <text x="80" y="765" font-size="26">Ghi thông tin của chính mình, không chép ví dụ.</text>
+    <text x="80" y="820" font-size="26">Không ghi dữ liệu cá nhân thật khi chạy demo.</text>
+  </g>
+  <g fill="none" stroke="black" stroke-width="3">
+    <rect x="80" y="300" width="840" height="100"/>
+    <rect x="80" y="520" width="840" height="100"/>
+  </g>
+</svg>

@@ -16,7 +16,7 @@ export class TTSController {
       const stepIndex = dto.stepIndex;
       const region = dto.region ?? 'NORTH';
 
-      if (typeof text !== 'string' || !text.trim() || text.length > 2000 ||
+      if (typeof text !== 'string' || !text.trim() || text.length > 2000 || Buffer.byteLength(text, 'utf8') > 5000 ||
           !Number.isSafeInteger(stepIndex) || (stepIndex as number) < 1 || (stepIndex as number) > 1000 ||
           (region !== 'NORTH' && region !== 'SOUTH')) {
         return {
@@ -39,6 +39,7 @@ export class TTSController {
           data: {
             audioUrl: result.audioUrl,
             wordTimestamps: result.wordTimestamps,
+            timestampSource: result.timestampSource,
           },
         },
       };

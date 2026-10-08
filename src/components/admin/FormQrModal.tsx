@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import { APP_ROUTES } from '@/shared/routes';
 import { X, Download, Printer, Copy, Check, ExternalLink, QrCode, Smartphone, FileText } from "lucide-react";
 
 interface FormQrModalProps {
@@ -33,7 +34,7 @@ export const FormQrModal: React.FC<FormQrModalProps> = ({
 
   const targetUrl =
     targetType === "direct"
-      ? `${baseUrl}/citizen/guide?templateId=${templateId}`
+      ? `${baseUrl}${APP_ROUTES.citizenGuide(formCode)}`
       : `${baseUrl}/citizen`;
 
   const handleDownloadImage = () => {

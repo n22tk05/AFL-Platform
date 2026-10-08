@@ -62,7 +62,7 @@ export class RecognitionSubmissionLifecycle {
     this.transcript.update(text, isFinal);
     return true;
   }
-  release(id: number, context: RecognitionContext): { ready: boolean; question: string } {
+  release(id: number, context: RecognitionContext): { ready: boolean; question: string; context?: RecognitionContext } {
     if (!this.turn || this.turn.id !== id || this.turn.released) return { ready: false, question: '' };
     this.turn.released = true;
     this.turn.context = context;

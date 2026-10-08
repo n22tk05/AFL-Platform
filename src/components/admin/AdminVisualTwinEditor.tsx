@@ -37,16 +37,11 @@ export function AdminVisualTwinEditor({
   const containerRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
 
-  const activePage = pages.find((p) => p.pageNumber === currentPageNumber) ||
-    pages[0] || {
-      pageNumber: 1,
-      imageUrl: "/assets/forms/01-lptb/page-1.jpg",
-      width: 1200,
-      height: 1700,
-    };
+  const activePage = pages.find((page) => page.pageNumber === currentPageNumber);
 
   const [mode, setMode] = useState<"drag" | "draw">("drag");
   const boxStyle = normalizeCoordsToBoxStyle(highlightCoords);
+  if (!activePage?.imageUrl) return <p role="status">Chưa có ảnh phôi của trang cần đối soát.</p>;
 
   // Khởi động thao tác kéo thả (di chuyển, co giãn 8 điểm neo, hoặc vẽ mới)
   const startInteraction = (e: React.MouseEvent, type: InteractionType) => {
@@ -267,7 +262,7 @@ export function AdminVisualTwinEditor({
           {/* Ảnh scan tài liệu gốc */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={activePage?.imageUrl || "/assets/forms/01-lptb/page-1.jpg"}
+            src={activePage.imageUrl}
             alt="Biểu mẫu cần đối soát"
             className="w-full h-auto block pointer-events-none select-none"
             draggable={false}

@@ -1,0 +1,23 @@
+{
+  "fixture": "demo-blank.svg",
+  "frame": "fixture-original",
+  "width": 1000,
+  "height": 1400,
+  "coordinateOrder": "normalized-yxyx",
+  "expectedInputCount": 2,
+  "fields": [
+    {
+      "label": "Họ và tên",
+      "rect": { "x": 80, "y": 300, "width": 840, "height": 100 },
+      "normalizedCoords": [0.21428571428571427, 0.08, 0.2857142857142857, 0.92],
+      "expectedTextInsideInput": ""
+    },
+    {
+      "label": "Địa chỉ liên hệ",
+      "rect": { "x": 80, "y": 520, "width": 840, "height": 100 },
+      "normalizedCoords": [0.37142857142857144, 0.08, 0.44285714285714284, 0.92],
+      "expectedTextInsideInput": ""
+    }
+  ],
+  "comparisonRequirement": "Transform ground truth into processed-primary when the pipeline changes the image frame. Rectangles describe drawn borders, not OCR text bounds."
+}

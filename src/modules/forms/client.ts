@@ -8,6 +8,13 @@ export type WorkflowStorage = Pick<Storage, 'getItem' | 'setItem'>;
 export type WorkflowFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 export type WorkflowSource = 'live' | 'cache' | 'fixture';
 
+export class WorkflowReadError extends Error {
+  constructor(readonly status: number | null, readonly code: string) {
+    super(`WORKFLOW_UNAVAILABLE: ${code}`);
+    this.name = 'WorkflowReadError';
+  }
+}
+
 export function canonicalFormCode(formCode: string): string {
   let value = formCode;
   try { value = decodeURIComponent(formCode); } catch { /* use the original code when it is not encoded */ }
@@ -21,7 +28,7 @@ export function workflowStorageKey(formCode: string): string {
 function validWorkflow(value: unknown): value is FormWorkflow {
   if (!value || typeof value !== 'object') return false;
   const workflow = value as Partial<FormWorkflow>;
-  const statuses = ['draft', 'pending_review', 'active', 'archived', 'DRAFT', 'ACTIVE', 'ARCHIVED'];
+  const statuses = ['draft', 'pending_review', 'active', 'archived', 'DRAFT', 'PENDING_REVIEW', 'ACTIVE', 'ARCHIVED'];
   if (typeof workflow.formCode !== 'string' || !workflow.formCode.trim() ||
       typeof workflow.formTitle !== 'string' || !workflow.formTitle.trim() ||
       !Array.isArray(workflow.steps) || workflow.steps.length === 0 ||
@@ -92,23 +99,25 @@ export async function fetchWorkflow(
   const fetcher = options.fetcher ?? fetch;
   try {
     const response = await fetcher(`/api/forms/${encodeURIComponent(formCode)}/workflow`);
-    if (!response.ok) throw new Error(`WORKFLOW_HTTP_${response.status}`);
-    const envelope: unknown = await response.json();
+    if (!response.ok) throw new WorkflowReadError(response.status, `WORKFLOW_HTTP_${response.status}`);
+    let envelope: unknown;
+    try { envelope = await response.json(); }
+    catch { throw new WorkflowReadError(502, 'INVALID_WORKFLOW_RESPONSE'); }
     const data = envelope && typeof envelope === 'object' && 'success' in envelope &&
       (envelope as { success?: unknown }).success === true
       ? (envelope as { data?: unknown }).data
       : undefined;
     if (!validWorkflow(data) || canonicalFormCode(data.formCode) !== canonicalFormCode(formCode)) {
-      throw new Error('INVALID_WORKFLOW_RESPONSE');
+      throw new WorkflowReadError(502, 'INVALID_WORKFLOW_RESPONSE');
     }
     try { options.storage?.setItem(workflowStorageKey(formCode), JSON.stringify(data)); } catch { /* storage is optional */ }
     options.onSource?.('live');
     return data;
-  } catch {
+  } catch (reason) {
     const cached = cachedWorkflow(options.storage, formCode);
     if (cached) { options.onSource?.('cache'); return cached; }
     const fallback = typeof options.fallback === 'function' ? options.fallback() : options.fallback;
     if (validWorkflow(fallback)) { options.onSource?.('fixture'); return fallback; }
-    throw new Error('WORKFLOW_UNAVAILABLE');
+    throw reason instanceof WorkflowReadError ? reason : new WorkflowReadError(null, 'NETWORK_ERROR');
   }
 }

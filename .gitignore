@@ -9,6 +9,8 @@
 /.next/
 /.next-document-json-test/
 /.next-document-json-build/
+/.next-workflow-recheck-build/
+/.next-demo/
 /out/
 /build
 dist/
@@ -45,6 +47,8 @@ _bmad
 _bmad-output
 .github
 AGENTS.md
+.peercode
+
 # Local cache & Sensitive files
 *.pem
 *.key

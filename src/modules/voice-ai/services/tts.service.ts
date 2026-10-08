@@ -38,7 +38,7 @@ export function isValidMp3(buffer: Buffer): boolean {
 }
 
 export function audioIdentity(text: string, stepIndex: number, region: VietnameseVoiceRegion) {
-  if (typeof text !== 'string' || !text.trim() || text.length > 2000 ||
+  if (typeof text !== 'string' || !text.trim() || text.length > 2000 || Buffer.byteLength(text, 'utf8') > 5000 ||
       !Number.isSafeInteger(stepIndex) || stepIndex < 1 || stepIndex > 1000 ||
       !['NORTH', 'SOUTH'].includes(region)) throw new Error('INVALID_TTS_REQUEST');
   const voiceName = region === 'NORTH' ? 'vi-VN-Neural2-A' : 'vi-VN-Neural2-D';
@@ -47,14 +47,41 @@ export function audioIdentity(text: string, stepIndex: number, region: Vietnames
   return { voiceName, cacheKey, hashKey, fileName: `${hashKey}.mp3` };
 }
 
+export function boundAudioUrlOrEmpty(text: string, stepIndex: number, audioUrl: unknown): string {
+  if (typeof audioUrl !== 'string' || !/^\/audio\/[a-f0-9]{64}\.mp3$/.test(audioUrl)) return '';
+  try {
+    return (['NORTH', 'SOUTH'] as const).some(region => audioUrl === `/audio/${audioIdentity(text, stepIndex, region).fileName}`) ? audioUrl : '';
+  } catch { return ''; }
+}
+
+export function validWordTimestamps(value: unknown, text: string): value is WordTimestamp[] {
+  const words = text.trim().split(/\s+/);
+  if (!Array.isArray(value) || value.length !== words.length) return false;
+  return value.every((point, index) => point && point.word === words[index].toUpperCase() &&
+    Number.isFinite(point.startMs) && Number.isFinite(point.endMs) && point.startMs >= 0 && point.endMs > point.startMs &&
+    (index === 0 || point.startMs >= value[index - 1].endMs));
+}
+
+export function timestampsFromTimepoints(value: unknown, text: string): WordTimestamp[] | null {
+  const words = text.trim().split(/\s+/);
+  if (!Array.isArray(value) || value.length !== words.length || value.some((point, index) =>
+    !point || point.markName !== `w_${index}` || typeof point.timeSeconds !== 'number' || !Number.isFinite(point.timeSeconds))) return null;
+  const timestamps = value.map((point, index) => {
+    const startMs = Math.round(point.timeSeconds * 1000);
+    return { word: words[index].toUpperCase(), startMs,
+      endMs: index + 1 < value.length ? Math.round(value[index + 1].timeSeconds * 1000) : startMs + 350 };
+  });
+  return validWordTimestamps(timestamps, text) ? timestamps : null;
+}
+
 export class TTSService {
   private readonly client: TextToSpeechClient | null;
-  private readonly outputDir = path.join(process.cwd(), 'public', 'audio');
   private static readonly inFlightRequests = new Map<string, Promise<SynthesisResult>>();
 
   constructor(
     private readonly cache: LocalCacheService,
-    private readonly voiceCacheRepository: VoiceCacheRepository
+    private readonly voiceCacheRepository: VoiceCacheRepository,
+    private readonly outputDir = path.join(process.cwd(), 'public', 'audio'),
   ) {
     this.client = process.env.GOOGLE_APPLICATION_CREDENTIALS ? new TextToSpeechClient() : null;
   }
@@ -85,13 +112,17 @@ export class TTSService {
       const audioBuffer = fs.readFileSync(filePath);
       if (isValidMp3(audioBuffer)) {
         let wordTimestamps = this.calculateTimestamps(text);
+        let timestampSource: SynthesisResult['timestampSource'] = 'estimated';
         if (fs.existsSync(timestampPath)) {
           try {
             const stored = JSON.parse(fs.readFileSync(timestampPath, 'utf8'));
-            if (Array.isArray(stored)) wordTimestamps = stored;
+            if (validWordTimestamps(stored?.wordTimestamps, text)) {
+              wordTimestamps = stored.wordTimestamps;
+              if (stored.timestampSource === 'ssml_marks') timestampSource = 'ssml_marks';
+            } else if (validWordTimestamps(stored, text)) wordTimestamps = stored;
           } catch {}
         }
-        return { audioUrl, audioBuffer, wordTimestamps };
+        return { audioUrl, audioBuffer, wordTimestamps, timestampSource };
       }
     }
 
@@ -112,15 +143,17 @@ export class TTSService {
   ): Promise<SynthesisResult> {
     let audioBuffer: Buffer | null = null;
     let wordTimestamps = this.calculateTimestamps(text);
+    let timestampSource: SynthesisResult['timestampSource'] = 'estimated';
     const apiKey = process.env.GOOGLE_TTS_API_KEY;
 
     if (apiKey) {
       try {
-        const { ssml, words } = this.formatSSMLWithMarks(text);
+        const { ssml } = this.formatSSMLWithMarks(text);
+        const useMarks = Buffer.byteLength(ssml, 'utf8') <= 5000;
         const response = await fetch(`https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=${apiKey}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ input: { ssml }, voice: { languageCode: 'vi-VN', name: voiceName },
-            audioConfig: { audioEncoding: 'MP3', speakingRate: SPEAKING_RATE }, enableTimePointing: ['SSML_MARK'] }),
+          body: JSON.stringify({ input: useMarks ? { ssml } : { text }, voice: { languageCode: 'vi-VN', name: voiceName },
+            audioConfig: { audioEncoding: 'MP3', speakingRate: SPEAKING_RATE }, ...(useMarks ? { enableTimePointing: ['SSML_MARK'] } : {}) }),
           signal: AbortSignal.timeout(8000),
         });
         if (response.ok) {
@@ -129,18 +162,13 @@ export class TTSService {
             const candidate = Buffer.from(data.audioContent, 'base64');
             if (isValidMp3(candidate)) {
               audioBuffer = candidate;
-              if (Array.isArray(data.timepoints) && data.timepoints.length === words.length) {
-                wordTimestamps = data.timepoints.map((point: { timeSeconds: number }, index: number) => {
-                  const startMs = Math.round(point.timeSeconds * 1000);
-                  const next = data.timepoints[index + 1];
-                  return { word: words[index].toUpperCase(), startMs, endMs: next ? Math.round(next.timeSeconds * 1000) : startMs + 350 };
-                });
-              }
+              const markedTimestamps = useMarks ? timestampsFromTimepoints(data.timepoints, text) : null;
+              if (markedTimestamps) { wordTimestamps = markedTimestamps; timestampSource = 'ssml_marks'; }
             }
           }
         }
       } catch (error) {
-        console.warn('[TTSService] REST TTS thất bại:', error);
+        console.warn('[TTSService] REST TTS thất bại:', error instanceof Error ? error.name : 'UNKNOWN');
       }
     }
 
@@ -153,16 +181,16 @@ export class TTSService {
         const candidate = Buffer.from(response.audioContent as Uint8Array);
         if (isValidMp3(candidate)) audioBuffer = candidate;
       } catch (error) {
-        console.warn('[TTSService] SDK TTS thất bại:', error);
+        console.warn('[TTSService] SDK TTS thất bại:', error instanceof Error ? error.name : 'UNKNOWN');
       }
     }
     if (!audioBuffer) throw new Error('TTS_UNAVAILABLE');
 
     fs.mkdirSync(this.outputDir, { recursive: true });
     fs.writeFileSync(filePath, audioBuffer);
-    fs.writeFileSync(timestampPath, JSON.stringify(wordTimestamps));
-    this.cache.set(cacheKey, { audioUrl, wordTimestamps });
+    fs.writeFileSync(timestampPath, JSON.stringify({ wordTimestamps, timestampSource }));
+    this.cache.set(cacheKey, { audioUrl, wordTimestamps, timestampSource });
     await this.voiceCacheRepository.save({ cacheKey: hashKey, rawText: text, audioUrl, voiceName, speakingRate: SPEAKING_RATE }).catch(() => {});
-    return { audioBuffer, audioUrl, wordTimestamps };
+    return { audioBuffer, audioUrl, wordTimestamps, timestampSource };
   }
 }

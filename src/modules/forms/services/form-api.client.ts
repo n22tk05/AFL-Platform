@@ -2,6 +2,19 @@
 
 import type { FormWorkflow } from '@/shared/contracts';
 import type { AdminFormSummary } from '@/modules/forms/types/form.types';
+import { validCoords } from './form-validation.service';
+import { formErrorMessage } from './form-feedback.client';
+
+export function parseReviewWorkflowEditor(editor: string): FormWorkflow | undefined {
+  try {
+    const workflow = JSON.parse(editor) as FormWorkflow;
+    if (!workflow || typeof workflow.formCode !== 'string' || typeof workflow.formTitle !== 'string' || !Array.isArray(workflow.steps)
+      || workflow.steps.some(step => !step || !Number.isSafeInteger(step.stepIndex) || typeof step.boxId !== 'string'
+        || ['sectionName', 'label', 'voiceGuidance', 'exampleRedText', 'audioUrl'].some(field => typeof step[field as keyof typeof step] !== 'string')
+        || !validCoords(step.highlightCoords))) return undefined;
+    return workflow;
+  } catch { return undefined; }
+}
 
 export type AdminApiFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
@@ -44,7 +57,7 @@ async function request<T>(path: string, adminKey: string, init: RequestInit = {}
   try { envelope = await response.json() as Envelope<T>; } catch { /* classified below */ }
   if (!response.ok || !envelope || envelope.success !== true) {
     const details = errorDetails(envelope && envelope.success === false ? envelope.error : undefined);
-    throw new AdminApiError(response.status, details.code, details.message);
+    throw new AdminApiError(response.status, details.code, formErrorMessage({ status: response.status, code: details.code }, 'Yêu cầu quản trị thất bại. Vui lòng kiểm tra và thử lại.'));
   }
   return envelope.data;
 }

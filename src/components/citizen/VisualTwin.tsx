@@ -22,7 +22,7 @@ export function VisualTwin({
   const containerRef = useRef<HTMLDivElement>(null);
   const highlightBoxRef = useRef<HTMLDivElement>(null);
 
-  const activePage = pages.find((p) => p.pageNumber === currentPageNumber) || pages[0];
+  const activePage = pages.find((page) => page.pageNumber === currentPageNumber);
   const boxStyle = normalizeCoordsToBoxStyle(highlightCoords);
 
   // Tự động căn chỉnh mượt mà để ô cần điền luôn nằm ở vị trí dễ nhìn nhất
@@ -39,6 +39,8 @@ export function VisualTwin({
       });
     }
   }, [highlightCoords, currentPageNumber]);
+
+  if (!activePage?.imageUrl) return <p role="status">Chưa có ảnh phôi cho trang {currentPageNumber}; không thay bằng biểu mẫu khác.</p>;
 
   return (
     <div className="w-full bg-white rounded-2xl overflow-hidden shadow-md border-2 border-slate-300 flex flex-col">
@@ -62,7 +64,7 @@ export function VisualTwin({
           {/* Ảnh scan tĩnh tự nhiên, không bị méo tỉ lệ hay letterbox */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={activePage?.imageUrl || "/assets/forms/01-lptb/page-1.jpg"}
+            src={activePage.imageUrl}
             alt={`Tờ khai trang ${currentPageNumber}`}
             className="w-full h-auto block select-none pointer-events-none"
           />

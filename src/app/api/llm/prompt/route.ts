@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         success: false,
         error: {
           code: 'PROMPT_GENERATION_FAILED',
-          message_vi: 'Không thể sinh kịch bản biểu mẫu từ AI. Hệ thống đang kích hoạt chế độ dự phòng.',
+          message_vi: 'Không thể sinh kịch bản biểu mẫu. Cán bộ vui lòng kiểm tra và thử lại sau.',
         },
       },
       { status: 500 }

@@ -303,7 +303,8 @@ async function runAdminClientTests() {
           { status: 503 },
         ),
     ),
-    /DATABASE_UNAVAILABLE/,
+    (error: unknown) => error instanceof AdminApiError && error.status === 503 && error.code === 'DATABASE_UNAVAILABLE'
+      && /Cơ sở dữ liệu tạm thời không khả dụng/.test(error.message),
   );
   assert.equal(
     active,

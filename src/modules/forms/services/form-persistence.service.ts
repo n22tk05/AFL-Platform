@@ -140,7 +140,7 @@ export class FormPersistenceService {
     try {
       return await this.repository.saveDraft(manifest, workflow);
     } catch (error) {
-      if (error instanceof Error && error.message === "FORM_ACTIVE")
+      if (error instanceof Error && ['FORM_ACTIVE', 'INVALID_WORKFLOW', 'FORM_ASSET_UNAVAILABLE'].includes(error.message))
         throw error;
       this.databaseHealth.markOffline();
       throw new Error("DATABASE_UNAVAILABLE");
@@ -209,7 +209,8 @@ export class FormPersistenceService {
       throw new Error("DATABASE_UNAVAILABLE");
     try {
       return await this.repository.getWorkflowByFormCode(formCode);
-    } catch {
+    } catch (error) {
+      if (error instanceof Error && error.message === 'FORM_ASSET_UNAVAILABLE') throw error;
       this.databaseHealth.markOffline();
       throw new Error("DATABASE_UNAVAILABLE");
     }
@@ -239,7 +240,8 @@ export class FormPersistenceService {
       throw new Error("DATABASE_UNAVAILABLE");
     try {
       return await this.repository.getWorkflowForReview(formCode);
-    } catch {
+    } catch (error) {
+      if (error instanceof Error && error.message === 'FORM_ASSET_UNAVAILABLE') throw error;
       this.databaseHealth.markOffline();
       throw new Error("DATABASE_UNAVAILABLE");
     }
@@ -260,6 +262,7 @@ export class FormPersistenceService {
           "FORM_CODE_MISMATCH",
           "INVALID_WORKFLOW",
           "REVIEW_CONFLICT",
+          "FORM_ASSET_UNAVAILABLE",
         ].includes(error.message)
       )
         throw error;
@@ -298,6 +301,7 @@ export class FormPersistenceService {
       }
       if (message === "REVIEW_CONFLICT")
         return { success: false, newStatus: "REVIEW_CONFLICT" };
+      if (message === 'FORM_ASSET_UNAVAILABLE') return { success: false, newStatus: 'FORM_ASSET_UNAVAILABLE' };
       this.databaseHealth.markOffline();
       return { success: false, newStatus: "DATABASE_UNAVAILABLE" };
     }

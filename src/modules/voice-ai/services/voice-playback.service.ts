@@ -1,6 +1,6 @@
 export type AudioFactory = (url: string) => Pick<HTMLAudioElement, 'play' | 'pause' | 'currentTime' | 'onended' | 'onerror'>;
 export type CancelSpeech = () => void;
-export type SpeechDriver = (text: string, onDone: () => void) => CancelSpeech | null;
+export type SpeechDriver = (text: string, onDone: (errorMessage?: string) => void) => CancelSpeech | null;
 export interface PlaybackSession { promise: Promise<void>; cancel: () => void }
 
 const browserAudioFactory: AudioFactory = url => new Audio(url);
@@ -9,8 +9,8 @@ const browserSpeechDriver: SpeechDriver = (text, onDone) => {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'vi-VN';
   utterance.rate = 0.9;
-  utterance.onend = onDone;
-  utterance.onerror = onDone;
+  utterance.onend = () => onDone();
+  utterance.onerror = () => onDone('Không đọc được hướng dẫn. Bác có thể xem chữ trên màn hình và thử lại.');
   window.speechSynthesis.speak(utterance);
   return () => window.speechSynthesis.cancel();
 };
@@ -20,12 +20,13 @@ export function startVoicePlayback(
   text: string,
   audioUrl: string | undefined,
   onPlaying: (playing: boolean) => void,
-  options: { createAudio?: AudioFactory; speak?: SpeechDriver } = {},
+  options: { createAudio?: AudioFactory; speak?: SpeechDriver; onError?: (message: string) => void } = {},
 ): PlaybackSession {
   const createAudio = options.createAudio ?? browserAudioFactory;
   const speak = options.speak ?? browserSpeechDriver;
   let audio: ReturnType<AudioFactory> | null = null;
   let cancelSpeech: CancelSpeech | null = null;
+  let speechStarted = false;
   let settled = false;
   let resolvePromise!: () => void;
   const promise = new Promise<void>(resolve => { resolvePromise = resolve; });
@@ -34,24 +35,36 @@ export function startVoicePlayback(
     audio.onended = null;
     audio.onerror = null;
   };
-  const settle = () => {
+  const stopMedia = () => {
+    try { audio?.pause(); } catch {}
+    try { if (audio) audio.currentTime = 0; } catch {}
+  };
+  const settle = (errorMessage?: string) => {
     if (settled) return;
     settled = true;
     detachAudio();
-    onPlaying(false);
-    resolvePromise();
+    try {
+      onPlaying(false);
+      if (errorMessage) options.onError?.(errorMessage);
+    } finally { resolvePromise(); }
   };
   const fallback = () => {
-    if (settled || cancelSpeech) return;
+    if (settled || speechStarted) return;
+    speechStarted = true;
     detachAudio();
-    cancelSpeech = speak(text, settle);
-    if (!cancelSpeech) settle();
+    stopMedia();
+    try {
+      cancelSpeech = speak(text, settle);
+      if (!cancelSpeech) settle('Thiết bị chưa hỗ trợ đọc hướng dẫn. Bác có thể xem chữ trên màn hình.');
+    } catch {
+      settle('Không đọc được hướng dẫn. Bác có thể xem chữ trên màn hình và thử lại.');
+    }
   };
   onPlaying(true);
   if (audioUrl && (typeof Audio !== 'undefined' || options.createAudio)) {
     try {
       audio = createAudio(audioUrl);
-      audio.onended = settle;
+      audio.onended = () => settle();
       audio.onerror = fallback;
       Promise.resolve(audio.play()).catch(fallback);
     } catch { fallback(); }
@@ -63,11 +76,9 @@ export function startVoicePlayback(
       if (settled) return;
       settled = true;
       detachAudio();
-      try { audio?.pause(); } catch { /* ignore media teardown errors */ }
-      if (audio) audio.currentTime = 0;
-      cancelSpeech?.();
-      onPlaying(false);
-      resolvePromise();
+      stopMedia();
+      try { cancelSpeech?.(); } catch {}
+      try { onPlaying(false); } finally { resolvePromise(); }
     },
   };
 }

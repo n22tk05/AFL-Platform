@@ -63,6 +63,9 @@ export interface FormGeometricBox {
 }
 
 export interface FormGeometricManifest {
+  pages?: FormPageMetadata[];
+  circularInfo?: string;
+  department?: string;
   formId: string;                    // Mã định danh form, ví dụ: "form_01_lptb"
   formTitle: string;                 // Tiêu đề form nhận diện được
   formCode: string;                  // Ký hiệu mẫu: "Mẫu 01/LPTB"
@@ -82,14 +85,14 @@ export interface StepFaqItem {
 }
 
 export interface WorkflowStep {
-  stepIndex: number;                 // Thứ tự bước: 0, 1, 2, 3...
+  stepIndex: number;
   boxId: string;                     // Khớp với boxId của OpenCV
-  pageNumber?: number;               // 1 hoặc 2 (Trang chứa ô này)
+  pageNumber?: number;
   sectionName: string;               // Phân mục hành chính: "I. THÔNG TIN NGƯỜI NỘP THUẾ", "II. ĐẶC ĐIỂM NHÀ ĐẤT"
   label: string;                     // Nhãn trường chuẩn: "Mục [04]: Tên người nộp thuế"
   voiceGuidance: string;             // Lời thoại bình dân ấm áp đọc cho người già (tốc độ 0.9x)
   audioUrl: string;                  // Đường dẫn file MP3
-  exampleRedText: string;            // Chữ mẫu in hoa màu đỏ đậm #D32F2F (WCAG AAA)
+  exampleRedText: string;
   highlightCoords: NormalizedBoundingBox; // Tọa độ chuẩn hóa trên trang tương ứng
   requiresPrerequisiteDoc?: boolean; // Ô này có cần lấy thông tin từ Sổ đỏ/Biên bản phạt không?
   sourceFieldFromPrerequisite?: string; // Tên trường nguồn (ví dụ: "so_do.dien_tich")

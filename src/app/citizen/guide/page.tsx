@@ -5,7 +5,9 @@ import { documentSession, prerequisiteValue } from "@/modules/documents/session"
 import { useSearchParams, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, CheckCircle, AlertTriangle, Home } from "lucide-react";
 import { WorkflowStep, FormWorkflow } from "@/shared/contracts";
-import { FormStorageService } from "@/shared/services/form-storage";
+import { loadCitizenWorkflow, resolveCitizenFormCode } from '@/modules/forms/services/citizen-workflow.client';
+import { citizenWorkflowFeedback } from '@/modules/forms/services/form-feedback.client';
+import { clearCitizenSession } from '@/modules/forms/citizen-session';
 import { VisualTwin } from "@/components/citizen/VisualTwin";
 import { RedTextExample } from "@/components/citizen/RedTextExample";
 import { StepHeader } from "@/components/citizen/StepHeader";
@@ -14,52 +16,33 @@ import { VoiceAssistantPanel } from "@/components/citizen/VoiceAssistantPanel";
 function GuideContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const templateId = searchParams?.get("templateId") || "tpl_01_lptb";
+  const formCode = resolveCitizenFormCode(searchParams?.get('formCode') ?? null, searchParams?.get('templateId') ?? null);
 
   const [workflow, setWorkflow] = useState<FormWorkflow | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<unknown>(null);
+  const [retry, setRetry] = useState(0);
 
   // Nạp kịch bản chỉ cho phép biểu mẫu ACTIVE
   useEffect(() => {
-    const activeWorkflow = FormStorageService.getCitizenWorkflow(templateId);
-    setWorkflow(activeWorkflow);
-    setIsLoading(false);
-    setCurrentStepIndex(0);
-  }, [templateId]);
-
-  // Lắng nghe sự kiện đồng bộ nếu Admin cập nhật bản mới (cả liên tab lẫn cùng tab)
-  useEffect(() => {
-    const reloadWorkflow = () => {
-      const updated = FormStorageService.getCitizenWorkflow(templateId);
-      setWorkflow(updated);
-      if (updated?.steps) {
-        setCurrentStepIndex((prev) => Math.min(prev, Math.max(0, updated.steps.length - 1)));
-      }
+    let controller = new AbortController();
+    const reloadWorkflow = async () => {
+      controller.abort(); controller = new AbortController();
+      const signal = controller.signal;
+      setWorkflow(null); setLoadError(null); setIsLoading(true); setCurrentStepIndex(0);
+      try {
+        if (formCode) {
+          const result = await loadCitizenWorkflow(formCode, { signal });
+          if (!signal.aborted) setWorkflow(result.workflow);
+        }
+      } catch (reason) { if (!signal.aborted) { setWorkflow(null); setLoadError(reason); } }
+      finally { if (!signal.aborted) setIsLoading(false); }
     };
+    void reloadWorkflow(); window.addEventListener('focus', reloadWorkflow);
+    return () => { controller.abort(); window.removeEventListener('focus', reloadWorkflow); };
+  }, [formCode, retry]);
 
-    const handleCustomUpdate = (e: any) => {
-      if (!e.detail?.templateId || e.detail.templateId === templateId) {
-        reloadWorkflow();
-      }
-    };
-
-    const handleStorageEvent = (e: StorageEvent) => {
-      if (!e.key || e.key === `afl_workflow_published_${templateId}` || e.key === "afl_admin_last_published_time") {
-        reloadWorkflow();
-      }
-    };
-
-    window.addEventListener("storage", handleStorageEvent);
-    window.addEventListener("afl:form-updated", handleCustomUpdate);
-    window.addEventListener("focus", reloadWorkflow);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageEvent);
-      window.removeEventListener("afl:form-updated", handleCustomUpdate);
-      window.removeEventListener("focus", reloadWorkflow);
-    };
-  }, [templateId]);
 
   // Đọc dữ liệu chứng từ tiên quyết (Biên bản phạt / Sổ đỏ) từ Session RAM (Nghị định 13)
   const [prerequisiteFields, setPrerequisiteFields] = useState<Record<string, string> | null>(null);
@@ -98,7 +81,7 @@ function GuideContent() {
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      documentSession.clear();
+      clearCitizenSession();
       alert(`Chúc mừng bác đã hoàn thành toàn bộ ${workflow?.formTitleVi || workflow?.formTitle || "tờ khai"}!`);
     }
   };
@@ -113,17 +96,20 @@ function GuideContent() {
 
   // BẢO MẬT & NGHIỆP VỤ: Chặn hiển thị nếu biểu mẫu chưa ACTIVE hoặc không tồn tại
   if (!workflow) {
+    const feedback = citizenWorkflowFeedback(loadError, !!formCode);
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-4">
         <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm">
           <AlertTriangle className="w-8 h-8" />
         </div>
         <h2 className="text-xl font-black text-slate-900 leading-snug">
-          Biểu mẫu chưa được ban hành chính thức
+          {feedback.title}
         </h2>
         <p className="text-sm text-slate-600 font-medium max-w-md">
-          Biểu mẫu này đang trong quá trình thẩm định hoặc chưa ban hành chính thức. Bác vui lòng chọn biểu mẫu khác nhé!
+          {feedback.message}
         </p>
+        {feedback.retryable && <button type="button" className="min-h-touch px-6 py-2.5 border rounded-xl font-bold"
+          onClick={() => setRetry(value => value + 1)}>Thử lại</button>}
         <button
           type="button"
           onClick={() => router.push("/citizen")}
@@ -199,6 +185,7 @@ function GuideContent() {
 
         {/* 3. Bộ điều khiển Trợ lý Giọng nói (Loa 0.9x + Micro Push-to-Talk + FAQ Chips) */}
         <VoiceAssistantPanel
+          key={`${workflow.formCode}:${workflow.version}:${currentStep.stepIndex}:${currentStep.voiceGuidance}`}
           voiceGuidance={currentStep.voiceGuidance}
           audioUrl={currentStep.audioUrl}
           faqs={currentStep.faqs}

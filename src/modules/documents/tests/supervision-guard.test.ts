@@ -108,7 +108,7 @@ test('SUPERVISION GUARD 3: Quy ước stepIndex 1-based được bảo toàn cho
         audioUrl: '',
         exampleRedText: 'NGUYỄN VĂN A',
         highlightCoords: [0.1, 0.1, 0.2, 0.9],
-        faqs: [],
+        faqs: [{ question: 'Ghi tên nào?', answer: 'Tên trên giấy tờ của bác.' }],
       },
       {
         stepIndex: 2, // 1-based!
@@ -119,7 +119,7 @@ test('SUPERVISION GUARD 3: Quy ước stepIndex 1-based được bảo toàn cho
         audioUrl: '',
         exampleRedText: '001234567890',
         highlightCoords: [0.3, 0.1, 0.4, 0.9],
-        faqs: [],
+        faqs: [{ question: 'Lấy số ở đâu?', answer: 'Số trên căn cước của bác.' }],
       },
     ],
   };

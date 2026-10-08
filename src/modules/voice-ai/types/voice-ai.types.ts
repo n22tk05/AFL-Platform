@@ -12,6 +12,7 @@ export interface SynthesisResult {
   audioBuffer: Buffer;
   audioUrl: string;
   wordTimestamps: WordTimestamp[];
+  timestampSource: 'ssml_marks' | 'estimated';
 }
 
 export interface QARequest {

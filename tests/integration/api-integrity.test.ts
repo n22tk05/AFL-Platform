@@ -130,11 +130,11 @@ async function main() {
 
   const qa = new VoiceQAService();
   const question = 'Thông tin mẫu cần ghi gì?';
-  const fromA = await qa.answerQuestion({ formCode: 'A', currentStep: { ...workflow.steps[0], faqs: [], exampleRedText: 'FORM A' }, userQuestion: question });
-  const fromB = await qa.answerQuestion({ formCode: 'B', currentStep: { ...workflow.steps[0], faqs: [], exampleRedText: 'FORM B' }, userQuestion: question });
+  const fromA = await qa.answerQuestion({ formCode: 'A', currentStep: { ...workflow.steps[0], label: 'Ô FORM A', faqs: [], exampleRedText: 'VÍ DỤ A' }, userQuestion: question });
+  const fromB = await qa.answerQuestion({ formCode: 'B', currentStep: { ...workflow.steps[0], label: 'Ô FORM B', faqs: [], exampleRedText: 'VÍ DỤ B' }, userQuestion: question });
   assert.notEqual(fromA.answerText, fromB.answerText);
   const qaController = new VoiceQAController(qa, { getWorkflowByFormCode: async (formCode: string) =>
-    formCode === 'DRAFT' ? null : { steps: [{ ...workflow.steps[0], faqs: [], exampleRedText: formCode }] } } as any);
+    formCode === 'DRAFT' ? null : { steps: [{ ...workflow.steps[0], label: `Ô FORM ${formCode}`, faqs: [], exampleRedText: 'VÍ DỤ' }] } } as any);
   assert.equal((await qaController.answer({ formCode: 'DRAFT', stepIndex: 1, userQuestion: question })).status, 404);
   const qaA = await qaController.answer({ formCode: 'A', stepIndex: 1, userQuestion: question, currentStep: { exampleRedText: 'FORGED' } } as any);
   const qaB = await qaController.answer({ formCode: 'B', stepIndex: 1, userQuestion: question });

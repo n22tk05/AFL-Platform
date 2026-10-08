@@ -47,6 +47,10 @@ export function validateManifest(value: unknown): FormGeometricManifest {
     throw new Error("INVALID_MANIFEST");
   }
   const ids = new Set<string>();
+  if (manifest.pages !== undefined && (!Array.isArray(manifest.pages) || manifest.pages.length !== 1 || !manifest.pages[0] || manifest.pages[0].pageNumber !== 1
+    || manifest.pages[0].width !== manifest.imageDimensions.width || manifest.pages[0].height !== manifest.imageDimensions.height
+    || typeof manifest.pages[0].imageUrl !== 'string' || !manifest.pages[0].imageUrl)) throw new Error('INVALID_MANIFEST_PAGES');
+  if ([manifest.circularInfo, manifest.department].some(value => value !== undefined && (typeof value !== 'string' || value.length > 1000))) throw new Error('INVALID_MANIFEST');
   for (const box of manifest.boxes) {
     if (
       !box ||
@@ -93,23 +97,31 @@ export function validateWorkflow(
       seen.has(step.boxId) ||
       typeof step.label !== "string" ||
       !step.label.trim() ||
+      step.label.length > 1000 ||
       typeof step.voiceGuidance !== "string" ||
       !step.voiceGuidance.trim() ||
+      step.voiceGuidance.length > 2000 ||
+      (step.pageNumber !== undefined && step.pageNumber !== 1) ||
       typeof step.sectionName !== "string" ||
       !step.sectionName.trim() ||
+      step.sectionName.length > 1000 ||
       typeof step.exampleRedText !== "string" ||
       !step.exampleRedText.trim() ||
+      step.exampleRedText.length > 2000 ||
       !validCoords(step.highlightCoords) ||
-      (step.faqs !== undefined &&
-        (!Array.isArray(step.faqs) ||
-          step.faqs.some(
+      (step.requiresPrerequisiteDoc !== undefined && typeof step.requiresPrerequisiteDoc !== 'boolean') ||
+      (step.sourceFieldFromPrerequisite !== undefined && typeof step.sourceFieldFromPrerequisite !== 'string') ||
+      (step.legalWarningFlag !== undefined && typeof step.legalWarningFlag !== 'boolean') ||
+      (!Array.isArray(step.faqs) || step.faqs.length < 1 || step.faqs.length > 10 ||
+        step.faqs.some(
             (faq: { question: string; answer: string } | null) =>
               !faq ||
               typeof faq.question !== "string" ||
               !faq.question.trim() ||
+              faq.question.length > 1000 ||
               typeof faq.answer !== "string" ||
-              !faq.answer.trim(),
-          )))
+              !faq.answer.trim() || faq.answer.length > 2000,
+        ))
     ) {
       throw new Error("INVALID_WORKFLOW");
     }

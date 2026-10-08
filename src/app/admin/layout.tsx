@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { AdminSessionProvider } from '@/modules/forms/admin-session.client';
 
 export default function AdminLayout({
   children,
@@ -10,7 +11,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-900">
+    <AdminSessionProvider><div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-900">
       {/* Header Desktop dành cho Cán bộ Quản trị */}
       <header className="bg-slate-900 text-white px-6 py-3.5 flex items-center justify-between border-b border-slate-800 shadow-md sticky top-0 z-50">
         <div className="flex items-center gap-4">
@@ -40,6 +41,6 @@ export default function AdminLayout({
 
       {/* Vùng làm việc chính */}
       <main className="flex-1 flex overflow-hidden">{children}</main>
-    </div>
+    </div></AdminSessionProvider>
   );
 }

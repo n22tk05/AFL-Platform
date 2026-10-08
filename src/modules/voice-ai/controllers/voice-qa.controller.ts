@@ -66,7 +66,7 @@ export class VoiceQAController {
             code: databaseUnavailable ? 'DATABASE_UNAVAILABLE' : 'QA_FAILED',
             message_vi: databaseUnavailable
               ? 'Dữ liệu hướng dẫn đang tạm thời không khả dụng. Bác vui lòng thử lại sau nhé!'
-              : 'Dạ bác ơi, bác nhìn theo chữ mẫu màu đỏ trên màn hình và ghi theo giúp cháu nhé!',
+              : 'Chưa giải đáp được. Bác vui lòng nhờ cán bộ quầy hỗ trợ thêm nhé!',
           },
         },
       };
