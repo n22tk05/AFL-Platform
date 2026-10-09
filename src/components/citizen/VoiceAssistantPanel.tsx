@@ -58,9 +58,16 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
 
   // Đọc câu thoại bằng Web Speech Synthesis qua utility chung (tốc độ 0.9x)
   const speakText = useCallback((text: string) => {
-    setIsPlaying(true);
-    speakVietnamese(text);
-    setTimeout(() => setIsPlaying(false), Math.max(1000, text.length * 70));
+    if (alive.current && typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "vi-VN";
+      utterance.rate = 0.9;
+      utterance.onstart = () => setIsPlaying(true);
+      utterance.onend = () => setIsPlaying(false);
+      utterance.onerror = () => setIsPlaying(false);
+      window.speechSynthesis.speak(utterance);
+    }
   }, []);
 
   const askQuestionRef = useRef<(code: string, idx: number, q: string) => Promise<void>>();
@@ -76,6 +83,7 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
     stopAudio,
   } = useVoiceAssistant({
     onTranscriptUpdate: (text, isFinal) => {
+      if (!alive.current) return;
       transcriptRef.current = text;
       if (text.trim()) {
         setLastQuestionText(text.trim());
@@ -85,6 +93,7 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
       }
     },
     onAnswerReceived: (answerText) => {
+      if (!alive.current) return;
       setFaqAnswer(answerText);
       speakText(answerText);
     },

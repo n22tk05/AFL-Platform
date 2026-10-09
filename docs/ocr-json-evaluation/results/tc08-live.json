@@ -1,0 +1,874 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "e8365dc4-865a-4f58-be27-6220b09aa3ad",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nTHÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ\n\nMã hồ sơ: 0192837465\n\nNgười nộp thuế: Vũ THị Hương\n\nSố tiền phải nộp: 1.250.000 đồng\n\nThời hạn nộp: 30/10/2026\n\nCơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 850,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      "newline": "\n",
+      "start": 0,
+      "end": 34,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "newline": "\n",
+      "start": 35,
+      "end": 62,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "",
+      "newline": "\n",
+      "start": 63,
+      "end": 63,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-3",
+      "page": 1,
+      "order": 3,
+      "text": "THÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ",
+      "newline": "\n",
+      "start": 64,
+      "end": 93,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-4",
+      "page": 1,
+      "order": 4,
+      "text": "",
+      "newline": "\n",
+      "start": 94,
+      "end": 94,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-5",
+      "page": 1,
+      "order": 5,
+      "text": "Mã hồ sơ: 0192837465",
+      "newline": "\n",
+      "start": 95,
+      "end": 115,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-6",
+      "page": 1,
+      "order": 6,
+      "text": "",
+      "newline": "\n",
+      "start": 116,
+      "end": 116,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-7",
+      "page": 1,
+      "order": 7,
+      "text": "Người nộp thuế: Vũ THị Hương",
+      "newline": "\n",
+      "start": 117,
+      "end": 145,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-8",
+      "page": 1,
+      "order": 8,
+      "text": "",
+      "newline": "\n",
+      "start": 146,
+      "end": 146,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-9",
+      "page": 1,
+      "order": 9,
+      "text": "Số tiền phải nộp: 1.250.000 đồng",
+      "newline": "\n",
+      "start": 147,
+      "end": 179,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-10",
+      "page": 1,
+      "order": 10,
+      "text": "",
+      "newline": "\n",
+      "start": 180,
+      "end": 180,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-11",
+      "page": 1,
+      "order": 11,
+      "text": "Thời hạn nộp: 30/10/2026",
+      "newline": "\n",
+      "start": 181,
+      "end": 205,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-12",
+      "page": 1,
+      "order": 12,
+      "text": "",
+      "newline": "\n",
+      "start": 206,
+      "end": 206,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-13",
+      "page": 1,
+      "order": 13,
+      "text": "Cơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+      "newline": "",
+      "start": 207,
+      "end": 252,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_001",
+      "page": 1,
+      "order": 0,
+      "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      "bbox": [
+        0.2964705882352941,
+        0.038181818181818185,
+        0.7035294117647058,
+        0.060909090909090906
+      ],
+      "confidence": 0.8549773845561716,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_002",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "bbox": [
+        0.36705882352941177,
+        0.06454545454545454,
+        0.6317647058823529,
+        0.08363636363636363
+      ],
+      "confidence": 0.8945155472591005,
+      "kind": "line"
+    },
+    {
+      "id": "block-2",
+      "providerId": "line_003",
+      "page": 1,
+      "order": 2,
+      "text": "THÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ",
+      "bbox": [
+        0.27647058823529413,
+        0.12545454545454546,
+        0.7235294117647059,
+        0.15363636363636363
+      ],
+      "confidence": 0.8582287918437611,
+      "kind": "line"
+    },
+    {
+      "id": "block-3",
+      "providerId": "line_004",
+      "page": 1,
+      "order": 3,
+      "text": "Mã hồ sơ: 0192837465",
+      "bbox": [
+        0.06823529411764706,
+        0.20363636363636364,
+        0.2788235294117647,
+        0.22272727272727272
+      ],
+      "confidence": 0.9310263454914093,
+      "kind": "line"
+    },
+    {
+      "id": "block-4",
+      "providerId": "line_005",
+      "page": 1,
+      "order": 4,
+      "text": "Người nộp thuế: Vũ THị Hương",
+      "bbox": [
+        0.06823529411764706,
+        0.25272727272727274,
+        0.3611764705882353,
+        0.27545454545454545
+      ],
+      "confidence": 0.899147899945577,
+      "kind": "line"
+    },
+    {
+      "id": "block-5",
+      "providerId": "line_006",
+      "page": 1,
+      "order": 5,
+      "text": "Số tiền phải nộp: 1.250.000 đồng",
+      "bbox": [
+        0.06941176470588235,
+        0.30363636363636365,
+        0.3564705882352941,
+        0.32545454545454544
+      ],
+      "confidence": 0.9298332631587982,
+      "kind": "line"
+    },
+    {
+      "id": "block-6",
+      "providerId": "line_007",
+      "page": 1,
+      "order": 6,
+      "text": "Thời hạn nộp: 30/10/2026",
+      "bbox": [
+        0.06823529411764706,
+        0.35545454545454547,
+        0.2988235294117647,
+        0.37454545454545457
+      ],
+      "confidence": 0.9338711574673653,
+      "kind": "line"
+    },
+    {
+      "id": "block-7",
+      "providerId": "line_008",
+      "page": 1,
+      "order": 7,
+      "text": "Cơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+      "bbox": [
+        0.06823529411764706,
+        0.4036363636363636,
+        0.4858823529411765,
+        0.42454545454545456
+      ],
+      "confidence": 0.927599577109019,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "national_heading",
+      "evidence": {
+        "method": "regex",
+        "rule": "national-heading",
+        "verified": false
+      },
+      "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "motto",
+      "evidence": {
+        "method": "regex",
+        "rule": "motto",
+        "verified": false
+      },
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-3",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "THÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ",
+      "page": 1,
+      "order": 3,
+      "sourceLineIds": [
+        "line-3"
+      ],
+      "sourceBlockIds": [
+        "block-2"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-4",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 4,
+      "sourceLineIds": [
+        "line-4"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-5",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Mã hồ sơ: 0192837465",
+      "page": 1,
+      "order": 5,
+      "sourceLineIds": [
+        "line-5"
+      ],
+      "sourceBlockIds": [
+        "block-3"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-6",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 6,
+      "sourceLineIds": [
+        "line-6"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-7",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Người nộp thuế: Vũ THị Hương",
+      "page": 1,
+      "order": 7,
+      "sourceLineIds": [
+        "line-7"
+      ],
+      "sourceBlockIds": [
+        "block-4"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-8",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 8,
+      "sourceLineIds": [
+        "line-8"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-9",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số tiền phải nộp: 1.250.000 đồng",
+      "page": 1,
+      "order": 9,
+      "sourceLineIds": [
+        "line-9"
+      ],
+      "sourceBlockIds": [
+        "block-5"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-10",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 10,
+      "sourceLineIds": [
+        "line-10"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-11",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Thời hạn nộp: 30/10/2026",
+      "page": 1,
+      "order": 11,
+      "sourceLineIds": [
+        "line-11"
+      ],
+      "sourceBlockIds": [
+        "block-6"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-12",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 12,
+      "sourceLineIds": [
+        "line-12"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-13",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Cơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+      "page": 1,
+      "order": 13,
+      "sourceLineIds": [
+        "line-13"
+      ],
+      "sourceBlockIds": [
+        "block-7"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [
+      "node-0",
+      "node-1"
+    ],
+    "titles": [
+      "node-3"
+    ],
+    "dateLines": [],
+    "sections": [],
+    "fields": [
+      {
+        "id": "field-node-5-0",
+        "nodeId": "node-5",
+        "label": "Mã hồ sơ",
+        "rawValue": " 0192837465",
+        "valueState": "observed",
+        "normalizedValue": " 0192837465",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-5"
+        ],
+        "sourceBlockIds": [
+          "block-3"
+        ]
+      },
+      {
+        "id": "field-node-7-0",
+        "nodeId": "node-7",
+        "label": "Người nộp thuế",
+        "rawValue": " Vũ THị Hương",
+        "valueState": "observed",
+        "normalizedValue": " Vũ THị Hương",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-7"
+        ],
+        "sourceBlockIds": [
+          "block-4"
+        ]
+      },
+      {
+        "id": "field-node-9-0",
+        "nodeId": "node-9",
+        "label": "Số tiền phải nộp",
+        "rawValue": " 1.250.000 đồng",
+        "valueState": "observed",
+        "normalizedValue": " 1.250.000 đồng",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-9"
+        ],
+        "sourceBlockIds": [
+          "block-5"
+        ]
+      },
+      {
+        "id": "field-node-11-0",
+        "nodeId": "node-11",
+        "label": "Thời hạn nộp",
+        "rawValue": " 30/10/2026",
+        "valueState": "observed",
+        "normalizedValue": " 30/10/2026",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-11"
+        ],
+        "sourceBlockIds": [
+          "block-6"
+        ]
+      },
+      {
+        "id": "field-node-13-0",
+        "nodeId": "node-13",
+        "label": "Cơ quan thuế",
+        "rawValue": " Chi cục Thuế khu vực Thanh Xuân",
+        "valueState": "observed",
+        "normalizedValue": " Chi cục Thuế khu vực Thanh Xuân",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-13"
+        ],
+        "sourceBlockIds": [
+          "block-7"
+        ]
+      }
+    ],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [
+      "node-2",
+      "node-4",
+      "node-6",
+      "node-8",
+      "node-10",
+      "node-12"
+    ],
+    "unclassified": []
+  },
+  "warnings": [
+    "BLUR_POSSIBLE",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nTHÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ\n\nMã hồ sơ: 0192837465\n\nNgười nộp thuế: Vũ THị Hương\n\nSố tiền phải nộp: 1.250.000 đồng\n\nThời hạn nộp: 30/10/2026\n\nCơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.2964705882352941,
+              0.038181818181818185,
+              0.7035294117647058,
+              0.060909090909090906
+            ],
+            "confidence": 0.8549773845561716,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.36705882352941177,
+              0.06454545454545454,
+              0.6317647058823529,
+              0.08363636363636363
+            ],
+            "confidence": 0.8945155472591005,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "THÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ",
+            "bbox": [
+              0.27647058823529413,
+              0.12545454545454546,
+              0.7235294117647059,
+              0.15363636363636363
+            ],
+            "confidence": 0.8582287918437611,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "Mã hồ sơ: 0192837465",
+            "bbox": [
+              0.06823529411764706,
+              0.20363636363636364,
+              0.2788235294117647,
+              0.22272727272727272
+            ],
+            "confidence": 0.9310263454914093,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "Người nộp thuế: Vũ THị Hương",
+            "bbox": [
+              0.06823529411764706,
+              0.25272727272727274,
+              0.3611764705882353,
+              0.27545454545454545
+            ],
+            "confidence": 0.899147899945577,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "Số tiền phải nộp: 1.250.000 đồng",
+            "bbox": [
+              0.06941176470588235,
+              0.30363636363636365,
+              0.3564705882352941,
+              0.32545454545454544
+            ],
+            "confidence": 0.9298332631587982,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "Thời hạn nộp: 30/10/2026",
+            "bbox": [
+              0.06823529411764706,
+              0.35545454545454547,
+              0.2988235294117647,
+              0.37454545454545457
+            ],
+            "confidence": 0.9338711574673653,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "Cơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+            "bbox": [
+              0.06823529411764706,
+              0.4036363636363636,
+              0.4858823529411765,
+              0.42454545454545456
+            ],
+            "confidence": 0.927599577109019,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": []
+  }
+}

@@ -82,7 +82,7 @@ export function parseStructuredResult(response: unknown, ocr: DocumentOcrResult,
     const value = grounded && !conflict && candidate.value !== null ? normalized : null;
     if (CRITICAL_FIELDS.has(key) && ocr.warnings.length) errors.push('Trường quan trọng cần đối chiếu cảnh báo OCR.');
     fields[key] = { key, label, value, rawText: raw, evidenceText: grounded ? evidence : null,
-      confidence, sourceLineIds: ids, sourceBoundingBoxes: lines.filter(l => validBox(l.boundingBox)).map(l => l.boundingBox),
+      confidence, sourceLineIds: ids, sourceBoundingBoxes: lines.flatMap(l => validBox(l.boundingBox) ? [l.boundingBox] : []),
       status: candidate.value === null ? 'unreadable' : errors.length ? 'needs_review' : 'accepted', validationErrors: errors };
   }
   const values = Object.values(fields);

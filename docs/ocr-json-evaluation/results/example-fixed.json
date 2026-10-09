@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "example-1",
+  "status": "success",
+  "provider": {
+    "name": "fixed-example",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": null
+  },
+  "rawText": "Số CCCD: 000000000007\nNội dung tự do 🧪\n",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": null,
+      "height": null,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "text-splitting"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "Số CCCD: 000000000007",
+      "newline": "\n",
+      "start": 0,
+      "end": 21,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "Nội dung tự do 🧪",
+      "newline": "\n",
+      "start": 22,
+      "end": 39,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "",
+      "newline": "",
+      "start": 40,
+      "end": 40,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số CCCD: 000000000007",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Nội dung tự do 🧪",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [],
+    "titles": [],
+    "dateLines": [],
+    "sections": [],
+    "fields": [
+      {
+        "id": "field-node-0-0",
+        "nodeId": "node-0",
+        "label": "Số CCCD",
+        "rawValue": " 000000000007",
+        "valueState": "observed",
+        "normalizedValue": " 000000000007",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-0"
+        ],
+        "sourceBlockIds": []
+      }
+    ],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [
+      "node-1",
+      "node-2"
+    ],
+    "unclassified": [
+      "node-1"
+    ]
+  },
+  "warnings": [
+    "SYNTHETIC_NOT_OCR",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "SOURCE_IS_TEXT_SPLITTING_NO_GEOMETRY",
+    "OCR_CONFIDENCE_MISSING",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": null,
+    "selectionReason": null,
+    "attempts": [],
+    "regions": []
+  }
+}

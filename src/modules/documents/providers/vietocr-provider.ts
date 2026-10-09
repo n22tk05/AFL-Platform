@@ -1,5 +1,5 @@
 import type { DocumentOcrInput, DocumentOcrProvider, DocumentOcrResult } from '@/shared/document-extraction.types';
-import { VietOcrAdapter, type VietOcrConfig } from '@/modules/ocr/vietocr-adapter';
+import { VietOcrAdapter, VietOcrTimeoutError, type VietOcrConfig } from '@/modules/ocr/vietocr-adapter';
 import { DocumentPipelineError } from '../errors';
 
 /**
@@ -7,10 +7,12 @@ import { DocumentPipelineError } from '../errors';
  * Integrates line segmentation with VietOCR recognition
  */
 export class VietOcrProvider implements DocumentOcrProvider {
+  readonly providerId = 'vietocr';
   private readonly adapter: VietOcrAdapter;
 
   constructor(config: Partial<VietOcrConfig> = {}) {
-    this.adapter = new VietOcrAdapter(config);
+    // Citizen documents must never use the adapter's development synthesizer.
+    this.adapter = new VietOcrAdapter({ ...config, allowOfflineFallback: false });
   }
 
   async extract(input: DocumentOcrInput): Promise<DocumentOcrResult> {
@@ -49,7 +51,7 @@ export class VietOcrProvider implements DocumentOcrProvider {
           fullText += cur.text;
         } else {
           const prev = lines[i - 1];
-          const verticalGap = cur.boundingBox[0] - prev.boundingBox[2];
+          const verticalGap = cur.boundingBox && prev.boundingBox ? cur.boundingBox[0] - prev.boundingBox[2] : 0;
           if (verticalGap > 0.025) {
             fullText += '\n\n' + cur.text;
           } else {
@@ -65,6 +67,7 @@ export class VietOcrProvider implements DocumentOcrProvider {
 
       return {
         provider: 'vietocr',
+        readingOrder: 'geometric-heuristic',
         fullText,
         lines,
         tokens: [],
@@ -74,8 +77,9 @@ export class VietOcrProvider implements DocumentOcrProvider {
       };
     } catch (error) {
       if (error instanceof DocumentPipelineError) throw error;
-      if (input.signal?.aborted) throw new DocumentPipelineError('OCR_TIMEOUT');
-      throw new DocumentPipelineError('OCR_UNAVAILABLE');
+      if (input.signal?.aborted || error instanceof VietOcrTimeoutError) throw new DocumentPipelineError('OCR_TIMEOUT');
+      const message = error instanceof Error ? error.message : '';
+      throw new DocumentPipelineError(/status 429/i.test(message) ? 'OCR_RATE_LIMITED' : /not configured|status 401|status 403/i.test(message) ? 'OCR_NOT_CONFIGURED' : /Invalid|alignment|Duplicate|Unknown/i.test(message) ? 'OCR_INVALID_RESPONSE' : 'OCR_UNAVAILABLE');
     }
   }
 }

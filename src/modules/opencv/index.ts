@@ -19,7 +19,7 @@ export {
   type PixelRect,
 } from "./field-types";
 export { detectContourCandidates } from "./contour-detector";
-export { calculateIou, filterCandidates } from "./box-filter";
+export { calculateIou, filterCandidates, mergeFormCandidates } from "./box-filter";
 export { sortCandidatesGeometrically } from "./geometric-sort";
 export { detectDocument } from './document-detector';
 export { orderDocumentCorners } from './corner-ordering';
@@ -28,3 +28,14 @@ export { warpDocument, calculatePerspectiveGeometry } from './perspective-transf
 export { DEFAULT_DOCUMENT_DETECTION_CONFIG, resolveDocumentConfig, type DocumentDetectionConfig } from './document-config';
 export { DocumentDetectionError, type Point2D, type DocumentQuad, type DocumentQuality, type DocumentMode, type DetectedDocument, type DeskewResult } from './document-types';
 export { segmentLines, cropLineFromCanvas, DEFAULT_LINE_SEGMENT_CONFIG, type LineSegmentConfig, type SegmentedLine, type LineSegmentationResult } from './line-segmentation';
+export {
+  detectCheckboxCandidates,
+  stampCheckboxesOnMask,
+  DEFAULT_CHECKBOX_DETECTION_CONFIG,
+  type CheckboxDetectionConfig,
+} from "./checkbox-detector";
+export {
+  detectFieldRowCandidates,
+  DEFAULT_FIELD_ROW_DETECTION_CONFIG,
+  type FieldRowDetectionConfig,
+} from "./row-detector";

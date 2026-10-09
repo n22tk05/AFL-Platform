@@ -1,0 +1,1293 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "37370e90-656e-4ee2-b823-045752a2733d",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ\n\nĐơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây\nNgười tiếp nhận: Chuyên viên Đỗ Tuấn Anh\n\nDanh mục tài liệu kèm theo:\n01 bản chính Đơn xin xác nhận đất không có tranh chấp\n-02 bản sao công chứng Căn cước công dân của hai vợ chồng\n01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08\n\nÝ kiến của cán bộ tiếp nhận:\nHồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế\nđất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.\n\nMÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC\n\nIn tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 850,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ",
+      "newline": "\n",
+      "start": 0,
+      "end": 34,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "",
+      "newline": "\n",
+      "start": 35,
+      "end": 35,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "Đơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+      "newline": "\n",
+      "start": 36,
+      "end": 100,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-3",
+      "page": 1,
+      "order": 3,
+      "text": "Người tiếp nhận: Chuyên viên Đỗ Tuấn Anh",
+      "newline": "\n",
+      "start": 101,
+      "end": 141,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-4",
+      "page": 1,
+      "order": 4,
+      "text": "",
+      "newline": "\n",
+      "start": 142,
+      "end": 142,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-5",
+      "page": 1,
+      "order": 5,
+      "text": "Danh mục tài liệu kèm theo:",
+      "newline": "\n",
+      "start": 143,
+      "end": 170,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-6",
+      "page": 1,
+      "order": 6,
+      "text": "01 bản chính Đơn xin xác nhận đất không có tranh chấp",
+      "newline": "\n",
+      "start": 171,
+      "end": 224,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-7",
+      "page": 1,
+      "order": 7,
+      "text": "-02 bản sao công chứng Căn cước công dân của hai vợ chồng",
+      "newline": "\n",
+      "start": 225,
+      "end": 282,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-8",
+      "page": 1,
+      "order": 8,
+      "text": "01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08",
+      "newline": "\n",
+      "start": 283,
+      "end": 347,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-9",
+      "page": 1,
+      "order": 9,
+      "text": "",
+      "newline": "\n",
+      "start": 348,
+      "end": 348,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-10",
+      "page": 1,
+      "order": 10,
+      "text": "Ý kiến của cán bộ tiếp nhận:",
+      "newline": "\n",
+      "start": 349,
+      "end": 377,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-11",
+      "page": 1,
+      "order": 11,
+      "text": "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế",
+      "newline": "\n",
+      "start": 378,
+      "end": 446,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-12",
+      "page": 1,
+      "order": 12,
+      "text": "đất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.",
+      "newline": "\n",
+      "start": 447,
+      "end": 513,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-13",
+      "page": 1,
+      "order": 13,
+      "text": "",
+      "newline": "\n",
+      "start": 514,
+      "end": 514,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-14",
+      "page": 1,
+      "order": 14,
+      "text": "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC",
+      "newline": "\n",
+      "start": 515,
+      "end": 552,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-15",
+      "page": 1,
+      "order": 15,
+      "text": "",
+      "newline": "\n",
+      "start": 553,
+      "end": 553,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-16",
+      "page": 1,
+      "order": 16,
+      "text": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+      "newline": "",
+      "start": 554,
+      "end": 634,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_001",
+      "page": 1,
+      "order": 0,
+      "text": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ",
+      "bbox": [
+        0.2529411764705882,
+        0.04363636363636364,
+        0.7482352941176471,
+        0.07090909090909091
+      ],
+      "confidence": 0.7336444644366994,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_002",
+      "page": 1,
+      "order": 1,
+      "text": "Đơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+      "bbox": [
+        0.06823529411764706,
+        0.11181818181818182,
+        0.6294117647058823,
+        0.13363636363636364
+      ],
+      "confidence": 0.9188622888177633,
+      "kind": "line"
+    },
+    {
+      "id": "block-2",
+      "providerId": "line_003",
+      "page": 1,
+      "order": 2,
+      "text": "Người tiếp nhận: Chuyên viên Đỗ Tuấn Anh",
+      "bbox": [
+        0.06941176470588235,
+        0.1481818181818182,
+        0.4376470588235294,
+        0.1709090909090909
+      ],
+      "confidence": 0.7919846989214421,
+      "kind": "line"
+    },
+    {
+      "id": "block-3",
+      "providerId": "line_004",
+      "page": 1,
+      "order": 3,
+      "text": "Danh mục tài liệu kèm theo:",
+      "bbox": [
+        0.06941176470588235,
+        0.21454545454545454,
+        0.32941176470588235,
+        0.23363636363636364
+      ],
+      "confidence": 0.9224688101697851,
+      "kind": "line"
+    },
+    {
+      "id": "block-4",
+      "providerId": "line_005",
+      "page": 1,
+      "order": 4,
+      "text": "01 bản chính Đơn xin xác nhận đất không có tranh chấp",
+      "bbox": [
+        0.06823529411764706,
+        0.24818181818181817,
+        0.5458823529411765,
+        0.27090909090909093
+      ],
+      "confidence": 0.9050578773021698,
+      "kind": "line"
+    },
+    {
+      "id": "block-5",
+      "providerId": "line_006",
+      "page": 1,
+      "order": 5,
+      "text": "-02 bản sao công chứng Căn cước công dân của hai vợ chồng",
+      "bbox": [
+        0.06823529411764706,
+        0.28454545454545455,
+        0.5929411764705882,
+        0.30727272727272725
+      ],
+      "confidence": 0.8893206693598481,
+      "kind": "line"
+    },
+    {
+      "id": "block-6",
+      "providerId": "line_007",
+      "page": 1,
+      "order": 6,
+      "text": "01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08",
+      "bbox": [
+        0.06823529411764706,
+        0.3209090909090909,
+        0.6105882352941177,
+        0.3427272727272727
+      ],
+      "confidence": 0.919805629484689,
+      "kind": "line"
+    },
+    {
+      "id": "block-7",
+      "providerId": "line_008",
+      "page": 1,
+      "order": 7,
+      "text": "Ý kiến của cán bộ tiếp nhận:",
+      "bbox": [
+        0.06823529411764706,
+        0.3845454545454545,
+        0.33294117647058824,
+        0.40636363636363637
+      ],
+      "confidence": 0.9223396969693047,
+      "kind": "line"
+    },
+    {
+      "id": "block-8",
+      "providerId": "line_009",
+      "page": 1,
+      "order": 8,
+      "text": "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế",
+      "bbox": [
+        0.06941176470588235,
+        0.4209090909090909,
+        0.6470588235294118,
+        0.44363636363636366
+      ],
+      "confidence": 0.9271934304167243,
+      "kind": "line"
+    },
+    {
+      "id": "block-9",
+      "providerId": "line_010",
+      "page": 1,
+      "order": 9,
+      "text": "đất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.",
+      "bbox": [
+        0.06823529411764706,
+        0.4527272727272727,
+        0.6282352941176471,
+        0.47545454545454546
+      ],
+      "confidence": 0.9218234504336742,
+      "kind": "line"
+    },
+    {
+      "id": "block-10",
+      "providerId": "line_011",
+      "page": 1,
+      "order": 10,
+      "text": "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC",
+      "bbox": [
+        0.06823529411764706,
+        0.5318181818181819,
+        0.41294117647058826,
+        0.55
+      ],
+      "confidence": 0.7235660965459935,
+      "kind": "line"
+    },
+    {
+      "id": "block-11",
+      "providerId": "line_012",
+      "page": 1,
+      "order": 11,
+      "text": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+      "bbox": [
+        0.2235294117647059,
+        0.9154545454545454,
+        0.7764705882352941,
+        0.9336363636363636
+      ],
+      "confidence": 0.932896788418293,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Đơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-3",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Người tiếp nhận: Chuyên viên Đỗ Tuấn Anh",
+      "page": 1,
+      "order": 3,
+      "sourceLineIds": [
+        "line-3"
+      ],
+      "sourceBlockIds": [
+        "block-2"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-4",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 4,
+      "sourceLineIds": [
+        "line-4"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-5",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Danh mục tài liệu kèm theo:",
+      "page": 1,
+      "order": 5,
+      "sourceLineIds": [
+        "line-5"
+      ],
+      "sourceBlockIds": [
+        "block-3"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-6",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "01 bản chính Đơn xin xác nhận đất không có tranh chấp",
+      "page": 1,
+      "order": 6,
+      "sourceLineIds": [
+        "line-6"
+      ],
+      "sourceBlockIds": [
+        "block-4"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-7",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "-02 bản sao công chứng Căn cước công dân của hai vợ chồng",
+      "page": 1,
+      "order": 7,
+      "sourceLineIds": [
+        "line-7"
+      ],
+      "sourceBlockIds": [
+        "block-5"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-8",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08",
+      "page": 1,
+      "order": 8,
+      "sourceLineIds": [
+        "line-8"
+      ],
+      "sourceBlockIds": [
+        "block-6"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-9",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 9,
+      "sourceLineIds": [
+        "line-9"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-10",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Ý kiến của cán bộ tiếp nhận:",
+      "page": 1,
+      "order": 10,
+      "sourceLineIds": [
+        "line-10"
+      ],
+      "sourceBlockIds": [
+        "block-7"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-11",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế",
+      "page": 1,
+      "order": 11,
+      "sourceLineIds": [
+        "line-11"
+      ],
+      "sourceBlockIds": [
+        "block-8"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-12",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "đất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.",
+      "page": 1,
+      "order": 12,
+      "sourceLineIds": [
+        "line-12"
+      ],
+      "sourceBlockIds": [
+        "block-9"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-13",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 13,
+      "sourceLineIds": [
+        "line-13"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-14",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC",
+      "page": 1,
+      "order": 14,
+      "sourceLineIds": [
+        "line-14"
+      ],
+      "sourceBlockIds": [
+        "block-10"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-15",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 15,
+      "sourceLineIds": [
+        "line-15"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-16",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+      "page": 1,
+      "order": 16,
+      "sourceLineIds": [
+        "line-16"
+      ],
+      "sourceBlockIds": [
+        "block-11"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [],
+    "titles": [
+      "node-0"
+    ],
+    "dateLines": [],
+    "sections": [],
+    "fields": [
+      {
+        "id": "field-node-2-0",
+        "nodeId": "node-2",
+        "label": "Đơn vị tiếp nhận",
+        "rawValue": " Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+        "valueState": "observed",
+        "normalizedValue": " Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-2"
+        ],
+        "sourceBlockIds": [
+          "block-1"
+        ]
+      },
+      {
+        "id": "field-node-3-0",
+        "nodeId": "node-3",
+        "label": "Người tiếp nhận",
+        "rawValue": " Chuyên viên Đỗ Tuấn Anh",
+        "valueState": "observed",
+        "normalizedValue": " Chuyên viên Đỗ Tuấn Anh",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-3"
+        ],
+        "sourceBlockIds": [
+          "block-2"
+        ]
+      }
+    ],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [
+      "node-1",
+      "node-4",
+      "node-5",
+      "node-6",
+      "node-7",
+      "node-8",
+      "node-9",
+      "node-10",
+      "node-11",
+      "node-12",
+      "node-13",
+      "node-14",
+      "node-15",
+      "node-16"
+    ],
+    "unclassified": [
+      "node-5",
+      "node-6",
+      "node-7",
+      "node-8",
+      "node-10",
+      "node-11",
+      "node-12",
+      "node-14",
+      "node-16"
+    ]
+  },
+  "warnings": [
+    "OCR_TEXT_DISAGREEMENT",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ\n\nĐơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây\nNgười tiếp nhận: Chuyên viên Đỗ Tuấn Anh\n\nDanh mục tài liệu kèm theo:\n01 bản chính Đơn xin xác nhận đất không có tranh chấp\n-02 bản sao công chứng Căn cước công dân của hai vợ chồng\n01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08\n\nÝ kiến của cán bộ tiếp nhận:\nHồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế\nđất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.\n\nMÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC\n\nIn tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ",
+            "bbox": [
+              0.2529411764705882,
+              0.04363636363636364,
+              0.7482352941176471,
+              0.07090909090909091
+            ],
+            "confidence": 0.7336444644366994,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Đơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+            "bbox": [
+              0.06823529411764706,
+              0.11181818181818182,
+              0.6294117647058823,
+              0.13363636363636364
+            ],
+            "confidence": 0.9188622888177633,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "Người tiếp nhận: Chuyên viên Đỗ Tuấn Anh",
+            "bbox": [
+              0.06941176470588235,
+              0.1481818181818182,
+              0.4376470588235294,
+              0.1709090909090909
+            ],
+            "confidence": 0.7919846989214421,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "Danh mục tài liệu kèm theo:",
+            "bbox": [
+              0.06941176470588235,
+              0.21454545454545454,
+              0.32941176470588235,
+              0.23363636363636364
+            ],
+            "confidence": 0.9224688101697851,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "01 bản chính Đơn xin xác nhận đất không có tranh chấp",
+            "bbox": [
+              0.06823529411764706,
+              0.24818181818181817,
+              0.5458823529411765,
+              0.27090909090909093
+            ],
+            "confidence": 0.9050578773021698,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "-02 bản sao công chứng Căn cước công dân của hai vợ chồng",
+            "bbox": [
+              0.06823529411764706,
+              0.28454545454545455,
+              0.5929411764705882,
+              0.30727272727272725
+            ],
+            "confidence": 0.8893206693598481,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08",
+            "bbox": [
+              0.06823529411764706,
+              0.3209090909090909,
+              0.6105882352941177,
+              0.3427272727272727
+            ],
+            "confidence": 0.919805629484689,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "Ý kiến của cán bộ tiếp nhận:",
+            "bbox": [
+              0.06823529411764706,
+              0.3845454545454545,
+              0.33294117647058824,
+              0.40636363636363637
+            ],
+            "confidence": 0.9223396969693047,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế",
+            "bbox": [
+              0.06941176470588235,
+              0.4209090909090909,
+              0.6470588235294118,
+              0.44363636363636366
+            ],
+            "confidence": 0.9271934304167243,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "đất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.",
+            "bbox": [
+              0.06823529411764706,
+              0.4527272727272727,
+              0.6282352941176471,
+              0.47545454545454546
+            ],
+            "confidence": 0.9218234504336742,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC",
+            "bbox": [
+              0.06823529411764706,
+              0.5318181818181819,
+              0.41294117647058826,
+              0.55
+            ],
+            "confidence": 0.7235660965459935,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+            "bbox": [
+              0.2235294117647059,
+              0.9154545454545454,
+              0.7764705882352941,
+              0.9336363636363636
+            ],
+            "confidence": 0.932896788418293,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      },
+      {
+        "attempt": 2,
+        "variant": "contrast",
+        "provider": "vietocr",
+        "rawText": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUÁ\n\nĐơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây\nNgười tiếp nhận: Chuyên viên Đỗ Tuấn Anh\n\nDanh mục tài liệu kèm theo:\n01 bản chính Đơn xin xác nhận đất không có tranh chấp\n02 bản sao công chứng Căn cước công dân của hai vợ chồng\n01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08\n\nÝ kiến của cán bộ tiếp nhận:\nHồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế\nđất phi nông nghiệp năm 2025 trước ngày trà kết quả theo quy định.\n\nMÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC\n\nIn tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUÁ",
+            "bbox": [
+              0.2529411764705882,
+              0.04363636363636364,
+              0.7482352941176471,
+              0.07181818181818182
+            ],
+            "confidence": 0.6421907353296614,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Đơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+            "bbox": [
+              0.06823529411764706,
+              0.11181818181818182,
+              0.6294117647058823,
+              0.13363636363636364
+            ],
+            "confidence": 0.9174955701455474,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "Người tiếp nhận: Chuyên viên Đỗ Tuấn Anh",
+            "bbox": [
+              0.06941176470588235,
+              0.1481818181818182,
+              0.4388235294117647,
+              0.1709090909090909
+            ],
+            "confidence": 0.7814148108164469,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "Danh mục tài liệu kèm theo:",
+            "bbox": [
+              0.06823529411764706,
+              0.21454545454545454,
+              0.32941176470588235,
+              0.23363636363636364
+            ],
+            "confidence": 0.9222572600400006,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "01 bản chính Đơn xin xác nhận đất không có tranh chấp",
+            "bbox": [
+              0.06823529411764706,
+              0.24818181818181817,
+              0.5470588235294118,
+              0.27090909090909093
+            ],
+            "confidence": 0.9050430956071821,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "02 bản sao công chứng Căn cước công dân của hai vợ chồng",
+            "bbox": [
+              0.06823529411764706,
+              0.28454545454545455,
+              0.5929411764705882,
+              0.30727272727272725
+            ],
+            "confidence": 0.8969572974789527,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08",
+            "bbox": [
+              0.06823529411764706,
+              0.3209090909090909,
+              0.6105882352941177,
+              0.3427272727272727
+            ],
+            "confidence": 0.9226849648489881,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "Ý kiến của cán bộ tiếp nhận:",
+            "bbox": [
+              0.06823529411764706,
+              0.3845454545454545,
+              0.33294117647058824,
+              0.40636363636363637
+            ],
+            "confidence": 0.9120256645338876,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế",
+            "bbox": [
+              0.06941176470588235,
+              0.4209090909090909,
+              0.6470588235294118,
+              0.44363636363636366
+            ],
+            "confidence": 0.9251461993245518,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "đất phi nông nghiệp năm 2025 trước ngày trà kết quả theo quy định.",
+            "bbox": [
+              0.06823529411764706,
+              0.4527272727272727,
+              0.6282352941176471,
+              0.47545454545454546
+            ],
+            "confidence": 0.9233636393475888,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC",
+            "bbox": [
+              0.06823529411764706,
+              0.5318181818181819,
+              0.41294117647058826,
+              0.55
+            ],
+            "confidence": 0.7439939993015234,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+            "bbox": [
+              0.2235294117647059,
+              0.9154545454545454,
+              0.7764705882352941,
+              0.9336363636363636
+            ],
+            "confidence": 0.9325338810682297,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": [
+          0.2529411764705882,
+          0.04363636363636364,
+          0.7482352941176471,
+          0.07090909090909091
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06941176470588235,
+          0.1481818181818182,
+          0.4376470588235294,
+          0.1709090909090909
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06823529411764706,
+          0.5318181818181819,
+          0.41294117647058826,
+          0.55
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.2529411764705882,
+          0.04363636363636364,
+          0.7482352941176471,
+          0.07090909090909091
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06823529411764706,
+          0.28454545454545455,
+          0.5929411764705882,
+          0.30727272727272725
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06823529411764706,
+          0.4527272727272727,
+          0.6282352941176471,
+          0.47545454545454546
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": null,
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}

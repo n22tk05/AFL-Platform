@@ -1,6 +1,6 @@
 export type DocumentErrorCode = 'OCR_NOT_CONFIGURED' | 'OCR_TIMEOUT' | 'OCR_UNAVAILABLE' | 'OCR_EMPTY_TEXT' | 'STRUCTURED_UNAVAILABLE' | 'INVALID_STRUCTURED_RESPONSE' | 'OCR_LIMIT_EXCEEDED' | 'OCR_RATE_LIMITED' | 'OCR_INVALID_RESPONSE';
 export class DocumentPipelineError extends Error {
-  constructor(public readonly code: DocumentErrorCode) { super(code); this.name = 'DocumentPipelineError'; }
+  constructor(public readonly code: DocumentErrorCode, public readonly ocrReview?: import('@/shared/document-extraction.types').OcrReview) { super(code); this.name = 'DocumentPipelineError'; }
 }
 export async function withDeadline<T>(work: (signal: AbortSignal) => Promise<T>, ms: number, code: DocumentErrorCode, parent?: AbortSignal): Promise<T> {
   const controller = new AbortController();
