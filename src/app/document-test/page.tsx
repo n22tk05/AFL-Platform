@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { preloadOpenCv } from '@/modules/opencv/loader';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -377,6 +378,7 @@ export default function DocumentTestPage() {
     setTimings({ deskewMs: 0, extractionMs: 0, totalMs: 0 }); documentSession.clear();
   }, []);
   useEffect(() => () => { generation.current++; abortControllerRef.current?.abort(); }, []);
+  useEffect(preloadOpenCv, []);
 
   // Each URL stays valid until that exact image is replaced or unmounted.
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);

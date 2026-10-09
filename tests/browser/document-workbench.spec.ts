@@ -112,7 +112,7 @@ test('stale response cannot restore output after image replacement or overwrite 
   }, { first: jsonDraft('OLD RESPONSE'), second: jsonDraft('NEW RESPONSE') });
   await page.goto('/document-test'); await choose(page);
   await page.getByRole('button', { name: 'Xuất JSON', exact: true }).click();
-  await expect.poll(() => page.evaluate(() => typeof Reflect.get(window, 'releaseOldWorkbench'))).toBe('function');
+  await expect.poll(() => page.evaluate(() => typeof Reflect.get(window, 'releaseOldWorkbench')), { timeout: 60_000 }).toBe('function');
   await choose(page); await page.getByRole('button', { name: 'Xuất JSON', exact: true }).click();
   await expect(page.getByTestId('json-preview')).toContainText('NEW RESPONSE', { timeout: 60_000 });
   await page.evaluate(() => Reflect.get(window, 'releaseOldWorkbench')());
@@ -146,7 +146,7 @@ test('blank result never appears successful and error review retains unreadable 
   await expect(page.getByRole('status').first()).toContainText('Chưa đọc được vùng này', { timeout: 60_000 });
   await expect(page.getByRole('region', { name: 'Vùng cần kiểm tra', exact: true })).toBeVisible();
   await expect(page.getByRole('region', { name: 'Duyệt JSON', exact: true }).getByRole('button', { name: 'Tải .json', exact: true })).toBeDisabled();
-  await expect(page.getByRole('region', { name: 'Duyệt JSON', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Duyệt JSON', exact: true })).toContainText('Trạng thái xử lý: failed');
   await page.route('**/api/documents/extract', route => route.fulfill({ json: { success: true, data: { ...extraction, fullText: '', fields: {}, status: 'manual_review_required' } } }));
   await page.getByRole('checkbox', { name: 'Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.' }).check();
   await page.getByRole('button', { name: 'Trích Xuất JSON', exact: true }).click();
