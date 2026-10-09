@@ -29,12 +29,12 @@ export class VietOcrProvider implements DocumentOcrProvider {
       const dataUrl = `data:${input.mimeType};base64,${base64}`;
 
       // Call VietOCR recognition (microservice auto-segments full documents into lines)
-      const detectedLines = await this.adapter.recognizeDocument(
+      const detected = await this.adapter.recognizeDocumentWithLayout(
         dataUrl,
         input.signal,
       );
 
-      const lines = detectedLines.map((l, idx) => ({
+      const lines = detected.lines.map((l, idx) => ({
         id: l.lineId || `line_${String(idx + 1).padStart(3, '0')}`,
         text: l.rawText,
         confidence: l.confidence,
@@ -45,22 +45,38 @@ export class VietOcrProvider implements DocumentOcrProvider {
 
       // Assemble fullText with natural paragraph and header breaks
       let fullText = '';
+      const ranges = new Map<string, { start: number; end: number }>();
+      let offset = 0;
       for (let i = 0; i < lines.length; i++) {
         const cur = lines[i];
-        if (i === 0) {
-          fullText += cur.text;
-        } else {
+        let separator = '';
+        if (i > 0) {
           const prev = lines[i - 1];
           const verticalGap = cur.boundingBox && prev.boundingBox ? cur.boundingBox[0] - prev.boundingBox[2] : 0;
           if (verticalGap > 0.025) {
-            fullText += '\n\n' + cur.text;
+            separator = '\n\n';
           } else {
-            fullText += '\n' + cur.text;
+            separator = '\n';
           }
         }
+        fullText += separator + cur.text;
+        offset += Array.from(separator).length;
+        ranges.set(cur.id, { start: offset, end: offset + Array.from(cur.text).length });
+        offset += Array.from(cur.text).length;
       }
 
-      const warnings: string[] = [];
+      const byId = new Map(lines.map(line => [line.id, line]));
+      const tables = detected.tables.map(table => ({
+        id: table.id, page: 1, headerRowCount: table.headerRowCount,
+        rows: table.rows.map(row => row.map(cell => ({
+          // Each fragment is tied to its exact source range, even for multiline cells.
+          text: cell.lineIds.map(id => byId.get(id)!.text).join(''),
+          sourceLineIds: cell.lineIds,
+          sourceRanges: cell.lineIds.map(id => ranges.get(id)!).filter(range => range.end > range.start),
+          rowSpan: 1, columnSpan: 1,
+        }))),
+      }));
+      const warnings: string[] = [...detected.warnings];
       if (!fullText.trim()) {
         warnings.push('OCR_EMPTY_TEXT');
       }
@@ -71,7 +87,7 @@ export class VietOcrProvider implements DocumentOcrProvider {
         fullText,
         lines,
         tokens: [],
-        tables: [],
+        tables,
         pageCount: 1,
         warnings,
       };
