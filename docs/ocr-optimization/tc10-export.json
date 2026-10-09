@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "0a24b1f5-e2d4-4592-9d1e-db20c5a318c3",
+  "status": "failed",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 850,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "text-splitting"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "",
+      "newline": "",
+      "start": 0,
+      "end": 0,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [],
+    "titles": [],
+    "dateLines": [],
+    "sections": [],
+    "fields": [],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [
+      "node-0"
+    ],
+    "unclassified": []
+  },
+  "warnings": [
+    "OCR_EMPTY_TEXT",
+    "BLUR_POSSIBLE",
+    "LOW_CONTRAST",
+    "POSSIBLE_BLANK",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "SOURCE_IS_TEXT_SPLITTING_NO_GEOMETRY",
+    "OCR_CONFIDENCE_MISSING",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "",
+        "blocks": [],
+        "errorCode": null
+      },
+      {
+        "attempt": 2,
+        "variant": "contrast",
+        "provider": "vietocr",
+        "rawText": "",
+        "blocks": [],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "reason": "OCR_EMPTY_TEXT",
+        "status": "unreadable"
+      },
+      {
+        "bbox": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "reason": "POSSIBLE_BLANK_REQUIRES_SOURCE_CHECK",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}

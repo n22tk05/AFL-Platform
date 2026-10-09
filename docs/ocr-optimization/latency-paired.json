@@ -1,0 +1,1659 @@
+{
+  "syntheticOnly": true,
+  "device": "cpu",
+  "repeats": 3,
+  "scope": "Warm service processing only; no HTTP, browser, adaptive retry or competing benchmark jobs",
+  "before": {
+    "decoder": "original",
+    "threads": 8,
+    "workers": 1,
+    "fusedPairs": 0
+  },
+  "after": {
+    "decoder": "cached",
+    "threads": 3,
+    "workers": 2,
+    "fusedPairs": 16
+  },
+  "results": [
+    {
+      "fixture": "TC01",
+      "beforeMs": [
+        10154.8757999999,
+        9518.619500000568,
+        9345.71909999977
+      ],
+      "afterMs": [
+        4294.596700000511,
+        4196.393899999748,
+        4162.929899999654
+      ],
+      "beforeMedianMs": 9518.619500000568,
+      "afterMedianMs": 4196.393899999748,
+      "afterMaxMs": 4294.596700000511,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 4.768371586472142e-08,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "C\u1ed8NG H\u00d2A X\u00c3 H\u1ed8I CH\u1ee6 NGH\u0128A VI\u1ec6T NAM",
+          "confidence": 0.9308641587986666,
+          "coordinates": [
+            0.03727272727272727,
+            0.3070588235294118,
+            0.060909090909090906,
+            0.691764705882353
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u1ed9c l\u1eadp - T\u1ef1 do - H\u1ea1nh ph\u00fac",
+          "confidence": 0.9307542200441714,
+          "coordinates": [
+            0.06363636363636363,
+            0.3776470588235294,
+            0.08363636363636363,
+            0.6211764705882353
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "GI\u1ea4Y X\u00c1C NH\u1eacN T\u00ccNH TR\u1ea0NG H\u00d4N NH\u00c2N",
+          "confidence": 0.9354433435382266,
+          "coordinates": [
+            0.12363636363636364,
+            0.2376470588235294,
+            0.15363636363636363,
+            0.7623529411764706
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "H\u00e0 N\u1ed9i, ng\u00e0y 18 th\u00e1ng 05 n\u0103m 2026",
+          "confidence": 0.9261246973817999,
+          "coordinates": [
+            0.1781818181818182,
+            0.6494117647058824,
+            0.19727272727272727,
+            0.9211764705882353
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "K\u00ednh g\u1eedi: \u1ee6y ban nh\u00e2n d\u00e2n ph\u01b0\u1eddng Kh\u01b0\u01a1ng Mai, qu\u1eadn Thanh Xu\u00e2n",
+          "confidence": 0.916595230048353,
+          "coordinates": [
+            0.2190909090909091,
+            0.08,
+            0.24363636363636362,
+            0.6894117647058824
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "1. H\u1ecc V\u00c0 T\u00caN: TR\u1ea6N \u0110\u0102NG QUANG",
+          "confidence": 0.9302492326703565,
+          "coordinates": [
+            0.27454545454545454,
+            0.08,
+            0.2972727272727273,
+            0.3635294117647059
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "2. Ng\u00e0y sinh: 25 th\u00e1ng 10 n\u0103m 1978",
+          "confidence": 0.9300376843003666,
+          "coordinates": [
+            0.3181818181818182,
+            0.07882352941176471,
+            0.3381818181818182,
+            0.37058823529411766
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "3. N\u01a1i sinh: B\u1ec7nh vi\u1ec7n Ph\u1ee5 s\u1ea3n Trung \u01b0\u01a1ng, th\u00e0nh ph\u1ed1 H\u00e0 N\u1ed9i",
+          "confidence": 0.9198597073554993,
+          "coordinates": [
+            0.3563636363636364,
+            0.07882352941176471,
+            0.3790909090909091,
+            0.5729411764705883
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "4. D\u00e2n t\u1ed9c: Kinh Qu\u1ed1c t\u1ecbch: Vi\u1ec7t Nam",
+          "confidence": 0.9312026318576601,
+          "coordinates": [
+            0.3972727272727273,
+            0.07882352941176471,
+            0.42,
+            0.37176470588235294
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "5. N\u01a1i c\u01b0 tr\u00fa: S\u1ed1 45 ng\u00f5 12 \u0111\u01b0\u1eddng Gi\u1ea3i Ph\u00f3ng, ph\u01b0\u1eddng \u0110\u1ed3ng T\u00e2m, qu\u1eadn Hai B\u00e0 Tr\u01b0ng",
+          "confidence": 0.917768113888227,
+          "coordinates": [
+            0.4381818181818182,
+            0.07882352941176471,
+            0.46090909090909093,
+            0.7670588235294118
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "6. Ngh\u1ec1 nghi\u1ec7p: K\u1ef9 s\u01b0 x\u00e2y d\u1ef1ng c\u00f4ng tr\u00ecnh giao th\u00f4ng th\u1ee7y l\u1ee3i",
+          "confidence": 0.9313044421947919,
+          "coordinates": [
+            0.47909090909090907,
+            0.07882352941176471,
+            0.5018181818181818,
+            0.5729411764705883
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "7. T\u00ecnh tr\u1ea1ng h\u00f4n nh\u00e2n: Hi\u1ec7n t\u1ea1i ch\u01b0a \u0111\u0103ng k\u00fd k\u1ebft h\u00f4n v\u1edbi ai",
+          "confidence": 0.9298270245393118,
+          "coordinates": [
+            0.52,
+            0.07882352941176471,
+            0.5427272727272727,
+            0.5552941176470588
+          ]
+        },
+        {
+          "lineId": "line_0013",
+          "text": "8. M\u1ee5c \u0111\u00edch s\u1eed d\u1ee5ng: \u0110\u1ec3 l\u00e0m th\u1ee7 t\u1ee5c vay v\u1ed1n th\u1ebf ch\u1ea5p t\u1ea1i ng\u00e2n h\u00e0ng th\u01b0\u01a1ng m\u1ea1i",
+          "confidence": 0.9310412585735321,
+          "coordinates": [
+            0.5609090909090909,
+            0.07882352941176471,
+            0.5836363636363636,
+            0.7152941176470589
+          ]
+        },
+        {
+          "lineId": "line_0014",
+          "text": "NG\u01af\u1edcI L\u00c0M \u0110\u01a0N",
+          "confidence": 0.9344244003295898,
+          "coordinates": [
+            0.6645454545454546,
+            0.15294117647058825,
+            0.6854545454545454,
+            0.3176470588235294
+          ]
+        },
+        {
+          "lineId": "line_0015",
+          "text": "CH\u1ee6 T\u1ecaCH UBND PH\u01af\u1edcNG",
+          "confidence": 0.9334895789623261,
+          "coordinates": [
+            0.6645454545454546,
+            0.6411764705882353,
+            0.6881818181818182,
+            0.888235294117647
+          ]
+        },
+        {
+          "lineId": "line_0016",
+          "text": "(K\u00fd, ghi r\u00f5 h\u1ecd t\u00ean)",
+          "confidence": 0.9122468986009297,
+          "coordinates": [
+            0.6909090909090909,
+            0.10235294117647059,
+            0.7109090909090909,
+            0.2388235294117647
+          ]
+        },
+        {
+          "lineId": "line_0017",
+          "text": "(K\u00fd, \u0111\u00f3ng d\u1ea5u)",
+          "confidence": 0.9235210972172874,
+          "coordinates": [
+            0.6890909090909091,
+            0.6541176470588236,
+            0.7109090909090909,
+            0.768235294117647
+          ]
+        },
+        {
+          "lineId": "line_0018",
+          "text": "Tr\u1ea7n \u0110\u0103ng Quang",
+          "confidence": 0.9323078751564026,
+          "coordinates": [
+            0.7654545454545455,
+            0.15764705882352942,
+            0.7881818181818182,
+            0.31176470588235294
+          ]
+        },
+        {
+          "lineId": "line_0019",
+          "text": "Nguy\u1ec5n V\u0103n B\u00ecnh",
+          "confidence": 0.9344585696856181,
+          "coordinates": [
+            0.7663636363636364,
+            0.6894117647058824,
+            0.7881818181818182,
+            0.84
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC02",
+      "beforeMs": [
+        5036.597599999368,
+        6976.119699999799,
+        5213.66450000005
+      ],
+      "afterMs": [
+        2518.7168000002202,
+        2463.529299999209,
+        2509.4349999999395
+      ],
+      "beforeMedianMs": 5213.66450000005,
+      "afterMedianMs": 2509.4349999999395,
+      "afterMaxMs": 2518.7168000002202,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 6.244296124613413e-08,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "C\u1ed8NG H\u00d2A X\u00c3 H\u1ed8I CH\u1ee6 NGH\u0128A VI\u1ec6T NAM",
+          "confidence": 0.9308641587986666,
+          "coordinates": [
+            0.03727272727272727,
+            0.3070588235294118,
+            0.060909090909090906,
+            0.691764705882353
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u1ed9c l\u1eadp - T\u1ef1 do - H\u1ea1nh ph\u00fac",
+          "confidence": 0.9307542200441714,
+          "coordinates": [
+            0.06363636363636363,
+            0.3776470588235294,
+            0.08363636363636363,
+            0.6211764705882353
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "\u0110\u01a0N \u0110\u1ec0 NGH\u1eca C\u1ea4P \u0110\u1ed4I GI\u1ea4Y PH\u00c9P L\u00c1I XE",
+          "confidence": 0.9247526410553191,
+          "coordinates": [
+            0.12545454545454546,
+            0.2564705882352941,
+            0.15272727272727274,
+            0.7423529411764705
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "H\u1ecc V\u00c0 T\u00caN: NGUY\u1ec4N V\u0102N AN",
+          "confidence": 0.9140546917915344,
+          "coordinates": [
+            0.2018181818181818,
+            0.08,
+            0.22454545454545455,
+            0.3176470588235294
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "Ng\u00e0y sinh:",
+          "confidence": 0.9306249618530273,
+          "coordinates": [
+            0.2545454545454545,
+            0.08,
+            0.27454545454545454,
+            0.16823529411764707
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "S\u1ed1 CCCD: 001085012345",
+          "confidence": 0.9097019859722683,
+          "coordinates": [
+            0.3018181818181818,
+            0.07882352941176471,
+            0.32272727272727275,
+            0.29058823529411765
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "Ng\u00e0y c\u1ea5p: 12/03/2021",
+          "confidence": 0.932486218214035,
+          "coordinates": [
+            0.3018181818181818,
+            0.38,
+            0.3245454545454545,
+            0.5564705882352942
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "N\u01a1i c\u1ea5p: C\u1ee5c C\u1ea3nh s\u00e1t qu\u1ea3n l\u00fd h\u00e0nh ch\u00ednh v\u1ec1 tr\u1eadt t\u1ef1 x\u00e3 h\u1ed9i",
+          "confidence": 0.9329049645685682,
+          "coordinates": [
+            0.3518181818181818,
+            0.08,
+            0.37454545454545457,
+            0.571764705882353
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "N\u01a1i \u0111\u0103ng k\u00fd th\u01b0\u1eddng tr\u00fa:",
+          "confidence": 0.9345336971075638,
+          "coordinates": [
+            0.40454545454545454,
+            0.08,
+            0.42454545454545456,
+            0.27294117647058824
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "N\u01a1i \u1edf hi\u1ec7n nay:",
+          "confidence": 0.9332813183466594,
+          "coordinates": [
+            0.4445454545454545,
+            0.08,
+            0.46545454545454545,
+            0.20588235294117646
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "Gi\u1ea5y ph\u00e9p l\u00e1i xe s\u1ed1: 790154823901",
+          "confidence": 0.9263283303289702,
+          "coordinates": [
+            0.49272727272727274,
+            0.07882352941176471,
+            0.5154545454545455,
+            0.3611764705882353
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "H\u1ea1ng: B2",
+          "confidence": 0.9305059462785721,
+          "coordinates": [
+            0.4954545454545455,
+            0.5023529411764706,
+            0.5154545454545455,
+            0.5823529411764706
+          ]
+        },
+        {
+          "lineId": "line_0013",
+          "text": "L\u00fd do \u0111\u1ec1 ngh\u1ecb:",
+          "confidence": 0.9356896706989833,
+          "coordinates": [
+            0.5427272727272727,
+            0.08,
+            0.5654545454545454,
+            0.1952941176470588
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC03",
+      "beforeMs": [
+        6629.763900000398,
+        7320.953700000246,
+        6682.842199999868
+      ],
+      "afterMs": [
+        3023.282200000722,
+        3169.2920999994385,
+        3309.609900000396
+      ],
+      "beforeMedianMs": 6682.842199999868,
+      "afterMedianMs": 3169.2920999994385,
+      "afterMaxMs": 3309.609900000396,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 1.0058283805847168e-07,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "C\u1ed8NG H\u00d2A X\u00c3 H\u1ed8I CH\u1ee6 NGH\u0128A VI\u1ec6T NAM",
+          "confidence": 0.9308641587986666,
+          "coordinates": [
+            0.03727272727272727,
+            0.3070588235294118,
+            0.060909090909090906,
+            0.691764705882353
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u1ed9c l\u1eadp - T\u1ef1 do - H\u1ea1nh ph\u00fac",
+          "confidence": 0.9307542067986948,
+          "coordinates": [
+            0.06363636363636363,
+            0.3776470588235294,
+            0.08363636363636363,
+            0.6211764705882353
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "T\u1edc KHAI THAY \u0110\u1ed4I TH\u00d4NG TIN C\u01af TR\u00da",
+          "confidence": 0.9318108721212908,
+          "coordinates": [
+            0.11636363636363636,
+            0.27176470588235296,
+            0.1409090909090909,
+            0.7258823529411764
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "1. H\u1ecd v\u00e0 t\u00ean: L\u00ea TH\u1ecb MAI",
+          "confidence": 0.8925319810708364,
+          "coordinates": [
+            0.19272727272727272,
+            0.08,
+            0.21545454545454545,
+            0.28352941176470586
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "2. Gi\u1edbi t\u00ednh: N\u1eef",
+          "confidence": 0.9053726810961962,
+          "coordinates": [
+            0.19545454545454546,
+            0.6082352941176471,
+            0.21272727272727274,
+            0.7376470588235294
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "3. Ng\u00e0y sinh: 20/11/1965",
+          "confidence": 0.932871845861276,
+          "coordinates": [
+            0.25,
+            0.07882352941176471,
+            0.27,
+            0.2811764705882353
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "4. D\u00e2n t\u1ed9c: Kinh",
+          "confidence": 0.9292633272707462,
+          "coordinates": [
+            0.25,
+            0.42,
+            0.27,
+            0.5552941176470588
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "5. Qu\u1ed1c t\u1ecbch: Vi\u1ec7t Nam",
+          "confidence": 0.9304353621872988,
+          "coordinates": [
+            0.24727272727272728,
+            0.6788235294117647,
+            0.27,
+            0.8647058823529412
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "6. S\u1ed1 \u0111\u1ecbnh danh c\u00e1 nh\u00e2n: 036165004321",
+          "confidence": 0.9252655683337031,
+          "coordinates": [
+            0.3018181818181818,
+            0.07882352941176471,
+            0.3245454545454545,
+            0.4023529411764706
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "7. S\u1ed1 \u0111i\u1ec7n tho\u1ea1i: 0912345678",
+          "confidence": 0.9249763978379113,
+          "coordinates": [
+            0.3018181818181818,
+            0.5611764705882353,
+            0.3245454545454545,
+            0.7988235294117647
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "8. N\u01a1i th\u01b0\u1eddng tr\u00fa: S\u1ed1 12 ph\u1ed1 Hu\u1ebf, ph\u01b0\u1eddng H\u00e0ng B\u00e0i, qu\u1eadn ho\u00e0n ki\u1ebfm, h\u00e0 n\u1ed9i",
+          "confidence": 0.9069968976757743,
+          "coordinates": [
+            0.3563636363636364,
+            0.07882352941176471,
+            0.3790909090909091,
+            0.7282352941176471
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "9. N\u01a1i t\u1ea1m tr\u00fa: X\u00e3 Kim Chung, huy\u1ec7n \u0110\u00f4ng Anh",
+          "confidence": 0.9238603237000379,
+          "coordinates": [
+            0.41363636363636364,
+            0.07882352941176471,
+            0.43363636363636365,
+            0.47411764705882353
+          ]
+        },
+        {
+          "lineId": "line_0013",
+          "text": "10. Quan h\u1ec7: ch\u1ee7 h\u1ed9",
+          "confidence": 0.9055867383354589,
+          "coordinates": [
+            0.41363636363636364,
+            0.6094117647058823,
+            0.43363636363636365,
+            0.7823529411764706
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC04",
+      "beforeMs": [
+        3178.0126000003293,
+        2917.913799999951,
+        3272.209599999769
+      ],
+      "afterMs": [
+        1993.0687999994916,
+        1963.4382000003825,
+        1650.6085000000894
+      ],
+      "beforeMedianMs": 3178.0126000003293,
+      "afterMedianMs": 1963.4382000003825,
+      "afterMaxMs": 1993.0687999994916,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 1.1920928955078125e-07,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "B\u1ea2NG K\u00ca KHAI T\u00c0I S\u1ea2N V\u00c0 THU NH\u1eacP",
+          "confidence": 0.9335376154631376,
+          "coordinates": [
+            0.034545454545454546,
+            0.29,
+            0.06181818181818182,
+            0.7111111111111111
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "STT",
+          "confidence": 0.9269525210062662,
+          "coordinates": [
+            0.11272727272727273,
+            0.07666666666666666,
+            0.1290909090909091,
+            0.11222222222222222
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "Lo\u1ea1i t\u00e0i s\u1ea3n",
+          "confidence": 0.9318151473999023,
+          "coordinates": [
+            0.11181818181818182,
+            0.22111111111111112,
+            0.1318181818181818,
+            0.31222222222222223
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "Di\u1ec7n t\u00edch (m2)",
+          "confidence": 0.9339923092297145,
+          "coordinates": [
+            0.11181818181818182,
+            0.4177777777777778,
+            0.1318181818181818,
+            0.5266666666666666
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "Gi\u00e1 tr\u1ecb \u01b0\u1edbc t\u00ednh",
+          "confidence": 0.9326353408396244,
+          "coordinates": [
+            0.11181818181818182,
+            0.5844444444444444,
+            0.1318181818181818,
+            0.7033333333333334
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "Ghi ch\u00fa",
+          "confidence": 0.9378935439246041,
+          "coordinates": [
+            0.11181818181818182,
+            0.8122222222222222,
+            0.1290909090909091,
+            0.8755555555555555
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "1",
+          "confidence": 0.9302380681037903,
+          "coordinates": [
+            0.15636363636363637,
+            0.08777777777777777,
+            0.17272727272727273,
+            0.1
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "Nh\u00e0 \u1edf t\u1ea1i H\u00e0 N\u1ed9i",
+          "confidence": 0.9064077660441399,
+          "coordinates": [
+            0.15545454545454546,
+            0.13111111111111112,
+            0.17545454545454545,
+            0.25222222222222224
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "120.5",
+          "confidence": 0.9271809458732605,
+          "coordinates": [
+            0.15636363636363637,
+            0.45111111111111113,
+            0.17363636363636364,
+            0.49444444444444446
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "4.500.000.000 \u0111",
+          "confidence": 0.9236745397249858,
+          "coordinates": [
+            0.15636363636363637,
+            0.6177777777777778,
+            0.17272727272727273,
+            0.7366666666666667
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "Nh\u00e0 c\u1ea5p 3",
+          "confidence": 0.9344348775015937,
+          "coordinates": [
+            0.15363636363636363,
+            0.77,
+            0.17545454545454545,
+            0.8466666666666667
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "2",
+          "confidence": 0.9337692856788635,
+          "coordinates": [
+            0.2018181818181818,
+            0.08666666666666667,
+            0.21818181818181817,
+            0.10222222222222223
+          ]
+        },
+        {
+          "lineId": "line_0013",
+          "text": "\u0110\u1ea5t n\u00f4ng nghi\u1ec7p",
+          "confidence": 0.9333704789479573,
+          "coordinates": [
+            0.1990909090909091,
+            0.13,
+            0.22090909090909092,
+            0.2511111111111111
+          ]
+        },
+        {
+          "lineId": "line_0014",
+          "text": "500.0",
+          "confidence": 0.9279009222984314,
+          "coordinates": [
+            0.2018181818181818,
+            0.45,
+            0.2190909090909091,
+            0.49444444444444446
+          ]
+        },
+        {
+          "lineId": "line_0015",
+          "text": "800.000.000 \u0111",
+          "confidence": 0.9194609064322251,
+          "coordinates": [
+            0.2018181818181818,
+            0.6311111111111111,
+            0.21818181818181817,
+            0.7366666666666667
+          ]
+        },
+        {
+          "lineId": "line_0016",
+          "text": "",
+          "confidence": null,
+          "coordinates": [
+            0.18818181818181817,
+            0.7566666666666667,
+            0.2309090909090909,
+            0.9311111111111111
+          ]
+        },
+        {
+          "lineId": "line_0017",
+          "text": "3",
+          "confidence": 0.9287266135215759,
+          "coordinates": [
+            0.24727272727272728,
+            0.08666666666666667,
+            0.26454545454545453,
+            0.10222222222222223
+          ]
+        },
+        {
+          "lineId": "line_0018",
+          "text": "Xe \u00f4 t\u00f4 con 5 ch\u1ed7",
+          "confidence": 0.9305398674572215,
+          "coordinates": [
+            0.24545454545454545,
+            0.13,
+            0.26454545454545453,
+            0.2577777777777778
+          ]
+        },
+        {
+          "lineId": "line_0019",
+          "text": "",
+          "confidence": null,
+          "coordinates": [
+            0.23363636363636364,
+            0.4122222222222222,
+            0.27636363636363637,
+            0.5311111111111111
+          ]
+        },
+        {
+          "lineId": "line_0020",
+          "text": "650.000.000 \u0111",
+          "confidence": 0.9214496933496915,
+          "coordinates": [
+            0.24727272727272728,
+            0.6311111111111111,
+            0.26454545454545453,
+            0.7366666666666667
+          ]
+        },
+        {
+          "lineId": "line_0021",
+          "text": "\u0110\u1ee9ng t\u00ean c\u00e1 nh\u00e2n",
+          "confidence": 0.9334762059152126,
+          "coordinates": [
+            0.24727272727272728,
+            0.7688888888888888,
+            0.26636363636363636,
+            0.9
+          ]
+        },
+        {
+          "lineId": "line_0022",
+          "text": "4",
+          "confidence": 0.9423302412033081,
+          "coordinates": [
+            0.2927272727272727,
+            0.08666666666666667,
+            0.3090909090909091,
+            0.10222222222222223
+          ]
+        },
+        {
+          "lineId": "line_0023",
+          "text": "Ti\u1ec1n ti\u1ebft ki\u1ec7m g\u1eedi ng\u00e2n h\u00e0ng",
+          "confidence": 0.9316232672759465,
+          "coordinates": [
+            0.29,
+            0.13,
+            0.3118181818181818,
+            0.3322222222222222
+          ]
+        },
+        {
+          "lineId": "line_0024",
+          "text": "",
+          "confidence": null,
+          "coordinates": [
+            0.2790909090909091,
+            0.4122222222222222,
+            0.32181818181818184,
+            0.5311111111111111
+          ]
+        },
+        {
+          "lineId": "line_0025",
+          "text": "300.000.000 \u0111",
+          "confidence": 0.9170894806201642,
+          "coordinates": [
+            0.2927272727272727,
+            0.6311111111111111,
+            0.3090909090909091,
+            0.7366666666666667
+          ]
+        },
+        {
+          "lineId": "line_0026",
+          "text": "",
+          "confidence": null,
+          "coordinates": [
+            0.2790909090909091,
+            0.7566666666666667,
+            0.32181818181818184,
+            0.9311111111111111
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC05",
+      "beforeMs": [
+        5564.269800000147,
+        6266.369200000554,
+        5811.617899999874
+      ],
+      "afterMs": [
+        2534.2889000003197,
+        2563.6501999997563,
+        2604.953099999875
+      ],
+      "beforeMedianMs": 5811.617899999874,
+      "afterMedianMs": 2563.6501999997563,
+      "afterMaxMs": 2604.953099999875,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 1.0303088593399679e-07,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "C\u1ed8NG H\u00d2A X\u00c3 H\u1ed8I CH\u1ee6 NGH\u0128A VI\u1ec6T NAM",
+          "confidence": 0.9163239078862326,
+          "coordinates": [
+            0.03727272727272727,
+            0.3070588235294118,
+            0.060909090909090906,
+            0.691764705882353
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u1ed9c l\u1eadp - T\u1ef1 do - H\u1ea1nh ph\u00fac",
+          "confidence": 0.9307542067986948,
+          "coordinates": [
+            0.06363636363636363,
+            0.3776470588235294,
+            0.08363636363636363,
+            0.6211764705882353
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "PHI\u1ebeU \u0110\u0102NG K\u00dd PH\u01af\u01a0NG TH\u1ee8C TR\u1ea2 K\u1ebeT QU\u1ea2",
+          "confidence": 0.9316899606159755,
+          "coordinates": [
+            0.11636363636363636,
+            0.22588235294117648,
+            0.1409090909090909,
+            0.7752941176470588
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "I. Ph\u01b0\u01a1ng th\u1ee9c nh\u1eadn k\u1ebft qu\u1ea3 gi\u1ea3i quy\u1ebft:",
+          "confidence": 0.9289146814590845,
+          "coordinates": [
+            0.1918181818181818,
+            0.08,
+            0.21636363636363637,
+            0.4423529411764706
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "2 Nh\u1eadn k\u1ebft qu\u1ea3 tr\u1ef1c ti\u1ebfp t\u1ea1i B\u1ed9 ph\u1eadn M\u1ed9t c\u1eeda",
+          "confidence": 0.9240740104155107,
+          "coordinates": [
+            0.23363636363636364,
+            0.11529411764705882,
+            0.25636363636363635,
+            0.4788235294117647
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "\u1ede Nh\u1eadn k\u1ebft qu\u1ea3 qua d\u1ecbch v\u1ee5 b\u01b0u ch\u00ednh c\u00f4ng \u00edch",
+          "confidence": 0.9258363697263929,
+          "coordinates": [
+            0.27454545454545454,
+            0.11529411764705882,
+            0.2972727272727273,
+            0.4964705882352941
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "II. H\u00ecnh th\u1ee9c thanh to\u00e1n ph\u00ed, l\u1ec7 ph\u00ed:",
+          "confidence": 0.9306062621039313,
+          "coordinates": [
+            0.34,
+            0.08,
+            0.3609090909090909,
+            0.3952941176470588
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "[x] Thanh to\u00e1n tr\u1ef1c tuy\u1ebfn qua C\u1ed5ng d\u1ecbch v\u1ee5 c\u00f4ng",
+          "confidence": 0.9279467463493347,
+          "coordinates": [
+            0.3790909090909091,
+            0.11529411764705882,
+            0.4027272727272727,
+            0.5023529411764706
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "[] N\u1ed9p ti\u1ec1n m\u1eb7t tr\u1ef1c ti\u1ebfp t\u1ea1i qu\u1ea7y thu ng\u00e2n",
+          "confidence": 0.9260566969250523,
+          "coordinates": [
+            0.42,
+            0.11529411764705882,
+            0.44272727272727275,
+            0.4505882352941176
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "III. Lo\u1ea1i h\u1ed3 s\u01a1 y\u00eau c\u1ea7u:",
+          "confidence": 0.9311753958463669,
+          "coordinates": [
+            0.4827272727272727,
+            0.08,
+            0.5072727272727273,
+            0.28823529411764703
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "- C\u1ea5p m\u1edbi",
+          "confidence": 0.8552985058890449,
+          "coordinates": [
+            0.5245454545454545,
+            0.11529411764705882,
+            0.5472727272727272,
+            0.20823529411764705
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "\u1ede C\u1ea5p \u0111\u1ed5i",
+          "confidence": 0.8984856075710721,
+          "coordinates": [
+            0.5245454545454545,
+            0.37411764705882355,
+            0.5472727272727272,
+            0.46
+          ]
+        },
+        {
+          "lineId": "line_0013",
+          "text": "\u1ede C\u1ea5p l\u1ea1i",
+          "confidence": 0.9275080296728346,
+          "coordinates": [
+            0.5245454545454545,
+            0.6329411764705882,
+            0.5472727272727272,
+            0.7129411764705882
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC06",
+      "beforeMs": [
+        5737.444299999879,
+        5491.736299999502,
+        5884.3278999993345
+      ],
+      "afterMs": [
+        2571.000200000526,
+        2559.8023000002286,
+        2709.1780999999173
+      ],
+      "beforeMedianMs": 5737.444299999879,
+      "afterMedianMs": 2571.000200000526,
+      "afterMaxMs": 2709.1780999999173,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 4.6359168170972964e-08,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "C\u1ed8NG H\u00d2A X\u00c3 H\u1ed8I CH\u1ee6 NGH\u0128A VI\u1ec6T NAM",
+          "confidence": 0.9308641587986666,
+          "coordinates": [
+            0.03727272727272727,
+            0.3070588235294118,
+            0.060909090909090906,
+            0.691764705882353
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u1ed9c l\u1eadp - T\u1ef1 do - H\u1ea1nh ph\u00fac",
+          "confidence": 0.9307542067986948,
+          "coordinates": [
+            0.06363636363636363,
+            0.3776470588235294,
+            0.08363636363636363,
+            0.6211764705882353
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "BI\u00caN B\u1ea2N VI PH\u1ea0M H\u00c0NH CH\u00cdNH",
+          "confidence": 0.9349918939449169,
+          "coordinates": [
+            0.11636363636363636,
+            0.31058823529411766,
+            0.14363636363636365,
+            0.6894117647058824
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "S\u1ed1 bi\u00ean b\u1ea3n: 001248/BB-VPHC",
+          "confidence": 0.9310547510782877,
+          "coordinates": [
+            0.17454545454545456,
+            0.07882352941176471,
+            0.19545454545454546,
+            0.33294117647058824
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "Ng\u00e0y l\u1eadp bi\u00ean b\u1ea3n: 05/09/2026",
+          "confidence": 0.9335914295295189,
+          "coordinates": [
+            0.21727272727272728,
+            0.08,
+            0.2381818181818182,
+            0.32588235294117646
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "H\u1ecc V\u00c0 T\u00caN: HO\u00c0NG V\u0102N TH\u1eaeNG",
+          "confidence": 0.9114685036517955,
+          "coordinates": [
+            0.25636363636363635,
+            0.08,
+            0.2790909090909091,
+            0.3458823529411765
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "S\u1ed1 CCCD: 038092008765",
+          "confidence": 0.9141914560681298,
+          "coordinates": [
+            0.2972727272727273,
+            0.07882352941176471,
+            0.3181818181818182,
+            0.29058823529411765
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "Bi\u1ec3n s\u1ed1 xe: 29B1-045.89",
+          "confidence": 0.9276833715646163,
+          "coordinates": [
+            0.3381818181818182,
+            0.08,
+            0.35818181818181816,
+            0.28
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "H\u00e0nh vi vi ph\u1ea1m: Ch\u1ea1y qu\u00e1 t\u1ed1c \u0111\u1ed9 quy \u0111\u1ecbnh t\u1eeb 10 km/h \u0111\u1ebfn 20 km/h",
+          "confidence": 0.9326692602851174,
+          "coordinates": [
+            0.3881818181818182,
+            0.08,
+            0.4109090909090909,
+            0.6388235294117647
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "S\u1ed1 ti\u1ec1n ph\u1ea1t: 2.500.000 \u0111\u1ed3ng",
+          "confidence": 0.9314539581537247,
+          "coordinates": [
+            0.4381818181818182,
+            0.07882352941176471,
+            0.46090909090909093,
+            0.31529411764705884
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "H\u1ea1n n\u1ed9p ph\u1ea1t: 15/09/2026",
+          "confidence": 0.9330601990222931,
+          "coordinates": [
+            0.4818181818181818,
+            0.08,
+            0.5018181818181818,
+            0.28941176470588237
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "S\u1ed1 t\u00e0i kho\u1ea3n Kho b\u1ea1c: 7111.0102.3456 t\u1ea1i Agribank Chi nh\u00e1nh h\u00e0 T\u00e2y",
+          "confidence": 0.8680258964498838,
+          "coordinates": [
+            0.52,
+            0.07882352941176471,
+            0.5427272727272727,
+            0.6329411764705882
+          ]
+        },
+        {
+          "lineId": "line_0013",
+          "text": "S\u1ed1 quy\u1ebft \u0111\u1ecbnh: 00892/Q\u0110-XPHC",
+          "confidence": 0.931041534457888,
+          "coordinates": [
+            0.5609090909090909,
+            0.07882352941176471,
+            0.5836363636363636,
+            0.3376470588235294
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC07",
+      "beforeMs": [
+        5552.522299999509,
+        6323.376399999688,
+        6152.2091000006185
+      ],
+      "afterMs": [
+        2593.2818000001134,
+        2649.1846999997506,
+        2888.5263999991366
+      ],
+      "beforeMedianMs": 6152.2091000006185,
+      "afterMedianMs": 2649.1846999997506,
+      "afterMaxMs": 2888.5263999991366,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 2.433856328698525e-07,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "C\u1ed8NG H\u00d2A X\u00c3 H\u1ed8I CH\u1ee6 NGH\u0128A VI\u1ec6T NAM",
+          "confidence": 0.9119632489540997,
+          "coordinates": [
+            0.06080084042707482,
+            0.39348226683271176,
+            0.11606484115643463,
+            0.7297549222123677
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u1ed9c l\u1eadp - T\u1ef1 do - H\u1ea1nh ph\u00fac",
+          "confidence": 0.9278217134652315,
+          "coordinates": [
+            0.09090025180059137,
+            0.45133378570758526,
+            0.1307291702758898,
+            0.664283636686533
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "BI\u00caN B\u1ea2N VI PH\u1ea0M H\u00c0NH CH\u00cdNH",
+          "confidence": 0.9348393060542919,
+          "coordinates": [
+            0.13255095041223167,
+            0.3853977311083372,
+            0.191368423385555,
+            0.7161910037277515
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "S\u1ed1 bi\u00ean b\u1ea3n: 001248/BB-VPHC",
+          "confidence": 0.9226483327371103,
+          "coordinates": [
+            0.16600363841033358,
+            0.1786855703252003,
+            0.20673343717283402,
+            0.4007718028262475
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "Ng\u00e0y l\u1eadp bi\u00ean b\u1ea3n: 05/09/2026",
+          "confidence": 0.9335373413973841,
+          "coordinates": [
+            0.20588260579047654,
+            0.1728148030820842,
+            0.2460118176948423,
+            0.3888101145683984
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "H\u1ecc V\u00c0 T\u00caN: HO\u00c0NG V\u0102N TH\u1eaeNG",
+          "confidence": 0.9260667516635015,
+          "coordinates": [
+            0.24077670224810163,
+            0.16743326644256107,
+            0.2842692005580217,
+            0.4009308027724153
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "S\u1ed1 CCCD: 038092008765",
+          "confidence": 0.9129830655597505,
+          "coordinates": [
+            0.27806313635729657,
+            0.16103657630058246,
+            0.3161203236010977,
+            0.3477147438665856
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "Bi\u1ec3n s\u1ed1 xe: 29B1-045.89",
+          "confidence": 0.9289053186126377,
+          "coordinates": [
+            0.3155497660858697,
+            0.15667019316351483,
+            0.351675065602671,
+            0.33205936455160917
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "H\u00e0nh vi vi ph\u1ea1m: Ch\u1ea1y qu\u00e1 t\u1ed1c \u0111\u1ed9 quy \u0111\u1ecbnh t\u1eeb 10 km/h \u0111\u1ebfn 20 km/h",
+          "confidence": 0.9323841875249689,
+          "coordinates": [
+            0.3619751302196808,
+            0.14843888825806242,
+            0.43122279496260973,
+            0.6348319543502338
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "S\u1ed1 ti\u1ec1n ph\u1ea1t: 2.500.000 \u0111\u1ed3ng",
+          "confidence": 0.9310212773936135,
+          "coordinates": [
+            0.40683896852234164,
+            0.1418342751095568,
+            0.4486598334104534,
+            0.3500752815289218
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "H\u1ea1n n\u1ed9p ph\u1ea1t: 15/09/2026",
+          "confidence": 0.9328492258985838,
+          "coordinates": [
+            0.44671793590248465,
+            0.13633043081913543,
+            0.4837441157064879,
+            0.3208559837293293
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "S\u1ed1 t\u00e0i kho\u1ea3n Kho b\u1ea1c: 7111.0102.3456 t\u1ea1i Agribank Chi nh\u00e1nh H\u00e0 T\u00e2y",
+          "confidence": 0.9057926833629608,
+          "coordinates": [
+            0.48161203236010974,
+            0.1307042788778158,
+            0.5511900198750128,
+            0.612143885108608
+          ]
+        },
+        {
+          "lineId": "line_0013",
+          "text": "S\u1ed1 quy\u1ebft \u0111\u1ecbnh: 00892/Q\u0110-XPHC",
+          "confidence": 0.9303837163107735,
+          "coordinates": [
+            0.5189985642789938,
+            0.1253227422382927,
+            0.5626211897415097,
+            0.3518365117018567
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC08",
+      "beforeMs": [
+        3687.036100000114,
+        3759.6910000002026,
+        3791.4340999996057
+      ],
+      "afterMs": [
+        1848.4433000003264,
+        1714.2078000006222,
+        1725.9887999998682
+      ],
+      "beforeMedianMs": 3759.6910000002026,
+      "afterMedianMs": 1725.9887999998682,
+      "afterMaxMs": 1848.4433000003264,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 6.37153099170007e-08,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "C\u1ed8NG H\u00d2A X\u00c3 H\u1ed8I CH\u1ee6 NGH\u0128A VI\u1ec6T NAM",
+          "confidence": 0.9221974190543679,
+          "coordinates": [
+            0.03727272727272727,
+            0.3070588235294118,
+            0.06181818181818182,
+            0.6929411764705883
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u1ed9c l\u1eadp - T\u1ef1 do - H\u1ea1nh ph\u00fac",
+          "confidence": 0.93047786421246,
+          "coordinates": [
+            0.06363636363636363,
+            0.3776470588235294,
+            0.08363636363636363,
+            0.6211764705882353
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "TH\u00d4NG B\u00c1O N\u1ed8P L\u1ec6 PH\u00cd TR\u01af\u1edaC B\u1ea0",
+          "confidence": 0.9280451453965286,
+          "coordinates": [
+            0.12454545454545454,
+            0.28705882352941176,
+            0.15363636363636363,
+            0.7129411764705882
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "M\u00e3 h\u1ed3 s\u01a1: 0192837465",
+          "confidence": 0.9281402915716171,
+          "coordinates": [
+            0.2018181818181818,
+            0.07882352941176471,
+            0.22272727272727272,
+            0.26823529411764707
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "Ng\u01b0\u1eddi n\u1ed9p thu\u1ebf: V\u0169 TH\u1ecb H\u01b0\u01a1NG",
+          "confidence": 0.8989621954304832,
+          "coordinates": [
+            0.25181818181818183,
+            0.07882352941176471,
+            0.27545454545454545,
+            0.35058823529411764
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "S\u1ed1 ti\u1ec1n ph\u1ea3i n\u1ed9p: 1.250.000 \u0111\u1ed3ng",
+          "confidence": 0.9312835857272148,
+          "coordinates": [
+            0.3018181818181818,
+            0.07882352941176471,
+            0.32545454545454544,
+            0.3458823529411765
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "Th\u1eddi h\u1ea1n n\u1ed9p: 30/10/2026",
+          "confidence": 0.9329983244339625,
+          "coordinates": [
+            0.35363636363636364,
+            0.07882352941176471,
+            0.37454545454545457,
+            0.28823529411764703
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "C\u01a1 quan thu\u1ebf: Chi c\u1ee5c Thu\u1ebf khu v\u1ef1c Thanh Xu\u00e2n",
+          "confidence": 0.9318363693025377,
+          "coordinates": [
+            0.4018181818181818,
+            0.07882352941176471,
+            0.42454545454545456,
+            0.4752941176470588
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC09",
+      "beforeMs": [
+        8582.746299999599,
+        7980.502099999285,
+        8291.044699999475
+      ],
+      "afterMs": [
+        3520.2351000007184,
+        3403.451899999709,
+        3864.6580999993603
+      ],
+      "beforeMedianMs": 8291.044699999475,
+      "afterMedianMs": 3520.2351000007184,
+      "afterMaxMs": 3864.6580999993603,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 3.532127101912863e-08,
+      "predictions": [
+        {
+          "lineId": "line_0001",
+          "text": "PHI\u1ebeU TI\u1ebeP NH\u1eacN V\u00c0 H\u1ee2N TR\u1ea2 K\u1ebeT QU\u1ea2",
+          "confidence": 0.9085021295091685,
+          "coordinates": [
+            0.04363636363636364,
+            0.2635294117647059,
+            0.07090909090909091,
+            0.7376470588235294
+          ]
+        },
+        {
+          "lineId": "line_0002",
+          "text": "\u0110\u01a1n v\u1ecb ti\u1ebfp nh\u1eadn: B\u1ed9 ph\u1eadn M\u1ed9t c\u1eeda \u1ee6y ban nh\u00e2n d\u00e2n th\u1ecb x\u00e3 S\u01a1n T\u00e2y",
+          "confidence": 0.9274826477158744,
+          "coordinates": [
+            0.11090909090909092,
+            0.07882352941176471,
+            0.13363636363636364,
+            0.6188235294117647
+          ]
+        },
+        {
+          "lineId": "line_0003",
+          "text": "Ng\u01b0\u1eddi ti\u1ebfp nh\u1eadn: Chuy\u00ean vi\u00ean \u0110\u1ed7 Tu\u1ea5n Anh",
+          "confidence": 0.9311099365353585,
+          "coordinates": [
+            0.14727272727272728,
+            0.08,
+            0.17,
+            0.42705882352941177
+          ]
+        },
+        {
+          "lineId": "line_0004",
+          "text": "Danh m\u1ee5c t\u00e0i li\u1ec7u k\u00e8m theo:",
+          "confidence": 0.9295546522846928,
+          "coordinates": [
+            0.21363636363636362,
+            0.08,
+            0.23363636363636364,
+            0.31882352941176473
+          ]
+        },
+        {
+          "lineId": "line_0005",
+          "text": "- 01 b\u1ea3n ch\u00ednh \u0110\u01a1n xin x\u00e1c nh\u1eadn \u0111\u1ea5t kh\u00f4ng c\u00f3 tranh ch\u1ea5p",
+          "confidence": 0.9300575983524323,
+          "coordinates": [
+            0.24727272727272728,
+            0.07882352941176471,
+            0.27,
+            0.5352941176470588
+          ]
+        },
+        {
+          "lineId": "line_0006",
+          "text": "- 02 b\u1ea3n sao c\u00f4ng ch\u1ee9ng C\u0103n c\u01b0\u1edbc c\u00f4ng d\u00e2n c\u1ee7a hai v\u1ee3 ch\u1ed3ng",
+          "confidence": 0.9304733230517461,
+          "coordinates": [
+            0.28363636363636363,
+            0.07882352941176471,
+            0.30636363636363634,
+            0.5823529411764706
+          ]
+        },
+        {
+          "lineId": "line_0007",
+          "text": "- 01 b\u1ea3n tr\u00edch l\u1ee5c b\u1ea3n \u0111\u1ed3 \u0111\u1ecba ch\u00ednh th\u1eeda \u0111\u1ea5t s\u1ed1 42 t\u1edd b\u1ea3n \u0111\u1ed3 s\u1ed1 08",
+          "confidence": 0.9307732805609703,
+          "coordinates": [
+            0.32,
+            0.07882352941176471,
+            0.3427272727272727,
+            0.6
+          ]
+        },
+        {
+          "lineId": "line_0008",
+          "text": "\u00dd ki\u1ebfn c\u1ee7a c\u00e1n b\u1ed9 ti\u1ebfp nh\u1eadn:",
+          "confidence": 0.9302881572927747,
+          "coordinates": [
+            0.3836363636363636,
+            0.07882352941176471,
+            0.40636363636363637,
+            0.32235294117647056
+          ]
+        },
+        {
+          "lineId": "line_0009",
+          "text": "H\u1ed3 s\u01a1 \u0111\u1ea7y \u0111\u1ee7 \u0111i\u1ec1u ki\u1ec7n ti\u1ebfp nh\u1eadn. \u0110\u01b0\u01a1ng s\u1ef1 c\u1ea7n b\u1ed5 sung bi\u00ean lai thu\u1ebf",
+          "confidence": 0.9217472848843555,
+          "coordinates": [
+            0.42,
+            0.08,
+            0.44272727272727275,
+            0.6364705882352941
+          ]
+        },
+        {
+          "lineId": "line_0010",
+          "text": "\u0111\u1ea5t phi n\u00f4ng nghi\u1ec7p n\u0103m 2025 tr\u01b0\u1edbc ng\u00e0y tr\u1ea3 k\u1ebft qu\u1ea3 theo quy \u0111\u1ecbnh.",
+          "confidence": 0.9190221428871155,
+          "coordinates": [
+            0.45181818181818184,
+            0.07882352941176471,
+            0.47454545454545455,
+            0.6188235294117647
+          ]
+        },
+        {
+          "lineId": "line_0011",
+          "text": "M\u00c3 TRA C\u1ee8U H\u1ed2 S\u01a0: STY-2026-09872-TNMC",
+          "confidence": 0.9315670197074478,
+          "coordinates": [
+            0.53,
+            0.07882352941176471,
+            0.55,
+            0.4023529411764706
+          ]
+        },
+        {
+          "lineId": "line_0012",
+          "text": "In t\u1ea1i Trung t\u00e2m C\u00f4ng ngh\u1ec7 Th\u00f4ng tin S\u1edf N\u1ed9i v\u1ee5 - Phi\u00ean b\u1ea3n ph\u1ea7n m\u1ec1m 2.4.1 - 2026",
+          "confidence": 0.9228684618359521,
+          "coordinates": [
+            0.9136363636363637,
+            0.23411764705882354,
+            0.9336363636363636,
+            0.7658823529411765
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "TC10",
+      "beforeMs": [
+        62.778000000434986,
+        56.55159999969328,
+        57.00070000057167
+      ],
+      "afterMs": [
+        67.20429999950284,
+        62.80810000043857,
+        54.9817000000985
+      ],
+      "beforeMedianMs": 57.00070000057167,
+      "afterMedianMs": 62.80810000043857,
+      "afterMaxMs": 67.20429999950284,
+      "sameText": true,
+      "sameLayoutAndCoordinates": true,
+      "maxConfidenceDelta": 0,
+      "predictions": []
+    }
+  ]
+}

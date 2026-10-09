@@ -1,0 +1,1121 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "4bf5044e-992c-4ed1-ba3b-38aa433d8563",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nBIÊN BẢN VI PHẠM HÀNH CHÍNH\nSố biên bản: 001248/BB-VPHC\nNgày lập biên bản: 05/09/2026\nHỌ VÀ TÊN: HOÀNG VĂN THẮNG\nSố CCCD: 038092008765\nBiển số xe: 29B1-045.89\nHành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h\nSố tiền phạt: 2.500.000 đồng\nHạn nộp phạt: 15/09/2026\nSố tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây\nSố quyết định: 00892/QĐ-XPHC",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 978,
+      "height": 1195,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      "newline": "\n",
+      "start": 0,
+      "end": 34,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "newline": "\n",
+      "start": 35,
+      "end": 62,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "BIÊN BẢN VI PHẠM HÀNH CHÍNH",
+      "newline": "\n",
+      "start": 63,
+      "end": 90,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-3",
+      "page": 1,
+      "order": 3,
+      "text": "Số biên bản: 001248/BB-VPHC",
+      "newline": "\n",
+      "start": 91,
+      "end": 118,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-4",
+      "page": 1,
+      "order": 4,
+      "text": "Ngày lập biên bản: 05/09/2026",
+      "newline": "\n",
+      "start": 119,
+      "end": 148,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-5",
+      "page": 1,
+      "order": 5,
+      "text": "HỌ VÀ TÊN: HOÀNG VĂN THẮNG",
+      "newline": "\n",
+      "start": 149,
+      "end": 175,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-6",
+      "page": 1,
+      "order": 6,
+      "text": "Số CCCD: 038092008765",
+      "newline": "\n",
+      "start": 176,
+      "end": 197,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-7",
+      "page": 1,
+      "order": 7,
+      "text": "Biển số xe: 29B1-045.89",
+      "newline": "\n",
+      "start": 198,
+      "end": 221,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-8",
+      "page": 1,
+      "order": 8,
+      "text": "Hành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+      "newline": "\n",
+      "start": 222,
+      "end": 286,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-9",
+      "page": 1,
+      "order": 9,
+      "text": "Số tiền phạt: 2.500.000 đồng",
+      "newline": "\n",
+      "start": 287,
+      "end": 315,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-10",
+      "page": 1,
+      "order": 10,
+      "text": "Hạn nộp phạt: 15/09/2026",
+      "newline": "\n",
+      "start": 316,
+      "end": 340,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-11",
+      "page": 1,
+      "order": 11,
+      "text": "Số tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+      "newline": "\n",
+      "start": 341,
+      "end": 407,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-12",
+      "page": 1,
+      "order": 12,
+      "text": "Số quyết định: 00892/QĐ-XPHC",
+      "newline": "",
+      "start": 408,
+      "end": 436,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_0001",
+      "page": 1,
+      "order": 0,
+      "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      "bbox": [
+        0.39348226683271176,
+        0.06080084042707482,
+        0.7297549222123677,
+        0.11606484115643463
+      ],
+      "confidence": 0.9119631744482938,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_0002",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "bbox": [
+        0.45133378570758526,
+        0.09090025180059137,
+        0.664283636686533,
+        0.1307291702758898
+      ],
+      "confidence": 0.9278216803515399,
+      "kind": "line"
+    },
+    {
+      "id": "block-2",
+      "providerId": "line_0003",
+      "page": 1,
+      "order": 2,
+      "text": "BIÊN BẢN VI PHẠM HÀNH CHÍNH",
+      "bbox": [
+        0.3853977311083372,
+        0.13255095041223167,
+        0.7161910037277515,
+        0.191368423385555
+      ],
+      "confidence": 0.9348392928088153,
+      "kind": "line"
+    },
+    {
+      "id": "block-3",
+      "providerId": "line_0004",
+      "page": 1,
+      "order": 3,
+      "text": "Số biên bản: 001248/BB-VPHC",
+      "bbox": [
+        0.1786855703252003,
+        0.16600363841033358,
+        0.4007718028262475,
+        0.20673343717283402
+      ],
+      "confidence": 0.9226484938904091,
+      "kind": "line"
+    },
+    {
+      "id": "block-4",
+      "providerId": "line_0005",
+      "page": 1,
+      "order": 4,
+      "text": "Ngày lập biên bản: 05/09/2026",
+      "bbox": [
+        0.1728148030820842,
+        0.20588260579047654,
+        0.3888101145683984,
+        0.2460118176948423
+      ],
+      "confidence": 0.9335373455080492,
+      "kind": "line"
+    },
+    {
+      "id": "block-5",
+      "providerId": "line_0006",
+      "page": 1,
+      "order": 5,
+      "text": "HỌ VÀ TÊN: HOÀNG VĂN THẮNG",
+      "bbox": [
+        0.16743326644256107,
+        0.24077670224810163,
+        0.4009308027724153,
+        0.2842692005580217
+      ],
+      "confidence": 0.9260667149837201,
+      "kind": "line"
+    },
+    {
+      "id": "block-6",
+      "providerId": "line_0007",
+      "page": 1,
+      "order": 6,
+      "text": "Số CCCD: 038092008765",
+      "bbox": [
+        0.16103657630058246,
+        0.27806313635729657,
+        0.3477147438665856,
+        0.3161203236010977
+      ],
+      "confidence": 0.9129831109728131,
+      "kind": "line"
+    },
+    {
+      "id": "block-7",
+      "providerId": "line_0008",
+      "page": 1,
+      "order": 7,
+      "text": "Biển số xe: 29B1-045.89",
+      "bbox": [
+        0.15667019316351483,
+        0.3155497660858697,
+        0.33205936455160917,
+        0.351675065602671
+      ],
+      "confidence": 0.9289052823315496,
+      "kind": "line"
+    },
+    {
+      "id": "block-8",
+      "providerId": "line_0009",
+      "page": 1,
+      "order": 8,
+      "text": "Hành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+      "bbox": [
+        0.14843888825806242,
+        0.3619751302196808,
+        0.6348319543502338,
+        0.43122279496260973
+      ],
+      "confidence": 0.9323842091993852,
+      "kind": "line"
+    },
+    {
+      "id": "block-9",
+      "providerId": "line_0010",
+      "page": 1,
+      "order": 9,
+      "text": "Số tiền phạt: 2.500.000 đồng",
+      "bbox": [
+        0.1418342751095568,
+        0.40683896852234164,
+        0.3500752815289218,
+        0.4486598334104534
+      ],
+      "confidence": 0.9310212965522494,
+      "kind": "line"
+    },
+    {
+      "id": "block-10",
+      "providerId": "line_0011",
+      "page": 1,
+      "order": 10,
+      "text": "Hạn nộp phạt: 15/09/2026",
+      "bbox": [
+        0.13633043081913543,
+        0.44671793590248465,
+        0.3208559837293293,
+        0.4837441157064879
+      ],
+      "confidence": 0.9328492085138956,
+      "kind": "line"
+    },
+    {
+      "id": "block-11",
+      "providerId": "line_0012",
+      "page": 1,
+      "order": 11,
+      "text": "Số tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+      "bbox": [
+        0.1307042788778158,
+        0.48161203236010974,
+        0.612143885108608,
+        0.5511900198750128
+      ],
+      "confidence": 0.905792439977328,
+      "kind": "line"
+    },
+    {
+      "id": "block-12",
+      "providerId": "line_0013",
+      "page": 1,
+      "order": 12,
+      "text": "Số quyết định: 00892/QĐ-XPHC",
+      "bbox": [
+        0.1253227422382927,
+        0.5189985642789938,
+        0.3518365117018567,
+        0.5626211897415097
+      ],
+      "confidence": 0.9303837248257228,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "national_heading",
+      "evidence": {
+        "method": "regex",
+        "rule": "national-heading",
+        "verified": false
+      },
+      "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "motto",
+      "evidence": {
+        "method": "regex",
+        "rule": "motto",
+        "verified": false
+      },
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "BIÊN BẢN VI PHẠM HÀNH CHÍNH",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [
+        "block-2"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-3",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số biên bản: 001248/BB-VPHC",
+      "page": 1,
+      "order": 3,
+      "sourceLineIds": [
+        "line-3"
+      ],
+      "sourceBlockIds": [
+        "block-3"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-4",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Ngày lập biên bản: 05/09/2026",
+      "page": 1,
+      "order": 4,
+      "sourceLineIds": [
+        "line-4"
+      ],
+      "sourceBlockIds": [
+        "block-4"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-5",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "HỌ VÀ TÊN: HOÀNG VĂN THẮNG",
+      "page": 1,
+      "order": 5,
+      "sourceLineIds": [
+        "line-5"
+      ],
+      "sourceBlockIds": [
+        "block-5"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-6",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số CCCD: 038092008765",
+      "page": 1,
+      "order": 6,
+      "sourceLineIds": [
+        "line-6"
+      ],
+      "sourceBlockIds": [
+        "block-6"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-7",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Biển số xe: 29B1-045.89",
+      "page": 1,
+      "order": 7,
+      "sourceLineIds": [
+        "line-7"
+      ],
+      "sourceBlockIds": [
+        "block-7"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-8",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Hành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+      "page": 1,
+      "order": 8,
+      "sourceLineIds": [
+        "line-8"
+      ],
+      "sourceBlockIds": [
+        "block-8"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-9",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số tiền phạt: 2.500.000 đồng",
+      "page": 1,
+      "order": 9,
+      "sourceLineIds": [
+        "line-9"
+      ],
+      "sourceBlockIds": [
+        "block-9"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-10",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Hạn nộp phạt: 15/09/2026",
+      "page": 1,
+      "order": 10,
+      "sourceLineIds": [
+        "line-10"
+      ],
+      "sourceBlockIds": [
+        "block-10"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-11",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+      "page": 1,
+      "order": 11,
+      "sourceLineIds": [
+        "line-11"
+      ],
+      "sourceBlockIds": [
+        "block-11"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-12",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số quyết định: 00892/QĐ-XPHC",
+      "page": 1,
+      "order": 12,
+      "sourceLineIds": [
+        "line-12"
+      ],
+      "sourceBlockIds": [
+        "block-12"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [
+      "node-0",
+      "node-1"
+    ],
+    "titles": [
+      "node-2"
+    ],
+    "dateLines": [],
+    "sections": [],
+    "fields": [
+      {
+        "id": "field-node-3-0",
+        "nodeId": "node-3",
+        "label": "Số biên bản",
+        "rawValue": " 001248/BB-VPHC",
+        "valueState": "observed",
+        "normalizedValue": " 001248/BB-VPHC",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-3"
+        ],
+        "sourceBlockIds": [
+          "block-3"
+        ]
+      },
+      {
+        "id": "field-node-4-0",
+        "nodeId": "node-4",
+        "label": "Ngày lập biên bản",
+        "rawValue": " 05/09/2026",
+        "valueState": "observed",
+        "normalizedValue": " 05/09/2026",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-4"
+        ],
+        "sourceBlockIds": [
+          "block-4"
+        ]
+      },
+      {
+        "id": "field-node-5-0",
+        "nodeId": "node-5",
+        "label": "HỌ VÀ TÊN",
+        "rawValue": " HOÀNG VĂN THẮNG",
+        "valueState": "observed",
+        "normalizedValue": " HOÀNG VĂN THẮNG",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-5"
+        ],
+        "sourceBlockIds": [
+          "block-5"
+        ]
+      },
+      {
+        "id": "field-node-6-0",
+        "nodeId": "node-6",
+        "label": "Số CCCD",
+        "rawValue": " 038092008765",
+        "valueState": "observed",
+        "normalizedValue": " 038092008765",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-6"
+        ],
+        "sourceBlockIds": [
+          "block-6"
+        ]
+      },
+      {
+        "id": "field-node-7-0",
+        "nodeId": "node-7",
+        "label": "Biển số xe",
+        "rawValue": " 29B1-045.89",
+        "valueState": "observed",
+        "normalizedValue": " 29B1-045.89",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-7"
+        ],
+        "sourceBlockIds": [
+          "block-7"
+        ]
+      },
+      {
+        "id": "field-node-8-0",
+        "nodeId": "node-8",
+        "label": "Hành vi vi phạm",
+        "rawValue": " Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+        "valueState": "observed",
+        "normalizedValue": " Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-8"
+        ],
+        "sourceBlockIds": [
+          "block-8"
+        ]
+      },
+      {
+        "id": "field-node-9-0",
+        "nodeId": "node-9",
+        "label": "Số tiền phạt",
+        "rawValue": " 2.500.000 đồng",
+        "valueState": "observed",
+        "normalizedValue": " 2.500.000 đồng",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-9"
+        ],
+        "sourceBlockIds": [
+          "block-9"
+        ]
+      },
+      {
+        "id": "field-node-10-0",
+        "nodeId": "node-10",
+        "label": "Hạn nộp phạt",
+        "rawValue": " 15/09/2026",
+        "valueState": "observed",
+        "normalizedValue": " 15/09/2026",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-10"
+        ],
+        "sourceBlockIds": [
+          "block-10"
+        ]
+      },
+      {
+        "id": "field-node-11-0",
+        "nodeId": "node-11",
+        "label": "Số tài khoản Kho bạc",
+        "rawValue": " 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+        "valueState": "observed",
+        "normalizedValue": " 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-11"
+        ],
+        "sourceBlockIds": [
+          "block-11"
+        ]
+      },
+      {
+        "id": "field-node-12-0",
+        "nodeId": "node-12",
+        "label": "Số quyết định",
+        "rawValue": " 00892/QĐ-XPHC",
+        "valueState": "observed",
+        "normalizedValue": " 00892/QĐ-XPHC",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-12"
+        ],
+        "sourceBlockIds": [
+          "block-12"
+        ]
+      }
+    ],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [],
+    "unclassified": []
+  },
+  "warnings": [
+    "OCR_DESKEW_APPLIED",
+    "OCR_DOTTED_GUIDES_DETECTED",
+    "UNEVEN_LIGHTING",
+    "POSSIBLE_GLARE",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nBIÊN BẢN VI PHẠM HÀNH CHÍNH\nSố biên bản: 001248/BB-VPHC\nNgày lập biên bản: 05/09/2026\nHỌ VÀ TÊN: HOÀNG VĂN THẮNG\nSố CCCD: 038092008765\nBiển số xe: 29B1-045.89\nHành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h\nSố tiền phạt: 2.500.000 đồng\nHạn nộp phạt: 15/09/2026\nSố tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây\nSố quyết định: 00892/QĐ-XPHC",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_0001",
+            "page": 1,
+            "order": 0,
+            "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.39348226683271176,
+              0.06080084042707482,
+              0.7297549222123677,
+              0.11606484115643463
+            ],
+            "confidence": 0.9119631744482938,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_0002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.45133378570758526,
+              0.09090025180059137,
+              0.664283636686533,
+              0.1307291702758898
+            ],
+            "confidence": 0.9278216803515399,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_0003",
+            "page": 1,
+            "order": 2,
+            "text": "BIÊN BẢN VI PHẠM HÀNH CHÍNH",
+            "bbox": [
+              0.3853977311083372,
+              0.13255095041223167,
+              0.7161910037277515,
+              0.191368423385555
+            ],
+            "confidence": 0.9348392928088153,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_0004",
+            "page": 1,
+            "order": 3,
+            "text": "Số biên bản: 001248/BB-VPHC",
+            "bbox": [
+              0.1786855703252003,
+              0.16600363841033358,
+              0.4007718028262475,
+              0.20673343717283402
+            ],
+            "confidence": 0.9226484938904091,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_0005",
+            "page": 1,
+            "order": 4,
+            "text": "Ngày lập biên bản: 05/09/2026",
+            "bbox": [
+              0.1728148030820842,
+              0.20588260579047654,
+              0.3888101145683984,
+              0.2460118176948423
+            ],
+            "confidence": 0.9335373455080492,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_0006",
+            "page": 1,
+            "order": 5,
+            "text": "HỌ VÀ TÊN: HOÀNG VĂN THẮNG",
+            "bbox": [
+              0.16743326644256107,
+              0.24077670224810163,
+              0.4009308027724153,
+              0.2842692005580217
+            ],
+            "confidence": 0.9260667149837201,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_0007",
+            "page": 1,
+            "order": 6,
+            "text": "Số CCCD: 038092008765",
+            "bbox": [
+              0.16103657630058246,
+              0.27806313635729657,
+              0.3477147438665856,
+              0.3161203236010977
+            ],
+            "confidence": 0.9129831109728131,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_0008",
+            "page": 1,
+            "order": 7,
+            "text": "Biển số xe: 29B1-045.89",
+            "bbox": [
+              0.15667019316351483,
+              0.3155497660858697,
+              0.33205936455160917,
+              0.351675065602671
+            ],
+            "confidence": 0.9289052823315496,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_0009",
+            "page": 1,
+            "order": 8,
+            "text": "Hành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+            "bbox": [
+              0.14843888825806242,
+              0.3619751302196808,
+              0.6348319543502338,
+              0.43122279496260973
+            ],
+            "confidence": 0.9323842091993852,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_0010",
+            "page": 1,
+            "order": 9,
+            "text": "Số tiền phạt: 2.500.000 đồng",
+            "bbox": [
+              0.1418342751095568,
+              0.40683896852234164,
+              0.3500752815289218,
+              0.4486598334104534
+            ],
+            "confidence": 0.9310212965522494,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_0011",
+            "page": 1,
+            "order": 10,
+            "text": "Hạn nộp phạt: 15/09/2026",
+            "bbox": [
+              0.13633043081913543,
+              0.44671793590248465,
+              0.3208559837293293,
+              0.4837441157064879
+            ],
+            "confidence": 0.9328492085138956,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_0012",
+            "page": 1,
+            "order": 11,
+            "text": "Số tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+            "bbox": [
+              0.1307042788778158,
+              0.48161203236010974,
+              0.612143885108608,
+              0.5511900198750128
+            ],
+            "confidence": 0.905792439977328,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_0013",
+            "page": 1,
+            "order": 12,
+            "text": "Số quyết định: 00892/QĐ-XPHC",
+            "bbox": [
+              0.1253227422382927,
+              0.5189985642789938,
+              0.3518365117018567,
+              0.5626211897415097
+            ],
+            "confidence": 0.9303837248257228,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": null,
+        "reason": "POSSIBLE_GLARE_REQUIRES_SOURCE_CHECK",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}
