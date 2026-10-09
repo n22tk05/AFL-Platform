@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import fs from "fs/promises";
 import path from "path";
 import { FormWorkflow } from "@/shared/contracts";
@@ -81,11 +82,24 @@ export async function POST(req: NextRequest) {
       try {
         await fs.writeFile(path.join(baseDir, "mock-workflow-khai-sinh-lai.json"), jsonString, "utf-8");
       } catch {}
+    } else if (templateId === "tpl_02_vphc") {
+      try {
+        await fs.writeFile(path.join(baseDir, "mock-workflow-tpl_02_vphc.json"), jsonString, "utf-8");
+      } catch {}
     }
 
     // 5. Ghi bản sao lưu lịch sử phiên bản
     const historyFilePath = path.join(historyDir, `${templateId}-v${currentVersion}.json`);
     await fs.writeFile(historyFilePath, jsonString, "utf-8");
+
+    // 6. Làm tươi cache cho các trang liên quan
+    try {
+      revalidatePath("/admin/library");
+      revalidatePath("/citizen");
+      revalidatePath(`/admin/review/${templateId}`);
+    } catch (e) {
+      console.warn("[revalidatePath] Warning:", e);
+    }
 
     return NextResponse.json({
       success: true,

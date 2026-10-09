@@ -255,8 +255,10 @@ export class PrismaFormRepository implements FormRepository {
   public async getWorkflowByFormCode(
     formCode: string,
   ): Promise<FormWorkflow | null> {
-    const template = await this.database.formTemplate.findUnique({
-      where: { formCode },
+    const template = await this.database.formTemplate.findFirst({
+      where: {
+        OR: [{ id: formCode }, { formCode }],
+      },
       include: {
         workflow: {
           include: {
@@ -323,7 +325,7 @@ export class PrismaFormRepository implements FormRepository {
       formId: form.id,
       formCode: form.formCode,
       formTitle: form.formTitle,
-      status: form.status.toLowerCase(),
+      status: (form.status.toUpperCase() as FormStatus),
       version: form.version,
       stepCount: form.workflow?._count.steps ?? 0,
       updatedAt: form.updatedAt.toISOString(),
@@ -333,8 +335,10 @@ export class PrismaFormRepository implements FormRepository {
   public async getWorkflowForReview(
     formCode: string,
   ): Promise<FormWorkflow | null> {
-    const template = await this.database.formTemplate.findUnique({
-      where: { formCode },
+    const template = await this.database.formTemplate.findFirst({
+      where: {
+        OR: [{ id: formCode }, { formCode }],
+      },
       include: {
         workflow: {
           include: {
@@ -362,7 +366,7 @@ export class PrismaFormRepository implements FormRepository {
       formId: template.id,
       formCode: template.formCode,
       formTitle: template.formTitle,
-      status: template.workflow.status.toLowerCase() as FormWorkflow["status"],
+      status: ((template.workflow?.status || template.status).toUpperCase() as FormWorkflow["status"]),
       version: template.workflow.version,
       steps: template.workflow.steps.map((step) => ({
         stepIndex: step.stepIndex,
@@ -391,14 +395,16 @@ export class PrismaFormRepository implements FormRepository {
   }
 
   public async saveReviewWorkflow(formCode: string, workflow: FormWorkflow) {
-    if (workflow.formCode !== formCode) throw new Error("FORM_CODE_MISMATCH");
+    if (workflow.formCode !== formCode && workflow.templateId !== formCode && workflow.formId !== formCode) throw new Error("FORM_CODE_MISMATCH");
     if (typeof workflow.formTitle !== "string" || !workflow.formTitle.trim())
       throw new Error("INVALID_WORKFLOW");
     try {
       return await this.database.$transaction(
         async (tx) => {
-          const existing = await tx.formTemplate.findUnique({
-            where: { formCode },
+          const existing = await tx.formTemplate.findFirst({
+            where: {
+              OR: [{ id: formCode }, { formCode }],
+            },
             include: { manifest: { include: { boxes: true } } },
           });
           if (!existing) throw new Error("NOT_FOUND");
@@ -530,8 +536,10 @@ export class PrismaFormRepository implements FormRepository {
   ): Promise<void> {
     await this.database.$transaction(
       async (tx) => {
-        const existing = await tx.formTemplate.findUnique({
-          where: { formCode },
+        const existing = await tx.formTemplate.findFirst({
+          where: {
+            OR: [{ id: formCode }, { formCode }],
+          },
           include: {
             manifest: { include: { boxes: true } },
             workflow: { include: { steps: { include: { faqs: true } } } },

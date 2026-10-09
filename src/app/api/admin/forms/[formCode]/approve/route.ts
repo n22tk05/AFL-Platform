@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { adminAuthorizationService, formController } from '@/modules/forms';
 import { readLimitedJson } from '@/modules/shared/services/request-body.service';
 
@@ -24,5 +25,16 @@ export async function POST(
     adminKey,
     body,
   });
+
+  if (result.status === 200) {
+    try {
+      revalidatePath('/admin/library');
+      revalidatePath('/citizen');
+      revalidatePath(`/admin/review/${params.formCode}`);
+    } catch (e) {
+      console.warn('[revalidatePath] Warning:', e);
+    }
+  }
+
   return NextResponse.json(result.body, { status: result.status });
 }

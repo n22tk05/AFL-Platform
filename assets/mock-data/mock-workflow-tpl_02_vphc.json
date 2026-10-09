@@ -1,0 +1,130 @@
+{
+  "templateId": "tpl_02_vphc",
+  "formId": "tpl_02_vphc",
+  "formCode": "Mẫu Nộp Phạt",
+  "formTitle": "Biểu Mẫu Nộp Tiền Phạt Vi Phạm Giao Thông",
+  "formTitleVi": "Biểu Mẫu Nộp Tiền Phạt Vi Phạm Giao Thông",
+  "status": "PENDING_REVIEW",
+  "circularInfo": "Nghị định 100/2019/NĐ-CP & Nghị định 123/2021/NĐ-CP",
+  "department": "Đội Cảnh sát Giao thông - Trật tự / Kho bạc Nhà nước",
+  "totalPages": 1,
+  "pages": [
+    {
+      "pageNumber": 1,
+      "imageUrl": "/assets/forms/01-lptb/page-1.jpg",
+      "width": 1200,
+      "height": 1700
+    }
+  ],
+  "version": 1,
+  "totalSteps": 6,
+  "steps": [
+    {
+      "stepIndex": 0,
+      "boxId": "box_vphc_01_so_bb",
+      "pageNumber": 1,
+      "sectionName": "I. THÔNG TIN BIÊN BẢN VI PHẠM",
+      "label": "Mục [01]: Số biên bản vi phạm hành chính",
+      "voiceGuidance": "Bác ghi dãy số biên bản in ở góc trên bên phải của tờ quyết định xử phạt nhé.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "SỐ BB: 014892/BB-VPHC",
+      "highlightCoords": [0.18, 0.2, 0.22, 0.85],
+      "requiresPrerequisiteDoc": true,
+      "sourceFieldFromPrerequisite": "bien_ban.so_bb",
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Tìm số biên bản ở dòng nào?",
+          "answer": "Bác mở tờ Biên bản do CSGT lập lúc xử phạt, số biên bản nằm ngay dưới Quốc hiệu tiêu ngữ."
+        }
+      ]
+    },
+    {
+      "stepIndex": 1,
+      "boxId": "box_vphc_02_hoten",
+      "pageNumber": 1,
+      "sectionName": "II. THÔNG TIN NGƯỜI NỘP PHẠT",
+      "label": "Mục [02]: Họ và tên người nộp phạt",
+      "voiceGuidance": "Bác ghi đầy đủ họ tên bằng chữ in hoa có dấu theo đúng trên Căn cước công dân của mình nhé.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "NGUYỄN VĂN AN",
+      "highlightCoords": [0.25, 0.2, 0.29, 0.85],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "Người nộp thay có ghi tên mình không?",
+          "answer": "Bác ghi tên người bị xử phạt ghi trên biên bản, người đi nộp thay sẽ ký ở mục Người nộp tiền phía dưới."
+        }
+      ]
+    },
+    {
+      "stepIndex": 2,
+      "boxId": "box_vphc_03_cccd",
+      "pageNumber": 1,
+      "sectionName": "II. THÔNG TIN NGƯỜI NỘP PHẠT",
+      "label": "Mục [03]: Số Căn cước công dân / CMND",
+      "voiceGuidance": "Bác điền đủ 12 chữ số Căn cước công dân vào các ô vuông tương ứng.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "001085012345",
+      "highlightCoords": [0.32, 0.2, 0.36, 0.85],
+      "requiresPrerequisiteDoc": true,
+      "sourceFieldFromPrerequisite": "cccd.so_cccd",
+      "legalWarningFlag": false,
+      "faqs": [
+        {
+          "question": "CCCD mới đổi số khác biên bản thì sao?",
+          "answer": "Bác xuất trình giấy xác nhận số CMND cũ hoặc dùng thẻ CCCD gắn chip có mã QR để cán bộ tra cứu."
+        }
+      ]
+    },
+    {
+      "stepIndex": 3,
+      "boxId": "box_vphc_04_so_tien",
+      "pageNumber": 1,
+      "sectionName": "III. CHI TIẾT NỘP TIỀN PHẠT",
+      "label": "Mục [04]: Số tiền phạt ghi bằng số và bằng chữ",
+      "voiceGuidance": "Bác nhìn vào mục Số tiền phạt trên quyết định xử phạt rồi điền chính xác số tiền vào đây.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "2.500.000 ĐỒNG (HAI TRIỆU NĂM TRĂM NGHÌN ĐỒNG)",
+      "highlightCoords": [0.42, 0.2, 0.47, 0.85],
+      "requiresPrerequisiteDoc": true,
+      "sourceFieldFromPrerequisite": "quyet_dinh.so_tien",
+      "legalWarningFlag": true,
+      "faqs": [
+        {
+          "question": "Có được nộp thiếu không?",
+          "answer": "Dạ không bác ơi, số tiền phải nộp đủ 100% theo đúng quyết định xử phạt hành chính."
+        }
+      ]
+    },
+    {
+      "stepIndex": 4,
+      "boxId": "box_vphc_05_kho_bac",
+      "pageNumber": 1,
+      "sectionName": "III. CHI TIẾT NỘP TIỀN PHẠT",
+      "label": "Mục [05]: Nộp vào tài khoản Kho bạc Nhà nước",
+      "voiceGuidance": "Bác ghi tên cơ quan Kho bạc Nhà nước hoặc ngân hàng thương mại được ủy nhiệm thu ghi trên quyết định.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "KHO BẠC NHÀ NƯỚC QUẬN CẦU GIẤY",
+      "highlightCoords": [0.5, 0.2, 0.54, 0.85],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    },
+    {
+      "stepIndex": 5,
+      "boxId": "box_vphc_06_ky_ten",
+      "pageNumber": 1,
+      "sectionName": "IV. KÝ XÁC NHẬN CỦA NGƯỜI NỘP TIỀN",
+      "label": "Mục [06]: Chữ ký và ghi rõ họ tên người nộp tiền",
+      "voiceGuidance": "Bác ký tên vào ô bên trái và ghi rõ họ tên của bác ở dòng dưới nhé.",
+      "audioUrl": "/audio/step_01.mp3",
+      "exampleRedText": "KÝ VÀ GHI RÕ HỌ TÊN",
+      "highlightCoords": [0.65, 0.55, 0.75, 0.9],
+      "requiresPrerequisiteDoc": false,
+      "legalWarningFlag": false,
+      "faqs": []
+    }
+  ]
+}
