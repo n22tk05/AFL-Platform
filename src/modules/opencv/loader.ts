@@ -105,3 +105,8 @@ export function loadOpenCv(): Promise<OpenCvRuntime> {
 
   return openCvPromise;
 }
+
+/** Warm the shared runtime while the user chooses an image; scan retries failures. */
+export function preloadOpenCv(): void {
+  void loadOpenCv().catch(() => { /* The actual scan reports errors and may retry. */ });
+}

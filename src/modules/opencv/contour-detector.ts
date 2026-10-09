@@ -21,7 +21,8 @@ export function detectContourCandidates(cv: CvRuntime, combinedMask: CvMat, over
   let contours: CvMatVector | undefined;
   let hierarchy: HierarchyMat | undefined;
   try {
-    mask = combinedMask.clone();
+    mask = new runtime.Mat();
+    combinedMask.copyTo(mask);
     contours = new runtime.MatVector();
     hierarchy = new runtime.Mat() as HierarchyMat;
     runtime.findContours(mask, contours, hierarchy, runtime.RETR_TREE, runtime.CHAIN_APPROX_SIMPLE);

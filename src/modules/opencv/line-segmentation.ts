@@ -1,5 +1,6 @@
 import type { NormalizedBoundingBox } from '@/shared/contracts';
 import type { CvMat, CvRuntime, ImageDimensions } from './types';
+import { removeDocumentRules } from './remove-rules';
 
 export interface LineSegmentConfig {
   /** Width of the horizontal dilation kernel in pixels (default: 25) */
@@ -88,6 +89,7 @@ export function segmentLines(
   let dilated: CvMat | undefined;
   let contours: CvMatVector | undefined;
   let hierarchy: CvMat | undefined;
+  let textMask: CvMat | undefined;
 
   try {
     // 1. Grayscale conversion
@@ -102,7 +104,9 @@ export function segmentLines(
 
     // 2. Binarization & Inversion (White characters on black background)
     binaryInv = new runtime.Mat();
-    if (typeof runtime.threshold === 'function') {
+    if (typeof runtime.adaptiveThreshold === 'function') {
+      runtime.adaptiveThreshold(gray, binaryInv, 255, runtime.ADAPTIVE_THRESH_GAUSSIAN_C, runtime.THRESH_BINARY_INV, 51, 8);
+    } else if (typeof runtime.threshold === 'function') {
       const otsuFlag = runtime.THRESH_OTSU ?? 8;
       runtime.threshold(gray, binaryInv, 0, 255, runtime.THRESH_BINARY_INV + otsuFlag);
     } else {
@@ -119,12 +123,13 @@ export function segmentLines(
 
     // 3. Horizontal Morphological Dilation
     // Merges horizontal letters/diacritics into continuous line bands without merging adjacent vertical lines
+    textMask = removeDocumentRules(cv, binaryInv);
     kernel = runtime.getStructuringElement(
       runtime.MORPH_RECT,
       new runtime.Size(config.kernelWidth, config.kernelHeight),
     );
     dilated = new runtime.Mat();
-    runtime.dilate(binaryInv, dilated, kernel);
+    runtime.dilate(textMask, dilated, kernel);
 
     // 4. Contour extraction
     contours = new runtime.MatVector();
@@ -198,6 +203,7 @@ export function segmentLines(
     dilated?.delete();
     kernel?.delete();
     binaryInv?.delete();
+    textMask?.delete();
     gray?.delete();
   }
 }
