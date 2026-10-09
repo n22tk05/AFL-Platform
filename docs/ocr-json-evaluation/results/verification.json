@@ -1,0 +1,43 @@
+{
+    "date":  "2026-10-06",
+    "node":  "v24.19.0",
+    "documentTests":  {
+                          "fail":  0,
+                          "command":  "npm run test:documents:inprocess",
+                          "pass":  151
+                      },
+    "adapterTests":  {
+                         "fail":  0,
+                         "command":  "node --import ./scripts/register-typescript.mjs --test --test-isolation=none src/modules/ocr/tests/vietocr-adapter.test.ts",
+                         "pass":  15
+                     },
+    "opencvTests":  {
+                        "fail":  0,
+                        "command":  "node --import ./scripts/register-typescript.mjs --test --test-isolation=none src/modules/opencv/tests/*.test.ts",
+                        "pass":  53
+                    },
+    "localQA":  {
+                    "fail":  0,
+                    "pass":  6
+                },
+    "localApiIntegrity":  "PASS_MOCK_ONLY",
+    "typecheck":  "PASS",
+    "lint":  "PASS",
+    "build":  {
+                  "environment":  {
+                                      "AFL_BUILD_DIR":  ".next-document-json-build",
+                                      "AFL_BUILD_THREADS":  "1"
+                                  },
+                  "command":  "npm run build",
+                  "status":  "PASS"
+              },
+    "standardProcessTests":  "BLOCKED_spawn_EPERM",
+    "browser":  "BLOCKED_Playwright_permissions_and_no_connected_browser",
+    "httpDownload":  "PASS_REAL_LOCAL_VIETOCR",
+    "syntheticLiveFixtures":  10,
+    "paidApiCalls":  0,
+    "savedExportsRevalidated":  "PASS",
+    "schemaGeneratorStable":  true,
+    "diffCheckExit":  0,
+    "migrationCommit":  "BLOCKED_git_read_only"
+}

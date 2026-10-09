@@ -1,0 +1,152 @@
+[
+  {
+    "id": "TC01",
+    "filename": "tc01_clean_accents.png",
+    "scenario": "sharp_vietnamese_accents",
+    "title": "Văn bản tiếng Việt rõ nét, đầy đủ thanh điệu và nguyên âm ghép",
+    "category": "standard_text",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Giấy xác nhận tình trạng hôn nhân mẫu chuẩn, độ phân giải cao, tương phản 100%, chứa toàn bộ hệ thống nguyên âm có dấu tiếng Việt (ă, â, đ, ê, ô, ơ, ư) và 5 dấu thanh.",
+    "keyVerificationPoints": [
+      "Không mất dấu tiếng Việt ở các từ: Khương Mai, Giải Phóng, Hai Bà Trưng",
+      "Quốc hiệu và Tiêu ngữ được nhận diện đúng cấp bậc",
+      "Khối ký tên 2 bên (Người làm đơn vs Chủ tịch UBND) giữ đúng vị trí trái/phải"
+    ]
+  },
+  {
+    "id": "TC02",
+    "filename": "tc02_dotted_form.png",
+    "scenario": "labels_and_dots_form",
+    "title": "Biểu mẫu có nhãn và dòng chấm điền (dòng đã điền vs dòng để trống)",
+    "category": "form_template",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Đơn đề nghị cấp đổi GPLX với các dòng chấm '......'. Một số trường đã điền giá trị (Họ tên, CCCD, GPLX), các trường khác để trống hoàn toàn (Ngày sinh, Nơi thường trú, Lý do).",
+    "keyVerificationPoints": [
+      "Dòng chấm '.......' không bị nhận diện nhầm thành giá trị điền hợp lệ",
+      "Trường để trống phải có value: null hoặc rỗng, không phải chuỗi '.........'",
+      "Các trường đã điền giữ đúng nhãn và giá trị (Họ và tên: NGUYỄN VĂN AN)"
+    ]
+  },
+  {
+    "id": "TC03",
+    "filename": "tc03_multi_field_line.png",
+    "scenario": "multiple_fields_per_line",
+    "title": "Nhiều trường độc lập nằm trên cùng một hàng ngang",
+    "category": "layout_complex",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Tờ khai cư trú với các trường song song trên cùng 1 hàng: (Họ tên + Giới tính), (Ngày sinh + Dân tộc + Quốc tịch), (Số định danh + Số điện thoại).",
+    "keyVerificationPoints": [
+      "Không gộp trường thứ 2 vào giá trị của trường thứ nhất trên cùng dòng",
+      "Bóc tách đúng 2-3 trường độc lập với nhãn và giá trị riêng biệt",
+      "Thứ tự đọc logic từ trái sang phải, từ trên xuống dưới"
+    ]
+  },
+  {
+    "id": "TC04",
+    "filename": "tc04_table_empty_cells.png",
+    "scenario": "table_with_empty_cells",
+    "title": "Bảng kê khai 5 cột x 4 hàng với các ô trống rải rác",
+    "category": "tabular_data",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 900, "height": 1100 },
+    "description": "Bảng kê tài sản gồm các cột: STT, Loại tài sản, Diện tích (m2), Giá trị ước tính, Ghi chú. Hàng 2 trống Ghi chú, Hàng 3 trống Diện tích, Hàng 4 trống cả Diện tích và Ghi chú.",
+    "keyVerificationPoints": [
+      "Số cột mỗi hàng bắt buộc bằng nhau (5 cột)",
+      "Ô trống không làm lệch cột các ô phía sau sang trái",
+      "Giá trị số tiền trong bảng giữ nguyên dấu chấm phân cách: 4.500.000.000 đ"
+    ]
+  },
+  {
+    "id": "TC05",
+    "filename": "tc05_checkboxes.png",
+    "scenario": "checkbox_states",
+    "title": "Biểu mẫu chứa checkbox dạng unicode và bracket với cả 2 trạng thái",
+    "category": "form_controls",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Phiếu đăng ký phương thức trả kết quả chứa ☑, ☐, [x], [ ] và danh sách checkbox nằm ngang (Cấp mới, Cấp đổi, Cấp lại).",
+    "keyVerificationPoints": [
+      "Nhận diện đúng trạng thái checked (true) của ☑ và [x]",
+      "Nhận diện đúng trạng thái unchecked (false) của ☐ và [ ]",
+      "Gắn đúng nhãn bên cạnh với ô checkbox tương ứng"
+    ]
+  },
+  {
+    "id": "TC06",
+    "filename": "tc06_numbers_dates_money.png",
+    "scenario": "critical_numbers_dates_currency",
+    "title": "Văn bản chứa chuỗi số bắt đầu bằng 0, số tiền, ngày tháng, biển số xe",
+    "category": "critical_values",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Biên bản xử phạt vi phạm giao thông chứa các giá trị nghiệp vụ nhạy cảm: Số biên bản '001248/BB-VPHC', CCCD '038092008765', Tiền phạt '2.500.000 đồng', Tài khoản '7111.0102.3456'.",
+    "keyVerificationPoints": [
+      "Tuyệt đối không nuốt số 0 ở đầu (CCCD 038092008765, Số BB 001248)",
+      "Số tiền 2.500.000 đồng không bị nhầm thành 2.5 đồng",
+      "Biển số 29B1-045.89 và số tài khoản kho bạc giữ nguyên dấu chấm"
+    ]
+  },
+  {
+    "id": "TC07",
+    "filename": "tc07_skewed_perspective.png",
+    "scenario": "skewed_perspective_distorted",
+    "title": "Ảnh bị nghiêng góc 7 độ trên nền tối (giả lập chụp camera bị lệch)",
+    "category": "geometric_challenge",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 978, "height": 1195 },
+    "description": "Văn bản TC06 được xoay nghiêng 7 độ và đặt trên nền xám. Đánh giá khả năng nắn thẳng hình học trước khi OCR và khả năng gom dòng.",
+    "keyVerificationPoints": [
+      "Kiểm tra xem pipeline có áp dụng deskew hay để nguyên ảnh nghiêng",
+      "Nếu không deskew, đánh giá thứ tự dòng có bị đảo lộn không",
+      "Gắn cờ deskewApplied hoặc cảnh báo nếu chất lượng giảm"
+    ]
+  },
+  {
+    "id": "TC08",
+    "filename": "tc08_low_contrast.png",
+    "scenario": "low_contrast_and_blur",
+    "title": "Ảnh độ tương phản thấp và hơi mờ (văn bản xám trên nền xám)",
+    "category": "quality_degraded",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Thông báo nộp LPTB với chữ xám #808080 trên nền xám #E2E2E2, kèm làm mờ Gaussian blur 0.8px. Đánh giá tính năng adaptive OCR contrast enhancement.",
+    "keyVerificationPoints": [
+      "Kích hoạt cơ chế Adaptive OCR retry (contrast variant)",
+      "Gắn cờ cảnh báo LOW_CONTRAST hoặc requiresReview: true nếu điểm tin cậy thấp",
+      "Không được crash hoặc tự ý bịa đặt số tiền nếu OCR không đọc rõ"
+    ]
+  },
+  {
+    "id": "TC09",
+    "filename": "tc09_ambiguous_freetext.png",
+    "scenario": "ambiguous_unstructured_freetext",
+    "title": "Nội dung văn bản tự do, danh mục gạch đầu dòng, ghi chú ngoài mẫu",
+    "category": "unstructured_content",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Phiếu hẹn tiếp nhận hồ sơ chứa danh sách gạch đầu dòng, đoạn văn ghi chú của cán bộ, mã kiểm soát và thông tin nhà in ở chân trang.",
+    "keyVerificationPoints": [
+      "Bảo toàn 100% dòng OCR: các dòng không khớp regex mẫu vẫn tồn tại trong freeText hoặc lines",
+      "Không được tự ý bỏ qua dòng chân trang hay mã kiểm soát",
+      "Phân loại đúng các dòng gạch đầu dòng (bullet_item / legal_reference)"
+    ]
+  },
+  {
+    "id": "TC10",
+    "filename": "tc10_blank_page.png",
+    "scenario": "blank_or_no_document",
+    "title": "Trang giấy trắng hoàn toàn không có văn bản",
+    "category": "edge_case_negative",
+    "status": "verified_synthetic",
+    "dimensions": { "width": 850, "height": 1100 },
+    "description": "Ảnh trang giấy trắng tinh không có bất kỳ chữ nào. Đánh giá khả năng xử lý biên của hệ thống đối với đầu vào rỗng.",
+    "keyVerificationPoints": [
+      "Không được throw unhandled exception hoặc crash server (500)",
+      "Trả về trạng thái rõ ràng: OCR_EMPTY_TEXT hoặc POSSIBLE_BLANK",
+      "Tuyệt đối không sinh dữ liệu mẫu giả định (mock fields)"
+    ]
+  }
+]

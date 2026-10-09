@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Upload,
@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { FormWorkflow } from "@/shared/contracts";
 import { FormStorageService } from "@/shared/services/form-storage";
+import { APP_ROUTES } from '@/shared/routes';
+import { saveLocalDraft } from '@/modules/forms/services/local-workflow-store';
 
 interface FormUploadModalProps {
   isOpen: boolean;
@@ -27,6 +29,19 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
   const [formTitle, setFormTitle] = useState("");
   const [formCode, setFormCode] = useState("");
   const [legalBasis, setLegalBasis] = useState("");
+  const [blankTemplateConfirmed, setBlankTemplateConfirmed] = useState(false);
+  const [adminKey, setAdminKey] = useState('');
+  const requestId = useRef(0);
+  const requestController = useRef<AbortController | null>(null);
+  useEffect(() => () => { requestId.current++; requestController.current?.abort(); }, []);
+  useEffect(() => { if (previewUrl) return () => URL.revokeObjectURL(previewUrl); }, [previewUrl]);
+  useEffect(() => {
+    if (!isOpen) {
+      requestId.current++; requestController.current?.abort();
+      setIsScanning(false); setSelectedFile(null); setPreviewUrl(null);
+      setDetectedBoxes([]); setTerminalLogs([]); setBlankTemplateConfirmed(false); setAdminKey('');
+    }
+  }, [isOpen]);
 
   // Trạng thái Animation
   const [isScanning, setIsScanning] = useState(false);
@@ -39,6 +54,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
   // Điều kiện kiểm tra bắt buộc: Phải có file và điền đủ cả 3 trường metadata
   const isFormValid = Boolean(
     selectedFile &&
+    blankTemplateConfirmed &&
     formCode.trim().length > 0 &&
     formTitle.trim().length > 0 &&
     legalBasis.trim().length > 0
@@ -62,16 +78,22 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (file && ['image/png', 'image/jpeg'].includes(file.type) && file.size <= 8 * 1024 * 1024) {
+      requestId.current++; requestController.current?.abort(); setDetectedBoxes([]); setTerminalLogs([]);
       processSelectedFile(file);
+    } else if (file) {
+      setTerminalLogs(['Chỉ hỗ trợ PNG/JPEG tối đa 8 MB. PDF chưa có bộ giải mã an toàn.']);
     }
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
-    if (file) {
+    if (file && ['image/png', 'image/jpeg'].includes(file.type) && file.size <= 8 * 1024 * 1024) {
+      requestId.current++; requestController.current?.abort(); setDetectedBoxes([]); setTerminalLogs([]);
       processSelectedFile(file);
+    } else if (file) {
+      setTerminalLogs(['Chỉ hỗ trợ PNG/JPEG tối đa 8 MB. PDF chưa có bộ giải mã an toàn.']);
     }
   };
 
@@ -88,7 +110,11 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
 
   // KÍCH HOẠT TIẾN TRÌNH XỬ LÝ BIỂU MẪU THẬT BẰNG OPENCV WASM & GEMINI
   const handleStartAnalysis = async () => {
-    if (!isFormValid || !previewUrl) return;
+    if (!isFormValid || !previewUrl || isScanning) return;
+    const id = ++requestId.current;
+    requestController.current?.abort();
+    const controller = new AbortController(); requestController.current = controller;
+    const current = () => id === requestId.current && !controller.signal.aborted;
 
     setIsScanning(true);
     setScanPhase(1);
@@ -106,6 +132,8 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
         img.onerror = () => reject(new Error("Không thể tải ảnh scan vào bộ nhớ"));
         img.src = previewUrl;
       });
+      if (!current()) return;
+      if (!img.naturalWidth || !img.naturalHeight || img.naturalWidth * img.naturalHeight > 12_000_000) throw new Error('Ảnh không hợp lệ hoặc vượt giới hạn 12 triệu pixel.');
 
       const maxDim = 1600;
       let width = img.naturalWidth || img.width;
@@ -131,12 +159,12 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
       setScanPhase(2);
       setTerminalLogs((prev) => [
         ...prev,
-        "✔ Đã nắn thẳng góc nghiêng tài liệu (-0.8° -> 0.0°)",
-        "➜ [Tầng 2 - Geometric Vision] Đang định vị các đường kẻ ngang và ô tích chọn...",
+        "➜ [Tầng 2 - Geometric Vision] Đang định vị các đường kẻ và ô nhập liệu...",
       ]);
 
       // 2. Chạy OpenCV WASM Line & Candidate Detection thật
       const { runLineDetectionDebug } = await import("@/modules/opencv");
+      if (!current()) return;
       const pipelineResult = await runLineDetectionDebug({
         mode: "clean-scan",
         inputCanvas: inCanvas,
@@ -149,122 +177,118 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
         combinedCanvas: combinedCanvasRef.current || document.createElement("canvas"),
         candidateOverlayCanvas: candidateOverlayCanvasRef.current || document.createElement("canvas"),
       });
+      if (!current()) return;
 
+      const procWidth = pipelineResult.width || width;
+      const procHeight = pipelineResult.height || height;
       const candidates = pipelineResult.candidates || [];
-      const realBoxes = candidates.slice(0, 12).map((c) => ({
-        top: `${((c.rect.y / height) * 100).toFixed(1)}%`,
-        left: `${((c.rect.x / width) * 100).toFixed(1)}%`,
-        width: `${((c.rect.width / width) * 100).toFixed(1)}%`,
-        height: `${((c.rect.height / height) * 100).toFixed(1)}%`,
+
+      // Hiển thị các box thật bóc tách được (giới hạn tối đa 200 ô theo hợp đồng)
+      const realBoxes = candidates.slice(0, 200).map((c) => ({
+        top: `${((c.rect.y / procHeight) * 100).toFixed(1)}%`,
+        left: `${((c.rect.x / procWidth) * 100).toFixed(1)}%`,
+        width: `${((c.rect.width / procWidth) * 100).toFixed(1)}%`,
+        height: `${((c.rect.height / procHeight) * 100).toFixed(1)}%`,
       }));
 
-      // Nếu phát hiện box thật thì hiển thị, nếu không có đủ thì dùng box phân bổ theo layout
-      if (realBoxes.length > 0) {
-        setDetectedBoxes(realBoxes);
-      } else {
-        setDetectedBoxes([
-          { top: "14%", left: "20%", width: "60%", height: "4%" },
-          { top: "25%", left: "16%", width: "70%", height: "5%" },
-          { top: "35%", left: "16%", width: "45%", height: "4%" },
-          { top: "42%", left: "16%", width: "68%", height: "6%" },
-          { top: "60%", left: "16%", width: "55%", height: "8%" },
-          { top: "78%", left: "48%", width: "40%", height: "10%" },
-        ]);
-      }
+      setDetectedBoxes(realBoxes);
 
       setScanPhase(3);
       setTerminalLogs((prev) => [
         ...prev,
+        pipelineResult.detectedQuad
+          ? `✔ Đã nhận diện 4 góc phôi và nắn phẳng phối cảnh (${pipelineResult.perspectiveTransformTimeMs.toFixed(0)}ms)`
+          : `✔ Đã phân tích phôi scan tiêu chuẩn (${procWidth}x${procHeight}px)`,
         `✔ OpenCV WASM đã bóc tách thành công ${candidates.length} khung ô hình học (${pipelineResult.totalProcessingTimeMs.toFixed(0)}ms)`,
-        "➜ [Tầng 3 - Gemini LLM] Đang sinh kịch bản câu thoại bình dân tốc độ 0.9x...",
+        candidates.length > 0
+          ? "➜ [Tầng 3 - Gemini LLM] Đang sinh kịch bản câu thoại bình dân tốc độ 0.9x..."
+          : "⚠ Không phát hiện được khung ô tự động. Biểu mẫu sẽ được chuyển sang giao diện kiểm duyệt để chuyên viên cấu hình.",
       ]);
 
-      // 3. Chuẩn bị Manifest để gọi LLM Prompt API
-      const manifestBoxes = (candidates.length > 0 ? candidates.slice(0, 8) : [
-        { rect: { x: width * 0.2, y: height * 0.14, width: width * 0.6, height: height * 0.04 } },
-        { rect: { x: width * 0.16, y: height * 0.25, width: width * 0.7, height: height * 0.05 } },
-        { rect: { x: width * 0.16, y: height * 0.35, width: width * 0.45, height: height * 0.04 } },
-        { rect: { x: width * 0.16, y: height * 0.42, width: width * 0.68, height: height * 0.06 } },
-        { rect: { x: width * 0.48, y: height * 0.78, width: width * 0.4, height: height * 0.10 } },
-      ]).map((c, idx) => {
-        const ymin = Math.max(0, Math.min(0.98, Number((c.rect.y / height).toFixed(4))));
-        const xmin = Math.max(0, Math.min(0.98, Number((c.rect.x / width).toFixed(4))));
-        const ymax = Math.max(ymin + 0.01, Math.min(1.0, Number(((c.rect.y + c.rect.height) / height).toFixed(4))));
-        const xmax = Math.max(xmin + 0.01, Math.min(1.0, Number(((c.rect.x + c.rect.width) / width).toFixed(4))));
+      // 3. Chuẩn bị Manifest để gọi LLM Prompt API (không tạo box giả)
+      const manifestBoxes = candidates.slice(0, 200).map((c, idx) => {
+        const ymin = Math.max(0, Math.min(0.98, Number((c.rect.y / procHeight).toFixed(4))));
+        const xmin = Math.max(0, Math.min(0.98, Number((c.rect.x / procWidth).toFixed(4))));
+        const ymax = Math.max(ymin + 0.01, Math.min(1.0, Number(((c.rect.y + c.rect.height) / procHeight).toFixed(4))));
+        const xmax = Math.max(xmin + 0.01, Math.min(1.0, Number(((c.rect.x + c.rect.width) / procWidth).toFixed(4))));
         return {
           boxId: `box_${String(idx + 1).padStart(2, "0")}`,
           normalizedCoords: [ymin, xmin, ymax, xmax] as [number, number, number, number],
           rawText: `Ô kê khai số ${idx + 1}`,
-          boxType: (c.rect.width / width < 0.08 ? "checkbox" : "text") as "checkbox" | "text",
-          estimatedWidthRatio: Math.max(0.01, Math.min(1.0, Number((c.rect.width / width).toFixed(2)))),
+          boxType: (c.rect.width / procWidth < 0.08 ? "checkbox" : "text") as "checkbox" | "text",
+          estimatedWidthRatio: Math.max(0.01, Math.min(1.0, Number((c.rect.width / procWidth).toFixed(2)))),
         };
       });
 
       const rawId = formCode.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_").slice(0, 60);
       const sanitizedFormId = rawId || `form_${Date.now()}`;
 
-      // Gọi API LLM sinh kịch bản kèm x-admin-key (Step 07 guardrail)
+      // Gọi API LLM sinh kịch bản kèm x-admin-key (Step 07 guardrail) khi có manifest boxes
       let generatedSteps: FormWorkflow["steps"] = [];
-      try {
-        const adminKey = process.env.NEXT_PUBLIC_ADMIN_KEY || "afl_admin_secret_key_2026";
-        const promptRes = await fetch("/api/llm/prompt", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-key": adminKey,
-          },
-          body: JSON.stringify({
-            manifest: {
-              formId: sanitizedFormId,
-              formTitle: formTitle.trim(),
-              formCode: formCode.trim(),
-              imageDimensions: { width, height },
-              boxes: manifestBoxes,
+      if (manifestBoxes.length > 0) {
+        try {
+          if (!adminKey.trim()) throw new Error('MANUAL_CONFIGURATION');
+          const promptRes = await fetch("/api/llm/prompt", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-key": adminKey,
             },
-          }),
-        });
+            signal: controller.signal,
+            body: JSON.stringify({
+              manifest: {
+                formId: sanitizedFormId,
+                formTitle: formTitle.trim(),
+                formCode: formCode.trim(),
+                imageDimensions: { width: procWidth, height: procHeight },
+                boxes: manifestBoxes,
+              },
+            }),
+          });
+          if (!current()) return;
 
-        if (promptRes.ok) {
-          const promptData = await promptRes.json();
-          if (promptData.success && promptData.data?.steps) {
-            generatedSteps = promptData.data.steps.map((st: { stepIndex?: number; boxId: string; sectionName?: string; label?: string; voiceGuidance?: string; audioUrl?: string; exampleRedText?: string; highlightCoords?: [number, number, number, number]; requiresPrerequisiteDoc?: boolean; legalWarningFlag?: boolean; faqs?: Array<{ question: string; answer: string }> }, sIdx: number) => ({
-              stepIndex: sIdx + 1,
-              boxId: st.boxId || `box_${String(sIdx + 1).padStart(2, "0")}`,
-              pageNumber: 1,
-              sectionName: st.sectionName || `Mục ${sIdx + 1}`,
-              label: st.label || `Thông tin trường ${sIdx + 1}`,
-              voiceGuidance: st.voiceGuidance || "Bác ghi rõ thông tin vào ô này nhé.",
-              audioUrl: st.audioUrl || "/audio/step_01.mp3",
-              exampleRedText: st.exampleRedText || "VÍ DỤ MẪU IN HOA",
-              highlightCoords: st.highlightCoords || manifestBoxes[sIdx]?.normalizedCoords || [0.2, 0.2, 0.25, 0.8],
-              requiresPrerequisiteDoc: st.requiresPrerequisiteDoc ?? false,
-              legalWarningFlag: st.legalWarningFlag ?? false,
-              faqs: st.faqs || [],
-            }));
+          if (promptRes.ok) {
+            const promptData = await promptRes.json();
+            if (!current()) return;
+            if (promptData.success && promptData.data?.steps) {
+              generatedSteps = promptData.data.steps.map((st: { stepIndex?: number; boxId: string; sectionName?: string; label?: string; voiceGuidance?: string; audioUrl?: string; exampleRedText?: string; highlightCoords?: [number, number, number, number]; requiresPrerequisiteDoc?: boolean; legalWarningFlag?: boolean; faqs?: Array<{ question: string; answer: string }> }, sIdx: number) => ({
+                stepIndex: sIdx + 1,
+                boxId: st.boxId || `box_${String(sIdx + 1).padStart(2, "0")}`,
+                pageNumber: 1,
+                sectionName: st.sectionName || `Mục ${sIdx + 1}`,
+                label: st.label || `Thông tin trường ${sIdx + 1}`,
+                voiceGuidance: st.voiceGuidance || "Bác ghi rõ thông tin vào ô này nhé.",
+                audioUrl: st.audioUrl || "",
+                exampleRedText: st.exampleRedText || "VÍ DỤ MẪU IN HOA",
+                highlightCoords: manifestBoxes.find(box => box.boxId === st.boxId)?.normalizedCoords || manifestBoxes[sIdx]?.normalizedCoords!,
+                requiresPrerequisiteDoc: st.requiresPrerequisiteDoc ?? false,
+                legalWarningFlag: st.legalWarningFlag ?? false,
+                faqs: st.faqs || [],
+              }));
+            }
           }
+        } catch {
+          if (!current()) return;
+          setTerminalLogs(prev => [...prev, 'Không có kịch bản AI đã lưu. Dùng tọa độ thật để cấu hình thủ công; đây vẫn là bản nháp.']);
         }
-      } catch (promptErr) {
-        console.warn("LLM API fallback:", promptErr);
-      }
 
-      // Nếu không có steps từ API, dùng fallback mẫu với tọa độ thật và stepIndex 1-based
-      if (generatedSteps.length === 0) {
-        generatedSteps = manifestBoxes.map((box, idx) => ({
-          stepIndex: idx + 1,
-          boxId: box.boxId,
-          pageNumber: 1,
-          sectionName: idx === 0 ? "I. TIÊU ĐỀ & KÍNH GỬI" : idx === manifestBoxes.length - 1 ? "IV. KÝ TÊN" : "II. THÔNG TIN KÊ KHAI",
-          label: idx === 0 ? "Cơ quan tiếp nhận giải quyết" : idx === manifestBoxes.length - 1 ? "Chữ ký và họ tên người làm đơn" : `Thông tin kê khai mục ${idx + 1}`,
-          voiceGuidance: idx === manifestBoxes.length - 1
-            ? "Bước cuối rồi bác ơi! Bác ký tên và viết rõ họ tên của mình vào ô này nhé."
-            : "Bác nhìn vào ô đang sáng trên màn hình và viết thông tin rõ ràng nhé.",
-          audioUrl: "/audio/step_01.mp3",
-          exampleRedText: idx === manifestBoxes.length - 1 ? "KÝ VÀ GHI RÕ HỌ TÊN" : "THÔNG TIN MẪU IN HOA",
-          highlightCoords: box.normalizedCoords,
-          requiresPrerequisiteDoc: false,
-          legalWarningFlag: false,
-          faqs: [],
-        }));
+        // Nếu không có steps từ API, dùng fallback mẫu với tọa độ thật và stepIndex 1-based
+        if (generatedSteps.length === 0) {
+          generatedSteps = manifestBoxes.map((box, idx) => ({
+            stepIndex: idx + 1,
+            boxId: box.boxId,
+            pageNumber: 1,
+            sectionName: 'Cần chuyên viên cấu hình',
+            label: `Ô ${idx + 1} — cần đặt tên theo phôi`,
+            voiceGuidance: 'Chuyên viên cần viết hướng dẫn đúng với ô trên phôi trước khi áp dụng.',
+            audioUrl: '',
+            exampleRedText: 'CẦN CHUYÊN VIÊN ĐỐI SOÁT',
+            highlightCoords: box.normalizedCoords,
+            requiresPrerequisiteDoc: false,
+            legalWarningFlag: false,
+            faqs: [],
+          }));
+        }
       }
 
       setScanPhase(4);
@@ -289,34 +313,36 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
         pages: [
           {
             pageNumber: 1,
-            imageUrl: dataUrl || previewUrl || "/assets/forms/01-lptb/page-1.jpg",
-            width,
-            height,
+            imageUrl: (deskewedCanvasRef.current || inCanvas).toDataURL('image/jpeg', 0.95),
+            width: procWidth,
+            height: procHeight,
           },
         ],
         totalSteps: generatedSteps.length,
         steps: generatedSteps,
       };
 
+      if (!current()) return;
       try {
         FormStorageService.saveDraft(draftWorkflow);
       } catch (e) {
         console.warn("Storage error", e);
       }
-
-      await new Promise((r) => setTimeout(r, 600));
+      saveLocalDraft(localStorage, draftWorkflow);
       setIsScanning(false);
       onClose();
 
       // Chuyển thẳng sang Cổng đối soát để Admin căn chỉnh ô
-      router.push(`/admin/review/${draftId}`);
+      router.push(APP_ROUTES.review(draftId));
     } catch (analysisErr) {
-      console.error("Lỗi khi phân tích biểu mẫu:", analysisErr);
+      if (!current()) return;
       setTerminalLogs((prev) => [
         ...prev,
         `❌ Lỗi xử lý: ${(analysisErr as Error).message}`,
       ]);
       setIsScanning(false);
+    } finally {
+      if (current()) setIsScanning(false);
     }
   };
 
@@ -425,7 +451,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*,application/pdf"
+                  accept="image/png,image/jpeg"
                   onChange={handleFileChange}
                   className="hidden"
                 />
@@ -452,7 +478,7 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
                       <span className="text-red-500">*</span>
                     </span>
                     <span className="text-xs text-slate-500">
-                      Hỗ trợ định dạng hình ảnh PNG, JPG hoặc tài liệu PDF
+                      Hỗ trợ phôi trống PNG/JPEG tối đa 8 MB
                     </span>
                   </div>
                 )}
@@ -514,6 +540,9 @@ export function FormUploadModal({ isOpen, onClose }: FormUploadModalProps) {
               </div>
 
               {/* Dòng cảnh báo điều kiện hợp lệ */}
+              <label className="flex gap-2 text-sm"><input type="checkbox" checked={blankTemplateConfirmed} onChange={e => setBlankTemplateConfirmed(e.target.checked)} />Đây là phôi trống, không chứa thông tin công dân; cho phép lưu phôi trong trình duyệt.</label>
+              <label className="block text-sm">Khóa quản trị để tạo/lưu kịch bản AI (tùy chọn)<input type="password" autoComplete="off" value={adminKey} onChange={e => setAdminKey(e.target.value)} className="w-full border rounded p-2" /></label>
+              {!isScanning && terminalLogs.length > 0 && <p role="status" className="text-amber-900">{terminalLogs.at(-1)}</p>}
               {!isFormValid && (
                 <div className="p-2.5 bg-amber-50 border border-amber-300 rounded-xl flex items-center gap-2 text-amber-900 text-xs font-bold">
                   <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />

@@ -1,0 +1,402 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Ground truth độc lập với schema phục vụ nghiệm thu bộ chuyển đổi OCR sang JSON - AFL Platform",
+  "version": "1.0.0",
+  "generatedAt": "2026-10-06T12:10:00+07:00",
+  "fixtures": {
+    "TC01": {
+      "id": "TC01",
+      "filename": "tc01_clean_accents.png",
+      "scenario": "sharp_vietnamese_accents",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG render via Sharp, 850x1100 px, 100% deterministic, no PII.",
+      "expectedFullTextInReadingOrder": [
+        "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "Độc lập - Tự do - Hạnh phúc",
+        "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+        "Hà Nội, ngày 18 tháng 05 năm 2026",
+        "Kính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+        "1. Họ và tên: TRẦN ĐĂNG QUANG",
+        "2. Ngày sinh: 25 tháng 10 năm 1978",
+        "3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố Hà Nội",
+        "4. Dân tộc: Kinh               Quốc tịch: Việt Nam",
+        "5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+        "6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi",
+        "7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai",
+        "8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+        "NGƯỜI LÀM ĐƠN",
+        "(Ký, ghi rõ họ tên)",
+        "Trần Đăng Quang",
+        "CHỦ TỊCH UBND PHƯỜNG",
+        "(Ký, đóng dấu)",
+        "Nguyễn Văn Bình"
+      ],
+      "criticalValues": {
+        "quoc_hieu": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "tieu_ngu": "Độc lập - Tự do - Hạnh phúc",
+        "tieu_de": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+        "ngay_thang_dia_danh": "Hà Nội, ngày 18 tháng 05 năm 2026",
+        "ho_va_ten": "TRẦN ĐĂNG QUANG",
+        "ngay_sinh": "25 tháng 10 năm 1978",
+        "dan_toc": "Kinh",
+        "quoc_tich": "Việt Nam",
+        "noi_cu_tru": "Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+        "tinh_trang_hon_nhan": "Hiện tại chưa đăng ký kết hôn với ai"
+      },
+      "structuralRelationships": [
+        { "type": "national_header", "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", "level": 1 },
+        { "type": "national_motto", "text": "Độc lập - Tự do - Hạnh phúc", "level": 2 },
+        { "type": "document_title", "text": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN" },
+        { "type": "date_location", "location": "Hà Nội", "date": "2026-05-18", "raw": "Hà Nội, ngày 18 tháng 05 năm 2026" },
+        { "type": "field_label_value", "label": "Họ và tên", "value": "TRẦN ĐĂNG QUANG" },
+        { "type": "field_label_value", "label": "Ngày sinh", "value": "25 tháng 10 năm 1978" },
+        { "type": "field_label_value", "label": "Dân tộc", "value": "Kinh" },
+        { "type": "field_label_value", "label": "Quốc tịch", "value": "Việt Nam" },
+        { "type": "signature_pair", "left": { "title": "NGƯỜI LÀM ĐƠN", "subtitle": "(Ký, ghi rõ họ tên)", "name": "Trần Đăng Quang" }, "right": { "title": "CHỦ TỊCH UBND PHƯỜNG", "subtitle": "(Ký, đóng dấu)", "name": "Nguyễn Văn Bình" } }
+      ],
+      "emptyFields": [],
+      "uncertainPoints": "Chữ ký tay và tên in dưới chữ ký có thể được bóc tách riêng biệt hoặc gộp chung tùy thuộc khả năng gom cụm của OCR."
+    },
+    "TC02": {
+      "id": "TC02",
+      "filename": "tc02_dotted_form.png",
+      "scenario": "labels_and_dots_form",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG render via Sharp, 850x1100 px, Arial & Courier dots, no PII.",
+      "expectedFullTextInReadingOrder": [
+        "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "Độc lập - Tự do - Hạnh phúc",
+        "ĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE",
+        "Họ và tên: NGUYỄN VĂN AN..........................................................",
+        "Ngày sinh: ...........................................................................................",
+        "Số CCCD: 001085012345........... Ngày cấp: 12/03/2021..........",
+        "Nơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội........",
+        "Nơi đăng ký thường trú: .....................................................................",
+        "Nơi ở hiện nay: ...................................................................................",
+        "Giấy phép lái xe số: 790154823901................. Hạng: B2..............",
+        "Lý do đề nghị: .....................................................................................",
+        "...................................................................................................................."
+      ],
+      "criticalValues": {
+        "ho_va_ten": "NGUYỄN VĂN AN",
+        "so_cccd": "001085012345",
+        "ngay_cap_cccd": "12/03/2021",
+        "noi_cap_cccd": "Cục Cảnh sát quản lý hành chính về trật tự xã hội",
+        "so_gplx": "790154823901",
+        "hang_gplx": "B2"
+      },
+      "structuralRelationships": [
+        { "type": "field_label_value", "label": "Họ và tên", "value": "NGUYỄN VĂN AN", "hasTrailingDots": true },
+        { "type": "field_label_value", "label": "Ngày sinh", "value": null, "isExplicitlyBlank": true },
+        { "type": "field_label_value", "label": "Số CCCD", "value": "001085012345" },
+        { "type": "field_label_value", "label": "Ngày cấp", "value": "12/03/2021" },
+        { "type": "field_label_value", "label": "Nơi cấp", "value": "Cục Cảnh sát quản lý hành chính về trật tự xã hội" },
+        { "type": "field_label_value", "label": "Nơi đăng ký thường trú", "value": null, "isExplicitlyBlank": true },
+        { "type": "field_label_value", "label": "Nơi ở hiện nay", "value": null, "isExplicitlyBlank": true },
+        { "type": "field_label_value", "label": "Giấy phép lái xe số", "value": "790154823901" },
+        { "type": "field_label_value", "label": "Hạng", "value": "B2" },
+        { "type": "field_label_value", "label": "Lý do đề nghị", "value": null, "isExplicitlyBlank": true }
+      ],
+      "emptyFields": [
+        "Ngày sinh",
+        "Nơi đăng ký thường trú",
+        "Nơi ở hiện nay",
+        "Lý do đề nghị"
+      ],
+      "uncertainPoints": "Các ký tự chấm '..........' có thể bị OCR đọc thành chuỗi dấu gạch, dấu chấm hoặc khoảng trắng; yêu cầu JSON tuyệt đối không lưu '..........' làm giá trị trường."
+    },
+    "TC03": {
+      "id": "TC03",
+      "filename": "tc03_multi_field_line.png",
+      "scenario": "multiple_fields_per_line",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG render via Sharp, 850x1100 px, side-by-side text columns, no PII.",
+      "expectedFullTextInReadingOrder": [
+        "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "Độc lập - Tự do - Hạnh phúc",
+        "TỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ",
+        "1. Họ và tên: LÊ THỊ MAI                                    2. Giới tính: Nữ",
+        "3. Ngày sinh: 20/11/1965                                   4. Dân tộc: Kinh               5. Quốc tịch: Việt Nam",
+        "6. Số định danh cá nhân: 036165004321        7. Số điện thoại: 0912345678",
+        "8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+        "9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh",
+        "10. Quan hệ: Chủ hộ"
+      ],
+      "criticalValues": {
+        "ho_va_ten": "LÊ THỊ MAI",
+        "gioi_tinh": "Nữ",
+        "ngay_sinh": "20/11/1965",
+        "dan_toc": "Kinh",
+        "quoc_tich": "Việt Nam",
+        "so_dinh_danh": "036165004321",
+        "so_dien_thoai": "0912345678",
+        "noi_thuong_tru": "Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+        "noi_tam_tru": "Xã Kim Chung, huyện Đông Anh",
+        "quan_he": "Chủ hộ"
+      },
+      "structuralRelationships": [
+        { "type": "field_label_value", "label": "Họ và tên", "value": "LÊ THỊ MAI", "lineIndex": 3 },
+        { "type": "field_label_value", "label": "Giới tính", "value": "Nữ", "lineIndex": 3 },
+        { "type": "field_label_value", "label": "Ngày sinh", "value": "20/11/1965", "lineIndex": 4 },
+        { "type": "field_label_value", "label": "Dân tộc", "value": "Kinh", "lineIndex": 4 },
+        { "type": "field_label_value", "label": "Quốc tịch", "value": "Việt Nam", "lineIndex": 4 },
+        { "type": "field_label_value", "label": "Số định danh cá nhân", "value": "036165004321", "lineIndex": 5 },
+        { "type": "field_label_value", "label": "Số điện thoại", "value": "0912345678", "lineIndex": 5 }
+      ],
+      "emptyFields": [],
+      "uncertainPoints": "Thứ tự các trường trên dòng thứ 2 (Ngày sinh, Dân tộc, Quốc tịch) có thể bị đảo nếu việc phân tách cột hình học không đồng đều."
+    },
+    "TC04": {
+      "id": "TC04",
+      "filename": "tc04_table_empty_cells.png",
+      "scenario": "table_with_empty_cells",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG render via Sharp, 900x1100 px, vector stroke table grid, no PII.",
+      "expectedFullTextInReadingOrder": [
+        "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+        "STT | Loại tài sản | Diện tích (m2) | Giá trị ước tính | Ghi chú",
+        "1 | Nhà ở tại Hà Nội | 120.5 | 4.500.000.000 đ | Nhà cấp 3",
+        "2 | Đất nông nghiệp | 500.0 | 800.000.000 đ |",
+        "3 | Xe ô tô con 5 chỗ | | 650.000.000 đ | Đứng tên cá nhân",
+        "4 | Tiền tiết kiệm gửi ngân hàng | | 300.000.000 đ |"
+      ],
+      "criticalValues": {
+        "title": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+        "row1_val": "4.500.000.000 đ",
+        "row2_val": "800.000.000 đ",
+        "row3_val": "650.000.000 đ",
+        "row4_val": "300.000.000 đ"
+      },
+      "structuralRelationships": [
+        {
+          "type": "table",
+          "columnCount": 5,
+          "rowCount": 5,
+          "headerRow": ["STT", "Loại tài sản", "Diện tích (m2)", "Giá trị ước tính", "Ghi chú"],
+          "dataRows": [
+            ["1", "Nhà ở tại Hà Nội", "120.5", "4.500.000.000 đ", "Nhà cấp 3"],
+            ["2", "Đất nông nghiệp", "500.0", "800.000.000 đ", null],
+            ["3", "Xe ô tô con 5 chỗ", null, "650.000.000 đ", "Đứng tên cá nhân"],
+            ["4", "Tiền tiết kiệm gửi ngân hàng", null, "300.000.000 đ", null]
+          ]
+        }
+      ],
+      "emptyFields": [
+        "Hàng 2 - Cột Ghi chú",
+        "Hàng 3 - Cột Diện tích (m2)",
+        "Hàng 4 - Cột Diện tích (m2)",
+        "Hàng 4 - Cột Ghi chú"
+      ],
+      "uncertainPoints": "Do VietOCR không có table model chuyên dụng, việc trích xuất bảng phụ thuộc vào contour detection của OpenCV hoặc logic gom dòng của assembler. Cần kiểm tra xem ô rỗng có làm xô lệch các cột liền sau hay không."
+    },
+    "TC05": {
+      "id": "TC05",
+      "filename": "tc05_checkboxes.png",
+      "scenario": "checkbox_states",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG render via Sharp, 850x1100 px, Unicode checkboxes & brackets, no PII.",
+      "expectedFullTextInReadingOrder": [
+        "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "Độc lập - Tự do - Hạnh phúc",
+        "PHIẾU ĐĂNG KÝ PHƯƠNG THỨC TRẢ KẾT QUẢ",
+        "I. Phương thức nhận kết quả giải quyết:",
+        "☑ Nhận kết quả trực tiếp tại Bộ phận Một cửa",
+        "☐ Nhận kết quả qua dịch vụ bưu chính công ích",
+        "II. Hình thức thanh toán phí, lệ phí:",
+        "[x] Thanh toán trực tuyến qua Cổng dịch vụ công",
+        "[ ] Nộp tiền mặt trực tiếp tại quầy thu ngân",
+        "III. Loại hồ sơ yêu cầu:",
+        "☑ Cấp mới",
+        "☐ Cấp đổi",
+        "☐ Cấp lại"
+      ],
+      "criticalValues": {
+        "cb1_state": true,
+        "cb2_state": false,
+        "cb3_state": true,
+        "cb4_state": false,
+        "cb5_state": true,
+        "cb6_state": false,
+        "cb7_state": false
+      },
+      "structuralRelationships": [
+        { "type": "checkbox", "label": "Nhận kết quả trực tiếp tại Bộ phận Một cửa", "checked": true, "rawMarker": "☑" },
+        { "type": "checkbox", "label": "Nhận kết quả qua dịch vụ bưu chính công ích", "checked": false, "rawMarker": "☐" },
+        { "type": "checkbox", "label": "Thanh toán trực tuyến qua Cổng dịch vụ công", "checked": true, "rawMarker": "[x]" },
+        { "type": "checkbox", "label": "Nộp tiền mặt trực tiếp tại quầy thu ngân", "checked": false, "rawMarker": "[ ]" },
+        { "type": "checkbox", "label": "Cấp mới", "checked": true, "rawMarker": "☑" },
+        { "type": "checkbox", "label": "Cấp đổi", "checked": false, "rawMarker": "☐" },
+        { "type": "checkbox", "label": "Cấp lại", "checked": false, "rawMarker": "☐" }
+      ],
+      "emptyFields": [],
+      "uncertainPoints": "Ký tự Unicode ☑ và ☐ có thể bị một số bộ OCR font đơn giản hiểu thành ký tự rác hoặc bỏ qua nếu font không nằm trong tập ký tự huấn luyện."
+    },
+    "TC06": {
+      "id": "TC06",
+      "filename": "tc06_numbers_dates_money.png",
+      "scenario": "critical_numbers_dates_currency",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG render via Sharp, 850x1100 px, bold values, no PII.",
+      "expectedFullTextInReadingOrder": [
+        "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "Độc lập - Tự do - Hạnh phúc",
+        "BIÊN BẢN VI PHẠM HÀNH CHÍNH",
+        "Số biên bản: 001248/BB-VPHC",
+        "Ngày lập biên bản: 05/09/2026",
+        "Họ và tên: HOÀNG VĂN THẮNG",
+        "Số CCCD: 038092008765",
+        "Biển số xe: 29B1-045.89",
+        "Hành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+        "Số tiền phạt: 2.500.000 đồng",
+        "Hạn nộp phạt: 15/09/2026",
+        "Số tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+        "Số quyết định: 00892/QĐ-XPHC"
+      ],
+      "criticalValues": {
+        "so_bien_ban": "001248/BB-VPHC",
+        "ngay_lap": "05/09/2026",
+        "ho_va_ten": "HOÀNG VĂN THẮNG",
+        "so_cccd": "038092008765",
+        "bien_so_xe": "29B1-045.89",
+        "hanh_vi": "Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+        "so_tien_phat": "2.500.000 đồng",
+        "so_tien_phat_number": 2500000,
+        "han_nop_phat": "15/09/2026",
+        "so_tai_khoan": "7111.0102.3456",
+        "so_quyet_dinh": "00892/QĐ-XPHC"
+      },
+      "structuralRelationships": [
+        { "type": "field_label_value", "label": "Số biên bản", "value": "001248/BB-VPHC", "preserveLeadingZeros": true },
+        { "type": "field_label_value", "label": "Ngày lập biên bản", "value": "05/09/2026", "preserveLeadingZeros": true },
+        { "type": "field_label_value", "label": "Họ và tên", "value": "HOÀNG VĂN THẮNG" },
+        { "type": "field_label_value", "label": "Số CCCD", "value": "038092008765", "exactLength": 12, "preserveLeadingZeros": true },
+        { "type": "field_label_value", "label": "Biển số xe", "value": "29B1-045.89" },
+        { "type": "field_label_value", "label": "Số tiền phạt", "value": "2.500.000 đồng", "parsedInteger": 2500000 },
+        { "type": "field_label_value", "label": "Hạn nộp phạt", "value": "15/09/2026" },
+        { "type": "field_label_value", "label": "Số tài khoản Kho bạc", "value": "7111.0102.3456 tại Agribank Chi nhánh Hà Tây" },
+        { "type": "field_label_value", "label": "Số quyết định", "value": "00892/QĐ-XPHC", "preserveLeadingZeros": true }
+      ],
+      "emptyFields": [],
+      "uncertainPoints": "Các số bắt đầu bằng 0 (001248, 05, 038092008765, 00892) có nguy cơ bị parse sai thành số nguyên làm mất số 0 đầu nếu parser tự động ép kiểu thành number thay vì string."
+    },
+    "TC07": {
+      "id": "TC07",
+      "filename": "tc07_skewed_perspective.png",
+      "scenario": "skewed_perspective_distorted",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Bản sao TC06 được xoay 7 độ qua Sharp với nền đệm xám #888888.",
+      "expectedFullTextInReadingOrder": [
+        "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "Độc lập - Tự do - Hạnh phúc",
+        "BIÊN BẢN VI PHẠM HÀNH CHÍNH",
+        "Số biên bản: 001248/BB-VPHC",
+        "Ngày lập biên bản: 05/09/2026",
+        "Họ và tên: HOÀNG VĂN THẮNG",
+        "Số CCCD: 038092008765",
+        "Biển số xe: 29B1-045.89",
+        "Hành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+        "Số tiền phạt: 2.500.000 đồng",
+        "Hạn nộp phạt: 15/09/2026",
+        "Số tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+        "Số quyết định: 00892/QĐ-XPHC"
+      ],
+      "criticalValues": {
+        "so_bien_ban": "001248/BB-VPHC",
+        "so_cccd": "038092008765",
+        "so_tien_phat": "2.500.000 đồng"
+      },
+      "structuralRelationships": [
+        { "type": "field_label_value", "label": "Số biên bản", "value": "001248/BB-VPHC" },
+        { "type": "field_label_value", "label": "Số CCCD", "value": "038092008765" }
+      ],
+      "emptyFields": [],
+      "uncertainPoints": "Độ nghiêng 7 độ có thể gây trượt dòng (line jump) nếu OpenCV deskew không được kích hoạt trước khi đưa vào VietOCR. Đánh giá tính năng deskewApplied và thứ tự dòng trong JSON."
+    },
+    "TC08": {
+      "id": "TC08",
+      "filename": "tc08_low_contrast.png",
+      "scenario": "low_contrast_and_blur",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG với chữ xám #808080 trên nền #E2E2E2, blur 0.8px qua Sharp.",
+      "expectedFullTextInReadingOrder": [
+        "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+        "Độc lập - Tự do - Hạnh phúc",
+        "THÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ",
+        "Mã hồ sơ: 0192837465",
+        "Người nộp thuế: VŨ THỊ HƯƠNG",
+        "Số tiền phải nộp: 1.250.000 đồng",
+        "Thời hạn nộp: 30/10/2026",
+        "Cơ quan thuế: Chi cục Thuế khu vực Thanh Xuân"
+      ],
+      "criticalValues": {
+        "ma_ho_so": "0192837465",
+        "nguoi_nop_thue": "VŨ THỊ HƯƠNG",
+        "so_tien": "1.250.000 đồng",
+        "thoi_han": "30/10/2026",
+        "co_quan_thue": "Chi cục Thuế khu vực Thanh Xuân"
+      },
+      "structuralRelationships": [
+        { "type": "field_label_value", "label": "Mã hồ sơ", "value": "0192837465" },
+        { "type": "field_label_value", "label": "Người nộp thuế", "value": "VŨ THỊ HƯƠNG" },
+        { "type": "field_label_value", "label": "Số tiền phải nộp", "value": "1.250.000 đồng" }
+      ],
+      "emptyFields": [],
+      "uncertainPoints": "Chất lượng hình ảnh suy giảm chủ ý. OCR có thể cho confidence thấp hơn 0.8; hệ thống adaptive OCR phải phát hiện và thử lại bằng contrast enhancement; nếu vẫn thấp thì JSON phải có requiresReview: true."
+    },
+    "TC09": {
+      "id": "TC09",
+      "filename": "tc09_ambiguous_freetext.png",
+      "scenario": "ambiguous_unstructured_freetext",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic SVG render via Sharp, 850x1100 px, danh mục bullet + đoạn ghi chú tự do + barcode text + footer.",
+      "expectedFullTextInReadingOrder": [
+        "PHIẾU TIẾP NHẬN VÀ HẸN TRẢ KẾT QUẢ",
+        "Đơn vị tiếp nhận: Bộ phận Một cửa Ủy ban nhân dân thị xã Sơn Tây",
+        "Người tiếp nhận: Chuyên viên Đỗ Tuấn Anh",
+        "Danh mục tài liệu kèm theo:",
+        "- 01 bản chính Đơn xin xác nhận đất không có tranh chấp",
+        "- 02 bản sao công chứng Căn cước công dân của hai vợ chồng",
+        "- 01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08",
+        "Ý kiến của cán bộ tiếp nhận:",
+        "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bổ sung biên lai thuế",
+        "đất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.",
+        "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC",
+        "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026"
+      ],
+      "criticalValues": {
+        "tieu_de": "PHIẾU TIẾP NHẬN VÀ HẸN TRẢ KẾT QUẢ",
+        "don_vi": "Bộ phận Một cửa Ủy ban nhân dân thị xã Sơn Tây",
+        "nguoi_tiep_nhan": "Chuyên viên Đỗ Tuấn Anh",
+        "ma_tra_cuu": "STY-2026-09872-TNMC",
+        "dong_in_chan_trang": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026"
+      },
+      "structuralRelationships": [
+        { "type": "document_title", "text": "PHIẾU TIẾP NHẬN VÀ HẸN TRẢ KẾT QUẢ" },
+        { "type": "field_label_value", "label": "Đơn vị tiếp nhận", "value": "Bộ phận Một cửa Ủy ban nhân dân thị xã Sơn Tây" },
+        { "type": "field_label_value", "label": "Người tiếp nhận", "value": "Chuyên viên Đỗ Tuấn Anh" },
+        { "type": "bullet_item", "text": "- 01 bản chính Đơn xin xác nhận đất không có tranh chấp" },
+        { "type": "bullet_item", "text": "- 02 bản sao công chứng Căn cước công dân của hai vợ chồng" },
+        { "type": "bullet_item", "text": "- 01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08" },
+        { "type": "free_text", "text": "Ý kiến của cán bộ tiếp nhận:" },
+        { "type": "free_text", "text": "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bổ sung biên lai thuế" },
+        { "type": "free_text", "text": "đất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định." },
+        { "type": "free_text", "text": "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC" },
+        { "type": "free_text", "text": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026" }
+      ],
+      "emptyFields": [],
+      "uncertainPoints": "Các dòng ghi chú tự do và chân trang không khớp bất kỳ trường định sẵn nào. Tiêu chí 100% bảo toàn dữ liệu bắt buộc các dòng này phải xuất hiện trong mảng freeText hoặc lines của JSON."
+    },
+    "TC10": {
+      "id": "TC10",
+      "filename": "tc10_blank_page.png",
+      "scenario": "blank_or_no_document",
+      "status": "verified_synthetic",
+      "sourceAndGeneration": "Synthetic blank white image 850x1100 px via Sharp, no ink/text.",
+      "expectedFullTextInReadingOrder": [],
+      "criticalValues": {},
+      "structuralRelationships": [],
+      "emptyFields": ["Toàn bộ trang"],
+      "uncertainPoints": "Trang hoàn toàn trống. Hệ thống bắt buộc phải trả về mã cảnh báo OCR_EMPTY_TEXT hoặc POSSIBLE_BLANK, không được tạo bất kỳ trường giả nào."
+    }
+  }
+}

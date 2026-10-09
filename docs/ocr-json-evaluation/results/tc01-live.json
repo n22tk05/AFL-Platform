@@ -1,0 +1,2031 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "17dc5632-4f46-427d-a229-4f826bdfa1bd",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\n\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\n\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\n\nTrần Đăng Quang\nNguyễn Văn Bình",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 850,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "newline": "\n",
+      "start": 0,
+      "end": 34,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "newline": "\n",
+      "start": 35,
+      "end": 62,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "",
+      "newline": "\n",
+      "start": 63,
+      "end": 63,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-3",
+      "page": 1,
+      "order": 3,
+      "text": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+      "newline": "\n",
+      "start": 64,
+      "end": 97,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-4",
+      "page": 1,
+      "order": 4,
+      "text": "",
+      "newline": "\n",
+      "start": 98,
+      "end": 98,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-5",
+      "page": 1,
+      "order": 5,
+      "text": "Hà Nội, ngày 18 tháng 05 năm 2026",
+      "newline": "\n",
+      "start": 99,
+      "end": 132,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-6",
+      "page": 1,
+      "order": 6,
+      "text": "Kính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+      "newline": "\n",
+      "start": 133,
+      "end": 193,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-7",
+      "page": 1,
+      "order": 7,
+      "text": "",
+      "newline": "\n",
+      "start": 194,
+      "end": 194,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-8",
+      "page": 1,
+      "order": 8,
+      "text": "1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG",
+      "newline": "\n",
+      "start": 195,
+      "end": 224,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-9",
+      "page": 1,
+      "order": 9,
+      "text": "2. Ngày sinh: 25 tháng 10 năm 1978",
+      "newline": "\n",
+      "start": 225,
+      "end": 259,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-10",
+      "page": 1,
+      "order": 10,
+      "text": "3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+      "newline": "\n",
+      "start": 260,
+      "end": 319,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-11",
+      "page": 1,
+      "order": 11,
+      "text": "4. Dân tộc: Kinh Quốc tịch: Việt Nam",
+      "newline": "\n",
+      "start": 320,
+      "end": 356,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-12",
+      "page": 1,
+      "order": 12,
+      "text": "5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+      "newline": "\n",
+      "start": 357,
+      "end": 437,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-13",
+      "page": 1,
+      "order": 13,
+      "text": "6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi",
+      "newline": "\n",
+      "start": 438,
+      "end": 499,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-14",
+      "page": 1,
+      "order": 14,
+      "text": "7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai",
+      "newline": "\n",
+      "start": 500,
+      "end": 560,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-15",
+      "page": 1,
+      "order": 15,
+      "text": "8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+      "newline": "\n",
+      "start": 561,
+      "end": 638,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-16",
+      "page": 1,
+      "order": 16,
+      "text": "",
+      "newline": "\n",
+      "start": 639,
+      "end": 639,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-17",
+      "page": 1,
+      "order": 17,
+      "text": "NGƯỜI LÀM ĐƠN",
+      "newline": "\n",
+      "start": 640,
+      "end": 653,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-18",
+      "page": 1,
+      "order": 18,
+      "text": "CHỦ TỊCH UBND PHƯỜNG",
+      "newline": "\n",
+      "start": 654,
+      "end": 674,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-19",
+      "page": 1,
+      "order": 19,
+      "text": "(Ký, ghi rõ họ tên)",
+      "newline": "\n",
+      "start": 675,
+      "end": 694,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-20",
+      "page": 1,
+      "order": 20,
+      "text": "(Ký, đóng dấu)",
+      "newline": "\n",
+      "start": 695,
+      "end": 709,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-21",
+      "page": 1,
+      "order": 21,
+      "text": "",
+      "newline": "\n",
+      "start": 710,
+      "end": 710,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-22",
+      "page": 1,
+      "order": 22,
+      "text": "Trần Đăng Quang",
+      "newline": "\n",
+      "start": 711,
+      "end": 726,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-23",
+      "page": 1,
+      "order": 23,
+      "text": "Nguyễn Văn Bình",
+      "newline": "",
+      "start": 727,
+      "end": 742,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_001",
+      "page": 1,
+      "order": 0,
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "bbox": [
+        0.2964705882352941,
+        0.038181818181818185,
+        0.7035294117647058,
+        0.060909090909090906
+      ],
+      "confidence": 0.7248032986022094,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_002",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "bbox": [
+        0.36705882352941177,
+        0.06454545454545454,
+        0.6317647058823529,
+        0.08363636363636363
+      ],
+      "confidence": 0.9032394896660533,
+      "kind": "line"
+    },
+    {
+      "id": "block-2",
+      "providerId": "line_003",
+      "page": 1,
+      "order": 2,
+      "text": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+      "bbox": [
+        0.22705882352941176,
+        0.12454545454545454,
+        0.7729411764705882,
+        0.15363636363636363
+      ],
+      "confidence": 0.6463543047075686,
+      "kind": "line"
+    },
+    {
+      "id": "block-3",
+      "providerId": "line_004",
+      "page": 1,
+      "order": 3,
+      "text": "Hà Nội, ngày 18 tháng 05 năm 2026",
+      "bbox": [
+        0.64,
+        0.17909090909090908,
+        0.9317647058823529,
+        0.19727272727272727
+      ],
+      "confidence": 0.7121984123931093,
+      "kind": "line"
+    },
+    {
+      "id": "block-4",
+      "providerId": "line_005",
+      "page": 1,
+      "order": 4,
+      "text": "Kính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+      "bbox": [
+        0.06941176470588235,
+        0.22,
+        0.7,
+        0.24363636363636362
+      ],
+      "confidence": 0.8793699035226409,
+      "kind": "line"
+    },
+    {
+      "id": "block-5",
+      "providerId": "line_006",
+      "page": 1,
+      "order": 5,
+      "text": "1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG",
+      "bbox": [
+        0.07058823529411765,
+        0.27636363636363637,
+        0.37411764705882355,
+        0.2963636363636364
+      ],
+      "confidence": 0.9311041153710464,
+      "kind": "line"
+    },
+    {
+      "id": "block-6",
+      "providerId": "line_007",
+      "page": 1,
+      "order": 6,
+      "text": "2. Ngày sinh: 25 tháng 10 năm 1978",
+      "bbox": [
+        0.06823529411764706,
+        0.3190909090909091,
+        0.3811764705882353,
+        0.3390909090909091
+      ],
+      "confidence": 0.5969513784059219,
+      "kind": "line"
+    },
+    {
+      "id": "block-7",
+      "providerId": "line_008",
+      "page": 1,
+      "order": 7,
+      "text": "3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+      "bbox": [
+        0.06941176470588235,
+        0.3572727272727273,
+        0.5835294117647059,
+        0.38
+      ],
+      "confidence": 0.8340825766324997,
+      "kind": "line"
+    },
+    {
+      "id": "block-8",
+      "providerId": "line_009",
+      "page": 1,
+      "order": 8,
+      "text": "4. Dân tộc: Kinh Quốc tịch: Việt Nam",
+      "bbox": [
+        0.06823529411764706,
+        0.3990909090909091,
+        0.38235294117647056,
+        0.41909090909090907
+      ],
+      "confidence": 0.6544749078315657,
+      "kind": "line"
+    },
+    {
+      "id": "block-9",
+      "providerId": "line_010",
+      "page": 1,
+      "order": 9,
+      "text": "5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+      "bbox": [
+        0.06941176470588235,
+        0.44,
+        0.7776470588235294,
+        0.4618181818181818
+      ],
+      "confidence": 0.9223833531141281,
+      "kind": "line"
+    },
+    {
+      "id": "block-10",
+      "providerId": "line_011",
+      "page": 1,
+      "order": 10,
+      "text": "6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi",
+      "bbox": [
+        0.06823529411764706,
+        0.4809090909090909,
+        0.5835294117647059,
+        0.5027272727272727
+      ],
+      "confidence": 0.8841969425028021,
+      "kind": "line"
+    },
+    {
+      "id": "block-11",
+      "providerId": "line_012",
+      "page": 1,
+      "order": 11,
+      "text": "7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai",
+      "bbox": [
+        0.06941176470588235,
+        0.5218181818181818,
+        0.5658823529411765,
+        0.5436363636363636
+      ],
+      "confidence": 0.8469555080943817,
+      "kind": "line"
+    },
+    {
+      "id": "block-12",
+      "providerId": "line_013",
+      "page": 1,
+      "order": 12,
+      "text": "8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+      "bbox": [
+        0.06823529411764706,
+        0.5618181818181818,
+        0.7270588235294118,
+        0.5845454545454546
+      ],
+      "confidence": 0.9307435495512826,
+      "kind": "line"
+    },
+    {
+      "id": "block-13",
+      "providerId": "line_014",
+      "page": 1,
+      "order": 13,
+      "text": "NGƯỜI LÀM ĐƠN",
+      "bbox": [
+        0.1423529411764706,
+        0.6654545454545454,
+        0.32823529411764707,
+        0.6863636363636364
+      ],
+      "confidence": 0.9340556539022006,
+      "kind": "line"
+    },
+    {
+      "id": "block-14",
+      "providerId": "line_015",
+      "page": 1,
+      "order": 14,
+      "text": "CHỦ TỊCH UBND PHƯỜNG",
+      "bbox": [
+        0.6305882352941177,
+        0.6654545454545454,
+        0.8988235294117647,
+        0.6881818181818182
+      ],
+      "confidence": 0.9334028840065003,
+      "kind": "line"
+    },
+    {
+      "id": "block-15",
+      "providerId": "line_016",
+      "page": 1,
+      "order": 15,
+      "text": "(Ký, ghi rõ họ tên)",
+      "bbox": [
+        0.09176470588235294,
+        0.6927272727272727,
+        0.24941176470588236,
+        0.7109090909090909
+      ],
+      "confidence": 0.9201556632393285,
+      "kind": "line"
+    },
+    {
+      "id": "block-16",
+      "providerId": "line_017",
+      "page": 1,
+      "order": 16,
+      "text": "(Ký, đóng dấu)",
+      "bbox": [
+        0.6435294117647059,
+        0.6909090909090909,
+        0.7788235294117647,
+        0.7109090909090909
+      ],
+      "confidence": 0.9314997664519719,
+      "kind": "line"
+    },
+    {
+      "id": "block-17",
+      "providerId": "line_018",
+      "page": 1,
+      "order": 17,
+      "text": "Trần Đăng Quang",
+      "bbox": [
+        0.14823529411764705,
+        0.7663636363636364,
+        0.32235294117647056,
+        0.7890909090909091
+      ],
+      "confidence": 0.8891858449205756,
+      "kind": "line"
+    },
+    {
+      "id": "block-18",
+      "providerId": "line_019",
+      "page": 1,
+      "order": 18,
+      "text": "Nguyễn Văn Bình",
+      "bbox": [
+        0.6788235294117647,
+        0.7672727272727272,
+        0.851764705882353,
+        0.7890909090909091
+      ],
+      "confidence": 0.8901649801170125,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "motto",
+      "evidence": {
+        "method": "regex",
+        "rule": "motto",
+        "verified": false
+      },
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-3",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+      "page": 1,
+      "order": 3,
+      "sourceLineIds": [
+        "line-3"
+      ],
+      "sourceBlockIds": [
+        "block-2"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-4",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 4,
+      "sourceLineIds": [
+        "line-4"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-5",
+      "type": "date_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "date-line",
+        "verified": false
+      },
+      "text": "Hà Nội, ngày 18 tháng 05 năm 2026",
+      "page": 1,
+      "order": 5,
+      "sourceLineIds": [
+        "line-5"
+      ],
+      "sourceBlockIds": [
+        "block-3"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-6",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Kính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+      "page": 1,
+      "order": 6,
+      "sourceLineIds": [
+        "line-6"
+      ],
+      "sourceBlockIds": [
+        "block-4"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-7",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 7,
+      "sourceLineIds": [
+        "line-7"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-8",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG",
+      "page": 1,
+      "order": 8,
+      "sourceLineIds": [
+        "line-8"
+      ],
+      "sourceBlockIds": [
+        "block-5"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-9",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "2. Ngày sinh: 25 tháng 10 năm 1978",
+      "page": 1,
+      "order": 9,
+      "sourceLineIds": [
+        "line-9"
+      ],
+      "sourceBlockIds": [
+        "block-6"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-10",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+      "page": 1,
+      "order": 10,
+      "sourceLineIds": [
+        "line-10"
+      ],
+      "sourceBlockIds": [
+        "block-7"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-11",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "4. Dân tộc: Kinh Quốc tịch: Việt Nam",
+      "page": 1,
+      "order": 11,
+      "sourceLineIds": [
+        "line-11"
+      ],
+      "sourceBlockIds": [
+        "block-8"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-12",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+      "page": 1,
+      "order": 12,
+      "sourceLineIds": [
+        "line-12"
+      ],
+      "sourceBlockIds": [
+        "block-9"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-13",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi",
+      "page": 1,
+      "order": 13,
+      "sourceLineIds": [
+        "line-13"
+      ],
+      "sourceBlockIds": [
+        "block-10"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-14",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai",
+      "page": 1,
+      "order": 14,
+      "sourceLineIds": [
+        "line-14"
+      ],
+      "sourceBlockIds": [
+        "block-11"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-15",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+      "page": 1,
+      "order": 15,
+      "sourceLineIds": [
+        "line-15"
+      ],
+      "sourceBlockIds": [
+        "block-12"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-16",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 16,
+      "sourceLineIds": [
+        "line-16"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-17",
+      "type": "signature_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "signature-title",
+        "verified": false
+      },
+      "text": "NGƯỜI LÀM ĐƠN",
+      "page": 1,
+      "order": 17,
+      "sourceLineIds": [
+        "line-17"
+      ],
+      "sourceBlockIds": [
+        "block-13"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-18",
+      "type": "signature_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "signature-title",
+        "verified": false
+      },
+      "text": "CHỦ TỊCH UBND PHƯỜNG",
+      "page": 1,
+      "order": 18,
+      "sourceLineIds": [
+        "line-18"
+      ],
+      "sourceBlockIds": [
+        "block-14"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-19",
+      "type": "signature_instruction",
+      "evidence": {
+        "method": "regex",
+        "rule": "signature-instruction",
+        "verified": false
+      },
+      "text": "(Ký, ghi rõ họ tên)",
+      "page": 1,
+      "order": 19,
+      "sourceLineIds": [
+        "line-19"
+      ],
+      "sourceBlockIds": [
+        "block-15"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-20",
+      "type": "signature_instruction",
+      "evidence": {
+        "method": "regex",
+        "rule": "signature-instruction",
+        "verified": false
+      },
+      "text": "(Ký, đóng dấu)",
+      "page": 1,
+      "order": 20,
+      "sourceLineIds": [
+        "line-20"
+      ],
+      "sourceBlockIds": [
+        "block-16"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-21",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 21,
+      "sourceLineIds": [
+        "line-21"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-22",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Trần Đăng Quang",
+      "page": 1,
+      "order": 22,
+      "sourceLineIds": [
+        "line-22"
+      ],
+      "sourceBlockIds": [
+        "block-17"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-23",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Nguyễn Văn Bình",
+      "page": 1,
+      "order": 23,
+      "sourceLineIds": [
+        "line-23"
+      ],
+      "sourceBlockIds": [
+        "block-18"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [
+      "node-1"
+    ],
+    "titles": [
+      "node-3"
+    ],
+    "dateLines": [
+      "node-5"
+    ],
+    "sections": [],
+    "fields": [
+      {
+        "id": "field-node-6-0",
+        "nodeId": "node-6",
+        "label": "Kính gửi",
+        "rawValue": " Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+        "valueState": "observed",
+        "normalizedValue": " Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-6"
+        ],
+        "sourceBlockIds": [
+          "block-4"
+        ]
+      },
+      {
+        "id": "field-node-8-0",
+        "nodeId": "node-8",
+        "label": "1. HỌ VÀ TÊN",
+        "rawValue": " TRẦN ĐĂNG QUANG",
+        "valueState": "observed",
+        "normalizedValue": " TRẦN ĐĂNG QUANG",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-8"
+        ],
+        "sourceBlockIds": [
+          "block-5"
+        ]
+      },
+      {
+        "id": "field-node-9-0",
+        "nodeId": "node-9",
+        "label": "2. Ngày sinh",
+        "rawValue": " 25 tháng 10 năm 1978",
+        "valueState": "observed",
+        "normalizedValue": " 25 tháng 10 năm 1978",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-9"
+        ],
+        "sourceBlockIds": [
+          "block-6"
+        ]
+      },
+      {
+        "id": "field-node-10-0",
+        "nodeId": "node-10",
+        "label": "3. Nơi sinh",
+        "rawValue": " Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+        "valueState": "observed",
+        "normalizedValue": " Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-10"
+        ],
+        "sourceBlockIds": [
+          "block-7"
+        ]
+      },
+      {
+        "id": "field-node-11-0",
+        "nodeId": "node-11",
+        "label": "4. Dân tộc",
+        "rawValue": " Kinh ",
+        "valueState": "observed",
+        "normalizedValue": " Kinh ",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-11"
+        ],
+        "sourceBlockIds": [
+          "block-8"
+        ]
+      },
+      {
+        "id": "field-node-11-1",
+        "nodeId": "node-11",
+        "label": "Quốc tịch",
+        "rawValue": " Việt Nam",
+        "valueState": "observed",
+        "normalizedValue": " Việt Nam",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-11"
+        ],
+        "sourceBlockIds": [
+          "block-8"
+        ]
+      },
+      {
+        "id": "field-node-12-0",
+        "nodeId": "node-12",
+        "label": "5. Nơi cư trú",
+        "rawValue": " Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+        "valueState": "observed",
+        "normalizedValue": " Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-12"
+        ],
+        "sourceBlockIds": [
+          "block-9"
+        ]
+      },
+      {
+        "id": "field-node-13-0",
+        "nodeId": "node-13",
+        "label": "6. Nghề nghiệp",
+        "rawValue": " Kỹ sư xây dựng công trình giao thông thủy lợi",
+        "valueState": "observed",
+        "normalizedValue": " Kỹ sư xây dựng công trình giao thông thủy lợi",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-13"
+        ],
+        "sourceBlockIds": [
+          "block-10"
+        ]
+      },
+      {
+        "id": "field-node-14-0",
+        "nodeId": "node-14",
+        "label": "7. Tình trạng hôn nhân",
+        "rawValue": " Hiện tại chưa đăng ký kết hôn với ai",
+        "valueState": "observed",
+        "normalizedValue": " Hiện tại chưa đăng ký kết hôn với ai",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-14"
+        ],
+        "sourceBlockIds": [
+          "block-11"
+        ]
+      },
+      {
+        "id": "field-node-15-0",
+        "nodeId": "node-15",
+        "label": "8. Mục đích sử dụng",
+        "rawValue": " Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+        "valueState": "observed",
+        "normalizedValue": " Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-15"
+        ],
+        "sourceBlockIds": [
+          "block-12"
+        ]
+      }
+    ],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [
+      {
+        "nodeId": "node-17",
+        "identity": null,
+        "evidence": {
+          "method": "regex",
+          "rule": "signature-title",
+          "verified": false
+        },
+        "status": "needs_review"
+      },
+      {
+        "nodeId": "node-18",
+        "identity": null,
+        "evidence": {
+          "method": "regex",
+          "rule": "signature-title",
+          "verified": false
+        },
+        "status": "needs_review"
+      }
+    ],
+    "freeText": [
+      "node-0",
+      "node-2",
+      "node-4",
+      "node-7",
+      "node-16",
+      "node-19",
+      "node-20",
+      "node-21",
+      "node-22",
+      "node-23"
+    ],
+    "unclassified": [
+      "node-0",
+      "node-22",
+      "node-23"
+    ]
+  },
+  "warnings": [
+    "OCR_TEXT_DISAGREEMENT",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\n\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\n\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\n\nTrần Đăng Quang\nNguyễn Văn Bình",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.2964705882352941,
+              0.038181818181818185,
+              0.7035294117647058,
+              0.060909090909090906
+            ],
+            "confidence": 0.7248032986022094,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.36705882352941177,
+              0.06454545454545454,
+              0.6317647058823529,
+              0.08363636363636363
+            ],
+            "confidence": 0.9032394896660533,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+            "bbox": [
+              0.22705882352941176,
+              0.12454545454545454,
+              0.7729411764705882,
+              0.15363636363636363
+            ],
+            "confidence": 0.6463543047075686,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "Hà Nội, ngày 18 tháng 05 năm 2026",
+            "bbox": [
+              0.64,
+              0.17909090909090908,
+              0.9317647058823529,
+              0.19727272727272727
+            ],
+            "confidence": 0.7121984123931093,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "Kính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+            "bbox": [
+              0.06941176470588235,
+              0.22,
+              0.7,
+              0.24363636363636362
+            ],
+            "confidence": 0.8793699035226409,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG",
+            "bbox": [
+              0.07058823529411765,
+              0.27636363636363637,
+              0.37411764705882355,
+              0.2963636363636364
+            ],
+            "confidence": 0.9311041153710464,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "2. Ngày sinh: 25 tháng 10 năm 1978",
+            "bbox": [
+              0.06823529411764706,
+              0.3190909090909091,
+              0.3811764705882353,
+              0.3390909090909091
+            ],
+            "confidence": 0.5969513784059219,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+            "bbox": [
+              0.06941176470588235,
+              0.3572727272727273,
+              0.5835294117647059,
+              0.38
+            ],
+            "confidence": 0.8340825766324997,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "4. Dân tộc: Kinh Quốc tịch: Việt Nam",
+            "bbox": [
+              0.06823529411764706,
+              0.3990909090909091,
+              0.38235294117647056,
+              0.41909090909090907
+            ],
+            "confidence": 0.6544749078315657,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+            "bbox": [
+              0.06941176470588235,
+              0.44,
+              0.7776470588235294,
+              0.4618181818181818
+            ],
+            "confidence": 0.9223833531141281,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi",
+            "bbox": [
+              0.06823529411764706,
+              0.4809090909090909,
+              0.5835294117647059,
+              0.5027272727272727
+            ],
+            "confidence": 0.8841969425028021,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai",
+            "bbox": [
+              0.06941176470588235,
+              0.5218181818181818,
+              0.5658823529411765,
+              0.5436363636363636
+            ],
+            "confidence": 0.8469555080943817,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_013",
+            "page": 1,
+            "order": 12,
+            "text": "8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+            "bbox": [
+              0.06823529411764706,
+              0.5618181818181818,
+              0.7270588235294118,
+              0.5845454545454546
+            ],
+            "confidence": 0.9307435495512826,
+            "kind": "line"
+          },
+          {
+            "id": "block-13",
+            "providerId": "line_014",
+            "page": 1,
+            "order": 13,
+            "text": "NGƯỜI LÀM ĐƠN",
+            "bbox": [
+              0.1423529411764706,
+              0.6654545454545454,
+              0.32823529411764707,
+              0.6863636363636364
+            ],
+            "confidence": 0.9340556539022006,
+            "kind": "line"
+          },
+          {
+            "id": "block-14",
+            "providerId": "line_015",
+            "page": 1,
+            "order": 14,
+            "text": "CHỦ TỊCH UBND PHƯỜNG",
+            "bbox": [
+              0.6305882352941177,
+              0.6654545454545454,
+              0.8988235294117647,
+              0.6881818181818182
+            ],
+            "confidence": 0.9334028840065003,
+            "kind": "line"
+          },
+          {
+            "id": "block-15",
+            "providerId": "line_016",
+            "page": 1,
+            "order": 15,
+            "text": "(Ký, ghi rõ họ tên)",
+            "bbox": [
+              0.09176470588235294,
+              0.6927272727272727,
+              0.24941176470588236,
+              0.7109090909090909
+            ],
+            "confidence": 0.9201556632393285,
+            "kind": "line"
+          },
+          {
+            "id": "block-16",
+            "providerId": "line_017",
+            "page": 1,
+            "order": 16,
+            "text": "(Ký, đóng dấu)",
+            "bbox": [
+              0.6435294117647059,
+              0.6909090909090909,
+              0.7788235294117647,
+              0.7109090909090909
+            ],
+            "confidence": 0.9314997664519719,
+            "kind": "line"
+          },
+          {
+            "id": "block-17",
+            "providerId": "line_018",
+            "page": 1,
+            "order": 17,
+            "text": "Trần Đăng Quang",
+            "bbox": [
+              0.14823529411764705,
+              0.7663636363636364,
+              0.32235294117647056,
+              0.7890909090909091
+            ],
+            "confidence": 0.8891858449205756,
+            "kind": "line"
+          },
+          {
+            "id": "block-18",
+            "providerId": "line_019",
+            "page": 1,
+            "order": 18,
+            "text": "Nguyễn Văn Bình",
+            "bbox": [
+              0.6788235294117647,
+              0.7672727272727272,
+              0.851764705882353,
+              0.7890909090909091
+            ],
+            "confidence": 0.8901649801170125,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      },
+      {
+        "attempt": 2,
+        "variant": "contrast",
+        "provider": "vietocr",
+        "rawText": "CỌNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\n\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\n\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\n\nTrần Đăng Quang\nNguyễn Văn Bình",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "CỌNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.2964705882352941,
+              0.038181818181818185,
+              0.7023529411764706,
+              0.060909090909090906
+            ],
+            "confidence": 0.6240573068459828,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.36705882352941177,
+              0.06454545454545454,
+              0.6317647058823529,
+              0.08363636363636363
+            ],
+            "confidence": 0.9033454081841877,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+            "bbox": [
+              0.22705882352941176,
+              0.12454545454545454,
+              0.7729411764705882,
+              0.15363636363636363
+            ],
+            "confidence": 0.6353303049231919,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "Hà Nội, ngày 18 tháng 05 năm 2026",
+            "bbox": [
+              0.64,
+              0.17909090909090908,
+              0.9317647058823529,
+              0.19727272727272727
+            ],
+            "confidence": 0.7130733746088157,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "Kính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+            "bbox": [
+              0.06941176470588235,
+              0.22,
+              0.7,
+              0.24363636363636362
+            ],
+            "confidence": 0.8649909028756446,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG",
+            "bbox": [
+              0.07058823529411765,
+              0.27636363636363637,
+              0.37411764705882355,
+              0.2963636363636364
+            ],
+            "confidence": 0.9313452490444841,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "2. Ngày sinh: 25 tháng 10 năm 1978",
+            "bbox": [
+              0.06823529411764706,
+              0.3190909090909091,
+              0.38,
+              0.3381818181818182
+            ],
+            "confidence": 0.6392941926606,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+            "bbox": [
+              0.06941176470588235,
+              0.3572727272727273,
+              0.5835294117647059,
+              0.3790909090909091
+            ],
+            "confidence": 0.8349721639284066,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "4. Dân tộc: Kinh Quốc tịch: Việt Nam",
+            "bbox": [
+              0.06823529411764706,
+              0.3990909090909091,
+              0.38235294117647056,
+              0.41909090909090907
+            ],
+            "confidence": 0.6532497751350338,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+            "bbox": [
+              0.06941176470588235,
+              0.44,
+              0.7776470588235294,
+              0.46090909090909093
+            ],
+            "confidence": 0.9217535704374313,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi",
+            "bbox": [
+              0.06823529411764706,
+              0.4809090909090909,
+              0.5835294117647059,
+              0.5018181818181818
+            ],
+            "confidence": 0.8874789334055203,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai",
+            "bbox": [
+              0.06941176470588235,
+              0.5218181818181818,
+              0.5658823529411765,
+              0.5427272727272727
+            ],
+            "confidence": 0.8326272720823417,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_013",
+            "page": 1,
+            "order": 12,
+            "text": "8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+            "bbox": [
+              0.06823529411764706,
+              0.5618181818181818,
+              0.7258823529411764,
+              0.5836363636363636
+            ],
+            "confidence": 0.931888971235845,
+            "kind": "line"
+          },
+          {
+            "id": "block-13",
+            "providerId": "line_014",
+            "page": 1,
+            "order": 13,
+            "text": "NGƯỜI LÀM ĐƠN",
+            "bbox": [
+              0.1423529411764706,
+              0.6654545454545454,
+              0.32823529411764707,
+              0.6863636363636364
+            ],
+            "confidence": 0.9341350793838501,
+            "kind": "line"
+          },
+          {
+            "id": "block-14",
+            "providerId": "line_015",
+            "page": 1,
+            "order": 14,
+            "text": "CHỦ TỊCH UBND PHƯỜNG",
+            "bbox": [
+              0.6305882352941177,
+              0.6654545454545454,
+              0.8988235294117647,
+              0.6881818181818182
+            ],
+            "confidence": 0.9327237576246261,
+            "kind": "line"
+          },
+          {
+            "id": "block-15",
+            "providerId": "line_016",
+            "page": 1,
+            "order": 15,
+            "text": "(Ký, ghi rõ họ tên)",
+            "bbox": [
+              0.09176470588235294,
+              0.6927272727272727,
+              0.24941176470588236,
+              0.7109090909090909
+            ],
+            "confidence": 0.9202669074660853,
+            "kind": "line"
+          },
+          {
+            "id": "block-16",
+            "providerId": "line_017",
+            "page": 1,
+            "order": 16,
+            "text": "(Ký, đóng dấu)",
+            "bbox": [
+              0.6435294117647059,
+              0.6909090909090909,
+              0.7776470588235294,
+              0.7109090909090909
+            ],
+            "confidence": 0.9322525858879089,
+            "kind": "line"
+          },
+          {
+            "id": "block-17",
+            "providerId": "line_018",
+            "page": 1,
+            "order": 17,
+            "text": "Trần Đăng Quang",
+            "bbox": [
+              0.14823529411764705,
+              0.7663636363636364,
+              0.32235294117647056,
+              0.7881818181818182
+            ],
+            "confidence": 0.9345708688100179,
+            "kind": "line"
+          },
+          {
+            "id": "block-18",
+            "providerId": "line_019",
+            "page": 1,
+            "order": 18,
+            "text": "Nguyễn Văn Bình",
+            "bbox": [
+              0.6788235294117647,
+              0.7672727272727272,
+              0.8505882352941176,
+              0.7881818181818182
+            ],
+            "confidence": 0.8976815547794104,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": [
+          0.2964705882352941,
+          0.038181818181818185,
+          0.7035294117647058,
+          0.060909090909090906
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.22705882352941176,
+          0.12454545454545454,
+          0.7729411764705882,
+          0.15363636363636363
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.64,
+          0.17909090909090908,
+          0.9317647058823529,
+          0.19727272727272727
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06823529411764706,
+          0.3190909090909091,
+          0.3811764705882353,
+          0.3390909090909091
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06823529411764706,
+          0.3990909090909091,
+          0.38235294117647056,
+          0.41909090909090907
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.2964705882352941,
+          0.038181818181818185,
+          0.7035294117647058,
+          0.060909090909090906
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": null,
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}

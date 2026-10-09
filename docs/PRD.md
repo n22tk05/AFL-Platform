@@ -308,11 +308,7 @@ stateDiagram-v2
 
 ### 6.1 Trong Phạm vi MVP
 * Ứng dụng Web tối ưu trên Di động (Mobile-responsive Web) dành cho người cao tuổi.
-* Cổng thông tin Web trên Máy tính dành cho Chuyên viên/Quản trị viên tạo và duyệt biểu mẫu.
-* Thử nghiệm thực tế với 2 nhóm biểu mẫu phức tạp:
-  1. *Tờ khai lệ phí trước bạ nhà, đất (Mẫu 01/LPTB)* — Có bóc tách đối chiếu từ Sổ đỏ/Hợp đồng.
-  2. *Biểu mẫu nộp tiền phạt vi phạm hành chính* — Có bóc tách đối chiếu từ Biên bản xử phạt.
-* Chụp ảnh nhận diện form giấy, highlight trực quan và đọc giọng nói tiếng Việt (Bắc/Nam).
+* Thử nghiệm thực tế với hệ thống biểu mẫu hành chính công chuẩn hóa từ Cổng Dịch vụ công Quốc gia (https://dichvucong.gov.vn/), bao gồm các biểu mẫu có quan hệ bóc tách đối chiếu liên chứng từ.
 * Cổng kiểm duyệt Human-in-the-loop cho cán bộ quản trị.
 
 ### 6.2 Ngoài Phạm vi MVP (Dành cho Giai đoạn Sau)

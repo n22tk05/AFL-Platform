@@ -10,7 +10,7 @@ import {
   validateWorkflow,
   validCoords,
 } from "@/modules/forms/services/form-validation.service";
-import type { AdminFormSummary } from "@/modules/forms/types/form.types";
+import type { AdminFormSummary, PublicFormSummary } from "@/modules/forms/types/form.types";
 export class PrismaFormRepository implements FormRepository {
   constructor(private readonly database = prisma) {}
 
@@ -312,6 +312,17 @@ export class PrismaFormRepository implements FormRepository {
       status: (template.workflow.status.toUpperCase() as FormStatus),
       steps,
     };
+  }
+
+  public async listActiveForms(): Promise<PublicFormSummary[]> {
+    const forms = await this.database.formTemplate.findMany({
+      where: { status: 'ACTIVE', workflow: { status: 'ACTIVE', steps: { some: {} } } },
+      select: { id: true, formCode: true, formTitle: true, version: true, updatedAt: true,
+        workflow: { select: { _count: { select: { steps: true } } } } },
+      orderBy: [{ updatedAt: 'desc' }, { formCode: 'asc' }],
+    });
+    return forms.map(form => ({ formId: form.id, formCode: form.formCode, formTitle: form.formTitle, status: 'ACTIVE' as const,
+      version: form.version, stepCount: form.workflow?._count.steps ?? 0, updatedAt: form.updatedAt.toISOString() }));
   }
 
   public async listForms(): Promise<AdminFormSummary[]> {

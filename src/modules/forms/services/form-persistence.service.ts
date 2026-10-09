@@ -226,6 +226,12 @@ export class FormPersistenceService {
     }
   }
 
+  public async listActiveForms() {
+    if (!(await this.databaseHealth.check())) throw new Error('DATABASE_UNAVAILABLE');
+    try { return await this.repository.listActiveForms(); }
+    catch { this.databaseHealth.markOffline(); throw new Error('DATABASE_UNAVAILABLE'); }
+  }
+
   public async getWorkflowForReview(
     formCode: string,
   ): Promise<FormWorkflow | null> {

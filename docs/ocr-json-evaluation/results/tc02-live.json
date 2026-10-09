@@ -1,0 +1,1623 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "fb5fc845-74d5-4bfc-882d-86c18dd8fdc7",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE\n\nHỌ VÀ TÊN: NGUYỄN VĂN AN\n\nNgày sinh:\n\nSố CCCD: 001085012345\nNgày cấp: 12/03/2021\n\nNơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.\n\nNơi đăng ký thường trú:\nNơi ở hiện nay\n\nGiấy phép lái xe số: 790154823901\nHạng: B2\n\nLý do đề nghị:",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 850,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "newline": "\n",
+      "start": 0,
+      "end": 34,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "newline": "\n",
+      "start": 35,
+      "end": 62,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "",
+      "newline": "\n",
+      "start": 63,
+      "end": 63,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-3",
+      "page": 1,
+      "order": 3,
+      "text": "ĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE",
+      "newline": "\n",
+      "start": 64,
+      "end": 100,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-4",
+      "page": 1,
+      "order": 4,
+      "text": "",
+      "newline": "\n",
+      "start": 101,
+      "end": 101,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-5",
+      "page": 1,
+      "order": 5,
+      "text": "HỌ VÀ TÊN: NGUYỄN VĂN AN",
+      "newline": "\n",
+      "start": 102,
+      "end": 126,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-6",
+      "page": 1,
+      "order": 6,
+      "text": "",
+      "newline": "\n",
+      "start": 127,
+      "end": 127,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-7",
+      "page": 1,
+      "order": 7,
+      "text": "Ngày sinh:",
+      "newline": "\n",
+      "start": 128,
+      "end": 138,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-8",
+      "page": 1,
+      "order": 8,
+      "text": "",
+      "newline": "\n",
+      "start": 139,
+      "end": 139,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-9",
+      "page": 1,
+      "order": 9,
+      "text": "Số CCCD: 001085012345",
+      "newline": "\n",
+      "start": 140,
+      "end": 161,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-10",
+      "page": 1,
+      "order": 10,
+      "text": "Ngày cấp: 12/03/2021",
+      "newline": "\n",
+      "start": 162,
+      "end": 182,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-11",
+      "page": 1,
+      "order": 11,
+      "text": "",
+      "newline": "\n",
+      "start": 183,
+      "end": 183,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-12",
+      "page": 1,
+      "order": 12,
+      "text": "Nơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+      "newline": "\n",
+      "start": 184,
+      "end": 243,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-13",
+      "page": 1,
+      "order": 13,
+      "text": "",
+      "newline": "\n",
+      "start": 244,
+      "end": 244,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-14",
+      "page": 1,
+      "order": 14,
+      "text": "Nơi đăng ký thường trú:",
+      "newline": "\n",
+      "start": 245,
+      "end": 268,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-15",
+      "page": 1,
+      "order": 15,
+      "text": "Nơi ở hiện nay",
+      "newline": "\n",
+      "start": 269,
+      "end": 283,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-16",
+      "page": 1,
+      "order": 16,
+      "text": "",
+      "newline": "\n",
+      "start": 284,
+      "end": 284,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-17",
+      "page": 1,
+      "order": 17,
+      "text": "Giấy phép lái xe số: 790154823901",
+      "newline": "\n",
+      "start": 285,
+      "end": 318,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-18",
+      "page": 1,
+      "order": 18,
+      "text": "Hạng: B2",
+      "newline": "\n",
+      "start": 319,
+      "end": 327,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-19",
+      "page": 1,
+      "order": 19,
+      "text": "",
+      "newline": "\n",
+      "start": 328,
+      "end": 328,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-20",
+      "page": 1,
+      "order": 20,
+      "text": "Lý do đề nghị:",
+      "newline": "",
+      "start": 329,
+      "end": 343,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_001",
+      "page": 1,
+      "order": 0,
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "bbox": [
+        0.2964705882352941,
+        0.038181818181818185,
+        0.7023529411764706,
+        0.060909090909090906
+      ],
+      "confidence": 0.7898848214401648,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_002",
+      "page": 1,
+      "order": 1,
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "bbox": [
+        0.36705882352941177,
+        0.06454545454545454,
+        0.6317647058823529,
+        0.08363636363636363
+      ],
+      "confidence": 0.8629579236430507,
+      "kind": "line"
+    },
+    {
+      "id": "block-2",
+      "providerId": "line_003",
+      "page": 1,
+      "order": 2,
+      "text": "ĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE",
+      "bbox": [
+        0.24588235294117647,
+        0.12636363636363637,
+        0.7529411764705882,
+        0.15272727272727274
+      ],
+      "confidence": 0.6974944259632717,
+      "kind": "line"
+    },
+    {
+      "id": "block-3",
+      "providerId": "line_004",
+      "page": 1,
+      "order": 3,
+      "text": "HỌ VÀ TÊN: NGUYỄN VĂN AN",
+      "bbox": [
+        0.06941176470588235,
+        0.20363636363636364,
+        0.32823529411764707,
+        0.22363636363636363
+      ],
+      "confidence": 0.9172956347465515,
+      "kind": "line"
+    },
+    {
+      "id": "block-4",
+      "providerId": "line_005",
+      "page": 1,
+      "order": 4,
+      "text": "Ngày sinh:",
+      "bbox": [
+        0.06941176470588235,
+        0.25545454545454543,
+        0.17882352941176471,
+        0.27454545454545454
+      ],
+      "confidence": 0.9057469725608825,
+      "kind": "line"
+    },
+    {
+      "id": "block-5",
+      "providerId": "line_006",
+      "page": 1,
+      "order": 5,
+      "text": "Số CCCD: 001085012345",
+      "bbox": [
+        0.06941176470588235,
+        0.30363636363636365,
+        0.30117647058823527,
+        0.32272727272727275
+      ],
+      "confidence": 0.790551669895649,
+      "kind": "line"
+    },
+    {
+      "id": "block-6",
+      "providerId": "line_007",
+      "page": 1,
+      "order": 6,
+      "text": "Ngày cấp: 12/03/2021",
+      "bbox": [
+        0.36941176470588233,
+        0.30363636363636365,
+        0.5670588235294117,
+        0.3245454545454545
+      ],
+      "confidence": 0.9242464959621429,
+      "kind": "line"
+    },
+    {
+      "id": "block-7",
+      "providerId": "line_008",
+      "page": 1,
+      "order": 7,
+      "text": "Nơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+      "bbox": [
+        0.06941176470588235,
+        0.3527272727272727,
+        0.5835294117647059,
+        0.37454545454545457
+      ],
+      "confidence": 0.9222265138464459,
+      "kind": "line"
+    },
+    {
+      "id": "block-8",
+      "providerId": "line_009",
+      "page": 1,
+      "order": 8,
+      "text": "Nơi đăng ký thường trú:",
+      "bbox": [
+        0.06941176470588235,
+        0.40545454545454546,
+        0.28352941176470586,
+        0.42454545454545456
+      ],
+      "confidence": 0.9326744364655536,
+      "kind": "line"
+    },
+    {
+      "id": "block-9",
+      "providerId": "line_010",
+      "page": 1,
+      "order": 9,
+      "text": "Nơi ở hiện nay",
+      "bbox": [
+        0.06941176470588235,
+        0.44636363636363635,
+        0.2164705882352941,
+        0.46545454545454545
+      ],
+      "confidence": 0.9332450372832162,
+      "kind": "line"
+    },
+    {
+      "id": "block-10",
+      "providerId": "line_011",
+      "page": 1,
+      "order": 10,
+      "text": "Giấy phép lái xe số: 790154823901",
+      "bbox": [
+        0.06823529411764706,
+        0.49454545454545457,
+        0.37176470588235294,
+        0.5154545454545455
+      ],
+      "confidence": 0.929563581943512,
+      "kind": "line"
+    },
+    {
+      "id": "block-11",
+      "providerId": "line_012",
+      "page": 1,
+      "order": 11,
+      "text": "Hạng: B2",
+      "bbox": [
+        0.49176470588235294,
+        0.49636363636363634,
+        0.5929411764705882,
+        0.5154545454545455
+      ],
+      "confidence": 0.6987089110272271,
+      "kind": "line"
+    },
+    {
+      "id": "block-12",
+      "providerId": "line_013",
+      "page": 1,
+      "order": 12,
+      "text": "Lý do đề nghị:",
+      "bbox": [
+        0.06941176470588235,
+        0.5445454545454546,
+        0.20588235294117646,
+        0.5654545454545454
+      ],
+      "confidence": 0.9354905230658395,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "motto",
+      "evidence": {
+        "method": "regex",
+        "rule": "motto",
+        "verified": false
+      },
+      "text": "Độc lập - Tự do - Hạnh phúc",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-3",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "ĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE",
+      "page": 1,
+      "order": 3,
+      "sourceLineIds": [
+        "line-3"
+      ],
+      "sourceBlockIds": [
+        "block-2"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-4",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 4,
+      "sourceLineIds": [
+        "line-4"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-5",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "HỌ VÀ TÊN: NGUYỄN VĂN AN",
+      "page": 1,
+      "order": 5,
+      "sourceLineIds": [
+        "line-5"
+      ],
+      "sourceBlockIds": [
+        "block-3"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-6",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 6,
+      "sourceLineIds": [
+        "line-6"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-7",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Ngày sinh:",
+      "page": 1,
+      "order": 7,
+      "sourceLineIds": [
+        "line-7"
+      ],
+      "sourceBlockIds": [
+        "block-4"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-8",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 8,
+      "sourceLineIds": [
+        "line-8"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-9",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Số CCCD: 001085012345",
+      "page": 1,
+      "order": 9,
+      "sourceLineIds": [
+        "line-9"
+      ],
+      "sourceBlockIds": [
+        "block-5"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-10",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Ngày cấp: 12/03/2021",
+      "page": 1,
+      "order": 10,
+      "sourceLineIds": [
+        "line-10"
+      ],
+      "sourceBlockIds": [
+        "block-6"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-11",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 11,
+      "sourceLineIds": [
+        "line-11"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-12",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Nơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+      "page": 1,
+      "order": 12,
+      "sourceLineIds": [
+        "line-12"
+      ],
+      "sourceBlockIds": [
+        "block-7"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-13",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 13,
+      "sourceLineIds": [
+        "line-13"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-14",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Nơi đăng ký thường trú:",
+      "page": 1,
+      "order": 14,
+      "sourceLineIds": [
+        "line-14"
+      ],
+      "sourceBlockIds": [
+        "block-8"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-15",
+      "type": "field_label",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-only",
+        "verified": false
+      },
+      "text": "Nơi ở hiện nay",
+      "page": 1,
+      "order": 15,
+      "sourceLineIds": [
+        "line-15"
+      ],
+      "sourceBlockIds": [
+        "block-9"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-16",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 16,
+      "sourceLineIds": [
+        "line-16"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-17",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Giấy phép lái xe số: 790154823901",
+      "page": 1,
+      "order": 17,
+      "sourceLineIds": [
+        "line-17"
+      ],
+      "sourceBlockIds": [
+        "block-10"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-18",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Hạng: B2",
+      "page": 1,
+      "order": 18,
+      "sourceLineIds": [
+        "line-18"
+      ],
+      "sourceBlockIds": [
+        "block-11"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-19",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 19,
+      "sourceLineIds": [
+        "line-19"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-20",
+      "type": "field_label_value",
+      "evidence": {
+        "method": "regex",
+        "rule": "known-label-colon",
+        "verified": false
+      },
+      "text": "Lý do đề nghị:",
+      "page": 1,
+      "order": 20,
+      "sourceLineIds": [
+        "line-20"
+      ],
+      "sourceBlockIds": [
+        "block-12"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [
+      "node-1"
+    ],
+    "titles": [
+      "node-3"
+    ],
+    "dateLines": [],
+    "sections": [],
+    "fields": [
+      {
+        "id": "field-node-5-0",
+        "nodeId": "node-5",
+        "label": "HỌ VÀ TÊN",
+        "rawValue": " NGUYỄN VĂN AN",
+        "valueState": "observed",
+        "normalizedValue": " NGUYỄN VĂN AN",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-5"
+        ],
+        "sourceBlockIds": [
+          "block-3"
+        ]
+      },
+      {
+        "id": "field-node-7-0",
+        "nodeId": "node-7",
+        "label": "Ngày sinh",
+        "rawValue": null,
+        "valueState": "blank",
+        "normalizedValue": null,
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-7"
+        ],
+        "sourceBlockIds": [
+          "block-4"
+        ]
+      },
+      {
+        "id": "field-node-9-0",
+        "nodeId": "node-9",
+        "label": "Số CCCD",
+        "rawValue": " 001085012345",
+        "valueState": "observed",
+        "normalizedValue": " 001085012345",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-9"
+        ],
+        "sourceBlockIds": [
+          "block-5"
+        ]
+      },
+      {
+        "id": "field-node-10-0",
+        "nodeId": "node-10",
+        "label": "Ngày cấp",
+        "rawValue": " 12/03/2021",
+        "valueState": "observed",
+        "normalizedValue": " 12/03/2021",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-10"
+        ],
+        "sourceBlockIds": [
+          "block-6"
+        ]
+      },
+      {
+        "id": "field-node-12-0",
+        "nodeId": "node-12",
+        "label": "Nơi cấp",
+        "rawValue": " Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+        "valueState": "observed",
+        "normalizedValue": " Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-12"
+        ],
+        "sourceBlockIds": [
+          "block-7"
+        ]
+      },
+      {
+        "id": "field-node-14-0",
+        "nodeId": "node-14",
+        "label": "Nơi đăng ký thường trú",
+        "rawValue": null,
+        "valueState": "blank",
+        "normalizedValue": null,
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-14"
+        ],
+        "sourceBlockIds": [
+          "block-8"
+        ]
+      },
+      {
+        "id": "field-node-15-0",
+        "nodeId": "node-15",
+        "label": "Nơi ở hiện nay",
+        "rawValue": null,
+        "valueState": "blank",
+        "normalizedValue": null,
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-only",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-15"
+        ],
+        "sourceBlockIds": [
+          "block-9"
+        ]
+      },
+      {
+        "id": "field-node-17-0",
+        "nodeId": "node-17",
+        "label": "Giấy phép lái xe số",
+        "rawValue": " 790154823901",
+        "valueState": "observed",
+        "normalizedValue": " 790154823901",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-17"
+        ],
+        "sourceBlockIds": [
+          "block-10"
+        ]
+      },
+      {
+        "id": "field-node-18-0",
+        "nodeId": "node-18",
+        "label": "Hạng",
+        "rawValue": " B2",
+        "valueState": "observed",
+        "normalizedValue": " B2",
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-18"
+        ],
+        "sourceBlockIds": [
+          "block-11"
+        ]
+      },
+      {
+        "id": "field-node-20-0",
+        "nodeId": "node-20",
+        "label": "Lý do đề nghị",
+        "rawValue": null,
+        "valueState": "blank",
+        "normalizedValue": null,
+        "status": "needs_review",
+        "evidence": {
+          "method": "regex",
+          "rule": "known-label-colon",
+          "verified": false
+        },
+        "reviewReasons": [
+          "TEXT_PATTERN_NOT_VISUAL_VERIFICATION"
+        ],
+        "sourceLineIds": [
+          "line-20"
+        ],
+        "sourceBlockIds": [
+          "block-12"
+        ]
+      }
+    ],
+    "checkboxes": [],
+    "tables": [],
+    "signatures": [],
+    "freeText": [
+      "node-0",
+      "node-2",
+      "node-4",
+      "node-6",
+      "node-8",
+      "node-11",
+      "node-13",
+      "node-16",
+      "node-19"
+    ],
+    "unclassified": [
+      "node-0"
+    ]
+  },
+  "warnings": [
+    "OCR_TEXT_DISAGREEMENT",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "TABLE_LAYOUT_NOT_PROVIDED"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE\n\nHỌ VÀ TÊN: NGUYỄN VĂN AN\n\nNgày sinh:\n\nSố CCCD: 001085012345\nNgày cấp: 12/03/2021\n\nNơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.\n\nNơi đăng ký thường trú:\nNơi ở hiện nay\n\nGiấy phép lái xe số: 790154823901\nHạng: B2\n\nLý do đề nghị:",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.2964705882352941,
+              0.038181818181818185,
+              0.7023529411764706,
+              0.060909090909090906
+            ],
+            "confidence": 0.7898848214401648,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.36705882352941177,
+              0.06454545454545454,
+              0.6317647058823529,
+              0.08363636363636363
+            ],
+            "confidence": 0.8629579236430507,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "ĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE",
+            "bbox": [
+              0.24588235294117647,
+              0.12636363636363637,
+              0.7529411764705882,
+              0.15272727272727274
+            ],
+            "confidence": 0.6974944259632717,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "HỌ VÀ TÊN: NGUYỄN VĂN AN",
+            "bbox": [
+              0.06941176470588235,
+              0.20363636363636364,
+              0.32823529411764707,
+              0.22363636363636363
+            ],
+            "confidence": 0.9172956347465515,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "Ngày sinh:",
+            "bbox": [
+              0.06941176470588235,
+              0.25545454545454543,
+              0.17882352941176471,
+              0.27454545454545454
+            ],
+            "confidence": 0.9057469725608825,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "Số CCCD: 001085012345",
+            "bbox": [
+              0.06941176470588235,
+              0.30363636363636365,
+              0.30117647058823527,
+              0.32272727272727275
+            ],
+            "confidence": 0.790551669895649,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "Ngày cấp: 12/03/2021",
+            "bbox": [
+              0.36941176470588233,
+              0.30363636363636365,
+              0.5670588235294117,
+              0.3245454545454545
+            ],
+            "confidence": 0.9242464959621429,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "Nơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+            "bbox": [
+              0.06941176470588235,
+              0.3527272727272727,
+              0.5835294117647059,
+              0.37454545454545457
+            ],
+            "confidence": 0.9222265138464459,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "Nơi đăng ký thường trú:",
+            "bbox": [
+              0.06941176470588235,
+              0.40545454545454546,
+              0.28352941176470586,
+              0.42454545454545456
+            ],
+            "confidence": 0.9326744364655536,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "Nơi ở hiện nay",
+            "bbox": [
+              0.06941176470588235,
+              0.44636363636363635,
+              0.2164705882352941,
+              0.46545454545454545
+            ],
+            "confidence": 0.9332450372832162,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "Giấy phép lái xe số: 790154823901",
+            "bbox": [
+              0.06823529411764706,
+              0.49454545454545457,
+              0.37176470588235294,
+              0.5154545454545455
+            ],
+            "confidence": 0.929563581943512,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "Hạng: B2",
+            "bbox": [
+              0.49176470588235294,
+              0.49636363636363634,
+              0.5929411764705882,
+              0.5154545454545455
+            ],
+            "confidence": 0.6987089110272271,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_013",
+            "page": 1,
+            "order": 12,
+            "text": "Lý do đề nghị:",
+            "bbox": [
+              0.06941176470588235,
+              0.5445454545454546,
+              0.20588235294117646,
+              0.5654545454545454
+            ],
+            "confidence": 0.9354905230658395,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      },
+      {
+        "attempt": 2,
+        "variant": "contrast",
+        "provider": "vietocr",
+        "rawText": "CỌNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE\n\nHỌ VÀ TÊN: NGUYỄN VĂN AN\n\nNgày sinh:\n\nSố CCCD: 001085012345\nNgày cấp: 12/03/2021\n\nNơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.\n\nNơi đăng ký thường trú:\nNơi ở hiện nay\n\nGiấy phép lái xe số: 790154823901\nHạng: B2\n\nLý do đề nghị:",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_001",
+            "page": 1,
+            "order": 0,
+            "text": "CỌNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+            "bbox": [
+              0.2964705882352941,
+              0.038181818181818185,
+              0.7023529411764706,
+              0.060909090909090906
+            ],
+            "confidence": 0.7324154906507049,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_002",
+            "page": 1,
+            "order": 1,
+            "text": "Độc lập - Tự do - Hạnh phúc",
+            "bbox": [
+              0.36823529411764705,
+              0.06454545454545454,
+              0.6317647058823529,
+              0.08363636363636363
+            ],
+            "confidence": 0.8815185477336248,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_003",
+            "page": 1,
+            "order": 2,
+            "text": "ĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE",
+            "bbox": [
+              0.24588235294117647,
+              0.12636363636363637,
+              0.7529411764705882,
+              0.15272727272727274
+            ],
+            "confidence": 0.7020992746407335,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_004",
+            "page": 1,
+            "order": 3,
+            "text": "HỌ VÀ TÊN: NGUYỄN VĂN AN",
+            "bbox": [
+              0.06941176470588235,
+              0.20363636363636364,
+              0.32823529411764707,
+              0.22363636363636363
+            ],
+            "confidence": 0.9130026896794637,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_005",
+            "page": 1,
+            "order": 4,
+            "text": "Ngày sinh:",
+            "bbox": [
+              0.06941176470588235,
+              0.25545454545454543,
+              0.17882352941176471,
+              0.27454545454545454
+            ],
+            "confidence": 0.9105221152305603,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_006",
+            "page": 1,
+            "order": 5,
+            "text": "Số CCCD: 001085012345",
+            "bbox": [
+              0.06941176470588235,
+              0.30363636363636365,
+              0.30117647058823527,
+              0.32181818181818184
+            ],
+            "confidence": 0.7968500544627507,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_007",
+            "page": 1,
+            "order": 6,
+            "text": "Ngày cấp: 12/03/2021",
+            "bbox": [
+              0.36941176470588233,
+              0.30363636363636365,
+              0.5670588235294117,
+              0.3245454545454545
+            ],
+            "confidence": 0.922281551361084,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_008",
+            "page": 1,
+            "order": 7,
+            "text": "Nơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+            "bbox": [
+              0.06941176470588235,
+              0.3527272727272727,
+              0.5823529411764706,
+              0.37454545454545457
+            ],
+            "confidence": 0.9163745373992597,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_009",
+            "page": 1,
+            "order": 8,
+            "text": "Nơi đăng ký thường trú:",
+            "bbox": [
+              0.06941176470588235,
+              0.40545454545454546,
+              0.28352941176470586,
+              0.42454545454545456
+            ],
+            "confidence": 0.9319991236147673,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_010",
+            "page": 1,
+            "order": 9,
+            "text": "Nơi ở hiện nay",
+            "bbox": [
+              0.06941176470588235,
+              0.44636363636363635,
+              0.2164705882352941,
+              0.46545454545454545
+            ],
+            "confidence": 0.9331788718700409,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_011",
+            "page": 1,
+            "order": 10,
+            "text": "Giấy phép lái xe số: 790154823901",
+            "bbox": [
+              0.06941176470588235,
+              0.49454545454545457,
+              0.37176470588235294,
+              0.5154545454545455
+            ],
+            "confidence": 0.9303157528241476,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_012",
+            "page": 1,
+            "order": 11,
+            "text": "Hạng: B2",
+            "bbox": [
+              0.49176470588235294,
+              0.49636363636363634,
+              0.5929411764705882,
+              0.5154545454545455
+            ],
+            "confidence": 0.7012420573404857,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_013",
+            "page": 1,
+            "order": 12,
+            "text": "Lý do đề nghị:",
+            "bbox": [
+              0.06941176470588235,
+              0.5445454545454546,
+              0.20588235294117646,
+              0.5654545454545454
+            ],
+            "confidence": 0.9286317229270935,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": [
+          0.2964705882352941,
+          0.038181818181818185,
+          0.7023529411764706,
+          0.060909090909090906
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.24588235294117647,
+          0.12636363636363637,
+          0.7529411764705882,
+          0.15272727272727274
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.06941176470588235,
+          0.30363636363636365,
+          0.30117647058823527,
+          0.32272727272727275
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.49176470588235294,
+          0.49636363636363634,
+          0.5929411764705882,
+          0.5154545454545455
+        ],
+        "reason": "OCR_LOW_CONFIDENCE_OR_GEOMETRY",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.2964705882352941,
+          0.038181818181818185,
+          0.7023529411764706,
+          0.060909090909090906
+        ],
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": null,
+        "reason": "OCR_TEXT_DISAGREEMENT",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}

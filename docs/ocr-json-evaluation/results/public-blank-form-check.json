@@ -1,0 +1,44 @@
+{
+    "dataset":  "public-blank-form-not-synthetic",
+    "file":  "public/assets/forms/01-lptb/page-1.jpg",
+    "sha256":  "3b97150168e2eab7b69c31d1c69be9e71c2f754ceb68dbf6747b609fd5d83a01",
+    "manualIdentification":  "Blank TỜ KHAI LỆ PHÍ TRƯỚC BẠ Mẫu số 01/LPTB; no filled personal data",
+    "provider":  "vietocr-local",
+    "httpStatus":  504,
+    "documentStatus":  "failed",
+    "sourcePreserved":  null,
+    "schemaValid":  true,
+    "requiresReview":  true,
+    "warnings":  [
+                     "OCR_TIMEOUT",
+                     "OCR_ACCURACY_NOT_MEASURED",
+                     "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+                     "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+                     "PROVIDER_MODEL_NOT_REPORTED",
+                     "SOURCE_IS_TEXT_SPLITTING_NO_GEOMETRY",
+                     "OCR_CONFIDENCE_MISSING",
+                     "TABLE_LAYOUT_NOT_PROVIDED"
+                 ],
+    "attempts":  [
+                     {
+                         "attempt":  1,
+                         "variant":  "primary",
+                         "errorCode":  "OCR_TIMEOUT"
+                     }
+                 ],
+    "unknownPreserved":  null,
+    "tableDetectorAvailable":  false,
+    "cer":  null,
+    "wer":  null,
+    "metricScope":  "No manually transcribed full ground truth; image-to-OCR-to-JSON integration only",
+    "browserPreprocessing":  false,
+    "sourceAuditStatus":  "BLOCKED_NO_PROVIDER_OUTPUT",
+    "priorCompletedRun":  {
+                              "httpStatus":  200,
+                              "documentStatus":  "partial",
+                              "sourcePreserved":  true,
+                              "schemaValid":  true,
+                              "warningDetailsNotCaptured":  true
+                          },
+    "status":  "BLOCKED_PROVIDER_TIMEOUT_LAST_RUN"
+}

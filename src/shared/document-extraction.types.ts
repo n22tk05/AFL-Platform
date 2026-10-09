@@ -1,12 +1,21 @@
 import type { NormalizedBoundingBox } from './contracts';
 export type { NormalizedBoundingBox } from './contracts';
-export interface DocumentOcrInput { bytes: Uint8Array; mimeType: 'image/jpeg' | 'image/png'; signal?: AbortSignal }
+export type OcrVariant = 'primary' | 'contrast' | 'lighting';
+export interface OcrImageVariant {
+  variant: 'contrast' | 'lighting'; bytes: Uint8Array; mimeType: 'image/jpeg' | 'image/png';
+  width: number; height: number; scaleX: number; scaleY: number;
+}
+export interface DocumentOcrInput {
+  bytes: Uint8Array; mimeType: 'image/jpeg' | 'image/png'; signal?: AbortSignal;
+  imageDimensions?: { width: number; height: number };
+  enhancements?: OcrImageVariant[]; imageWarnings?: string[]; documentDetectionFailed?: boolean;
+}
 export interface OcrToken {
   id: string;
   text: string;
   confidence: number | null;
   /** [ymin, xmin, ymax, xmax] relative to the processed page, never pixels. */
-  boundingBox: NormalizedBoundingBox;
+  boundingBox: NormalizedBoundingBox | null;
   page: number;
 }
 export interface OcrLine extends OcrToken { tokenIds: string[] }
@@ -14,6 +23,8 @@ export interface OcrLine extends OcrToken { tokenIds: string[] }
 export interface OcrTextRange { start: number; end: number }
 export interface OcrTableCell {
   text: string;
+  /** Provider line IDs identify even empty cells; never inferred from text. */
+  sourceLineIds?: string[];
   sourceRanges: OcrTextRange[];
   rowSpan: number;
   columnSpan: number;
@@ -26,6 +37,9 @@ export interface OcrTable {
 }
 export interface DocumentOcrResult {
   provider: string;
+  model?: string;
+  readingOrder?: 'provider' | 'geometric-heuristic' | 'text-splitting';
+  pages?: { page: number; status: 'success' | 'failed'; error: string | null; width: number | null; height: number | null }[];
   fullText: string;
   tokens: OcrToken[];
   lines: OcrLine[];
@@ -34,7 +48,21 @@ export interface DocumentOcrResult {
   /** Optional provider-supplied table layout, never inferred by an LLM. */
   tables?: OcrTable[];
 }
-export interface DocumentOcrProvider { extract(input: DocumentOcrInput): Promise<DocumentOcrResult> }
+export interface DocumentOcrProvider { readonly providerId?: string; extract(input: DocumentOcrInput): Promise<DocumentOcrResult> }
+export interface OcrAttempt {
+  attempt: number; variant: OcrVariant; provider: string; timingMs: number;
+  scaleX: number; scaleY: number; raw: DocumentOcrResult | null; errorCode?: string;
+}
+export interface OcrReviewRegion {
+  boundingBox: NormalizedBoundingBox | null;
+  status: 'recognitionUncertain' | 'unreadable'; reason: string;
+  sources: { attempt: number; lineId: string; text: string; boundingBox: NormalizedBoundingBox | null }[];
+}
+export interface OcrReview {
+  attempts: OcrAttempt[]; selectedAttempt: number; selectionReason: string;
+  regions: OcrReviewRegion[]; warnings: string[]; requiresReview: boolean;
+  documentDetectionFailed: boolean;
+}
 export type DocumentType = 'traffic_violation_record' | 'citizen_identity_card' | 'land_document' | 'unknown';
 export type ExtractedFieldStatus = 'accepted' | 'needs_review' | 'unreadable';
 export interface ExtractedField<T = unknown> {
@@ -63,6 +91,7 @@ export interface DocumentExtractionResult extends StructuredDocumentResult {
   status: 'extracted' | 'manual_review_required';
   processingTimeMs: number;
   deskewApplied: boolean;
+  ocrReview?: OcrReview;
 }
 export interface StructuredExtractionProvider {
   classify(ocr: DocumentOcrResult, signal?: AbortSignal): Promise<DocumentType>;

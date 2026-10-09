@@ -4,12 +4,13 @@ import { DocumentExtractionService } from '../services/document-extraction.servi
 import { DocumentPipelineError } from '../errors';
 import { handleDocumentExtraction } from '../api';
 import { DOCUMENT_LIMITS } from '../config';
+import { readFileSync } from 'node:fs';
 import type { DocumentOcrProvider, StructuredExtractionProvider } from '@/shared/document-extraction.types';
 
-const input = { bytes:new Uint8Array([255,216,255,224]),mimeType:'image/jpeg' as const };
+const input = { bytes:readFileSync('tests/fixtures/documents/clear.png'),mimeType:'image/png' as const };
 const fake: DocumentOcrProvider = {extract:async()=>({provider:'fake',fullText:'Số TEST',tokens:[],lines:[{id:'l1',text:'Số TEST',confidence:1,boundingBox:[0,0,1,1],page:1,tokenIds:[]}],pageCount:1,warnings:[]})};
 const structured: StructuredExtractionProvider = { classify:async()=> 'traffic_violation_record', extract:async()=>({fields:{recordNumber:{value:'TEST',rawText:'TEST',evidenceText:'Số TEST',sourceLineIds:['l1'],confidence:1}}}) };
-function request(mime='image/jpeg',bytes: Uint8Array=input.bytes) {
+function request(mime='image/png',bytes: Uint8Array=input.bytes) {
   const form=new FormData(); form.set('file',new Blob([Buffer.from(bytes)],{type:mime}),'test'); form.set('deskewApplied','true');
   return new Request('http://local/api/documents/extract',{method:'POST',body:form});
 }
@@ -40,7 +41,7 @@ test('provider configuration/secret failures are sanitized and never synthesize 
 test('bad MIME/signature, oversized file/body rejected before providers',async()=>{
   let calls=0; const factory=()=>{calls++;return new DocumentExtractionService(fake,structured);};
   assert.equal((await handleDocumentExtraction(request('text/plain'),factory)).status,415);
-  assert.equal((await handleDocumentExtraction(request('image/png'),factory)).status,400);
+  assert.equal((await handleDocumentExtraction(request('image/jpeg'),factory)).status,400);
   assert.equal((await handleDocumentExtraction(request('image/jpeg',new Uint8Array(DOCUMENT_LIMITS.fileBytes+1)),factory)).status,413);
   assert.equal((await handleDocumentExtraction(new Request('http://local',{method:'POST',headers:{'content-type':'application/json','content-length':String(DOCUMENT_LIMITS.requestBytes+1)},body:'{}'}),factory)).status,413);
   assert.equal(calls,0);
@@ -51,7 +52,7 @@ test('actual body cap applies without content-length',async()=>{
 });
 test('multipart and JSON return same stable v2 envelope with no-store',async()=>{
   const factory=()=>new DocumentExtractionService(fake,structured);
-  const jsonReq=new Request('http://local',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({imageBase64:'data:image/jpeg;base64,'+Buffer.from(input.bytes).toString('base64'),deskewApplied:true})});
+  const jsonReq=new Request('http://local',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({imageBase64:'data:image/png;base64,'+Buffer.from(input.bytes).toString('base64'),deskewApplied:true})});
   for(const req of [request(),jsonReq]) {
     const response=await handleDocumentExtraction(req,factory); const body=await response.json();
     assert.equal(body.success,true); assert.equal(body.data.contractVersion,2); assert.equal(body.data.fields.recordNumber.status,'accepted');

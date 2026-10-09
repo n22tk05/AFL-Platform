@@ -1,0 +1,14 @@
+{
+  "syntheticOnly": true,
+  "provider": "vietocr-local",
+  "httpStatus": 200,
+  "contentType": "application/json; charset=utf-8",
+  "attachmentFilenameSafe": true,
+  "jsonParsed": true,
+  "runtimeValidation": true,
+  "criticalIdPreserved": true,
+  "schemaEndpoint": true,
+  "removedRouteStatus": 404,
+  "pageServerRendered": true,
+  "browserInteraction": false
+}

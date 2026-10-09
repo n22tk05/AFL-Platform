@@ -30,13 +30,26 @@ export function filterCandidates(
 export function passesGeometry(candidate: FieldCandidate, image: ImageSize, config: ContourDetectionConfig): boolean {
   const { rect } = candidate;
   if (!isValidRect(rect) || ![candidate.areaRatio, candidate.aspectRatio, candidate.contourArea, candidate.rectangularity].every(Number.isFinite)) return false;
+  if (isNearlyWholePage(rect, image)) return false;
+
   const widthRatio = rect.width / image.width;
   const heightRatio = rect.height / image.height;
-  if (widthRatio < config.minWidthRatio || widthRatio > config.maxWidthRatio || heightRatio < config.minHeightRatio || heightRatio > config.maxHeightRatio) return false;
-  if (candidate.areaRatio < config.minAreaRatio || candidate.areaRatio > config.maxAreaRatio) return false;
-  if (candidate.aspectRatio < config.minAspectRatio || candidate.aspectRatio > config.maxAspectRatio) return false;
-  if (candidate.rectangularity < config.minRectangularity || candidate.rectangularity > 1) return false;
-  return !isNearlyWholePage(rect, image);
+
+  // Source-adapted thresholds: allow fine-grained detail for phrase clusters, field rows, and checkboxes
+  const isDetail = candidate.source === "phrase_cluster" || candidate.source === "field_row" || candidate.source === "checkbox";
+  const minWidthRatio = isDetail ? Math.min(config.minWidthRatio, 0.005) : config.minWidthRatio;
+  const minHeightRatio = isDetail ? Math.min(config.minHeightRatio, 0.003) : config.minHeightRatio;
+  const minAreaRatio = isDetail ? Math.min(config.minAreaRatio, 0.00002) : config.minAreaRatio;
+  const maxAspectRatio = isDetail ? Math.max(config.maxAspectRatio, 100) : config.maxAspectRatio;
+  const minRectangularity = isDetail ? Math.min(config.minRectangularity, 0.2) : config.minRectangularity;
+
+  if (widthRatio < minWidthRatio || widthRatio > config.maxWidthRatio) return false;
+  if (heightRatio < minHeightRatio || heightRatio > config.maxHeightRatio) return false;
+  if (candidate.areaRatio < minAreaRatio || candidate.areaRatio > config.maxAreaRatio) return false;
+  if (candidate.aspectRatio < config.minAspectRatio || candidate.aspectRatio > maxAspectRatio) return false;
+  if (candidate.rectangularity < minRectangularity || candidate.rectangularity > 1) return false;
+
+  return true;
 }
 
 function areNearDuplicate(left: FieldCandidate, right: FieldCandidate, config: ContourDetectionConfig): boolean {
@@ -77,3 +90,59 @@ function comparePreference(left: FieldCandidate, right: FieldCandidate): number 
   return right.rectangularity - left.rectangularity || right.contourArea - left.contourArea || right.areaRatio - left.areaRatio || comparePosition(left, right);
 }
 function comparePosition(left: FieldCandidate, right: FieldCandidate): number { return left.rect.y - right.rect.y || left.rect.x - right.rect.x || left.rect.width - right.rect.width || left.rect.height - right.rect.height || left.parentIndex - right.parentIndex || left.childIndex - right.childIndex; }
+
+/**
+ * Merge table cells, checkboxes, and field rows into a unified, non-redundant candidate list.
+ * Any field row that falls inside a detected table cell is suppressed so the table cell remains the primary field.
+ * Standalone field rows (in forms without tables, or in non-table sections) are preserved as input candidates.
+ */
+export function mergeFormCandidates(
+  lineCandidates: readonly FieldCandidate[],
+  checkboxCandidates: readonly FieldCandidate[],
+  fieldRowCandidates: readonly FieldCandidate[],
+  image: ImageSize,
+  configOverrides: Partial<ContourDetectionConfig> = {},
+): FieldCandidate[] {
+  const config = resolveContourDetectionConfig(configOverrides);
+
+  // 1. Filter valid line candidates (tables and boxes)
+  const validLineBoxes = filterCandidates(lineCandidates, image, config);
+
+  // 2. Filter valid checkbox candidates
+  const validCheckboxes = filterCandidates(checkboxCandidates, image, config);
+
+  // 3. For field rows, only keep those that are NOT already contained inside a table cell
+  const standaloneFieldRows: FieldCandidate[] = [];
+  for (const row of fieldRowCandidates) {
+    if (!passesGeometry(row, image, config)) continue;
+
+    // Check if row is inside any table cell
+    const isInsideTableCell = validLineBoxes.some((cell) => {
+      const isContained =
+        row.rect.x >= cell.rect.x - 4 &&
+        row.rect.y >= cell.rect.y - 4 &&
+        row.rect.x + row.rect.width <= cell.rect.x + cell.rect.width + 4 &&
+        row.rect.y + row.rect.height <= cell.rect.y + cell.rect.height + 4;
+      const cellArea = cell.rect.width * cell.rect.height;
+      const rowArea = row.rect.width * row.rect.height;
+      return !cell.isContainer && isContained && cellArea >= rowArea * 1.15;
+    });
+
+    // Check if row heavily overlaps with a checkbox (e.g. checkbox is part of the row or duplicated)
+    const overlapsCheckbox = validCheckboxes.some((cb) => {
+      const iou = calculateIou(cb.rect, row.rect);
+      if (iou > 0.4) return true;
+      const overlap = intersectionArea(cb.rect, row.rect);
+      const rowArea = row.rect.width * row.rect.height;
+      return rowArea > 0 && overlap / rowArea >= 0.65;
+    });
+
+    if (!isInsideTableCell && !overlapsCheckbox) {
+      standaloneFieldRows.push(row);
+    }
+  }
+
+  // 4. Combine all candidates and deduplicate
+  const combined = [...validLineBoxes, ...validCheckboxes, ...standaloneFieldRows];
+  return filterCandidates(combined, image, config);
+}

@@ -10,22 +10,25 @@ export interface VietOcrLineInput {
 }
 
 export interface VietOcrConfig {
-  /** Microservice REST endpoint for VietOCR (default: process.env.VIETOCR_ENDPOINT or 'http://localhost:8000/predict') */
+  /** Microservice REST endpoint for VietOCR (default: process.env.VIETOCR_ENDPOINT or 'http://127.0.0.1:8000/predict') */
   endpoint?: string;
   /** Network timeout in milliseconds (default: 30000) */
   timeoutMs?: number;
   /** Concurrency batch size for line recognition requests (default: 8) */
   batchSize?: number;
-  /** Allow clean fallback when microservice is offline (default: true in development/test) */
+  /** Explicit test-only mock fallback. Disabled by default, including development. */
   allowOfflineFallback?: boolean;
 }
 
 export const DEFAULT_VIETOCR_CONFIG: Readonly<VietOcrConfig> = Object.freeze({
-  endpoint: process.env.VIETOCR_ENDPOINT || 'http://localhost:8000/predict',
+  endpoint: process.env.VIETOCR_ENDPOINT || 'http://127.0.0.1:8000/predict',
   timeoutMs: Number(process.env.DOCUMENT_OCR_TIMEOUT_MS || 60_000),
   batchSize: 8,
-  allowOfflineFallback: process.env.NODE_ENV !== 'production',
+  allowOfflineFallback: false,
 });
+
+class VietOcrResponseError extends Error {}
+export class VietOcrTimeoutError extends Error {}
 
 /**
  * Normalizes line image dimensions for VietOCR:
@@ -68,11 +71,12 @@ export class VietOcrAdapter {
     const endpoint = this.config.endpoint;
     if (endpoint) {
       try {
-        const response = await this.callMicroservice(lines, endpoint, signal);
-        if (response && response.length > 0) {
-          return response;
-        }
+        // Empty predictions are a genuine OCR result, not a service failure.
+        return await this.callMicroservice(lines, endpoint, signal);
       } catch (error) {
+        // A malformed response cannot be replaced with plausible-looking mock text.
+        if (error instanceof VietOcrResponseError) throw error;
+        if (error instanceof VietOcrTimeoutError) throw error;
         if (!this.config.allowOfflineFallback) {
           throw new Error(
             `VietOCR service unavailable at ${endpoint}: ${error instanceof Error ? error.message : String(error)}`,
@@ -82,7 +86,11 @@ export class VietOcrAdapter {
       }
     }
 
-    // Offline / Development Mock Fallback
+    if (!this.config.allowOfflineFallback) {
+      throw new Error('VietOCR endpoint is not configured.');
+    }
+
+    // Explicit testing mock fallback
     return this.synthesizeOfflineResults(lines);
   }
 
@@ -116,9 +124,9 @@ export class VietOcrAdapter {
   ): Promise<DetectedLineText[]> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.config.timeoutMs);
-    const combinedSignal = signal
-      ? anySignal([signal, controller.signal])
-      : controller.signal;
+    const abort = () => controller.abort();
+    signal?.addEventListener('abort', abort, { once: true });
+    if (signal?.aborted) controller.abort();
 
     try {
       const payload = {
@@ -137,7 +145,7 @@ export class VietOcrAdapter {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-        signal: combinedSignal,
+        signal: controller.signal,
       });
 
       if (!res.ok) {
@@ -146,7 +154,14 @@ export class VietOcrAdapter {
 
       const data = await res.json();
       if (!Array.isArray(data.predictions)) {
-        throw new Error('Invalid response structure from VietOCR service.');
+        throw new VietOcrResponseError('Invalid response structure from VietOCR service.');
+      }
+
+      if (!data.predictions.length) return [];
+      if (data.predictions.some((pred: unknown) => !pred || typeof pred !== 'object' || Array.isArray(pred)
+        || ('text' in pred && typeof pred.text !== 'string' && pred.text !== null)
+        || ('lineId' in pred && typeof pred.lineId !== 'string' && pred.lineId !== null))) {
+        throw new VietOcrResponseError('Invalid prediction item from VietOCR service.');
       }
 
       if (
@@ -157,6 +172,8 @@ export class VietOcrAdapter {
         lines[0].coordinates[2] === 1 &&
         lines[0].coordinates[3] === 1
       ) {
+        const ids = data.predictions.map((pred: { lineId?: string }, idx: number) => pred.lineId || `line_${String(idx + 1).padStart(3, '0')}`);
+        if (new Set(ids).size !== ids.length) throw new VietOcrResponseError('Duplicate full-document line IDs prevent reliable OCR alignment.');
         return data.predictions.map(
           (
             pred: {
@@ -171,29 +188,61 @@ export class VietOcrAdapter {
             coordinates:
               Array.isArray(pred.coordinates) && pred.coordinates.length === 4
                 ? (pred.coordinates as NormalizedBoundingBox)
-                : lines[0].coordinates,
-            rawText: String(pred.text ?? '').trim(),
+                : null,
+            rawText: String(pred.text ?? ''),
             confidence:
-              typeof pred.confidence === 'number' ? pred.confidence : 0.95,
+              typeof pred.confidence === 'number' && Number.isFinite(pred.confidence) && pred.confidence >= 0 && pred.confidence <= 1 ? pred.confidence : null,
           }),
         );
       }
 
+      const inputIds = new Set(lines.map(line => line.lineId));
+      if (inputIds.size !== lines.length) {
+        throw new VietOcrResponseError('Duplicate input line IDs prevent reliable OCR alignment.');
+      }
+      const predictions = data.predictions as {
+        lineId?: unknown;
+        text?: string;
+        confidence?: number;
+        coordinates?: NormalizedBoundingBox;
+      }[];
+      if (predictions.some(pred => !pred || typeof pred !== 'object')) {
+        throw new VietOcrResponseError('Invalid prediction item from VietOCR service.');
+      }
+      const allIdsMissing = predictions.every(pred => pred.lineId === undefined || pred.lineId === null);
+      const byId = new Map<string, typeof predictions[number]>();
+      if (allIdsMissing) {
+        if (predictions.length !== lines.length) {
+          throw new VietOcrResponseError('OCR result count prevents reliable positional alignment.');
+        }
+      } else {
+        for (const pred of predictions) {
+          if (typeof pred.lineId !== 'string' || !inputIds.has(pred.lineId) || byId.has(pred.lineId)) {
+            throw new VietOcrResponseError('Unknown, duplicate or mixed OCR line IDs prevent reliable alignment.');
+          }
+          byId.set(pred.lineId, pred);
+        }
+      }
+
       return lines.map((line, idx) => {
-        const pred = data.predictions[idx] || {};
+        const pred = (allIdsMissing ? predictions[idx] : byId.get(line.lineId)) || {};
         return {
           lineId: line.lineId,
           coordinates:
             Array.isArray(pred.coordinates) && pred.coordinates.length === 4
               ? (pred.coordinates as NormalizedBoundingBox)
               : line.coordinates,
-          rawText: String(pred.text ?? '').trim(),
+          rawText: String(pred.text ?? ''),
           confidence:
-            typeof pred.confidence === 'number' ? pred.confidence : 0.95,
+            typeof pred.confidence === 'number' && Number.isFinite(pred.confidence) && pred.confidence >= 0 && pred.confidence <= 1 ? pred.confidence : null,
         };
       });
+    } catch (error) {
+      if (controller.signal.aborted) throw new VietOcrTimeoutError('VietOCR request timed out or was cancelled.');
+      throw error;
     } finally {
       clearTimeout(timeout);
+      signal?.removeEventListener('abort', abort);
     }
   }
 
@@ -208,16 +257,4 @@ export class VietOcrAdapter {
       confidence: 0.98,
     }));
   }
-}
-
-function anySignal(signals: AbortSignal[]): AbortSignal {
-  const controller = new AbortController();
-  for (const sig of signals) {
-    if (sig.aborted) {
-      controller.abort();
-      return controller.signal;
-    }
-    sig.addEventListener('abort', () => controller.abort(), { once: true });
-  }
-  return controller.signal;
 }

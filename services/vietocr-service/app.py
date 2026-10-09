@@ -3,6 +3,10 @@ import io
 import logging
 import os
 import time
+import math
+import tempfile
+import threading
+from pathlib import Path
 from typing import List, Optional, Tuple
 
 import cv2
@@ -34,6 +38,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger("vietocr-service")
 
+SERVICE_DIR = Path(__file__).resolve().parent
+MAX_IMAGE_BYTES = 8 * 1024 * 1024
+MAX_IMAGE_PIXELS = 12_000_000
+MAX_LINES = 120
+DETECTION_WIDTH = 1200
+BATCH_SIZE = 8
+inference_lock = threading.Lock()
+
 app = FastAPI(
     title="VietOCR Microservice (High Performance)",
     description="High-throughput Vietnamese line OCR service with batch inference and OpenCV line segmentation",
@@ -55,40 +67,39 @@ device: str = "cuda:0" if torch.cuda.is_available() else "cpu"
 @app.on_event("startup")
 def load_model():
     global predictor, device
-    model_name = os.getenv("VIETOCR_MODEL", "vgg_transformer")
-    logger.info(f"Loading VietOCR model '{model_name}' on device '{device}' (threads: {torch.get_num_threads()})...")
-
-    try:
-        config = Cfg.load_config_from_name(model_name)
-        if "cnn" in config and isinstance(config["cnn"], dict):
-            config["cnn"]["pretrained"] = False
-        config["device"] = device
-        predictor = Predictor(config)
-        logger.info(f"VietOCR model '{model_name}' initialized successfully.")
-    except Exception as e:
-        logger.error(f"Failed to load VietOCR model '{model_name}': {e}", exc_info=True)
-        # Attempt fallback to seq2seq if transformer fails
-        if model_name != "vgg_seq2seq":
-            logger.info("Attempting fallback to 'vgg_seq2seq'...")
-            try:
-                config = Cfg.load_config_from_name("vgg_seq2seq")
-                if "cnn" in config and isinstance(config["cnn"], dict):
-                    config["cnn"]["pretrained"] = False
-                config["device"] = device
-                predictor = Predictor(config)
-                logger.info("VietOCR model 'vgg_seq2seq' loaded successfully as fallback.")
-            except Exception as e_fallback:
-                logger.error(f"Fallback to 'vgg_seq2seq' also failed: {e_fallback}", exc_info=True)
-                raise e
+    predictor = None
+    config_path = Path(os.getenv("VIETOCR_CONFIG_PATH", str(SERVICE_DIR / "inference.yml")))
+    if os.getenv("VIETOCR_MODEL", "vgg_transformer") != "vgg_transformer" and not os.getenv("VIETOCR_CONFIG_PATH"):
+        raise RuntimeError("A different VIETOCR_MODEL requires its matching local VIETOCR_CONFIG_PATH")
+    config = Cfg.load_config_from_file(str(config_path))
+    configured_weights = os.getenv("VIETOCR_WEIGHTS_PATH")
+    weights_name = Path(config["weights"]).name
+    candidates = [Path(configured_weights)] if configured_weights else [
+        SERVICE_DIR / ".cache" / weights_name,
+        Path(tempfile.gettempdir()) / weights_name,
+    ]
+    weights = next((candidate for candidate in candidates if candidate.is_file()), None)
+    if weights is None:
+        raise RuntimeError("VietOCR weights missing. Run services/vietocr-service/setup.ps1 or set VIETOCR_WEIGHTS_PATH to trusted local weights.")
+    config["weights"] = str(weights.resolve())
+    config["cnn"]["pretrained"] = False
+    config["device"] = device
+    logger.info("Loading local VietOCR model on %s (threads: %s)", device, torch.get_num_threads())
+    loaded_predictor = Predictor(config)
 
     # Warmup inference to eliminate first-request latency
     try:
         dummy = Image.new("RGB", (100, 32), color=(255, 255, 255))
         with torch.inference_mode():
-            predictor.predict_batch([dummy], return_prob=True)
+            loaded_predictor.predict_batch([dummy], return_prob=True)
+        predictor = loaded_predictor
+        logger.info("VietOCR model initialized; no startup configuration/weights download")
         logger.info("VietOCR model warmup completed successfully.")
     except Exception as warmup_err:
-        logger.warning(f"Model warmup skipped: {warmup_err}")
+        predictor = None
+        raise RuntimeError("VietOCR model warmup failed; service is not ready") from warmup_err
+    finally:
+        dummy.close()
 
 # Request / Response Schemas matching AFL-Platform VietOcrAdapter
 class Dimensions(BaseModel):
@@ -108,7 +119,7 @@ class PredictRequest(BaseModel):
 class PredictionResult(BaseModel):
     lineId: Optional[str] = None
     text: str
-    confidence: float
+    confidence: Optional[float] = None
     coordinates: Optional[List[float]] = None
 
 class PredictResponse(BaseModel):
@@ -148,10 +159,9 @@ def sort_line_boxes_geometrically(boxes: List[Tuple[int, int, int, int]]) -> Lis
         sorted_boxes.extend(row['boxes'])
     return sorted_boxes
 
-def segment_document_lines(pil_img: Image.Image, target_width: int = 1200) -> List[Tuple[Image.Image, List[float], str]]:
+def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_WIDTH) -> List[Tuple[Image.Image, List[float], str]]:
     """
-    High-performance document line segmentation with adaptive scale downsampling.
-    Runs in <15ms on modern multi-core CPU even for 12MP photos.
+    Detect on a smaller copy; crop OCR lines from the original pixels.
     """
     orig_w, orig_h = pil_img.size
     
@@ -159,14 +169,18 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = 1200) -> Li
     if orig_w > target_width:
         scale = target_width / float(orig_w)
         proc_w = target_width
-        proc_h = int(orig_h * scale)
+        proc_h = max(1, round(orig_h * scale))
         proc_img = pil_img.resize((proc_w, proc_h), Image.Resampling.BILINEAR)
     else:
         scale = 1.0
         proc_w, proc_h = orig_w, orig_h
         proc_img = pil_img
 
-    img_np = np.array(proc_img)
+    try:
+        img_np = np.array(proc_img)
+    finally:
+        if proc_img is not pil_img:
+            proc_img.close()
     if img_np.ndim == 3:
         if img_np.shape[2] == 4:
             gray = cv2.cvtColor(img_np, cv2.COLOR_RGBA2GRAY)
@@ -190,7 +204,7 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = 1200) -> Li
     # Find external contours
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    max_height = int(proc_h * 0.25)
+    max_height = max(64, int(proc_h * 0.25))
     min_height = max(8, int(10 * scale))
     min_width = max(20, int(24 * scale))
     min_area = max(160, int(200 * scale * scale))
@@ -207,11 +221,9 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = 1200) -> Li
     if not raw_boxes:
         return []
 
-    # Limit maximum lines per document to 70 to prevent runaway inference on pathological images
-    MAX_LINES = 70
+    # Never silently discard smaller regions (they may contain essential fields).
     if len(raw_boxes) > MAX_LINES:
-        raw_boxes.sort(key=lambda b: b[2] * b[3], reverse=True)
-        raw_boxes = raw_boxes[:MAX_LINES]
+        raise HTTPException(status_code=413, detail="Too many text regions; split the document into smaller pages")
 
     sorted_boxes = sort_line_boxes_geometrically(raw_boxes)
 
@@ -225,12 +237,17 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = 1200) -> Li
         x2 = min(proc_w, x + w + padding_x)
         y2 = min(proc_h, y + h + padding_y)
 
-        line_crop = proc_img.crop((x1, y1, x2, y2))
+        # Rounded resize dimensions have independent X/Y scales.
+        source_x1 = max(0, math.floor(x1 * orig_w / proc_w))
+        source_y1 = max(0, math.floor(y1 * orig_h / proc_h))
+        source_x2 = min(orig_w, math.ceil(x2 * orig_w / proc_w))
+        source_y2 = min(orig_h, math.ceil(y2 * orig_h / proc_h))
+        line_crop = pil_img.crop((source_x1, source_y1, source_x2, source_y2))
         coords = [
-            round(y1 / proc_h, 4),
-            round(x1 / proc_w, 4),
-            round(y2 / proc_h, 4),
-            round(x2 / proc_w, 4)
+            source_y1 / orig_h,
+            source_x1 / orig_w,
+            source_y2 / orig_h,
+            source_x2 / orig_w,
         ]
         line_id = f"line_{idx+1:03d}"
         segmented.append((line_crop, coords, line_id))
@@ -240,12 +257,12 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = 1200) -> Li
 def fast_predict_batch(
     pred: Predictor,
     pil_images: List[Image.Image],
-    batch_size: int = 8
-) -> Tuple[List[str], List[float]]:
+    batch_size: int = BATCH_SIZE
+) -> Tuple[List[str], List[Optional[float]]]:
     """
     High-throughput binned batch inference for VietOCR.
     Quantizes line widths into bins with right-padding to maximize true parallel batching.
-    Increases CPU throughput by 2.5x - 3.5x compared to standard predict_batch.
+    Confidence remains the model score, not a calibrated accuracy measure.
     """
     if not pil_images:
         return [], []
@@ -265,7 +282,7 @@ def fast_predict_batch(
             w = t.shape[-1]
             target_bin = max_w
             for b in bins:
-                if w <= b:
+                if w <= b <= max_w:
                     target_bin = b
                     break
 
@@ -277,10 +294,10 @@ def fast_predict_batch(
             bucket.setdefault(target_bin, []).append(padded)
             bucket_idx.setdefault(target_bin, []).append(i)
         except Exception as err:
-            logger.warning(f"Error preparing line image {i}: {err}")
+            raise RuntimeError("Could not prepare a text region for OCR") from err
 
     sents = [''] * len(pil_images)
-    probs = [0.0] * len(pil_images)
+    probs = [None] * len(pil_images)
 
     for bin_w, batch_list in bucket.items():
         indices_list = bucket_idx[bin_w]
@@ -318,141 +335,126 @@ def health():
         "threads": torch.get_num_threads()
     }
 
+def confidence_value(value) -> Optional[float]:
+    if value is None:
+        return None
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return None
+    return score if math.isfinite(score) and 0 <= score <= 1 else None
+
+
 def decode_base64_image(image_str: str) -> Image.Image:
     raw_str = image_str.strip()
+    if len(raw_str) > ((MAX_IMAGE_BYTES + 2) // 3) * 4 + 128:
+        raise HTTPException(status_code=413, detail="Image exceeds byte limit")
     if "," in raw_str:
         raw_str = raw_str.split(",", 1)[1]
-    image_bytes = base64.b64decode(raw_str)
-    return Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    try:
+        image_bytes = base64.b64decode(raw_str, validate=True)
+        if len(image_bytes) > MAX_IMAGE_BYTES:
+            raise HTTPException(status_code=413, detail="Image exceeds byte limit")
+        with Image.open(io.BytesIO(image_bytes)) as image:
+            width, height = image.size
+            if image.format not in ("JPEG", "PNG"):
+                raise HTTPException(status_code=400, detail="Only PNG and JPEG are supported")
+            if width <= 0 or height <= 0 or width * height > MAX_IMAGE_PIXELS:
+                raise HTTPException(status_code=413, detail="Image exceeds pixel limit")
+            image.load()
+            return image.convert("RGB")
+    except HTTPException:
+        raise
+    except Exception as error:
+        raise HTTPException(status_code=400, detail="Invalid or undecodable image") from error
+
+
+def validated_coordinates(coords):
+    if coords is None:
+        return None
+    if len(coords) != 4 or not all(math.isfinite(value) and 0 <= value <= 1 for value in coords):
+        raise HTTPException(status_code=400, detail="Invalid normalized coordinates")
+    if coords[0] >= coords[2] or coords[1] >= coords[3]:
+        raise HTTPException(status_code=400, detail="Degenerate normalized coordinates")
+    return coords
+
+
+def is_flat_image(image: Image.Image) -> bool:
+    gray = image.convert("L")
+    try:
+        # Only virtually uniform crops are skipped; low contrast is not a gate.
+        pixels = np.asarray(gray)
+        return int(pixels.max()) - int(pixels.min()) <= 1
+    finally:
+        gray.close()
+
 
 @app.post("/predict", response_model=PredictResponse)
 def predict_lines(request: PredictRequest):
     if predictor is None:
         raise HTTPException(status_code=503, detail="VietOCR model is not loaded yet")
+    if request.image and request.lines:
+        raise HTTPException(status_code=400, detail="Provide an image or cropped lines, not both")
+    if len(request.lines or []) > MAX_LINES:
+        raise HTTPException(status_code=413, detail="Too many text regions")
+    if not inference_lock.acquire(blocking=True, timeout=120.0):
+        raise HTTPException(status_code=429, detail="VietOCR is busy; try again after the current request")
 
     started_at = time.perf_counter()
-    results: List[PredictionResult] = []
-
-    # Case 1: Direct full image provided
-    if request.image:
-        try:
-            pil_image = decode_base64_image(request.image)
-            lines_data = segment_document_lines(pil_image)
-            if not lines_data:
-                with torch.inference_mode():
-                    text, prob = predictor.predict(pil_image, return_prob=True)
-                return PredictResponse(
-                    predictions=[
-                        PredictionResult(lineId="line_001", text=str(text).strip() if text else "", confidence=float(prob) if prob else 0.95, coordinates=[0, 0, 1, 1])
-                    ],
-                    processingTimeMs=(time.perf_counter() - started_at) * 1000
-                )
-
-            # High-performance binned batch inference
-            crops = [item[0] for item in lines_data]
-            sents, probs = fast_predict_batch(predictor, crops, batch_size=8)
-
-            for (crop, coords, line_id), text, prob in zip(lines_data, sents, probs):
-                cleaned_text = str(text).strip() if text else ""
-                if cleaned_text:
-                    results.append(PredictionResult(
-                        lineId=line_id,
-                        text=cleaned_text,
-                        confidence=float(prob) if prob is not None else 0.95,
-                        coordinates=coords
-                    ))
-
-            return PredictResponse(
-                predictions=results,
-                processingTimeMs=(time.perf_counter() - started_at) * 1000
-            )
-        except Exception as e:
-            logger.error(f"Error processing document image: {e}")
-            raise HTTPException(status_code=400, detail=f"Invalid image data: {e}")
-
-    # Case 2: Array of lines provided
-    if not request.lines:
-        return PredictResponse(predictions=[], processingTimeMs=0.0)
-
-    # Check if lines is a single full-page document image [0, 0, 1, 1]
-    if len(request.lines) == 1:
-        single_line = request.lines[0]
-        coords = single_line.coordinates or [0, 0, 1, 1]
-        is_full_page = (coords[0] == 0 and coords[1] == 0 and coords[2] == 1 and coords[3] == 1)
-
-        try:
-            pil_image = decode_base64_image(single_line.image)
-            w, h = pil_image.size
-            if is_full_page or (h > 60 and (h / max(w, 1)) > 0.15):
-                lines_data = segment_document_lines(pil_image)
-                if lines_data:
-                    crops = [item[0] for item in lines_data]
-                    sents, probs = fast_predict_batch(predictor, crops, batch_size=8)
-
-                    for (crop, line_coords, line_id), text, prob in zip(lines_data, sents, probs):
-                        cleaned_text = str(text).strip() if text else ""
-                        if cleaned_text:
-                            results.append(PredictionResult(
-                                lineId=line_id,
-                                text=cleaned_text,
-                                confidence=float(prob) if prob is not None else 0.95,
-                                coordinates=line_coords
-                            ))
-                    if results:
-                        return PredictResponse(
-                            predictions=results,
-                            processingTimeMs=(time.perf_counter() - started_at) * 1000
-                        )
-        except Exception as err:
-            logger.warning(f"Auto-segmentation fallback: {err}")
-
-    # Case 3: Multiple pre-cropped lines provided -> Batch predict in one go!
+    owned_images = []
     try:
-        crops = [decode_base64_image(line.image) for line in request.lines]
-        sents, probs = fast_predict_batch(predictor, crops, batch_size=8)
+        regions = []
+        if request.image:
+            image = decode_base64_image(request.image)
+            owned_images.append(image)
+            regions = segment_document_lines(image)
+            owned_images.extend(region[0] for region in regions)
+        elif request.lines:
+            total_pixels = 0
+            for idx, line in enumerate(request.lines):
+                coords = validated_coordinates(line.coordinates)
+                image = decode_base64_image(line.image)
+                owned_images.append(image)
+                total_pixels += image.width * image.height
+                if total_pixels > MAX_IMAGE_PIXELS:
+                    raise HTTPException(status_code=413, detail="Cropped lines exceed total pixel limit")
+                is_page = coords == [0, 0, 1, 1] or (coords is None and image.height > 60 and image.height / image.width > 0.15)
+                if len(request.lines) == 1 and is_page:
+                    regions = segment_document_lines(image)
+                    owned_images.extend(region[0] for region in regions)
+                elif not is_flat_image(image):
+                    regions.append((image, coords, line.lineId or f"line_{idx+1:03d}"))
 
-        for line, text, prob in zip(request.lines, sents, probs):
-            cleaned_text = str(text).strip() if text else ""
-            results.append(
-                PredictionResult(
-                    lineId=line.lineId,
-                    text=cleaned_text,
-                    confidence=float(prob) if prob is not None else 0.95,
-                    coordinates=line.coordinates
-                )
-            )
-    except Exception as err:
-        logger.warning(f"Batch inference fallback to sequential: {err}")
-        for idx, line in enumerate(request.lines):
-            try:
-                pil_image = decode_base64_image(line.image)
-                with torch.inference_mode():
-                    text, prob = predictor.predict(pil_image, return_prob=True)
-                results.append(
-                    PredictionResult(
-                        lineId=line.lineId or f"line_{idx+1:03d}",
-                        text=str(text).strip() if text else "",
-                        confidence=float(prob) if prob is not None else 0.95,
-                        coordinates=line.coordinates
-                    )
-                )
-            except Exception as line_err:
-                results.append(
-                    PredictionResult(
-                        lineId=line.lineId or f"line_{idx+1:03d}",
-                        text="",
-                        confidence=0.0,
-                        coordinates=line.coordinates
-                    )
-                )
+        # A page with no detected text has no recognized content. Never feed
+        # an unsegmented page or blank sheet to the line-only model as fallback.
+        if not regions:
+            return PredictResponse(predictions=[], processingTimeMs=(time.perf_counter() - started_at) * 1000)
+        crops = [region[0] for region in regions]
+        sents, probs = fast_predict_batch(predictor, crops)
+        if len(sents) != len(regions) or len(probs) != len(regions):
+            raise RuntimeError("Model result count differs from input region count")
+        results = []
+        for (_, coords, line_id), text, score in zip(regions, sents, probs):
+            results.append(PredictionResult(
+                lineId=line_id,
+                text=str(text).strip() if text is not None else "",
+                confidence=confidence_value(score),
+                coordinates=coords,
+            ))
+        return PredictResponse(predictions=results, processingTimeMs=(time.perf_counter() - started_at) * 1000)
+    except HTTPException:
+        raise
+    except Exception as error:
+        logger.error("VietOCR inference failed (%s)", type(error).__name__)
+        raise HTTPException(status_code=500, detail="VietOCR inference failed") from error
+    finally:
+        for image in owned_images:
+            image.close()
+        inference_lock.release()
 
-    return PredictResponse(
-        predictions=results,
-        processingTimeMs=(time.perf_counter() - started_at) * 1000
-    )
 
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
-    host = os.getenv("HOST", "0.0.0.0")
+    host = os.getenv("HOST", "127.0.0.1")
     uvicorn.run("app:app", host=host, port=port, reload=False)

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Smartphone, ShieldCheck, Sparkles, BookOpen, ArrowRight } from "lucide-react";
+import { APP_ROUTES } from '@/shared/routes';
 
 export default function HomePage() {
   return (
@@ -8,7 +9,7 @@ export default function HomePage() {
         {/* Nút Cổng Quản trị viên ở góc trên */}
         <div className="flex justify-end mb-2">
           <Link
-            href="/admin/library"
+            href={APP_ROUTES.library}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-black shadow-sm transition-all active:scale-95"
             title="Truy cập Cổng Quản trị & Thư viện Biểu mẫu"
           >
@@ -56,8 +57,8 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <BookOpen className="w-8 h-8" aria-hidden="true" />
               <div className="text-left">
-                <div className="font-bold text-base">Chuyển ảnh thành Markdown</div>
-                <div className="text-xs">OpenCV → Google OCR → Ghép Markdown → Duyệt → .md</div>
+                <div className="font-bold text-base">Chuyển ảnh thành JSON</div>
+                <div className="text-xs">OpenCV → VietOCR cục bộ → Ghép JSON → Duyệt → .json</div>
               </div>
             </div>
           </Link>
@@ -74,7 +75,7 @@ export default function HomePage() {
               <div className="text-left">
                 <div className="font-bold text-base">Bàn Làm Việc Kiểm Thử (Workbench)</div>
                 <div className="text-xs text-amber-800 font-medium">
-                  Soi Bounding Box, test trích xuất JSON & Markdown
+                  Soi Bounding Box, test trích xuất JSON & JSON
                 </div>
               </div>
             </div>
@@ -82,7 +83,7 @@ export default function HomePage() {
 
           {/* Lối vào dành cho Cán bộ Quản trị */}
           <Link
-            href="/admin/library"
+            href={APP_ROUTES.library}
             className="w-full p-4 bg-slate-50 hover:bg-slate-100 border-2 border-slate-300 rounded-2xl flex items-center justify-between text-slate-800 transition-all group shadow-sm active:scale-98"
           >
             <div className="flex items-center gap-3">
