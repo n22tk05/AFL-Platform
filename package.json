@@ -4,10 +4,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:all": "node scripts/start-all.mjs",
-    "start:all": "node scripts/start-all.mjs",
-    "dev": "next dev -p 3001",
-    "tunnel": "ngrok http --url=crayfish-exodus-stingray.ngrok-free.dev 3001",
+    "dev": "next dev",
+    "tunnel": "npx ngrok http --url=crayfish-exodus-stingray.ngrok-free.dev 3000",
     "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\"",
     "build": "next build",
     "start": "next start",

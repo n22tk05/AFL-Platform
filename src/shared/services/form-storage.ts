@@ -2,6 +2,7 @@ import { FormWorkflow, FormStatus } from "@/shared/contracts";
 import initialTemplates from "../../../assets/mock-data/mock-admin-templates.json";
 import mockLptb from "../../../assets/mock-data/mock-workflow-01-lptb.json";
 import mockKhaiSinh from "../../../assets/mock-data/mock-workflow-khai-sinh-lai.json";
+import mockVphc from "../../../assets/mock-data/mock-workflow-tpl_02_vphc.json";
 
 const DRAFT_PREFIX = "afl_workflow_draft_";
 const PUBLISHED_PREFIX = "afl_workflow_published_";
@@ -94,6 +95,7 @@ export const FormStorageService = {
     let fallback: any = null;
     if (templateId === "tpl_03_khai_sinh") fallback = mockKhaiSinh;
     else if (templateId === "tpl_01_lptb") fallback = mockLptb;
+    else if (templateId === "tpl_02_vphc") fallback = mockVphc;
 
     if (fallback && (fallback.status || "").toUpperCase() === "ACTIVE") {
       return {
@@ -120,6 +122,7 @@ export const FormStorageService = {
             templateId: parsed.templateId || templateId,
             formTitle: parsed.formTitle || parsed.formTitleVi || "Biểu mẫu hành chính",
             formTitleVi: parsed.formTitleVi || parsed.formTitle || "Biểu mẫu hành chính",
+            status: ((parsed.status || "DRAFT") as string).toUpperCase() as FormStatus,
           };
         } catch {}
       }
@@ -132,6 +135,7 @@ export const FormStorageService = {
             templateId: parsed.templateId || templateId,
             formTitle: parsed.formTitle || parsed.formTitleVi || "Biểu mẫu hành chính",
             formTitleVi: parsed.formTitleVi || parsed.formTitle || "Biểu mẫu hành chính",
+            status: ((parsed.status || "ACTIVE") as string).toUpperCase() as FormStatus,
           };
         } catch {}
       }
@@ -139,13 +143,23 @@ export const FormStorageService = {
 
     let defaultWorkflow: any = mockLptb;
     if (templateId === "tpl_03_khai_sinh") defaultWorkflow = mockKhaiSinh;
+    else if (templateId === "tpl_02_vphc") defaultWorkflow = mockVphc;
+
+    // Tìm template gốc để lấy đúng trạng thái danh mục đã khai báo
+    const targetTemplate = (initialTemplates as any[]).find(
+      (t: any) => t.id === templateId || t.formCode === templateId
+    );
+    const declaredStatus = targetTemplate
+      ? targetTemplate.status
+      : (defaultWorkflow.status || "PENDING_REVIEW");
 
     return {
       ...defaultWorkflow,
-      templateId: defaultWorkflow.templateId || templateId,
-      formTitle: defaultWorkflow.formTitle || defaultWorkflow.formTitleVi || "Biểu mẫu hành chính",
-      formTitleVi: defaultWorkflow.formTitleVi || defaultWorkflow.formTitle || "Biểu mẫu hành chính",
-      status: (defaultWorkflow.status as FormStatus) || "ACTIVE",
+      templateId: templateId,
+      formCode: targetTemplate?.formCode || defaultWorkflow.formCode || templateId,
+      formTitle: targetTemplate?.title || defaultWorkflow.formTitleVi || defaultWorkflow.formTitle || "Biểu mẫu hành chính",
+      formTitleVi: targetTemplate?.title || defaultWorkflow.formTitleVi || defaultWorkflow.formTitle || "Biểu mẫu hành chính",
+      status: (declaredStatus || "PENDING_REVIEW").toUpperCase() as FormStatus,
     };
   },
 

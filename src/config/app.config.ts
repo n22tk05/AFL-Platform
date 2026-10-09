@@ -8,6 +8,7 @@ import mockManifestJson from '../../assets/mock-data/mock-manifest.json';
 import mockWorkflowJson from '../../assets/mock-data/mock-workflow.json';
 import mockWorkflowLptb from '../../assets/mock-data/mock-workflow-01-lptb.json';
 import mockWorkflowKhaiSinh from '../../assets/mock-data/mock-workflow-khai-sinh-lai.json';
+import mockWorkflowVphc from '../../assets/mock-data/mock-workflow-tpl_02_vphc.json';
 import { FormGeometricManifest, FormWorkflow } from '@/shared/contracts';
 
 export interface AppConfig {
@@ -67,6 +68,7 @@ export const APP_CONFIG: AppConfig = {
 export const MOCK_WORKFLOW_REGISTRY: Record<string, FormWorkflow> = {
   tpl_01_lptb: mockWorkflowLptb as unknown as FormWorkflow,
   tpl_03_khai_sinh: mockWorkflowKhaiSinh as unknown as FormWorkflow,
+  tpl_02_vphc: mockWorkflowVphc as unknown as FormWorkflow,
 };
 
 /**

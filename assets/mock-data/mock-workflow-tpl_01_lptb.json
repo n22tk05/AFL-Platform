@@ -4,7 +4,7 @@
   "formCode": "01/LPTB",
   "formTitle": "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
   "formTitleVi": "Tờ Khai Lệ Phí Trước Bạ Nhà, Đất",
-  "status": "active",
+  "status": "ACTIVE",
   "circularInfo": "Mẫu số 01/LPTB kèm theo Thông tư số 89/2026/TT-BTC ngày 30/6/2026 của Bộ trưởng Bộ Tài chính",
   "totalPages": 2,
   "pages": [
@@ -894,6 +894,6 @@
       ]
     }
   ],
-  "version": 2,
-  "publishedAt": "2026-09-27T12:34:50.177Z"
+  "version": 4,
+  "publishedAt": "2026-10-05T15:52:07.353Z"
 }
