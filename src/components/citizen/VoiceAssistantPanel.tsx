@@ -56,9 +56,25 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
   const transcriptRef = useRef<string>("");
   const lastSubmittedQuestionRef = useRef<string>("");
 
+  const alive = useRef(true);
+
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
   // Đọc câu thoại bằng Web Speech Synthesis qua utility chung (tốc độ 0.9x)
   const speakText = useCallback((text: string) => {
-    if (alive.current && typeof window !== "undefined" && "speechSynthesis" in window) {
+    if (
+      alive.current &&
+      typeof window !== "undefined" &&
+      "speechSynthesis" in window
+    ) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "vi-VN";
@@ -70,7 +86,8 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
     }
   }, []);
 
-  const askQuestionRef = useRef<(code: string, idx: number, q: string) => Promise<void>>();
+  const askQuestionRef =
+    useRef<(code: string, idx: number, q: string) => Promise<void>>();
 
   const {
     isListening: internalIsListening,
@@ -83,7 +100,6 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
     stopAudio,
   } = useVoiceAssistant({
     onTranscriptUpdate: (text, isFinal) => {
-      if (!alive.current) return;
       transcriptRef.current = text;
       if (text.trim()) {
         setLastQuestionText(text.trim());
@@ -93,7 +109,6 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
       }
     },
     onAnswerReceived: (answerText) => {
-      if (!alive.current) return;
       setFaqAnswer(answerText);
       speakText(answerText);
     },
@@ -103,9 +118,13 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
 
   // Xác định trạng thái thực tế (Ưu tiên controlled props nếu có, fallback sang internal hook)
   const isListeningEffective =
-    controlledIsListening !== undefined ? controlledIsListening : internalIsListening;
+    controlledIsListening !== undefined
+      ? controlledIsListening
+      : internalIsListening;
   const isAnsweringEffective =
-    controlledIsAnswering !== undefined ? controlledIsAnswering : internalIsAnswering;
+    controlledIsAnswering !== undefined
+      ? controlledIsAnswering
+      : internalIsAnswering;
   const transcriptEffective =
     controlledTranscript !== undefined
       ? controlledTranscript
@@ -117,12 +136,13 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
     (q: string) => {
       const trimmed = q.trim();
       if (!trimmed) return;
-      if (lastSubmittedQuestionRef.current === trimmed && isAnsweringEffective) return;
+      if (lastSubmittedQuestionRef.current === trimmed && isAnsweringEffective)
+        return;
       lastSubmittedQuestionRef.current = trimmed;
       setLastQuestionText(trimmed);
       askQuestion(formCode, stepIndex, trimmed);
     },
-    [formCode, stepIndex, askQuestion, isAnsweringEffective]
+    [formCode, stepIndex, askQuestion, isAnsweringEffective],
   );
 
   // Tự động phát khi chuyển bước
@@ -225,12 +245,16 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
               isListeningEffective
                 ? "bg-red-500 animate-ping"
                 : isAnsweringEffective
-                ? "bg-amber-400 animate-pulse"
-                : "bg-emerald-400"
+                  ? "bg-amber-400 animate-pulse"
+                  : "bg-emerald-400"
             }`}
           />
           <span className="text-[11px] font-black tracking-wider text-white uppercase">
-            {isListeningEffective ? "ĐANG THU ÂM" : isAnsweringEffective ? "ĐANG DÒ SÓNG" : "SẴN SÀNG"}
+            {isListeningEffective
+              ? "ĐANG THU ÂM"
+              : isAnsweringEffective
+                ? "ĐANG DÒ SÓNG"
+                : "SẴN SÀNG"}
           </span>
         </div>
       </div>
@@ -269,7 +293,9 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
             <div className="bg-emerald-950 text-white rounded-2xl p-3.5 space-y-2 relative overflow-hidden shadow-inner">
               <div className="flex justify-between text-[10px] font-mono text-emerald-400 font-bold">
                 <span>FM 88.0</span>
-                <span className="text-white bg-emerald-700 px-1.5 rounded">FM 100.5 MHz</span>
+                <span className="text-white bg-emerald-700 px-1.5 rounded">
+                  FM 100.5 MHz
+                </span>
                 <span>FM 108.0</span>
               </div>
 
@@ -299,12 +325,15 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
               </div>
               <div className="flex items-center gap-2 text-slate-700 font-extrabold animate-pulse">
                 <span className="w-4 h-4 rounded-full border-2 border-amber-600 border-t-transparent animate-spin shrink-0" />
-                <span>Bước 2: Đang đối chiếu quy định thủ tục hành chính...</span>
+                <span>
+                  Bước 2: Đang đối chiếu quy định thủ tục hành chính...
+                </span>
               </div>
             </div>
 
             <p className="text-[11px] text-slate-500 italic text-center pt-1 font-medium">
-              &ldquo;Bác đợi cháu vài giây, hệ thống đang tổng hợp bản tin phát thanh...&rdquo;
+              &ldquo;Bác đợi cháu vài giây, hệ thống đang tổng hợp bản tin phát
+              thanh...&rdquo;
             </p>
           </div>
         )}
@@ -319,7 +348,9 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
                 <span className="flex h-3 w-3 relative">
                   <span
                     className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
-                      activePlaying ? "bg-red-500 opacity-75" : "bg-emerald-500 opacity-75"
+                      activePlaying
+                        ? "bg-red-500 opacity-75"
+                        : "bg-emerald-500 opacity-75"
                     }`}
                   />
                   <span
@@ -329,7 +360,9 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
                   />
                 </span>
                 <span className="text-xs sm:text-sm font-black text-emerald-950 uppercase tracking-wide">
-                  {lastAnswerEffective ? "Bản Tin Giải Đáp Một Cửa" : "Bản Tin Hướng Dẫn Kê Khai"}
+                  {lastAnswerEffective
+                    ? "Bản Tin Giải Đáp Một Cửa"
+                    : "Bản Tin Hướng Dẫn Kê Khai"}
                 </span>
                 {activePlaying && (
                   <span className="text-[10px] font-black uppercase text-red-600 tracking-wider bg-red-100 px-1.5 py-0.5 rounded border border-red-300">
@@ -434,15 +467,17 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
               isListeningEffective
                 ? "bg-red-700 hover:bg-red-800 text-white ring-4 ring-red-300 scale-[1.02]"
                 : isAnsweringEffective
-                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                : "bg-emerald-700 hover:bg-emerald-800 text-white border-2 border-emerald-600"
+                  ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                  : "bg-emerald-700 hover:bg-emerald-800 text-white border-2 border-emerald-600"
             }`}
             disabled={isAnsweringEffective}
           >
             {/* Vòng tròn Icon */}
             <div
               className={`w-12 h-12 rounded-full flex items-center justify-center shadow-inner ${
-                isListeningEffective ? "bg-white text-red-700 animate-pulse" : "bg-white/20 text-white"
+                isListeningEffective
+                  ? "bg-white text-red-700 animate-pulse"
+                  : "bg-white/20 text-white"
               }`}
             >
               {isListeningEffective ? (
@@ -458,15 +493,15 @@ export const VoiceAssistantPanel: React.FC<VoiceAssistantPanelProps> = ({
                 {isListeningEffective
                   ? "BÁC NÓI XONG BẤM VÀO ĐÂY"
                   : isAnsweringEffective
-                  ? "ĐANG TRA CỨU HƯỚNG DẪN..."
-                  : "CHẠM ĐỂ NÓI CÂU HỎI"}
+                    ? "ĐANG TRA CỨU HƯỚNG DẪN..."
+                    : "CHẠM ĐỂ NÓI CÂU HỎI"}
               </div>
               <div className="text-xs font-medium text-emerald-100/90 leading-tight mt-0.5">
                 {isListeningEffective
                   ? "Chạm vào để kết thúc câu hỏi và nhận câu trả lời"
                   : isAnsweringEffective
-                  ? "Đài phát thanh đang chuẩn bị giải đáp cho bác"
-                  : "Chạm 1 lần rồi đọc câu hỏi thong thả"}
+                    ? "Đài phát thanh đang chuẩn bị giải đáp cho bác"
+                    : "Chạm 1 lần rồi đọc câu hỏi thong thả"}
               </div>
             </div>
           </button>
