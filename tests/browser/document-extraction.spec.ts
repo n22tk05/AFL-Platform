@@ -45,7 +45,7 @@ test('clean scan, evidence, review, expiry-safe navigation and three consecutive
     expect(offset).toBeGreaterThan(0);dimensions.push([bytes.readUInt32BE(offset+16),bytes.readUInt32BE(offset+20)]);
     await route.fulfill({json:{success:true,data:result}});
   });
-  await page.goto('/scan-document'); await page.getByRole('checkbox', { name: 'Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.' }).check();
+  await page.goto('/scan-document?templateId=tpl_01_lptb'); await page.getByRole('checkbox', { name: 'Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.' }).check();
   await page.getByLabel('Nguồn ảnh').selectOption('clean-scan');
   await page.getByLabel('1. Chọn ảnh').setInputFiles({name:'synthetic.png',mimeType:'image/png',buffer:await synthetic(page,'clean')});
   await page.getByRole('checkbox', { name: 'Tôi đồng ý gửi nội dung chữ đã đọc tới Gemini để trích xuất trường.' }).check(); await page.getByRole('button',{name:'Đọc chứng từ',exact:true}).click();

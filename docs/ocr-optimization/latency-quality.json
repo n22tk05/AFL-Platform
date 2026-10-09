@@ -1,0 +1,97 @@
+{
+  "syntheticOnly": true,
+  "baseline": "after.json",
+  "optimized": "latency-after.json",
+  "comparisons": [
+    {
+      "fixture": "TC01",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0.008141112618724558,
+      "wer": 0.018404907975460124,
+      "processingTimeMs": 4677.6216999996905
+    },
+    {
+      "fixture": "TC02",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": null,
+      "wer": null,
+      "processingTimeMs": 3046.490100000483
+    },
+    {
+      "fixture": "TC03",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0.017114914425427872,
+      "wer": 0.07692307692307693,
+      "processingTimeMs": 3624.171800000113
+    },
+    {
+      "fixture": "TC04",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0,
+      "wer": 0,
+      "processingTimeMs": 2546.058300000368
+    },
+    {
+      "fixture": "TC05",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0.014388489208633094,
+      "wer": 0.07142857142857142,
+      "processingTimeMs": 3371.3277999995626
+    },
+    {
+      "fixture": "TC06",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0.016055045871559634,
+      "wer": 0.047058823529411764,
+      "processingTimeMs": 2946.4293999999427
+    },
+    {
+      "fixture": "TC07",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0.013761467889908258,
+      "wer": 0.03529411764705882,
+      "processingTimeMs": 2882.949400000143
+    },
+    {
+      "fixture": "TC08",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0.016260162601626018,
+      "wer": 0.05660377358490566,
+      "processingTimeMs": 2118.3894999994664
+    },
+    {
+      "fixture": "TC09",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": 0.0015772870662460567,
+      "wer": 0.006896551724137931,
+      "processingTimeMs": 4146.1239999998725
+    },
+    {
+      "fixture": "TC10",
+      "sameText": true,
+      "sameCer": true,
+      "sameWer": true,
+      "cer": null,
+      "wer": null,
+      "processingTimeMs": 69.4244999995135
+    }
+  ]
+}

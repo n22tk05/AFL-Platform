@@ -77,11 +77,9 @@ test("checkbox detector filters invalid shapes and retains true square checkboxe
   const mockBinaryMat = {
     cols: 1200,
     rows: 1600,
-    clone: () => ({
-      cols: 1200,
-      rows: 1600,
-      delete: () => { clonedMatDeleted = true; },
-    } as unknown as CvMat),
+    copyTo: (destination: CvMat) => {
+      destination.delete = () => { clonedMatDeleted = true; };
+    },
   } as unknown as CvMat;
 
   const mockCv = {

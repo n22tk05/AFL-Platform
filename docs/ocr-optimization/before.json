@@ -1,0 +1,1274 @@
+{
+  "syntheticOnly": true,
+  "device": "cpu",
+  "results": [
+    {
+      "fixture": "TC01",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+          "confidence": 0.7248032986022094,
+          "coordinates": [
+            0.038181818181818185,
+            0.2964705882352941,
+            0.060909090909090906,
+            0.7035294117647058
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Độc lập - Tự do - Hạnh phúc",
+          "confidence": 0.9032394896660533,
+          "coordinates": [
+            0.06454545454545454,
+            0.36705882352941177,
+            0.08363636363636363,
+            0.6317647058823529
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "GIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN",
+          "confidence": 0.6463543047075686,
+          "coordinates": [
+            0.12454545454545454,
+            0.22705882352941176,
+            0.15363636363636363,
+            0.7729411764705882
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "Hà Nội, ngày 18 tháng 05 năm 2026",
+          "confidence": 0.7121984123931093,
+          "coordinates": [
+            0.17909090909090908,
+            0.64,
+            0.19727272727272727,
+            0.9317647058823529
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "Kính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân",
+          "confidence": 0.8793699035226409,
+          "coordinates": [
+            0.22,
+            0.06941176470588235,
+            0.24363636363636362,
+            0.7
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG",
+          "confidence": 0.9311041153710464,
+          "coordinates": [
+            0.27636363636363637,
+            0.07058823529411765,
+            0.2963636363636364,
+            0.37411764705882355
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "2. Ngày sinh: 25 tháng 10 năm 1978",
+          "confidence": 0.5969513784059219,
+          "coordinates": [
+            0.3190909090909091,
+            0.06823529411764706,
+            0.3390909090909091,
+            0.3811764705882353
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội",
+          "confidence": 0.8340825766324997,
+          "coordinates": [
+            0.3572727272727273,
+            0.06941176470588235,
+            0.38,
+            0.5835294117647059
+          ]
+        },
+        {
+          "lineId": "line_009",
+          "text": "4. Dân tộc: Kinh Quốc tịch: Việt Nam",
+          "confidence": 0.6544749078315657,
+          "coordinates": [
+            0.3990909090909091,
+            0.06823529411764706,
+            0.41909090909090907,
+            0.38235294117647056
+          ]
+        },
+        {
+          "lineId": "line_010",
+          "text": "5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng",
+          "confidence": 0.9223833531141281,
+          "coordinates": [
+            0.44,
+            0.06941176470588235,
+            0.4618181818181818,
+            0.7776470588235294
+          ]
+        },
+        {
+          "lineId": "line_011",
+          "text": "6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi",
+          "confidence": 0.8841969425028021,
+          "coordinates": [
+            0.4809090909090909,
+            0.06823529411764706,
+            0.5027272727272727,
+            0.5835294117647059
+          ]
+        },
+        {
+          "lineId": "line_012",
+          "text": "7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai",
+          "confidence": 0.8469555080943817,
+          "coordinates": [
+            0.5218181818181818,
+            0.06941176470588235,
+            0.5436363636363636,
+            0.5658823529411765
+          ]
+        },
+        {
+          "lineId": "line_013",
+          "text": "8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại",
+          "confidence": 0.9307435495512826,
+          "coordinates": [
+            0.5618181818181818,
+            0.06823529411764706,
+            0.5845454545454546,
+            0.7270588235294118
+          ]
+        },
+        {
+          "lineId": "line_014",
+          "text": "NGƯỜI LÀM ĐƠN",
+          "confidence": 0.9340556539022006,
+          "coordinates": [
+            0.6654545454545454,
+            0.1423529411764706,
+            0.6863636363636364,
+            0.32823529411764707
+          ]
+        },
+        {
+          "lineId": "line_015",
+          "text": "CHỦ TỊCH UBND PHƯỜNG",
+          "confidence": 0.9334028840065003,
+          "coordinates": [
+            0.6654545454545454,
+            0.6305882352941177,
+            0.6881818181818182,
+            0.8988235294117647
+          ]
+        },
+        {
+          "lineId": "line_016",
+          "text": "(Ký, ghi rõ họ tên)",
+          "confidence": 0.9201556632393285,
+          "coordinates": [
+            0.6927272727272727,
+            0.09176470588235294,
+            0.7109090909090909,
+            0.24941176470588236
+          ]
+        },
+        {
+          "lineId": "line_017",
+          "text": "(Ký, đóng dấu)",
+          "confidence": 0.9314997664519719,
+          "coordinates": [
+            0.6909090909090909,
+            0.6435294117647059,
+            0.7109090909090909,
+            0.7788235294117647
+          ]
+        },
+        {
+          "lineId": "line_018",
+          "text": "Trần Đăng Quang",
+          "confidence": 0.8891858449205756,
+          "coordinates": [
+            0.7663636363636364,
+            0.14823529411764705,
+            0.7890909090909091,
+            0.32235294117647056
+          ]
+        },
+        {
+          "lineId": "line_019",
+          "text": "Nguyễn Văn Bình",
+          "confidence": 0.8901649801170125,
+          "coordinates": [
+            0.7672727272727272,
+            0.6788235294117647,
+            0.7890909090909091,
+            0.851764705882353
+          ]
+        }
+      ],
+      "processingTimeMs": 9582.033299999921,
+      "actualText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\nTrần Đăng Quang\nNguyễn Văn Bình",
+      "cer": 0.013568521031207599,
+      "wer": 0.04294478527607362
+    },
+    {
+      "fixture": "TC02",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+          "confidence": 0.7898848214401648,
+          "coordinates": [
+            0.038181818181818185,
+            0.2964705882352941,
+            0.060909090909090906,
+            0.7023529411764706
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Độc lập - Tự do - Hạnh phúc",
+          "confidence": 0.8629579236430507,
+          "coordinates": [
+            0.06454545454545454,
+            0.36705882352941177,
+            0.08363636363636363,
+            0.6317647058823529
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "ĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE",
+          "confidence": 0.6974944259632717,
+          "coordinates": [
+            0.12636363636363637,
+            0.24588235294117647,
+            0.15272727272727274,
+            0.7529411764705882
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "HỌ VÀ TÊN: NGUYỄN VĂN AN",
+          "confidence": 0.9172956347465515,
+          "coordinates": [
+            0.20363636363636364,
+            0.06941176470588235,
+            0.22363636363636363,
+            0.32823529411764707
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "Ngày sinh:",
+          "confidence": 0.9057469725608825,
+          "coordinates": [
+            0.25545454545454543,
+            0.06941176470588235,
+            0.27454545454545454,
+            0.17882352941176471
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "Số CCCD: 001085012345",
+          "confidence": 0.790551669895649,
+          "coordinates": [
+            0.30363636363636365,
+            0.06941176470588235,
+            0.32272727272727275,
+            0.30117647058823527
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "Ngày cấp: 12/03/2021",
+          "confidence": 0.9242464959621429,
+          "coordinates": [
+            0.30363636363636365,
+            0.36941176470588233,
+            0.3245454545454545,
+            0.5670588235294117
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "Nơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.",
+          "confidence": 0.9222265138464459,
+          "coordinates": [
+            0.3527272727272727,
+            0.06941176470588235,
+            0.37454545454545457,
+            0.5835294117647059
+          ]
+        },
+        {
+          "lineId": "line_009",
+          "text": "Nơi đăng ký thường trú:",
+          "confidence": 0.9326744364655536,
+          "coordinates": [
+            0.40545454545454546,
+            0.06941176470588235,
+            0.42454545454545456,
+            0.28352941176470586
+          ]
+        },
+        {
+          "lineId": "line_010",
+          "text": "Nơi ở hiện nay",
+          "confidence": 0.9332450372832162,
+          "coordinates": [
+            0.44636363636363635,
+            0.06941176470588235,
+            0.46545454545454545,
+            0.2164705882352941
+          ]
+        },
+        {
+          "lineId": "line_011",
+          "text": "Giấy phép lái xe số: 790154823901",
+          "confidence": 0.929563581943512,
+          "coordinates": [
+            0.49454545454545457,
+            0.06823529411764706,
+            0.5154545454545455,
+            0.37176470588235294
+          ]
+        },
+        {
+          "lineId": "line_012",
+          "text": "Hạng: B2",
+          "confidence": 0.6987089110272271,
+          "coordinates": [
+            0.49636363636363634,
+            0.49176470588235294,
+            0.5154545454545455,
+            0.5929411764705882
+          ]
+        },
+        {
+          "lineId": "line_013",
+          "text": "Lý do đề nghị:",
+          "confidence": 0.9354905230658395,
+          "coordinates": [
+            0.5445454545454546,
+            0.06941176470588235,
+            0.5654545454545454,
+            0.20588235294117646
+          ]
+        }
+      ],
+      "processingTimeMs": 4097.1316999998635,
+      "actualText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nĐƠN ĐỀ NGHỊ CẤP ĐỔI GIẤY PHÉP LÁI XE\nHỌ VÀ TÊN: NGUYỄN VĂN AN\nNgày sinh:\nSố CCCD: 001085012345\nNgày cấp: 12/03/2021\nNơi cấp: Cục Cảnh sát quản lý hành chính về trật tự xã hội.\nNơi đăng ký thường trú:\nNơi ở hiện nay\nGiấy phép lái xe số: 790154823901\nHạng: B2\nLý do đề nghị:",
+      "cer": null,
+      "wer": null
+    },
+    {
+      "fixture": "TC03",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+          "confidence": 0.6710992110046473,
+          "coordinates": [
+            0.038181818181818185,
+            0.2964705882352941,
+            0.060909090909090906,
+            0.7023529411764706
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Độc lập - Tự do - Hạnh phúc",
+          "confidence": 0.9258042507701449,
+          "coordinates": [
+            0.06454545454545454,
+            0.36705882352941177,
+            0.08363636363636363,
+            0.6317647058823529
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "TỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ",
+          "confidence": 0.7351356155815578,
+          "coordinates": [
+            0.11727272727272728,
+            0.2611764705882353,
+            0.1409090909090909,
+            0.7376470588235294
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "1. Họ và tên: Lê Thị MAI",
+          "confidence": 0.8497392497956753,
+          "coordinates": [
+            0.19363636363636363,
+            0.07058823529411765,
+            0.21545454545454545,
+            0.29411764705882354
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "2. Giới tính: nữ",
+          "confidence": 0.8531905836180637,
+          "coordinates": [
+            0.19636363636363635,
+            0.5976470588235294,
+            0.21363636363636362,
+            0.7482352941176471
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "3. Ngày sinh: 20/11/1965",
+          "confidence": 0.8839359112359859,
+          "coordinates": [
+            0.2509090909090909,
+            0.06941176470588235,
+            0.27,
+            0.2917647058823529
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "4. Dân tộc: Kinh",
+          "confidence": 0.9082626551389694,
+          "coordinates": [
+            0.2509090909090909,
+            0.40941176470588236,
+            0.2690909090909091,
+            0.5658823529411765
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "5. Quốc tịch: Việt Nam",
+          "confidence": 0.9147219143130563,
+          "coordinates": [
+            0.24909090909090909,
+            0.6694117647058824,
+            0.27,
+            0.8752941176470588
+          ]
+        },
+        {
+          "lineId": "line_009",
+          "text": "6. Số định danh cá nhân: 036165004321",
+          "confidence": 0.7639732382753316,
+          "coordinates": [
+            0.30363636363636365,
+            0.06823529411764706,
+            0.3236363636363636,
+            0.41294117647058826
+          ]
+        },
+        {
+          "lineId": "line_010",
+          "text": "7. Số điện thoại: 0912345678",
+          "confidence": 0.9207503157002586,
+          "coordinates": [
+            0.30363636363636365,
+            0.5517647058823529,
+            0.3236363636363636,
+            0.8094117647058824
+          ]
+        },
+        {
+          "lineId": "line_011",
+          "text": "8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội",
+          "confidence": 0.9219458870691796,
+          "coordinates": [
+            0.3572727272727273,
+            0.06823529411764706,
+            0.3790909090909091,
+            0.7388235294117647
+          ]
+        },
+        {
+          "lineId": "line_012",
+          "text": "9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh",
+          "confidence": 0.7559709233650262,
+          "coordinates": [
+            0.41454545454545455,
+            0.06823529411764706,
+            0.43363636363636365,
+            0.48470588235294115
+          ]
+        },
+        {
+          "lineId": "line_013",
+          "text": "10. Quan hệ: chủ hộ",
+          "confidence": 0.895546168088913,
+          "coordinates": [
+            0.41454545454545455,
+            0.6,
+            0.43363636363636365,
+            0.7929411764705883
+          ]
+        }
+      ],
+      "processingTimeMs": 4991.416600000093,
+      "actualText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nTỜ KHAI THAY ĐỔI THÔNG TIN CƯ TRÚ\n1. Họ và tên: Lê Thị MAI\n2. Giới tính: nữ\n3. Ngày sinh: 20/11/1965\n4. Dân tộc: Kinh\n5. Quốc tịch: Việt Nam\n6. Số định danh cá nhân: 036165004321\n7. Số điện thoại: 0912345678\n8. Nơi thường trú: Số 12 phố Huế, phường Hàng Bài, quận Hoàn Kiếm, Hà Nội\n9. Nơi tạm trú: Xã Kim Chung, huyện Đông Anh\n10. Quan hệ: chủ hộ",
+      "cer": 0.017114914425427872,
+      "wer": 0.06593406593406594
+    },
+    {
+      "fixture": "TC04",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+          "confidence": 0.934822928160429,
+          "coordinates": [
+            0.034545454545454546,
+            0.28,
+            0.06181818181818182,
+            0.7222222222222222
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "LIES",
+          "confidence": 0.6042819693684578,
+          "coordinates": [
+            0.09636363636363636,
+            0.052222222222222225,
+            0.32727272727272727,
+            0.9488888888888889
+          ]
+        }
+      ],
+      "processingTimeMs": 599.0626000000248,
+      "actualText": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\nLIES",
+      "cer": 0.8759124087591241,
+      "wer": 0.8709677419354839
+    },
+    {
+      "fixture": "TC05",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+          "confidence": 0.8302967409292857,
+          "coordinates": [
+            0.038181818181818185,
+            0.2964705882352941,
+            0.060909090909090906,
+            0.7023529411764706
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Độc lập - Tự do - Hạnh phúc",
+          "confidence": 0.9258042618080422,
+          "coordinates": [
+            0.06454545454545454,
+            0.36705882352941177,
+            0.08363636363636363,
+            0.6317647058823529
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "PHIẾU ĐĂNG KÝ PHƯƠNG THỨC TRẢ KẾT QUẢ",
+          "confidence": 0.918368556781819,
+          "coordinates": [
+            0.11727272727272728,
+            0.21529411764705883,
+            0.1409090909090909,
+            0.7858823529411765
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "Phương thức nhận kết quả giải quyết:",
+          "confidence": 0.8612066918895358,
+          "coordinates": [
+            0.19272727272727272,
+            0.06941176470588235,
+            0.21636363636363637,
+            0.45294117647058824
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "Nhận kết quả trực tiếp tại bộ phận một cửa",
+          "confidence": 0.9105123792375837,
+          "coordinates": [
+            0.23454545454545456,
+            0.10470588235294118,
+            0.25636363636363635,
+            0.4894117647058824
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "Đ Nhận kết quả qua dịch vụ bưu chính công ích",
+          "confidence": 0.9208893934885661,
+          "coordinates": [
+            0.27545454545454545,
+            0.10470588235294118,
+            0.2972727272727273,
+            0.5070588235294118
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "II. Hình thức thanh toán phí, lệ phí:",
+          "confidence": 0.9290962476988096,
+          "coordinates": [
+            0.3409090909090909,
+            0.06941176470588235,
+            0.3609090909090909,
+            0.40588235294117647
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "[x] Thanh toán trực tuyến qua Cổng dịch vụ công",
+          "confidence": 0.9250014779415536,
+          "coordinates": [
+            0.38,
+            0.10470588235294118,
+            0.4027272727272727,
+            0.5129411764705882
+          ]
+        },
+        {
+          "lineId": "line_009",
+          "text": "[] Nộp tiền mặt trực tiếp tại quầy thu ngân",
+          "confidence": 0.9237362904982134,
+          "coordinates": [
+            0.4218181818181818,
+            0.10470588235294118,
+            0.44272727272727275,
+            0.4611764705882353
+          ]
+        },
+        {
+          "lineId": "line_010",
+          "text": "III. Loại hồ sơ yêu cầu:",
+          "confidence": 0.9241341128945351,
+          "coordinates": [
+            0.48363636363636364,
+            0.06941176470588235,
+            0.5072727272727273,
+            0.2988235294117647
+          ]
+        },
+        {
+          "lineId": "line_011",
+          "text": "Cấp mới",
+          "confidence": 0.6630498308401841,
+          "coordinates": [
+            0.5263636363636364,
+            0.10470588235294118,
+            0.5472727272727272,
+            0.2188235294117647
+          ]
+        },
+        {
+          "lineId": "line_012",
+          "text": "0 Cấp đổi",
+          "confidence": 0.7929858499103122,
+          "coordinates": [
+            0.5254545454545455,
+            0.3635294117647059,
+            0.5472727272727272,
+            0.47058823529411764
+          ]
+        },
+        {
+          "lineId": "line_013",
+          "text": "Ở Cấp lại",
+          "confidence": 0.8558610164456897,
+          "coordinates": [
+            0.5263636363636364,
+            0.6223529411764706,
+            0.5472727272727272,
+            0.7235294117647059
+          ]
+        }
+      ],
+      "processingTimeMs": 3987.455000000182,
+      "actualText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nPHIẾU ĐĂNG KÝ PHƯƠNG THỨC TRẢ KẾT QUẢ\nPhương thức nhận kết quả giải quyết:\nNhận kết quả trực tiếp tại bộ phận một cửa\nĐ Nhận kết quả qua dịch vụ bưu chính công ích\nII. Hình thức thanh toán phí, lệ phí:\n[x] Thanh toán trực tuyến qua Cổng dịch vụ công\n[] Nộp tiền mặt trực tiếp tại quầy thu ngân\nIII. Loại hồ sơ yêu cầu:\nCấp mới\n0 Cấp đổi\nỞ Cấp lại",
+      "cer": 0.03597122302158273,
+      "wer": 0.12244897959183673
+    },
+    {
+      "fixture": "TC06",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+          "confidence": 0.7234524561692093,
+          "coordinates": [
+            0.038181818181818185,
+            0.2964705882352941,
+            0.060909090909090906,
+            0.7023529411764706
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Độc lập - Tự do - Hạnh phúc",
+          "confidence": 0.903239481151104,
+          "coordinates": [
+            0.06454545454545454,
+            0.36705882352941177,
+            0.08363636363636363,
+            0.6317647058823529
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "BIÊN BẢN VI PHẠM HÀNH CHÍNH",
+          "confidence": 0.9182636152053701,
+          "coordinates": [
+            0.11727272727272728,
+            0.3,
+            0.14363636363636365,
+            0.7
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "Số biên bản: 001248/BB-VPHC",
+          "confidence": 0.9286468006946422,
+          "coordinates": [
+            0.17636363636363636,
+            0.06941176470588235,
+            0.19545454545454546,
+            0.34352941176470586
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "Ngày lập biên bản: 05/09/2026",
+          "confidence": 0.9351472053034552,
+          "coordinates": [
+            0.2190909090909091,
+            0.06941176470588235,
+            0.2381818181818182,
+            0.33647058823529413
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "HỌ VÀ TÊN: HOÀNG VĂN THẮNG",
+          "confidence": 0.9190742792906584,
+          "coordinates": [
+            0.25727272727272726,
+            0.06941176470588235,
+            0.2781818181818182,
+            0.3564705882352941
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "Số CCCD: 038092008765",
+          "confidence": 0.8486822843551636,
+          "coordinates": [
+            0.2990909090909091,
+            0.06941176470588235,
+            0.3181818181818182,
+            0.30117647058823527
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "Biển số xe: 29B1-045.89",
+          "confidence": 0.8543683014534138,
+          "coordinates": [
+            0.3390909090909091,
+            0.06941176470588235,
+            0.35909090909090907,
+            0.29058823529411765
+          ]
+        },
+        {
+          "lineId": "line_009",
+          "text": "Hành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h",
+          "confidence": 0.9261196902165046,
+          "coordinates": [
+            0.3890909090909091,
+            0.06941176470588235,
+            0.4109090909090909,
+            0.6494117647058824
+          ]
+        },
+        {
+          "lineId": "line_010",
+          "text": "Số tiền phạt: 2.500.000 đồng",
+          "confidence": 0.9317146603550229,
+          "coordinates": [
+            0.4390909090909091,
+            0.06941176470588235,
+            0.46090909090909093,
+            0.32588235294117646
+          ]
+        },
+        {
+          "lineId": "line_011",
+          "text": "Hạn nộp phạt: 15/09/2026",
+          "confidence": 0.9323981354633967,
+          "coordinates": [
+            0.4827272727272727,
+            0.06941176470588235,
+            0.5018181818181818,
+            0.3
+          ]
+        },
+        {
+          "lineId": "line_012",
+          "text": "Số tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây",
+          "confidence": 0.9276405283899019,
+          "coordinates": [
+            0.5218181818181818,
+            0.06941176470588235,
+            0.5427272727272727,
+            0.6435294117647059
+          ]
+        },
+        {
+          "lineId": "line_013",
+          "text": "Số quyết định: 00892/QĐ-XPHC",
+          "confidence": 0.9312654776232583,
+          "coordinates": [
+            0.5627272727272727,
+            0.06941176470588235,
+            0.5836363636363636,
+            0.34823529411764703
+          ]
+        }
+      ],
+      "processingTimeMs": 4710.352600000078,
+      "actualText": "CỌNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nBIÊN BẢN VI PHẠM HÀNH CHÍNH\nSố biên bản: 001248/BB-VPHC\nNgày lập biên bản: 05/09/2026\nHỌ VÀ TÊN: HOÀNG VĂN THẮNG\nSố CCCD: 038092008765\nBiển số xe: 29B1-045.89\nHành vi vi phạm: Chạy quá tốc độ quy định từ 10 km/h đến 20 km/h\nSố tiền phạt: 2.500.000 đồng\nHạn nộp phạt: 15/09/2026\nSố tài khoản Kho bạc: 7111.0102.3456 tại Agribank Chi nhánh Hà Tây\nSố quyết định: 00892/QĐ-XPHC",
+      "cer": 0.01834862385321101,
+      "wer": 0.058823529411764705
+    },
+    {
+      "fixture": "TC07",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "CỘNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM",
+          "confidence": 0.49069924444937313,
+          "coordinates": [
+            0.06443514644351464,
+            0.38445807770961143,
+            0.11297071129707113,
+            0.7392638036809815
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Độc lập - Tự do - Hạnh pAV",
+          "confidence": 0.48404334542357313,
+          "coordinates": [
+            0.09205020920502092,
+            0.4427402862985685,
+            0.1280334728033473,
+            0.6738241308793456
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "Phú thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thán",
+          "confidence": 0.38969058058289596,
+          "coordinates": [
+            0.1087866108786611,
+            0.44683026584867075,
+            0.13640167364016736,
+            0.6676891615541922
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "Số biên bản: 001248/BB-VPHC",
+          "confidence": 0.3932374447108583,
+          "coordinates": [
+            0.16903765690376568,
+            0.16973415132924335,
+            0.20669456066945607,
+            0.4110429447852761
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "BIÊN BẢN VỊ PHẠM HÀNH CHÍNH",
+          "confidence": 0.5311347226878362,
+          "coordinates": [
+            0.13640167364016736,
+            0.37627811860940696,
+            0.18744769874476988,
+            0.7259713701431493
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "Ngày lập biên bản: 05/09/2026",
+          "confidence": 0.520342349393727,
+          "coordinates": [
+            0.20753138075313807,
+            0.16359918200409,
+            0.24351464435146444,
+            0.3987730061349693
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "HỌ VÀ TÊN: HOÀNG VĂN THÁNG",
+          "confidence": 0.507832505616049,
+          "coordinates": [
+            0.24518828451882846,
+            0.15848670756646216,
+            0.2820083682008368,
+            0.4100204498977505
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "Số CCCD: 038092008765",
+          "confidence": 0.5095782343408849,
+          "coordinates": [
+            0.28117154811715483,
+            0.1523517382413088,
+            0.31464435146443515,
+            0.35685071574642124
+          ]
+        },
+        {
+          "lineId": "line_009",
+          "text": "Biền số xe: 29B1-045.89",
+          "confidence": 0.4924526453260484,
+          "coordinates": [
+            0.3188284518828452,
+            0.147239263803681,
+            0.3514644351464435,
+            0.3425357873210634
+          ]
+        },
+        {
+          "lineId": "line_010",
+          "text": "Số tiền phạt: 2.500.000 đồng",
+          "confidence": 0.488390645836709,
+          "coordinates": [
+            0.4100418410041841,
+            0.1329243353783231,
+            0.4485355648535565,
+            0.3588957055214724
+          ]
+        },
+        {
+          "lineId": "line_011",
+          "text": "Thời Vì Phạm Chạy Xuất theo độ cuy quan từ 10 kinh đến 30 km?",
+          "confidence": 0.5405729296873873,
+          "coordinates": [
+            0.36569037656903763,
+            0.14008179959100203,
+            0.42845188284518826,
+            0.6441717791411042
+          ]
+        },
+        {
+          "lineId": "line_012",
+          "text": "Hạn nộp phạt: 15/09/2026",
+          "confidence": 0.44018440693616867,
+          "coordinates": [
+            0.4485355648535565,
+            0.1278118609406953,
+            0.4811715481171548,
+            0.3312883435582822
+          ]
+        },
+        {
+          "lineId": "line_013",
+          "text": "Số quyết định: 00892/QĐ-XPHC",
+          "confidence": 0.501730504240525,
+          "coordinates": [
+            0.5221757322175732,
+            0.1165644171779141,
+            0.5598326359832636,
+            0.3619631901840491
+          ]
+        },
+        {
+          "lineId": "line_014",
+          "text": "Số Nghiệm Được Thì Hạng Phám Bị Ap Đanh Chỉ Nhân Hai Trong Thị Thuận Thuận Thuận Thuận Thế Nhất Thế Nhất Thế Thế Thế Thế Thế Thế",
+          "confidence": 0.46636145602363027,
+          "coordinates": [
+            0.4845188284518828,
+            0.12167689161554192,
+            0.5506276150627615,
+            0.621676891615542
+          ]
+        }
+      ],
+      "processingTimeMs": 18649.43920000019,
+      "actualText": "CỘNG HÒA XÃ HỌI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh pAV\nPhú thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thuận thán\nSố biên bản: 001248/BB-VPHC\nBIÊN BẢN VỊ PHẠM HÀNH CHÍNH\nNgày lập biên bản: 05/09/2026\nHỌ VÀ TÊN: HOÀNG VĂN THÁNG\nSố CCCD: 038092008765\nBiền số xe: 29B1-045.89\nSố tiền phạt: 2.500.000 đồng\nThời Vì Phạm Chạy Xuất theo độ cuy quan từ 10 kinh đến 30 km?\nHạn nộp phạt: 15/09/2026\nSố quyết định: 00892/QĐ-XPHC\nSố Nghiệm Được Thì Hạng Phám Bị Ap Đanh Chỉ Nhân Hai Trong Thị Thuận Thuận Thuận Thuận Thế Nhất Thế Nhất Thế Thế Thế Thế Thế Thế",
+      "cer": 0.8004587155963303,
+      "wer": 1
+    },
+    {
+      "fixture": "TC08",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+          "confidence": 0.8549773845561716,
+          "coordinates": [
+            0.038181818181818185,
+            0.2964705882352941,
+            0.060909090909090906,
+            0.7035294117647058
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Độc lập - Tự do - Hạnh phúc",
+          "confidence": 0.8945155472591005,
+          "coordinates": [
+            0.06454545454545454,
+            0.36705882352941177,
+            0.08363636363636363,
+            0.6317647058823529
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "THÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ",
+          "confidence": 0.8582287918437611,
+          "coordinates": [
+            0.12545454545454546,
+            0.27647058823529413,
+            0.15363636363636363,
+            0.7235294117647059
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "Mã hồ sơ: 0192837465",
+          "confidence": 0.9310263454914093,
+          "coordinates": [
+            0.20363636363636364,
+            0.06823529411764706,
+            0.22272727272727272,
+            0.2788235294117647
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "Người nộp thuế: Vũ THị Hương",
+          "confidence": 0.899147899945577,
+          "coordinates": [
+            0.25272727272727274,
+            0.06823529411764706,
+            0.27545454545454545,
+            0.3611764705882353
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "Số tiền phải nộp: 1.250.000 đồng",
+          "confidence": 0.9298332631587982,
+          "coordinates": [
+            0.30363636363636365,
+            0.06941176470588235,
+            0.32545454545454544,
+            0.3564705882352941
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "Thời hạn nộp: 30/10/2026",
+          "confidence": 0.9338711574673653,
+          "coordinates": [
+            0.35545454545454547,
+            0.06823529411764706,
+            0.37454545454545457,
+            0.2988235294117647
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "Cơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+          "confidence": 0.927599577109019,
+          "coordinates": [
+            0.4036363636363636,
+            0.06823529411764706,
+            0.42454545454545456,
+            0.4858823529411765
+          ]
+        }
+      ],
+      "processingTimeMs": 2775.2423000001727,
+      "actualText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nTHÔNG BÁO NỘP LỆ PHÍ TRƯỚC BẠ\nMã hồ sơ: 0192837465\nNgười nộp thuế: Vũ THị Hương\nSố tiền phải nộp: 1.250.000 đồng\nThời hạn nộp: 30/10/2026\nCơ quan thuế: Chi cục Thuế khu vực Thanh Xuân",
+      "cer": 0.024390243902439025,
+      "wer": 0.05660377358490566
+    },
+    {
+      "fixture": "TC09",
+      "predictions": [
+        {
+          "lineId": "line_001",
+          "text": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ",
+          "confidence": 0.7336444644366994,
+          "coordinates": [
+            0.04363636363636364,
+            0.2529411764705882,
+            0.07090909090909091,
+            0.7482352941176471
+          ]
+        },
+        {
+          "lineId": "line_002",
+          "text": "Đơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây",
+          "confidence": 0.9188622888177633,
+          "coordinates": [
+            0.11181818181818182,
+            0.06823529411764706,
+            0.13363636363636364,
+            0.6294117647058823
+          ]
+        },
+        {
+          "lineId": "line_003",
+          "text": "Người tiếp nhận: Chuyên viên Đỗ Tuấn Anh",
+          "confidence": 0.7919846989214421,
+          "coordinates": [
+            0.1481818181818182,
+            0.06941176470588235,
+            0.1709090909090909,
+            0.4376470588235294
+          ]
+        },
+        {
+          "lineId": "line_004",
+          "text": "Danh mục tài liệu kèm theo:",
+          "confidence": 0.9224688101697851,
+          "coordinates": [
+            0.21454545454545454,
+            0.06941176470588235,
+            0.23363636363636364,
+            0.32941176470588235
+          ]
+        },
+        {
+          "lineId": "line_005",
+          "text": "01 bản chính Đơn xin xác nhận đất không có tranh chấp",
+          "confidence": 0.9050578773021698,
+          "coordinates": [
+            0.24818181818181817,
+            0.06823529411764706,
+            0.27090909090909093,
+            0.5458823529411765
+          ]
+        },
+        {
+          "lineId": "line_006",
+          "text": "-02 bản sao công chứng Căn cước công dân của hai vợ chồng",
+          "confidence": 0.8893206693598481,
+          "coordinates": [
+            0.28454545454545455,
+            0.06823529411764706,
+            0.30727272727272725,
+            0.5929411764705882
+          ]
+        },
+        {
+          "lineId": "line_007",
+          "text": "01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08",
+          "confidence": 0.919805629484689,
+          "coordinates": [
+            0.3209090909090909,
+            0.06823529411764706,
+            0.3427272727272727,
+            0.6105882352941177
+          ]
+        },
+        {
+          "lineId": "line_008",
+          "text": "Ý kiến của cán bộ tiếp nhận:",
+          "confidence": 0.9223396969693047,
+          "coordinates": [
+            0.3845454545454545,
+            0.06823529411764706,
+            0.40636363636363637,
+            0.33294117647058824
+          ]
+        },
+        {
+          "lineId": "line_009",
+          "text": "Hồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế",
+          "confidence": 0.9271934304167243,
+          "coordinates": [
+            0.4209090909090909,
+            0.06941176470588235,
+            0.44363636363636366,
+            0.6470588235294118
+          ]
+        },
+        {
+          "lineId": "line_010",
+          "text": "đất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.",
+          "confidence": 0.9218234504336742,
+          "coordinates": [
+            0.4527272727272727,
+            0.06823529411764706,
+            0.47545454545454546,
+            0.6282352941176471
+          ]
+        },
+        {
+          "lineId": "line_011",
+          "text": "MÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC",
+          "confidence": 0.7235660965459935,
+          "coordinates": [
+            0.5318181818181819,
+            0.06823529411764706,
+            0.55,
+            0.41294117647058826
+          ]
+        },
+        {
+          "lineId": "line_012",
+          "text": "In tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+          "confidence": 0.932896788418293,
+          "coordinates": [
+            0.9154545454545454,
+            0.2235294117647059,
+            0.9336363636363636,
+            0.7764705882352941
+          ]
+        }
+      ],
+      "processingTimeMs": 8118.97440000007,
+      "actualText": "PHIẾU TIẾP NHẬN VÀ HỢN TRẢ KẾT QUẢ\nĐơn vị tiếp nhận: Bộ phận một cửa Ủy ban nhân dân thị xã Sơn Tây\nNgười tiếp nhận: Chuyên viên Đỗ Tuấn Anh\nDanh mục tài liệu kèm theo:\n01 bản chính Đơn xin xác nhận đất không có tranh chấp\n-02 bản sao công chứng Căn cước công dân của hai vợ chồng\n01 bản trích lục bản đồ địa chính thửa đất số 42 tờ bản đồ số 08\nÝ kiến của cán bộ tiếp nhận:\nHồ sơ đầy đủ điều kiện tiếp nhận. Đương sự cần bồ sung biên lai thuế\nđất phi nông nghiệp năm 2025 trước ngày trả kết quả theo quy định.\nMÃ TRA CỨU HỒ SƠ: STY-2026-09872-TNMC\nIn tại Trung tâm Công nghệ Thông tin Sở Nội vụ - Phiên bản phần mềm 2.4.1 - 2026",
+      "cer": 0.012618296529968454,
+      "wer": 0.04827586206896552
+    },
+    {
+      "fixture": "TC10",
+      "predictions": [],
+      "processingTimeMs": 16.77109999991444,
+      "actualText": "",
+      "cer": null,
+      "wer": null
+    }
+  ],
+  "metricScope": "One real local inference per synthetic page; NFC/collapsed whitespace; no browser preprocessing or adaptive retry. TC02 excluded (unverified dot count); TC10 negative blank.",
+  "createdAt": "2026-10-09T18:52:41.007Z"
+}

@@ -1,0 +1,124 @@
+{
+  "syntheticOnly": true,
+  "metric": "Unweighted mean CER of the same eight eligible synthetic pages",
+  "scoredPages": 8,
+  "excluded": [
+    "TC02 (unverified exact dot count)",
+    "TC10 (blank negative page)"
+  ],
+  "beforeMeanCer": 0.2247978683899114,
+  "afterMeanCer": 0.010912309960265687,
+  "timingScope": "Single-run observed CPU timings; not a controlled speed benchmark",
+  "comparisons": [
+    {
+      "fixture": "TC01",
+      "beforeCer": 0.013568521031207599,
+      "afterCer": 0.008141112618724558,
+      "beforeWer": 0.04294478527607362,
+      "afterWer": 0.018404907975460124,
+      "beforeRegions": 19,
+      "afterRegions": 19,
+      "beforeMs": 9582.033299999921,
+      "afterMs": 8781.667899999775
+    },
+    {
+      "fixture": "TC02",
+      "beforeCer": null,
+      "afterCer": null,
+      "beforeWer": null,
+      "afterWer": null,
+      "beforeRegions": 13,
+      "afterRegions": 13,
+      "beforeMs": 4097.1316999998635,
+      "afterMs": 4664.980300000025
+    },
+    {
+      "fixture": "TC03",
+      "beforeCer": 0.017114914425427872,
+      "afterCer": 0.017114914425427872,
+      "beforeWer": 0.06593406593406594,
+      "afterWer": 0.07692307692307693,
+      "beforeRegions": 13,
+      "afterRegions": 13,
+      "beforeMs": 4991.416600000093,
+      "afterMs": 5608.378899999934
+    },
+    {
+      "fixture": "TC04",
+      "beforeCer": 0.8759124087591241,
+      "afterCer": 0,
+      "beforeWer": 0.8709677419354839,
+      "afterWer": 0,
+      "beforeRegions": 2,
+      "afterRegions": 26,
+      "beforeMs": 599.0626000000248,
+      "afterMs": 3650.9717000003548
+    },
+    {
+      "fixture": "TC05",
+      "beforeCer": 0.03597122302158273,
+      "afterCer": 0.014388489208633094,
+      "beforeWer": 0.12244897959183673,
+      "afterWer": 0.07142857142857142,
+      "beforeRegions": 13,
+      "afterRegions": 13,
+      "beforeMs": 3987.455000000182,
+      "afterMs": 7309.746900000391
+    },
+    {
+      "fixture": "TC06",
+      "beforeCer": 0.01834862385321101,
+      "afterCer": 0.016055045871559634,
+      "beforeWer": 0.058823529411764705,
+      "afterWer": 0.047058823529411764,
+      "beforeRegions": 13,
+      "afterRegions": 13,
+      "beforeMs": 4710.352600000078,
+      "afterMs": 6500.3898999998455
+    },
+    {
+      "fixture": "TC07",
+      "beforeCer": 0.8004587155963303,
+      "afterCer": 0.013761467889908258,
+      "beforeWer": 1,
+      "afterWer": 0.03529411764705882,
+      "beforeRegions": 14,
+      "afterRegions": 13,
+      "beforeMs": 18649.43920000019,
+      "afterMs": 5423.899999999776
+    },
+    {
+      "fixture": "TC08",
+      "beforeCer": 0.024390243902439025,
+      "afterCer": 0.016260162601626018,
+      "beforeWer": 0.05660377358490566,
+      "afterWer": 0.05660377358490566,
+      "beforeRegions": 8,
+      "afterRegions": 8,
+      "beforeMs": 2775.2423000001727,
+      "afterMs": 3497.529400000076
+    },
+    {
+      "fixture": "TC09",
+      "beforeCer": 0.012618296529968454,
+      "afterCer": 0.0015772870662460567,
+      "beforeWer": 0.04827586206896552,
+      "afterWer": 0.006896551724137931,
+      "beforeRegions": 12,
+      "afterRegions": 12,
+      "beforeMs": 8118.97440000007,
+      "afterMs": 8548.754899999949
+    },
+    {
+      "fixture": "TC10",
+      "beforeCer": null,
+      "afterCer": null,
+      "beforeWer": null,
+      "afterWer": null,
+      "beforeRegions": 0,
+      "afterRegions": 0,
+      "beforeMs": 16.77109999991444,
+      "afterMs": 77.99720000002708
+    }
+  ]
+}

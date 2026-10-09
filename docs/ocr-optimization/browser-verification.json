@@ -1,0 +1,10 @@
+{
+  "syntheticOnly": true,
+  "actualBrowserPreprocessing": true,
+  "actualNextHttpRoute": true,
+  "actualLocalVietOcr": true,
+  "rows": 5,
+  "columns": 5,
+  "blankCells": 4,
+  "pageErrors": []
+}

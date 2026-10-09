@@ -1,0 +1,62 @@
+{
+  "syntheticOnly": true,
+  "actualLocalInference": true,
+  "scope": "One warm clean-scan run per nonblank fixture, button click through rendered JSON review; excludes page load, image selection, model startup and structured cloud extraction",
+  "results": [
+    {
+      "fixture": "TC01",
+      "totalMs": 5612.1929,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC02",
+      "totalMs": 2966.9521999999997,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC03",
+      "totalMs": 3317.3581999999988,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC04",
+      "totalMs": 2131.4741999999987,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC05",
+      "totalMs": 3112.2333999999973,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC06",
+      "totalMs": 3167.3857000000025,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC07",
+      "totalMs": 3694.894400000001,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC08",
+      "totalMs": 2986.6176000000014,
+      "attempts": 1,
+      "sameText": true
+    },
+    {
+      "fixture": "TC09",
+      "totalMs": 4512.898000000001,
+      "attempts": 1,
+      "sameText": true
+    }
+  ],
+  "pageErrors": []
+}

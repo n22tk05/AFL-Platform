@@ -1,0 +1,16 @@
+[
+  {
+    "filename": "tc01_clean_accents.png",
+    "threads": 8,
+    "totalMs": 5202.111800000239,
+    "recognitionMs": 5001.0535000001255,
+    "regions": 19
+  },
+  {
+    "filename": "tc04_table_empty_cells.png",
+    "threads": 8,
+    "totalMs": 2131.213800000296,
+    "recognitionMs": 1997.0328999997946,
+    "regions": 26
+  }
+]

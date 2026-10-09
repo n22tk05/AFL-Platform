@@ -1,0 +1,38 @@
+{
+  "completedAt": "2026-10-09T19:58:05Z",
+  "syntheticOnly": true,
+  "pythonTestsPassed": 31,
+  "documentTestsPassed": 154,
+  "openCvTestsPassed": 55,
+  "finalProductionBrowserTestsPassed": 18,
+  "finalProductionBrowserTestsFailed": 0,
+  "productionBuildExitCode": 0,
+  "productionBuildIncludesTypeAndLintValidation": true,
+  "productionDistDir": ".next-document-json-build",
+  "serviceComparison": {
+    "file": "latency-paired.json",
+    "pages": 10,
+    "repeatsPerPage": 3,
+    "optimizedRunsUnder5Seconds": 30,
+    "optimizedMaxMs": 4294.596700000511,
+    "textLayoutAndGeometryPreserved": true
+  },
+  "qualityComparison": "latency-quality.json",
+  "browserFullPass": {
+    "file": "latency-browser.json",
+    "nonblankPages": 9,
+    "under5Seconds": 8,
+    "firstTC01Ms": 5612.1929,
+    "sameText": true,
+    "pageErrors": []
+  },
+  "browserTC01Repeats": {
+    "file": "latency-browser-tc01.json",
+    "runs": 3,
+    "under5Seconds": 3,
+    "minMs": 4216.9234000000015,
+    "maxMs": 4504.8452,
+    "serviceAlreadyUsed": true
+  },
+  "limitations": "No SLA for all documents, cold scans, queueing, retries or cloud structured extraction. GPU not measured. Existing user servers were preserved."
+}

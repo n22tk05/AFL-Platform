@@ -82,9 +82,23 @@ class ServiceTests(unittest.TestCase):
             weights.write_bytes(b"fake model for unit test")
             with patch.object(app, "Predictor") as constructor, patch.dict(app.os.environ, {"VIETOCR_CONFIG_PATH": str(app.SERVICE_DIR / "inference.yml"), "VIETOCR_WEIGHTS_PATH": str(weights)}):
                 constructor.return_value.predict_batch.side_effect = RuntimeError("test")
+                constructor.return_value.model = app.torch.nn.Module()
+                constructor.return_value.model.cnn = app.torch.nn.Sequential()
                 with self.assertRaises(RuntimeError):
                     app.load_model()
                 self.assertFalse(app.health()["ready"])
+
+    def test_cached_decoder_warmup_failure_never_reports_ready(self):
+        with tempfile.TemporaryDirectory() as directory:
+            weights = Path(directory) / 'fake.pth'
+            weights.write_bytes(b'fake model for unit test')
+            with (patch.object(app, 'Predictor') as constructor,
+                  patch.object(app, 'fast_predict_batch', side_effect=RuntimeError('cached warmup')),
+                  patch.dict(app.os.environ, {'VIETOCR_CONFIG_PATH': str(app.SERVICE_DIR / 'inference.yml'), 'VIETOCR_WEIGHTS_PATH': str(weights)})):
+                constructor.return_value.model = app.torch.nn.Module()
+                constructor.return_value.model.cnn = app.torch.nn.Sequential()
+                with self.assertRaises(RuntimeError): app.load_model()
+                self.assertFalse(app.health()['ready'])
 
     def test_line_crops_retain_original_pixels_and_axis_scales(self):
         with Image.new("RGB", (3001, 2003), "white") as image:
@@ -131,6 +145,34 @@ class ServiceTests(unittest.TestCase):
             result = app.predict_lines(app.PredictRequest(lines=[app.LineItem(image=payload), app.LineItem(image=payload)]))
         self.assertIsNone(result.predictions[0].confidence)
         self.assertEqual(result.predictions[1].confidence, 0)
+
+    def test_transparent_page_is_composited_on_white(self):
+        with Image.new('RGBA', (100, 100), (0, 0, 0, 0)) as image:
+            payload = encoded(image)
+        with app.decode_base64_image(payload) as result:
+            self.assertEqual(result.getpixel((0, 0)), (255, 255, 255))
+            self.assertTrue(app.is_flat_image(result))
+
+    def test_multiline_crop_retains_parent_id_and_full_page_coordinates(self):
+        with Image.new('RGB', (300, 150), 'white') as image:
+            draw = ImageDraw.Draw(image)
+            draw.rectangle((20, 20, 250, 35), fill='black')
+            draw.rectangle((20, 90, 250, 105), fill='black')
+            payload = encoded(image)
+        box = [0.2, 0.3, 0.4, 0.8]
+        with patch.object(app, 'predictor', object()), patch.object(app, 'fast_predict_batch', return_value=(['00120', 'AB'], [0.9, 0.8])) as infer:
+            result = app.predict_lines(app.PredictRequest(lines=[app.LineItem(lineId='cell-A', image=payload, coordinates=box)]))
+            self.assertEqual(len(infer.call_args.args[1]), 2)
+            self.assertEqual(len(result.predictions), 1)
+            self.assertEqual(result.predictions[0].lineId, 'cell-A')
+            self.assertEqual(result.predictions[0].coordinates, box)
+            self.assertEqual(result.predictions[0].text, '00120\nAB')
+            self.assertEqual(result.predictions[0].confidence, 0.8)
+
+    def test_duplicate_input_ids_are_refused_before_inference(self):
+        with patch.object(app, 'predictor', object()), self.assertRaises(HTTPException) as caught:
+            app.predict_lines(app.PredictRequest(lines=[app.LineItem(lineId='same', image='x'), app.LineItem(lineId='same', image='x')]))
+        self.assertEqual(caught.exception.status_code, 400)
 
 
 if __name__ == "__main__":

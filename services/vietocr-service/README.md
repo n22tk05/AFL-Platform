@@ -19,6 +19,8 @@ Dịch vụ nhận diện chữ tiếng Việt phục vụ pipeline OCR dòng ch
 
 ## Cấu trúc thư mục
 - `app.py`: FastAPI server xử lý nhận diện dòng chữ theo format của `VietOcrAdapter`.
+- `segmentation.py`: deskew, phân vùng chữ và lưới bảng có đường kẻ, ánh xạ tọa độ về ảnh nguồn.
+- `recognition.py`: chia dòng rộng tại khoảng trắng thật trước khi nhận diện.
 - `requirements.txt`: Danh sách các package Python cần thiết.
 - `start.ps1`: Script PowerShell khởi chạy service trên cổng 8000.
 - `start.bat`: File batch khởi chạy nhanh trên Windows.
@@ -101,18 +103,21 @@ Tham khảo: [Node.js child processes](https://nodejs.org/api/child_process.html
 ## API Endpoints
 - **GET /**: Kiểm tra trạng thái service và thiết bị chạy (CPU / CUDA).
 - **GET /health**: Health check (`status: ok`).
-- **POST /predict**: Nhận mảng các dòng chữ dạng Base64 và trả về text + độ tin cậy.
+- **POST /predict**: Nhận `image` toàn trang hoặc `lines` crop Base64; trả text, confidence, tọa độ và metadata bảng nếu phát hiện được lưới hoàn chỉnh.
 
 Confidence thiếu hoặc không hữu hạn là `null`, điểm `0` giữ nguyên; không tự gán
 0.95. Đây là điểm greedy character probability của model, không phải độ chính xác
 đã hiệu chỉnh. Trang trắng/không tìm thấy vùng chữ trả `predictions: []` và cần kiểm
 tra trong Web. Crop dòng dùng pixel ảnh gốc, chỉ detection dùng ảnh nhỏ. Giới hạn
-8 MB/12 triệu pixel/70 vùng; quá số vùng bị từ chối rõ ràng thay vì bỏ nội dung.
+8 MB/12 triệu pixel/1.000 vùng; quá số vùng bị từ chối rõ ràng thay vì bỏ nội dung.
+Service 1.4.0 trả thêm `tables`, `warnings` và `skewDegrees`; prediction cũ giữ nguyên.
+Ô trống trong bảng giữ slot và ID nguồn nhưng không chạy model. Không suy đoán hàng
+tiêu đề; confidence của crop vẫn vượt giới hạn model là `null`. Service bận trả 429.
 
 Kiểm thử không gọi model/cloud:
 
 ```powershell
-& services/vietocr-service/.venv/Scripts/python.exe -m unittest discover -s services/vietocr-service/tests -v
+npm run test:vietocr
 ```
 
 Sau khi launcher sẵn sàng, kiểm thử OCR local thật bằng chữ tổng hợp trong RAM:
@@ -150,4 +155,33 @@ không chứng minh accuracy trên ảnh camera thật.
 }
 ```
 
-Document export now uses [JSON schema 1.0.0](../../docs/DOCUMENT-JSON-EXPORT.md). This service recognizes segmented lines; it does not provide table, checkbox or signature semantics.
+Document export uses [JSON schema 1.0.0](../../docs/DOCUMENT-JSON-EXPORT.md).
+Service cung cấp cấu trúc pixel của bảng đều có đường kẻ; không suy luận ngữ nghĩa
+tiêu đề, checkbox hoặc chữ ký. Xem [báo cáo tối ưu và số liệu trước/sau](../../docs/ocr-optimization/REPORT.md)
+để chạy lại benchmark và kiểm chứng JSON/trình duyệt với OCR local thật.
+
+## Tối ưu thời gian xử lý
+
+Mặc định dùng greedy decoder có cache attention theo từng batch, gộp các cặp
+Conv/BatchNorm của CNN ở chế độ eval và chạy tối đa hai batch CPU song song.
+Chiều rộng batch vẫn chính xác, không thêm padding hoặc đổi model. GPU chạy một
+batch tại một thời điểm. WASM tải nền khi mở trang quét. `/health` trả thêm
+`decoder` và `inferenceWorkers` để kiểm tra service đã khởi động với cấu hình mới.
+
+| Biến môi trường | Mặc định | Giá trị |
+| --- | --- | --- |
+| `VIETOCR_DECODER` | `cached` | `cached` hoặc `original`; model không tương thích tự dùng decoder upstream |
+| `VIETOCR_FUSE_CNN` | `1` | `0` hoặc `1` |
+| `VIETOCR_INFERENCE_WORKERS` | `2` | `1` hoặc `2`, GPU luôn chạy 1 |
+| `VIETOCR_THREADS` | tối đa 3 | 1–64, tùy số CPU; trên máy đo dùng 3 luồng/worker |
+
+Thay cấu hình cần khởi động lại service. Muốn đối chiếu đường suy luận cũ, dùng
+`VIETOCR_DECODER=original`, `VIETOCR_FUSE_CNN=0`, `VIETOCR_INFERENCE_WORKERS=1`,
+`VIETOCR_THREADS=8`. Không cần tải weights khác hay thay môi trường PyTorch.
+
+`npm run benchmark:vietocr:latency` chạy ba lượt đo ghép cặp trước/sau trên từng
+ảnh tổng hợp, kiểm tra chữ và bố cục không thay đổi, lưu `latency-paired.json`.
+Không chạy benchmark đồng thời với build, kiểm thử khác hoặc request OCR nặng.
+Xem [báo cáo thời gian](../../docs/ocr-optimization/LATENCY.md) cho phạm vi đo và
+thời gian qua API/trình duyệt. Mốc 5 giây không phải cam kết cho mọi ảnh, lần tải
+đầu, hàng đợi, retry hoặc bước trích xuất trường bằng dịch vụ cloud.

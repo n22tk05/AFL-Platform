@@ -1,0 +1,23 @@
+{
+  "completedAt": "2026-10-09T19:19:13Z",
+  "localDate": "2026-10-10",
+  "syntheticOnly": true,
+  "checks": [
+    { "command": "npm run test:opencv", "passed": 55, "failed": 0, "scope": "Unit tests and real OpenCV WASM integration" },
+    { "command": "npm run test:documents", "passed": 154, "failed": 0, "scope": "Document pipeline, provenance and JSON schema" },
+    { "command": "npx tsx --test src/modules/ocr/tests/vietocr-adapter.test.ts", "passed": 15, "failed": 0, "scope": "Adapter contract" },
+    { "command": "npm run test:vietocr", "passed": 24, "failed": 0, "scope": "Python segmentation and service with mocked model" },
+    { "command": "npm run test:documents:browser", "passed": 18, "failed": 0, "scope": "Final complete Chrome run, mocked API scenarios", "elapsedSeconds": 144 },
+    { "command": "npm run typecheck", "exitCode": 0 },
+    { "command": "npm run build", "exitCode": 0, "environment": { "AFL_BUILD_DIR": ".next-document-json-build", "AFL_BUILD_THREADS": "1" } },
+    { "command": "git diff --check", "exitCode": 0 }
+  ],
+  "realModelChecks": {
+    "benchmarkPages": 10,
+    "scoredPages": 8,
+    "comparison": "comparison.json",
+    "httpExports": "export-verification.json",
+    "browserOpenCvNextVietOcr": "browser-verification.json"
+  },
+  "limitations": "Synthetic fixtures only; no calibrated real-document accuracy or controlled throughput claim. TC03 WER increased slightly."
+}

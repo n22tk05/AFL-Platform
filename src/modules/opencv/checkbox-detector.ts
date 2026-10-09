@@ -73,7 +73,8 @@ export function detectCheckboxCandidates(
   let hierarchy: HierarchyMat | undefined;
 
   try {
-    working = binary.clone();
+    working = new runtime.Mat();
+    binary.copyTo(working);
     contours = new runtime.MatVector();
     hierarchy = new runtime.Mat() as HierarchyMat;
 

@@ -11,8 +11,9 @@ const damaged = (text: string) => /[\uFFFD\u0000-\u0008\u000B\u000C\u000E-\u001F
 const numbers = (text: string) => Array.from(text.matchAll(/\d(?:[\d.,/\- ]*\d)?/g), m => m[0].trim()).sort();
 const signature = (text: string) => JSON.stringify(numbers(text));
 export function needsOcrRetry(ocr: DocumentOcrResult): boolean {
-  if (!readable(ocr) || !ocr.lines.length || damaged(ocr.fullText) || ocr.warnings.length) return true;
-  const scores = ocr.tokens.length ? ocr.tokens : ocr.lines;
+  if (!readable(ocr) || !ocr.lines.length || damaged(ocr.fullText)
+    || ocr.warnings.some(w => !['OCR_DESKEW_APPLIED', 'TABLE_HEADER_UNVERIFIED', 'OCR_DOTTED_GUIDES_DETECTED'].includes(w))) return true;
+  const scores = (ocr.tokens.length ? ocr.tokens : ocr.lines).filter(t => t.text.trim());
   return scores.some(t => t.confidence === null || !Number.isFinite(t.confidence) || t.confidence < 0 || t.confidence > 1 || !validBox(t.boundingBox))
     || scores.filter(t => t.confidence !== null && t.confidence < CONFIG.retryConfidence).length / scores.length >= CONFIG.lowConfidenceFraction;
 }
@@ -49,6 +50,17 @@ export function reconcileOcr(review: OcrReview): DocumentOcrResult | null {
   }
   if (second?.raw) {
     const a = primary.raw, b = second.raw;
+    for (const [source, other, attempt] of [[a, b, primary.attempt], [b, a, second.attempt]] as const) {
+      for (const line of source.lines) {
+        if (!line.text.trim() || !validBox(line.boundingBox)) continue;
+        const box = line.boundingBox;
+        // Intersecting split/merged lines are not evidence of an omitted region.
+        if (other.lines.some(candidate => validBox(candidate.boundingBox) && iou(box, candidate.boundingBox) > 0)) continue;
+        const reason = source === b ? 'OCR_REGION_ONLY_IN_ENHANCED' : 'OCR_REGION_ONLY_IN_PRIMARY';
+        region(box, reason, [{ attempt, lineId: line.id, text: line.text, boundingBox: box }]);
+        review.warnings.push(reason);
+      }
+    }
     for (const line of a.lines) {
       if (!validBox(line.boundingBox)) continue;
       const lineBox = line.boundingBox;

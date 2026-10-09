@@ -1,0 +1,38 @@
+{
+  "syntheticOnly": true,
+  "actualLocalInference": true,
+  "scope": "Warm WASM/route clean-scan, button click through rendered JSON review; excludes page load, image selection, model startup and structured cloud extraction",
+  "results": [
+    {
+      "fixture": "TC01",
+      "repeat": 1,
+      "totalMs": 4504.8452,
+      "attempts": 1,
+      "deskewMs": 88,
+      "extractionMs": 4343,
+      "uiReportedTotalMs": 4431,
+      "sameText": true
+    },
+    {
+      "fixture": "TC01",
+      "repeat": 2,
+      "totalMs": 4493.5643,
+      "attempts": 1,
+      "deskewMs": 132,
+      "extractionMs": 4298,
+      "uiReportedTotalMs": 4430,
+      "sameText": true
+    },
+    {
+      "fixture": "TC01",
+      "repeat": 3,
+      "totalMs": 4216.9234000000015,
+      "attempts": 1,
+      "deskewMs": 115,
+      "extractionMs": 4041,
+      "uiReportedTotalMs": 4156,
+      "sameText": true
+    }
+  ],
+  "pageErrors": []
+}

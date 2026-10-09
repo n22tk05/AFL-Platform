@@ -1,0 +1,37 @@
+{
+  "syntheticOnly": true,
+  "actualLocalHttpInference": true,
+  "nextRouteHandlerExecuted": true,
+  "results": [
+    {
+      "fixture": "TC04",
+      "httpStatus": 200,
+      "schemaValid": true,
+      "sourcePreserved": true,
+      "attempts": 1,
+      "tables": 1,
+      "cer": 0,
+      "wer": 0
+    },
+    {
+      "fixture": "TC07",
+      "httpStatus": 200,
+      "schemaValid": true,
+      "sourcePreserved": true,
+      "attempts": 1,
+      "tables": 0,
+      "cer": 0.013761467889908258,
+      "wer": 0.03529411764705882
+    },
+    {
+      "fixture": "TC10",
+      "httpStatus": 422,
+      "schemaValid": true,
+      "sourcePreserved": true,
+      "attempts": 2,
+      "tables": 0,
+      "cer": null,
+      "wer": null
+    }
+  ]
+}

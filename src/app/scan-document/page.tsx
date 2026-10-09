@@ -12,6 +12,7 @@ import { JsonReview } from '@/components/documents/JsonReview';
 import type { DocumentJsonExport } from '@/shared/document-export.types';
 import { parseJsonExport } from '@/modules/documents/json-validator';
 import { normalizeField, valueErrors } from '@/modules/documents/validation';
+import { preloadOpenCv } from '@/modules/opencv/loader';
 
 const button = 'min-h-14 px-4 py-3 rounded-xl border border-slate-600 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-lg font-bold';
 const panel = 'bg-slate-950 border border-slate-700 rounded-2xl p-5 space-y-4';
@@ -48,10 +49,11 @@ export default function ScanDocumentPage() {
   const [jsonBox, setJsonBox] = useState<NormalizedBoundingBox | null>(null);
   const [jsonDraft, setJsonDraft] = useState<DocumentJsonExport | null>(null);
   const [failedReview, setFailedReview] = useState<OcrReview | null>(null);
-  const [guideHref, setGuideHref] = useState('/scan');
+  const [guideHref, setGuideHref] = useState('/citizen/scan');
   const generation = useRef(0), controller = useRef<AbortController>();
   const expiry = useRef<ReturnType<typeof setTimeout>>(), input = useRef<HTMLInputElement>(null);
   const cancelPending = useCallback(() => { generation.current++; controller.current?.abort(); }, []);
+  useEffect(preloadOpenCv, []);
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
   useEffect(() => () => { if (processed) URL.revokeObjectURL(processed); }, [processed]);
   useEffect(() => () => { enhancedPreviews.forEach(image => URL.revokeObjectURL(image.url)); }, [enhancedPreviews]);
@@ -61,7 +63,7 @@ export default function ScanDocumentPage() {
     const back = new URLSearchParams();
     if (formCode && /^[A-Za-z0-9_-]{1,80}$/.test(formCode)) back.set('formCode', formCode);
     if (templateId && /^[A-Za-z0-9_-]{1,120}$/.test(templateId)) back.set('templateId', templateId);
-    setGuideHref(back.size ? `/guide?${back.toString()}` : '/scan');
+    setGuideHref(back.size ? `/citizen/guide?${back.toString()}` : '/citizen/scan');
     try { sessionStorage.removeItem('afl_prerequisite_document_data'); } catch { /* Storage can be disabled. */ }
     const clearSaved = documentSession.subscribe(() => { if (!documentSession.read()) setSaved(false); });
     return () => { cancelPending(); clearTimeout(expiry.current); clearSaved(); };

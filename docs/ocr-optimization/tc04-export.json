@@ -1,0 +1,2393 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentId": "918cb0b4-8f14-4f4f-92ac-29d14d31a7fb",
+  "status": "success",
+  "provider": {
+    "name": "vietocr",
+    "model": null
+  },
+  "source": {
+    "mimeType": "image/png",
+    "pageCount": 1,
+    "frame": "processed-primary",
+    "deskewApplied": false
+  },
+  "rawText": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\n\nSTT\nLoại tài sản\nDiện tích (m2)\nGiá trị ước tính\nGhi chú\n\n1\nNhà ở tại Hà Nội\n120.5\n4.500.000.000 đ\nNhà cấp 3\n\n2\nĐất nông nghiệp\n500.0\n800.000.000 đ\n\n3\nXe ô tô con 5 chỗ\n\n650.000.000 đ\nĐứng tên cá nhân\n\n4\nTiền tiết kiệm gửi ngân hàng\n\n300.000.000 đ\n",
+  "pages": [
+    {
+      "page": 1,
+      "status": "success",
+      "error": null,
+      "width": 900,
+      "height": 1100,
+      "coordinateSystem": "normalized-xyxy",
+      "readingOrder": "geometric-heuristic"
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-0",
+      "page": 1,
+      "order": 0,
+      "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+      "newline": "\n",
+      "start": 0,
+      "end": 32,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-1",
+      "page": 1,
+      "order": 1,
+      "text": "",
+      "newline": "\n",
+      "start": 33,
+      "end": 33,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-2",
+      "page": 1,
+      "order": 2,
+      "text": "STT",
+      "newline": "\n",
+      "start": 34,
+      "end": 37,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-3",
+      "page": 1,
+      "order": 3,
+      "text": "Loại tài sản",
+      "newline": "\n",
+      "start": 38,
+      "end": 50,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-4",
+      "page": 1,
+      "order": 4,
+      "text": "Diện tích (m2)",
+      "newline": "\n",
+      "start": 51,
+      "end": 65,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-5",
+      "page": 1,
+      "order": 5,
+      "text": "Giá trị ước tính",
+      "newline": "\n",
+      "start": 66,
+      "end": 82,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-6",
+      "page": 1,
+      "order": 6,
+      "text": "Ghi chú",
+      "newline": "\n",
+      "start": 83,
+      "end": 90,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-7",
+      "page": 1,
+      "order": 7,
+      "text": "",
+      "newline": "\n",
+      "start": 91,
+      "end": 91,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-8",
+      "page": 1,
+      "order": 8,
+      "text": "1",
+      "newline": "\n",
+      "start": 92,
+      "end": 93,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-9",
+      "page": 1,
+      "order": 9,
+      "text": "Nhà ở tại Hà Nội",
+      "newline": "\n",
+      "start": 94,
+      "end": 110,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-10",
+      "page": 1,
+      "order": 10,
+      "text": "120.5",
+      "newline": "\n",
+      "start": 111,
+      "end": 116,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-11",
+      "page": 1,
+      "order": 11,
+      "text": "4.500.000.000 đ",
+      "newline": "\n",
+      "start": 117,
+      "end": 132,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-12",
+      "page": 1,
+      "order": 12,
+      "text": "Nhà cấp 3",
+      "newline": "\n",
+      "start": 133,
+      "end": 142,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-13",
+      "page": 1,
+      "order": 13,
+      "text": "",
+      "newline": "\n",
+      "start": 143,
+      "end": 143,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-14",
+      "page": 1,
+      "order": 14,
+      "text": "2",
+      "newline": "\n",
+      "start": 144,
+      "end": 145,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-15",
+      "page": 1,
+      "order": 15,
+      "text": "Đất nông nghiệp",
+      "newline": "\n",
+      "start": 146,
+      "end": 161,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-16",
+      "page": 1,
+      "order": 16,
+      "text": "500.0",
+      "newline": "\n",
+      "start": 162,
+      "end": 167,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-17",
+      "page": 1,
+      "order": 17,
+      "text": "800.000.000 đ",
+      "newline": "\n",
+      "start": 168,
+      "end": 181,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-18",
+      "page": 1,
+      "order": 18,
+      "text": "",
+      "newline": "\n",
+      "start": 182,
+      "end": 182,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-19",
+      "page": 1,
+      "order": 19,
+      "text": "3",
+      "newline": "\n",
+      "start": 183,
+      "end": 184,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-20",
+      "page": 1,
+      "order": 20,
+      "text": "Xe ô tô con 5 chỗ",
+      "newline": "\n",
+      "start": 185,
+      "end": 202,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-21",
+      "page": 1,
+      "order": 21,
+      "text": "",
+      "newline": "\n",
+      "start": 203,
+      "end": 203,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-22",
+      "page": 1,
+      "order": 22,
+      "text": "650.000.000 đ",
+      "newline": "\n",
+      "start": 204,
+      "end": 217,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-23",
+      "page": 1,
+      "order": 23,
+      "text": "Đứng tên cá nhân",
+      "newline": "\n",
+      "start": 218,
+      "end": 234,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-24",
+      "page": 1,
+      "order": 24,
+      "text": "",
+      "newline": "\n",
+      "start": 235,
+      "end": 235,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-25",
+      "page": 1,
+      "order": 25,
+      "text": "4",
+      "newline": "\n",
+      "start": 236,
+      "end": 237,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-26",
+      "page": 1,
+      "order": 26,
+      "text": "Tiền tiết kiệm gửi ngân hàng",
+      "newline": "\n",
+      "start": 238,
+      "end": 266,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-27",
+      "page": 1,
+      "order": 27,
+      "text": "",
+      "newline": "\n",
+      "start": 267,
+      "end": 267,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-28",
+      "page": 1,
+      "order": 28,
+      "text": "300.000.000 đ",
+      "newline": "\n",
+      "start": 268,
+      "end": 281,
+      "provenance": "text-splitting"
+    },
+    {
+      "id": "line-29",
+      "page": 1,
+      "order": 29,
+      "text": "",
+      "newline": "",
+      "start": 282,
+      "end": 282,
+      "provenance": "text-splitting"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-0",
+      "providerId": "line_0001",
+      "page": 1,
+      "order": 0,
+      "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+      "bbox": [
+        0.29,
+        0.034545454545454546,
+        0.7111111111111111,
+        0.06181818181818182
+      ],
+      "confidence": 0.9335375968366861,
+      "kind": "line"
+    },
+    {
+      "id": "block-1",
+      "providerId": "line_0002",
+      "page": 1,
+      "order": 1,
+      "text": "STT",
+      "bbox": [
+        0.07666666666666666,
+        0.11272727272727273,
+        0.11222222222222222,
+        0.1290909090909091
+      ],
+      "confidence": 0.9269525011380514,
+      "kind": "line"
+    },
+    {
+      "id": "block-2",
+      "providerId": "line_0003",
+      "page": 1,
+      "order": 2,
+      "text": "Loại tài sản",
+      "bbox": [
+        0.22111111111111112,
+        0.11181818181818182,
+        0.31222222222222223,
+        0.1318181818181818
+      ],
+      "confidence": 0.9318151374657949,
+      "kind": "line"
+    },
+    {
+      "id": "block-3",
+      "providerId": "line_0004",
+      "page": 1,
+      "order": 3,
+      "text": "Diện tích (m2)",
+      "bbox": [
+        0.4177777777777778,
+        0.11181818181818182,
+        0.5266666666666666,
+        0.1318181818181818
+      ],
+      "confidence": 0.9339922751699176,
+      "kind": "line"
+    },
+    {
+      "id": "block-4",
+      "providerId": "line_0005",
+      "page": 1,
+      "order": 4,
+      "text": "Giá trị ước tính",
+      "bbox": [
+        0.5844444444444444,
+        0.11181818181818182,
+        0.7033333333333334,
+        0.1318181818181818
+      ],
+      "confidence": 0.9326353333890438,
+      "kind": "line"
+    },
+    {
+      "id": "block-5",
+      "providerId": "line_0006",
+      "page": 1,
+      "order": 5,
+      "text": "Ghi chú",
+      "bbox": [
+        0.8122222222222222,
+        0.11181818181818182,
+        0.8755555555555555,
+        0.1290909090909091
+      ],
+      "confidence": 0.9378935609545026,
+      "kind": "line"
+    },
+    {
+      "id": "block-6",
+      "providerId": "line_0007",
+      "page": 1,
+      "order": 6,
+      "text": "1",
+      "bbox": [
+        0.08777777777777777,
+        0.15636363636363637,
+        0.1,
+        0.17272727272727273
+      ],
+      "confidence": 0.9302380681037903,
+      "kind": "line"
+    },
+    {
+      "id": "block-7",
+      "providerId": "line_0008",
+      "page": 1,
+      "order": 7,
+      "text": "Nhà ở tại Hà Nội",
+      "bbox": [
+        0.13111111111111112,
+        0.15545454545454546,
+        0.25222222222222224,
+        0.17545454545454545
+      ],
+      "confidence": 0.9064078293740749,
+      "kind": "line"
+    },
+    {
+      "id": "block-8",
+      "providerId": "line_0009",
+      "page": 1,
+      "order": 8,
+      "text": "120.5",
+      "bbox": [
+        0.45111111111111113,
+        0.15636363636363637,
+        0.49444444444444446,
+        0.17363636363636364
+      ],
+      "confidence": 0.9271809458732605,
+      "kind": "line"
+    },
+    {
+      "id": "block-9",
+      "providerId": "line_0010",
+      "page": 1,
+      "order": 9,
+      "text": "4.500.000.000 đ",
+      "bbox": [
+        0.6177777777777778,
+        0.15636363636363637,
+        0.7366666666666667,
+        0.17272727272727273
+      ],
+      "confidence": 0.9236745158831279,
+      "kind": "line"
+    },
+    {
+      "id": "block-10",
+      "providerId": "line_0011",
+      "page": 1,
+      "order": 10,
+      "text": "Nhà cấp 3",
+      "bbox": [
+        0.77,
+        0.15363636363636363,
+        0.8466666666666667,
+        0.17545454545454545
+      ],
+      "confidence": 0.9344349172380235,
+      "kind": "line"
+    },
+    {
+      "id": "block-11",
+      "providerId": "line_0012",
+      "page": 1,
+      "order": 11,
+      "text": "2",
+      "bbox": [
+        0.08666666666666667,
+        0.2018181818181818,
+        0.10222222222222223,
+        0.21818181818181817
+      ],
+      "confidence": 0.9337692856788635,
+      "kind": "line"
+    },
+    {
+      "id": "block-12",
+      "providerId": "line_0013",
+      "page": 1,
+      "order": 12,
+      "text": "Đất nông nghiệp",
+      "bbox": [
+        0.13,
+        0.1990909090909091,
+        0.2511111111111111,
+        0.22090909090909092
+      ],
+      "confidence": 0.9333704630533854,
+      "kind": "line"
+    },
+    {
+      "id": "block-13",
+      "providerId": "line_0014",
+      "page": 1,
+      "order": 13,
+      "text": "500.0",
+      "bbox": [
+        0.45,
+        0.2018181818181818,
+        0.49444444444444446,
+        0.2190909090909091
+      ],
+      "confidence": 0.9279008865356445,
+      "kind": "line"
+    },
+    {
+      "id": "block-14",
+      "providerId": "line_0015",
+      "page": 1,
+      "order": 14,
+      "text": "800.000.000 đ",
+      "bbox": [
+        0.6311111111111111,
+        0.2018181818181818,
+        0.7366666666666667,
+        0.21818181818181817
+      ],
+      "confidence": 0.919460865167471,
+      "kind": "line"
+    },
+    {
+      "id": "block-15",
+      "providerId": "line_0016",
+      "page": 1,
+      "order": 15,
+      "text": "",
+      "bbox": [
+        0.7566666666666667,
+        0.18818181818181817,
+        0.9311111111111111,
+        0.2309090909090909
+      ],
+      "confidence": null,
+      "kind": "line"
+    },
+    {
+      "id": "block-16",
+      "providerId": "line_0017",
+      "page": 1,
+      "order": 16,
+      "text": "3",
+      "bbox": [
+        0.08666666666666667,
+        0.24727272727272728,
+        0.10222222222222223,
+        0.26454545454545453
+      ],
+      "confidence": 0.9287267327308655,
+      "kind": "line"
+    },
+    {
+      "id": "block-17",
+      "providerId": "line_0018",
+      "page": 1,
+      "order": 17,
+      "text": "Xe ô tô con 5 chỗ",
+      "bbox": [
+        0.13,
+        0.24545454545454545,
+        0.2577777777777778,
+        0.26454545454545453
+      ],
+      "confidence": 0.9305398639510659,
+      "kind": "line"
+    },
+    {
+      "id": "block-18",
+      "providerId": "line_0019",
+      "page": 1,
+      "order": 18,
+      "text": "",
+      "bbox": [
+        0.4122222222222222,
+        0.23363636363636364,
+        0.5311111111111111,
+        0.27636363636363637
+      ],
+      "confidence": null,
+      "kind": "line"
+    },
+    {
+      "id": "block-19",
+      "providerId": "line_0020",
+      "page": 1,
+      "order": 19,
+      "text": "650.000.000 đ",
+      "bbox": [
+        0.6311111111111111,
+        0.24727272727272728,
+        0.7366666666666667,
+        0.26454545454545453
+      ],
+      "confidence": 0.9214496474999648,
+      "kind": "line"
+    },
+    {
+      "id": "block-20",
+      "providerId": "line_0021",
+      "page": 1,
+      "order": 20,
+      "text": "Đứng tên cá nhân",
+      "bbox": [
+        0.7688888888888888,
+        0.24727272727272728,
+        0.9,
+        0.26636363636363636
+      ],
+      "confidence": 0.9334762394428253,
+      "kind": "line"
+    },
+    {
+      "id": "block-21",
+      "providerId": "line_0022",
+      "page": 1,
+      "order": 21,
+      "text": "4",
+      "bbox": [
+        0.08666666666666667,
+        0.2927272727272727,
+        0.10222222222222223,
+        0.3090909090909091
+      ],
+      "confidence": 0.9423302412033081,
+      "kind": "line"
+    },
+    {
+      "id": "block-22",
+      "providerId": "line_0023",
+      "page": 1,
+      "order": 22,
+      "text": "Tiền tiết kiệm gửi ngân hàng",
+      "bbox": [
+        0.13,
+        0.29,
+        0.3322222222222222,
+        0.3118181818181818
+      ],
+      "confidence": 0.931623290692057,
+      "kind": "line"
+    },
+    {
+      "id": "block-23",
+      "providerId": "line_0024",
+      "page": 1,
+      "order": 23,
+      "text": "",
+      "bbox": [
+        0.4122222222222222,
+        0.2790909090909091,
+        0.5311111111111111,
+        0.32181818181818184
+      ],
+      "confidence": null,
+      "kind": "line"
+    },
+    {
+      "id": "block-24",
+      "providerId": "line_0025",
+      "page": 1,
+      "order": 24,
+      "text": "300.000.000 đ",
+      "bbox": [
+        0.6311111111111111,
+        0.2927272727272727,
+        0.7366666666666667,
+        0.3090909090909091
+      ],
+      "confidence": 0.9170893935056833,
+      "kind": "line"
+    },
+    {
+      "id": "block-25",
+      "providerId": "line_0026",
+      "page": 1,
+      "order": 25,
+      "text": "",
+      "bbox": [
+        0.7566666666666667,
+        0.2790909090909091,
+        0.9311111111111111,
+        0.32181818181818184
+      ],
+      "confidence": null,
+      "kind": "line"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-0",
+      "type": "document_title",
+      "evidence": {
+        "method": "regex",
+        "rule": "administrative-title",
+        "verified": false
+      },
+      "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+      "page": 1,
+      "order": 0,
+      "sourceLineIds": [
+        "line-0"
+      ],
+      "sourceBlockIds": [
+        "block-0"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-1",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 1,
+      "sourceLineIds": [
+        "line-1"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-2",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "STT",
+      "page": 1,
+      "order": 2,
+      "sourceLineIds": [
+        "line-2"
+      ],
+      "sourceBlockIds": [
+        "block-1"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-3",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Loại tài sản",
+      "page": 1,
+      "order": 3,
+      "sourceLineIds": [
+        "line-3"
+      ],
+      "sourceBlockIds": [
+        "block-2"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-4",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Diện tích (m2)",
+      "page": 1,
+      "order": 4,
+      "sourceLineIds": [
+        "line-4"
+      ],
+      "sourceBlockIds": [
+        "block-3"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-5",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Giá trị ước tính",
+      "page": 1,
+      "order": 5,
+      "sourceLineIds": [
+        "line-5"
+      ],
+      "sourceBlockIds": [
+        "block-4"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-6",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Ghi chú",
+      "page": 1,
+      "order": 6,
+      "sourceLineIds": [
+        "line-6"
+      ],
+      "sourceBlockIds": [
+        "block-5"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-7",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 7,
+      "sourceLineIds": [
+        "line-7"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-8",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "1",
+      "page": 1,
+      "order": 8,
+      "sourceLineIds": [
+        "line-8"
+      ],
+      "sourceBlockIds": [
+        "block-6"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-9",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Nhà ở tại Hà Nội",
+      "page": 1,
+      "order": 9,
+      "sourceLineIds": [
+        "line-9"
+      ],
+      "sourceBlockIds": [
+        "block-7"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-10",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "120.5",
+      "page": 1,
+      "order": 10,
+      "sourceLineIds": [
+        "line-10"
+      ],
+      "sourceBlockIds": [
+        "block-8"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-11",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "4.500.000.000 đ",
+      "page": 1,
+      "order": 11,
+      "sourceLineIds": [
+        "line-11"
+      ],
+      "sourceBlockIds": [
+        "block-9"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-12",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Nhà cấp 3",
+      "page": 1,
+      "order": 12,
+      "sourceLineIds": [
+        "line-12"
+      ],
+      "sourceBlockIds": [
+        "block-10"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-13",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 13,
+      "sourceLineIds": [
+        "line-13"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-14",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "2",
+      "page": 1,
+      "order": 14,
+      "sourceLineIds": [
+        "line-14"
+      ],
+      "sourceBlockIds": [
+        "block-11"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-15",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Đất nông nghiệp",
+      "page": 1,
+      "order": 15,
+      "sourceLineIds": [
+        "line-15"
+      ],
+      "sourceBlockIds": [
+        "block-12"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-16",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "500.0",
+      "page": 1,
+      "order": 16,
+      "sourceLineIds": [
+        "line-16"
+      ],
+      "sourceBlockIds": [
+        "block-13"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-17",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "800.000.000 đ",
+      "page": 1,
+      "order": 17,
+      "sourceLineIds": [
+        "line-17"
+      ],
+      "sourceBlockIds": [
+        "block-14"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-18",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 18,
+      "sourceLineIds": [
+        "line-18"
+      ],
+      "sourceBlockIds": [
+        "block-15"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-19",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "3",
+      "page": 1,
+      "order": 19,
+      "sourceLineIds": [
+        "line-19"
+      ],
+      "sourceBlockIds": [
+        "block-16"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-20",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Xe ô tô con 5 chỗ",
+      "page": 1,
+      "order": 20,
+      "sourceLineIds": [
+        "line-20"
+      ],
+      "sourceBlockIds": [
+        "block-17"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-21",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 21,
+      "sourceLineIds": [
+        "line-21"
+      ],
+      "sourceBlockIds": [
+        "block-18"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-22",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "650.000.000 đ",
+      "page": 1,
+      "order": 22,
+      "sourceLineIds": [
+        "line-22"
+      ],
+      "sourceBlockIds": [
+        "block-19"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-23",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Đứng tên cá nhân",
+      "page": 1,
+      "order": 23,
+      "sourceLineIds": [
+        "line-23"
+      ],
+      "sourceBlockIds": [
+        "block-20"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-24",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 24,
+      "sourceLineIds": [
+        "line-24"
+      ],
+      "sourceBlockIds": [],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-25",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "4",
+      "page": 1,
+      "order": 25,
+      "sourceLineIds": [
+        "line-25"
+      ],
+      "sourceBlockIds": [
+        "block-21"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-26",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "Tiền tiết kiệm gửi ngân hàng",
+      "page": 1,
+      "order": 26,
+      "sourceLineIds": [
+        "line-26"
+      ],
+      "sourceBlockIds": [
+        "block-22"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-27",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 27,
+      "sourceLineIds": [
+        "line-27"
+      ],
+      "sourceBlockIds": [
+        "block-23"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-28",
+      "type": "unknown",
+      "evidence": {
+        "method": "none",
+        "rule": null,
+        "verified": false
+      },
+      "text": "300.000.000 đ",
+      "page": 1,
+      "order": 28,
+      "sourceLineIds": [
+        "line-28"
+      ],
+      "sourceBlockIds": [
+        "block-24"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    },
+    {
+      "id": "node-29",
+      "type": "blank_line",
+      "evidence": {
+        "method": "regex",
+        "rule": "empty",
+        "verified": false
+      },
+      "text": "",
+      "page": 1,
+      "order": 29,
+      "sourceLineIds": [
+        "line-29"
+      ],
+      "sourceBlockIds": [
+        "block-25"
+      ],
+      "status": "needs_review",
+      "reviewReasons": [
+        "COMPARE_WITH_SOURCE_IMAGE"
+      ]
+    }
+  ],
+  "structure": {
+    "headers": [],
+    "titles": [
+      "node-0"
+    ],
+    "dateLines": [],
+    "sections": [],
+    "fields": [],
+    "checkboxes": [],
+    "tables": [
+      {
+        "id": "table_001",
+        "page": 1,
+        "headerRowCount": 0,
+        "evidence": {
+          "method": "provider_layout",
+          "rule": null,
+          "verified": false
+        },
+        "status": "needs_review",
+        "rows": [
+          [
+            {
+              "rowIndex": 0,
+              "columnIndex": 0,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "STT",
+              "normalizedValue": "STT",
+              "sourceRanges": [
+                {
+                  "start": 34,
+                  "end": 37
+                }
+              ],
+              "sourceLineIds": [
+                "line-2"
+              ],
+              "sourceBlockIds": [
+                "block-1"
+              ]
+            },
+            {
+              "rowIndex": 0,
+              "columnIndex": 1,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Loại tài sản",
+              "normalizedValue": "Loại tài sản",
+              "sourceRanges": [
+                {
+                  "start": 38,
+                  "end": 50
+                }
+              ],
+              "sourceLineIds": [
+                "line-3"
+              ],
+              "sourceBlockIds": [
+                "block-2"
+              ]
+            },
+            {
+              "rowIndex": 0,
+              "columnIndex": 2,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Diện tích (m2)",
+              "normalizedValue": "Diện tích (m2)",
+              "sourceRanges": [
+                {
+                  "start": 51,
+                  "end": 65
+                }
+              ],
+              "sourceLineIds": [
+                "line-4"
+              ],
+              "sourceBlockIds": [
+                "block-3"
+              ]
+            },
+            {
+              "rowIndex": 0,
+              "columnIndex": 3,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Giá trị ước tính",
+              "normalizedValue": "Giá trị ước tính",
+              "sourceRanges": [
+                {
+                  "start": 66,
+                  "end": 82
+                }
+              ],
+              "sourceLineIds": [
+                "line-5"
+              ],
+              "sourceBlockIds": [
+                "block-4"
+              ]
+            },
+            {
+              "rowIndex": 0,
+              "columnIndex": 4,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Ghi chú",
+              "normalizedValue": "Ghi chú",
+              "sourceRanges": [
+                {
+                  "start": 83,
+                  "end": 90
+                }
+              ],
+              "sourceLineIds": [
+                "line-6"
+              ],
+              "sourceBlockIds": [
+                "block-5"
+              ]
+            }
+          ],
+          [
+            {
+              "rowIndex": 1,
+              "columnIndex": 0,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "1",
+              "normalizedValue": "1",
+              "sourceRanges": [
+                {
+                  "start": 92,
+                  "end": 93
+                }
+              ],
+              "sourceLineIds": [
+                "line-8"
+              ],
+              "sourceBlockIds": [
+                "block-6"
+              ]
+            },
+            {
+              "rowIndex": 1,
+              "columnIndex": 1,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Nhà ở tại Hà Nội",
+              "normalizedValue": "Nhà ở tại Hà Nội",
+              "sourceRanges": [
+                {
+                  "start": 94,
+                  "end": 110
+                }
+              ],
+              "sourceLineIds": [
+                "line-9"
+              ],
+              "sourceBlockIds": [
+                "block-7"
+              ]
+            },
+            {
+              "rowIndex": 1,
+              "columnIndex": 2,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "120.5",
+              "normalizedValue": "120.5",
+              "sourceRanges": [
+                {
+                  "start": 111,
+                  "end": 116
+                }
+              ],
+              "sourceLineIds": [
+                "line-10"
+              ],
+              "sourceBlockIds": [
+                "block-8"
+              ]
+            },
+            {
+              "rowIndex": 1,
+              "columnIndex": 3,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "4.500.000.000 đ",
+              "normalizedValue": "4.500.000.000 đ",
+              "sourceRanges": [
+                {
+                  "start": 117,
+                  "end": 132
+                }
+              ],
+              "sourceLineIds": [
+                "line-11"
+              ],
+              "sourceBlockIds": [
+                "block-9"
+              ]
+            },
+            {
+              "rowIndex": 1,
+              "columnIndex": 4,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Nhà cấp 3",
+              "normalizedValue": "Nhà cấp 3",
+              "sourceRanges": [
+                {
+                  "start": 133,
+                  "end": 142
+                }
+              ],
+              "sourceLineIds": [
+                "line-12"
+              ],
+              "sourceBlockIds": [
+                "block-10"
+              ]
+            }
+          ],
+          [
+            {
+              "rowIndex": 2,
+              "columnIndex": 0,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "2",
+              "normalizedValue": "2",
+              "sourceRanges": [
+                {
+                  "start": 144,
+                  "end": 145
+                }
+              ],
+              "sourceLineIds": [
+                "line-14"
+              ],
+              "sourceBlockIds": [
+                "block-11"
+              ]
+            },
+            {
+              "rowIndex": 2,
+              "columnIndex": 1,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Đất nông nghiệp",
+              "normalizedValue": "Đất nông nghiệp",
+              "sourceRanges": [
+                {
+                  "start": 146,
+                  "end": 161
+                }
+              ],
+              "sourceLineIds": [
+                "line-15"
+              ],
+              "sourceBlockIds": [
+                "block-12"
+              ]
+            },
+            {
+              "rowIndex": 2,
+              "columnIndex": 2,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "500.0",
+              "normalizedValue": "500.0",
+              "sourceRanges": [
+                {
+                  "start": 162,
+                  "end": 167
+                }
+              ],
+              "sourceLineIds": [
+                "line-16"
+              ],
+              "sourceBlockIds": [
+                "block-13"
+              ]
+            },
+            {
+              "rowIndex": 2,
+              "columnIndex": 3,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "800.000.000 đ",
+              "normalizedValue": "800.000.000 đ",
+              "sourceRanges": [
+                {
+                  "start": 168,
+                  "end": 181
+                }
+              ],
+              "sourceLineIds": [
+                "line-17"
+              ],
+              "sourceBlockIds": [
+                "block-14"
+              ]
+            },
+            {
+              "rowIndex": 2,
+              "columnIndex": 4,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "",
+              "normalizedValue": "",
+              "sourceRanges": [],
+              "sourceLineIds": [],
+              "sourceBlockIds": [
+                "block-15"
+              ]
+            }
+          ],
+          [
+            {
+              "rowIndex": 3,
+              "columnIndex": 0,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "3",
+              "normalizedValue": "3",
+              "sourceRanges": [
+                {
+                  "start": 183,
+                  "end": 184
+                }
+              ],
+              "sourceLineIds": [
+                "line-19"
+              ],
+              "sourceBlockIds": [
+                "block-16"
+              ]
+            },
+            {
+              "rowIndex": 3,
+              "columnIndex": 1,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Xe ô tô con 5 chỗ",
+              "normalizedValue": "Xe ô tô con 5 chỗ",
+              "sourceRanges": [
+                {
+                  "start": 185,
+                  "end": 202
+                }
+              ],
+              "sourceLineIds": [
+                "line-20"
+              ],
+              "sourceBlockIds": [
+                "block-17"
+              ]
+            },
+            {
+              "rowIndex": 3,
+              "columnIndex": 2,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "",
+              "normalizedValue": "",
+              "sourceRanges": [],
+              "sourceLineIds": [],
+              "sourceBlockIds": [
+                "block-18"
+              ]
+            },
+            {
+              "rowIndex": 3,
+              "columnIndex": 3,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "650.000.000 đ",
+              "normalizedValue": "650.000.000 đ",
+              "sourceRanges": [
+                {
+                  "start": 204,
+                  "end": 217
+                }
+              ],
+              "sourceLineIds": [
+                "line-22"
+              ],
+              "sourceBlockIds": [
+                "block-19"
+              ]
+            },
+            {
+              "rowIndex": 3,
+              "columnIndex": 4,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Đứng tên cá nhân",
+              "normalizedValue": "Đứng tên cá nhân",
+              "sourceRanges": [
+                {
+                  "start": 218,
+                  "end": 234
+                }
+              ],
+              "sourceLineIds": [
+                "line-23"
+              ],
+              "sourceBlockIds": [
+                "block-20"
+              ]
+            }
+          ],
+          [
+            {
+              "rowIndex": 4,
+              "columnIndex": 0,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "4",
+              "normalizedValue": "4",
+              "sourceRanges": [
+                {
+                  "start": 236,
+                  "end": 237
+                }
+              ],
+              "sourceLineIds": [
+                "line-25"
+              ],
+              "sourceBlockIds": [
+                "block-21"
+              ]
+            },
+            {
+              "rowIndex": 4,
+              "columnIndex": 1,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "Tiền tiết kiệm gửi ngân hàng",
+              "normalizedValue": "Tiền tiết kiệm gửi ngân hàng",
+              "sourceRanges": [
+                {
+                  "start": 238,
+                  "end": 266
+                }
+              ],
+              "sourceLineIds": [
+                "line-26"
+              ],
+              "sourceBlockIds": [
+                "block-22"
+              ]
+            },
+            {
+              "rowIndex": 4,
+              "columnIndex": 2,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "",
+              "normalizedValue": "",
+              "sourceRanges": [],
+              "sourceLineIds": [],
+              "sourceBlockIds": [
+                "block-23"
+              ]
+            },
+            {
+              "rowIndex": 4,
+              "columnIndex": 3,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "300.000.000 đ",
+              "normalizedValue": "300.000.000 đ",
+              "sourceRanges": [
+                {
+                  "start": 268,
+                  "end": 281
+                }
+              ],
+              "sourceLineIds": [
+                "line-28"
+              ],
+              "sourceBlockIds": [
+                "block-24"
+              ]
+            },
+            {
+              "rowIndex": 4,
+              "columnIndex": 4,
+              "rowSpan": 1,
+              "columnSpan": 1,
+              "rawValue": "",
+              "normalizedValue": "",
+              "sourceRanges": [],
+              "sourceLineIds": [],
+              "sourceBlockIds": [
+                "block-25"
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    "signatures": [],
+    "freeText": [
+      "node-1",
+      "node-2",
+      "node-3",
+      "node-4",
+      "node-5",
+      "node-6",
+      "node-7",
+      "node-8",
+      "node-9",
+      "node-10",
+      "node-11",
+      "node-12",
+      "node-13",
+      "node-14",
+      "node-15",
+      "node-16",
+      "node-17",
+      "node-18",
+      "node-19",
+      "node-20",
+      "node-21",
+      "node-22",
+      "node-23",
+      "node-24",
+      "node-25",
+      "node-26",
+      "node-27",
+      "node-28",
+      "node-29"
+    ],
+    "unclassified": [
+      "node-2",
+      "node-3",
+      "node-4",
+      "node-5",
+      "node-6",
+      "node-8",
+      "node-9",
+      "node-10",
+      "node-11",
+      "node-12",
+      "node-14",
+      "node-15",
+      "node-16",
+      "node-17",
+      "node-19",
+      "node-20",
+      "node-22",
+      "node-23",
+      "node-25",
+      "node-26",
+      "node-28"
+    ]
+  },
+  "warnings": [
+    "TABLE_HEADER_UNVERIFIED",
+    "OCR_ACCURACY_NOT_MEASURED",
+    "TEXT_CLASSIFICATION_REQUIRES_REVIEW",
+    "NO_VERIFIED_IMAGE_SIGNATURE_OR_STAMP_DETECTOR",
+    "PROVIDER_MODEL_NOT_REPORTED",
+    "OCR_CONFIDENCE_MISSING"
+  ],
+  "requiresReview": true,
+  "review": {
+    "selectedAttempt": 1,
+    "selectionReason": "PRESERVE_PRIMARY_WITHOUT_RELIABLE_EVIDENCE_TO_REPLACE",
+    "attempts": [
+      {
+        "attempt": 1,
+        "variant": "primary",
+        "provider": "vietocr",
+        "rawText": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\n\nSTT\nLoại tài sản\nDiện tích (m2)\nGiá trị ước tính\nGhi chú\n\n1\nNhà ở tại Hà Nội\n120.5\n4.500.000.000 đ\nNhà cấp 3\n\n2\nĐất nông nghiệp\n500.0\n800.000.000 đ\n\n3\nXe ô tô con 5 chỗ\n\n650.000.000 đ\nĐứng tên cá nhân\n\n4\nTiền tiết kiệm gửi ngân hàng\n\n300.000.000 đ\n",
+        "blocks": [
+          {
+            "id": "block-0",
+            "providerId": "line_0001",
+            "page": 1,
+            "order": 0,
+            "text": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP",
+            "bbox": [
+              0.29,
+              0.034545454545454546,
+              0.7111111111111111,
+              0.06181818181818182
+            ],
+            "confidence": 0.9335375968366861,
+            "kind": "line"
+          },
+          {
+            "id": "block-1",
+            "providerId": "line_0002",
+            "page": 1,
+            "order": 1,
+            "text": "STT",
+            "bbox": [
+              0.07666666666666666,
+              0.11272727272727273,
+              0.11222222222222222,
+              0.1290909090909091
+            ],
+            "confidence": 0.9269525011380514,
+            "kind": "line"
+          },
+          {
+            "id": "block-2",
+            "providerId": "line_0003",
+            "page": 1,
+            "order": 2,
+            "text": "Loại tài sản",
+            "bbox": [
+              0.22111111111111112,
+              0.11181818181818182,
+              0.31222222222222223,
+              0.1318181818181818
+            ],
+            "confidence": 0.9318151374657949,
+            "kind": "line"
+          },
+          {
+            "id": "block-3",
+            "providerId": "line_0004",
+            "page": 1,
+            "order": 3,
+            "text": "Diện tích (m2)",
+            "bbox": [
+              0.4177777777777778,
+              0.11181818181818182,
+              0.5266666666666666,
+              0.1318181818181818
+            ],
+            "confidence": 0.9339922751699176,
+            "kind": "line"
+          },
+          {
+            "id": "block-4",
+            "providerId": "line_0005",
+            "page": 1,
+            "order": 4,
+            "text": "Giá trị ước tính",
+            "bbox": [
+              0.5844444444444444,
+              0.11181818181818182,
+              0.7033333333333334,
+              0.1318181818181818
+            ],
+            "confidence": 0.9326353333890438,
+            "kind": "line"
+          },
+          {
+            "id": "block-5",
+            "providerId": "line_0006",
+            "page": 1,
+            "order": 5,
+            "text": "Ghi chú",
+            "bbox": [
+              0.8122222222222222,
+              0.11181818181818182,
+              0.8755555555555555,
+              0.1290909090909091
+            ],
+            "confidence": 0.9378935609545026,
+            "kind": "line"
+          },
+          {
+            "id": "block-6",
+            "providerId": "line_0007",
+            "page": 1,
+            "order": 6,
+            "text": "1",
+            "bbox": [
+              0.08777777777777777,
+              0.15636363636363637,
+              0.1,
+              0.17272727272727273
+            ],
+            "confidence": 0.9302380681037903,
+            "kind": "line"
+          },
+          {
+            "id": "block-7",
+            "providerId": "line_0008",
+            "page": 1,
+            "order": 7,
+            "text": "Nhà ở tại Hà Nội",
+            "bbox": [
+              0.13111111111111112,
+              0.15545454545454546,
+              0.25222222222222224,
+              0.17545454545454545
+            ],
+            "confidence": 0.9064078293740749,
+            "kind": "line"
+          },
+          {
+            "id": "block-8",
+            "providerId": "line_0009",
+            "page": 1,
+            "order": 8,
+            "text": "120.5",
+            "bbox": [
+              0.45111111111111113,
+              0.15636363636363637,
+              0.49444444444444446,
+              0.17363636363636364
+            ],
+            "confidence": 0.9271809458732605,
+            "kind": "line"
+          },
+          {
+            "id": "block-9",
+            "providerId": "line_0010",
+            "page": 1,
+            "order": 9,
+            "text": "4.500.000.000 đ",
+            "bbox": [
+              0.6177777777777778,
+              0.15636363636363637,
+              0.7366666666666667,
+              0.17272727272727273
+            ],
+            "confidence": 0.9236745158831279,
+            "kind": "line"
+          },
+          {
+            "id": "block-10",
+            "providerId": "line_0011",
+            "page": 1,
+            "order": 10,
+            "text": "Nhà cấp 3",
+            "bbox": [
+              0.77,
+              0.15363636363636363,
+              0.8466666666666667,
+              0.17545454545454545
+            ],
+            "confidence": 0.9344349172380235,
+            "kind": "line"
+          },
+          {
+            "id": "block-11",
+            "providerId": "line_0012",
+            "page": 1,
+            "order": 11,
+            "text": "2",
+            "bbox": [
+              0.08666666666666667,
+              0.2018181818181818,
+              0.10222222222222223,
+              0.21818181818181817
+            ],
+            "confidence": 0.9337692856788635,
+            "kind": "line"
+          },
+          {
+            "id": "block-12",
+            "providerId": "line_0013",
+            "page": 1,
+            "order": 12,
+            "text": "Đất nông nghiệp",
+            "bbox": [
+              0.13,
+              0.1990909090909091,
+              0.2511111111111111,
+              0.22090909090909092
+            ],
+            "confidence": 0.9333704630533854,
+            "kind": "line"
+          },
+          {
+            "id": "block-13",
+            "providerId": "line_0014",
+            "page": 1,
+            "order": 13,
+            "text": "500.0",
+            "bbox": [
+              0.45,
+              0.2018181818181818,
+              0.49444444444444446,
+              0.2190909090909091
+            ],
+            "confidence": 0.9279008865356445,
+            "kind": "line"
+          },
+          {
+            "id": "block-14",
+            "providerId": "line_0015",
+            "page": 1,
+            "order": 14,
+            "text": "800.000.000 đ",
+            "bbox": [
+              0.6311111111111111,
+              0.2018181818181818,
+              0.7366666666666667,
+              0.21818181818181817
+            ],
+            "confidence": 0.919460865167471,
+            "kind": "line"
+          },
+          {
+            "id": "block-15",
+            "providerId": "line_0016",
+            "page": 1,
+            "order": 15,
+            "text": "",
+            "bbox": [
+              0.7566666666666667,
+              0.18818181818181817,
+              0.9311111111111111,
+              0.2309090909090909
+            ],
+            "confidence": null,
+            "kind": "line"
+          },
+          {
+            "id": "block-16",
+            "providerId": "line_0017",
+            "page": 1,
+            "order": 16,
+            "text": "3",
+            "bbox": [
+              0.08666666666666667,
+              0.24727272727272728,
+              0.10222222222222223,
+              0.26454545454545453
+            ],
+            "confidence": 0.9287267327308655,
+            "kind": "line"
+          },
+          {
+            "id": "block-17",
+            "providerId": "line_0018",
+            "page": 1,
+            "order": 17,
+            "text": "Xe ô tô con 5 chỗ",
+            "bbox": [
+              0.13,
+              0.24545454545454545,
+              0.2577777777777778,
+              0.26454545454545453
+            ],
+            "confidence": 0.9305398639510659,
+            "kind": "line"
+          },
+          {
+            "id": "block-18",
+            "providerId": "line_0019",
+            "page": 1,
+            "order": 18,
+            "text": "",
+            "bbox": [
+              0.4122222222222222,
+              0.23363636363636364,
+              0.5311111111111111,
+              0.27636363636363637
+            ],
+            "confidence": null,
+            "kind": "line"
+          },
+          {
+            "id": "block-19",
+            "providerId": "line_0020",
+            "page": 1,
+            "order": 19,
+            "text": "650.000.000 đ",
+            "bbox": [
+              0.6311111111111111,
+              0.24727272727272728,
+              0.7366666666666667,
+              0.26454545454545453
+            ],
+            "confidence": 0.9214496474999648,
+            "kind": "line"
+          },
+          {
+            "id": "block-20",
+            "providerId": "line_0021",
+            "page": 1,
+            "order": 20,
+            "text": "Đứng tên cá nhân",
+            "bbox": [
+              0.7688888888888888,
+              0.24727272727272728,
+              0.9,
+              0.26636363636363636
+            ],
+            "confidence": 0.9334762394428253,
+            "kind": "line"
+          },
+          {
+            "id": "block-21",
+            "providerId": "line_0022",
+            "page": 1,
+            "order": 21,
+            "text": "4",
+            "bbox": [
+              0.08666666666666667,
+              0.2927272727272727,
+              0.10222222222222223,
+              0.3090909090909091
+            ],
+            "confidence": 0.9423302412033081,
+            "kind": "line"
+          },
+          {
+            "id": "block-22",
+            "providerId": "line_0023",
+            "page": 1,
+            "order": 22,
+            "text": "Tiền tiết kiệm gửi ngân hàng",
+            "bbox": [
+              0.13,
+              0.29,
+              0.3322222222222222,
+              0.3118181818181818
+            ],
+            "confidence": 0.931623290692057,
+            "kind": "line"
+          },
+          {
+            "id": "block-23",
+            "providerId": "line_0024",
+            "page": 1,
+            "order": 23,
+            "text": "",
+            "bbox": [
+              0.4122222222222222,
+              0.2790909090909091,
+              0.5311111111111111,
+              0.32181818181818184
+            ],
+            "confidence": null,
+            "kind": "line"
+          },
+          {
+            "id": "block-24",
+            "providerId": "line_0025",
+            "page": 1,
+            "order": 24,
+            "text": "300.000.000 đ",
+            "bbox": [
+              0.6311111111111111,
+              0.2927272727272727,
+              0.7366666666666667,
+              0.3090909090909091
+            ],
+            "confidence": 0.9170893935056833,
+            "kind": "line"
+          },
+          {
+            "id": "block-25",
+            "providerId": "line_0026",
+            "page": 1,
+            "order": 25,
+            "text": "",
+            "bbox": [
+              0.7566666666666667,
+              0.2790909090909091,
+              0.9311111111111111,
+              0.32181818181818184
+            ],
+            "confidence": null,
+            "kind": "line"
+          }
+        ],
+        "errorCode": null
+      }
+    ],
+    "regions": [
+      {
+        "bbox": [
+          0.7566666666666667,
+          0.18818181818181817,
+          0.9311111111111111,
+          0.2309090909090909
+        ],
+        "reason": "OCR_CONFIDENCE_MISSING",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.4122222222222222,
+          0.23363636363636364,
+          0.5311111111111111,
+          0.27636363636363637
+        ],
+        "reason": "OCR_CONFIDENCE_MISSING",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.4122222222222222,
+          0.2790909090909091,
+          0.5311111111111111,
+          0.32181818181818184
+        ],
+        "reason": "OCR_CONFIDENCE_MISSING",
+        "status": "recognitionUncertain"
+      },
+      {
+        "bbox": [
+          0.7566666666666667,
+          0.2790909090909091,
+          0.9311111111111111,
+          0.32181818181818184
+        ],
+        "reason": "OCR_CONFIDENCE_MISSING",
+        "status": "recognitionUncertain"
+      }
+    ]
+  }
+}

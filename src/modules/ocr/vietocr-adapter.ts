@@ -20,6 +20,54 @@ export interface VietOcrConfig {
   allowOfflineFallback?: boolean;
 }
 
+export interface VietOcrTableLayout {
+  id: string;
+  headerRowCount: number;
+  rows: { lineIds: string[]; coordinates: NormalizedBoundingBox }[][];
+}
+export interface VietOcrDocumentLayout {
+  lines: DetectedLineText[];
+  tables: VietOcrTableLayout[];
+  warnings: string[];
+  skewDegrees: number;
+}
+
+const validCoordinates = (box: unknown): box is NormalizedBoundingBox => Array.isArray(box) && box.length === 4
+  && box.every(n => typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= 1)
+  && box[0] < box[2] && box[1] < box[3];
+
+function readLayout(data: Record<string, unknown>, lines: DetectedLineText[]): Omit<VietOcrDocumentLayout, 'lines'> {
+  const tables = data.tables ?? [], warnings = data.warnings ?? [], skewDegrees = data.skewDegrees ?? 0;
+  if (!Array.isArray(tables) || tables.length > 100 || !Array.isArray(warnings)
+    || warnings.length > 100 || warnings.some(w => typeof w !== 'string' || !/^[A-Z0-9_]{1,100}$/.test(w))
+    || typeof skewDegrees !== 'number' || !Number.isFinite(skewDegrees) || Math.abs(skewDegrees) > 12)
+    throw new VietOcrResponseError('Invalid document layout metadata');
+  const lineIds = new Set(lines.map(l => l.lineId)), assigned = new Set<string>(), tableIds = new Set<string>();
+  let cells = 0;
+  for (const table of tables) {
+    if (!table || typeof table !== 'object' || typeof table.id !== 'string' || !table.id || tableIds.has(table.id)
+      || !Array.isArray(table.rows) || !table.rows.length || table.rows.length > 100
+      || !Number.isInteger(table.headerRowCount) || table.headerRowCount < 0 || table.headerRowCount > table.rows.length)
+      throw new VietOcrResponseError('Invalid table layout');
+    tableIds.add(table.id);
+    const columns = table.rows[0]?.length;
+    if (!columns || columns > 50) throw new VietOcrResponseError('Invalid table columns');
+    for (const row of table.rows) {
+      if (!Array.isArray(row) || row.length !== columns) throw new VietOcrResponseError('Invalid rectangular table layout');
+      for (const cell of row) {
+        if (++cells > 4000 || !cell || !validCoordinates(cell.coordinates) || !Array.isArray(cell.lineIds) || !cell.lineIds.length
+          || cell.lineIds.some((id: unknown) => typeof id !== 'string' || !lineIds.has(id) || assigned.has(id)))
+          throw new VietOcrResponseError('Invalid table cell source alignment');
+        for (const id of cell.lineIds) {
+          if (assigned.has(id)) throw new VietOcrResponseError('Duplicate table cell source alignment');
+          assigned.add(id);
+        }
+      }
+    }
+  }
+  return { tables, warnings, skewDegrees };
+}
+
 export const DEFAULT_VIETOCR_CONFIG: Readonly<VietOcrConfig> = Object.freeze({
   endpoint: process.env.VIETOCR_ENDPOINT || 'http://127.0.0.1:8000/predict',
   timeoutMs: Number(process.env.DOCUMENT_OCR_TIMEOUT_MS || 60_000),
@@ -65,6 +113,10 @@ export class VietOcrAdapter {
     lines: VietOcrLineInput[],
     signal?: AbortSignal,
   ): Promise<DetectedLineText[]> {
+    return this.recognize(lines, signal);
+  }
+
+  private async recognize(lines: VietOcrLineInput[], signal?: AbortSignal, onLayout?: (data: Record<string, unknown>) => void): Promise<DetectedLineText[]> {
     if (!lines.length) return [];
 
     // Attempt to call VietOCR microservice if endpoint configured
@@ -72,7 +124,7 @@ export class VietOcrAdapter {
     if (endpoint) {
       try {
         // Empty predictions are a genuine OCR result, not a service failure.
-        return await this.callMicroservice(lines, endpoint, signal);
+        return await this.callMicroservice(lines, endpoint, signal, onLayout);
       } catch (error) {
         // A malformed response cannot be replaced with plausible-looking mock text.
         if (error instanceof VietOcrResponseError) throw error;
@@ -114,6 +166,13 @@ export class VietOcrAdapter {
     );
   }
 
+  async recognizeDocumentWithLayout(image: string, signal?: AbortSignal): Promise<VietOcrDocumentLayout> {
+    let metadata: Record<string, unknown> = {};
+    const lines = await this.recognize([{ lineId: 'line_full_doc', image, coordinates: [0, 0, 1, 1] }], signal,
+      data => { metadata = data; });
+    return { lines, ...readLayout(metadata, lines) };
+  }
+
   /**
    * Calls external Python/FastAPI VietOCR microservice
    */
@@ -121,6 +180,7 @@ export class VietOcrAdapter {
     lines: VietOcrLineInput[],
     endpoint: string,
     signal?: AbortSignal,
+    onLayout?: (data: Record<string, unknown>) => void,
   ): Promise<DetectedLineText[]> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.config.timeoutMs);
@@ -156,6 +216,7 @@ export class VietOcrAdapter {
       if (!Array.isArray(data.predictions)) {
         throw new VietOcrResponseError('Invalid response structure from VietOCR service.');
       }
+      onLayout?.(data);
 
       if (!data.predictions.length) return [];
       if (data.predictions.some((pred: unknown) => !pred || typeof pred !== 'object' || Array.isArray(pred)

@@ -39,6 +39,7 @@ export async function prepareDocumentImage(file: File, mode: PreparationMode, op
     // native pixels; only warp's explicit safety caps can downscale.
     input.width = img.naturalWidth; input.height = img.naturalHeight;
     const context = input.getContext('2d'); if (!context) throw new Error('Không tạo được canvas.');
+    context.fillStyle = '#ffffff'; context.fillRect(0, 0, input.width, input.height);
     context.drawImage(img, 0, 0);
     const cv = await loadOpenCv() as unknown as EnhancementRuntime & { imread(canvas: HTMLCanvasElement): CvMat };
     checkCancelled(); source = cv.imread(input); validateImageDimensions(source.cols, source.rows);

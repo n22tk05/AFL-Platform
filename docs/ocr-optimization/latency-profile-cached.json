@@ -1,0 +1,58 @@
+[
+  {
+    "filename": "tc01_clean_accents.png",
+    "threads": 8,
+    "totalMs": 5168.113599999742,
+    "recognitionMs": 4950.748100000055,
+    "regions": 19
+  },
+  {
+    "filename": "tc04_table_empty_cells.png",
+    "threads": 8,
+    "totalMs": 2465.3912999992826,
+    "recognitionMs": 2331.621900000755,
+    "regions": 26
+  },
+  {
+    "filename": "tc01_clean_accents.png",
+    "threads": 4,
+    "totalMs": 6805.2575000001525,
+    "recognitionMs": 6563.206700000592,
+    "regions": 19
+  },
+  {
+    "filename": "tc04_table_empty_cells.png",
+    "threads": 4,
+    "totalMs": 2499.5129999997516,
+    "recognitionMs": 2373.083999999835,
+    "regions": 26
+  },
+  {
+    "filename": "tc01_clean_accents.png",
+    "threads": 2,
+    "totalMs": 7194.853599999988,
+    "recognitionMs": 7034.3229000000065,
+    "regions": 19
+  },
+  {
+    "filename": "tc04_table_empty_cells.png",
+    "threads": 2,
+    "totalMs": 3017.7496000005704,
+    "recognitionMs": 2894.0738000001147,
+    "regions": 26
+  },
+  {
+    "filename": "tc01_clean_accents.png",
+    "threads": 1,
+    "totalMs": 8420.534200000475,
+    "recognitionMs": 8238.697400000092,
+    "regions": 19
+  },
+  {
+    "filename": "tc04_table_empty_cells.png",
+    "threads": 1,
+    "totalMs": 3326.3409000001047,
+    "recognitionMs": 3207.714300000589,
+    "regions": 26
+  }
+]
