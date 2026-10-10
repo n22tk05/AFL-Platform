@@ -1,4 +1,7 @@
-import { STTCallbacks, STTConfig } from '@/modules/voice-ai/types/voice-ai.types';
+import {
+  STTCallbacks,
+  STTConfig,
+} from "@/modules/voice-ai/types/voice-ai.types";
 
 /**
  * AFL Platform - Web Speech API STT Service (FR-4)
@@ -9,17 +12,19 @@ import { STTCallbacks, STTConfig } from '@/modules/voice-ai/types/voice-ai.types
 export class WebSpeechSTT {
   private recognition: any = null;
   private isListeningState: boolean = false;
+  private silenceTimer: NodeJS.Timeout | null = null;
+  private readonly SILENCE_TIMEOUT_MS: number = 3500;
   private startRequested = false;
   private config: STTConfig;
   private callbacks: STTCallbacks = {};
 
   constructor(config?: STTConfig) {
     this.config = {
-      lang: 'vi-VN',
-      continuous: false,
+      lang: "vi-VN",
+      continuous: true, //Bắt buộc để trình duyệt không ép dừng sau 1s
       interimResults: true,
       maxAlternatives: 1,
-      ...config
+      ...config,
     };
 
     this.initRecognition();
@@ -29,7 +34,7 @@ export class WebSpeechSTT {
    * Khởi tạo đối tượng SpeechRecognition từ window
    */
   private initRecognition(): boolean {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return false; // Server-side rendering safe
     }
 
@@ -43,7 +48,7 @@ export class WebSpeechSTT {
 
     try {
       this.recognition = new SpeechRecognition();
-      this.recognition.lang = this.config.lang || 'vi-VN';
+      this.recognition.lang = this.config.lang || "vi-VN";
       this.recognition.continuous = this.config.continuous ?? false;
       this.recognition.interimResults = this.config.interimResults ?? true;
       this.recognition.maxAlternatives = this.config.maxAlternatives ?? 1;
@@ -54,12 +59,12 @@ export class WebSpeechSTT {
       };
 
       this.recognition.onresult = (event: any) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
+        let interimTranscript = "";
+        let finalTranscript = "";
 
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
+        for (let i = 0; i < event.results.length; ++i) {
           const item = event.results[i];
-          const text = item[0]?.transcript || '';
+          const text = item[0]?.transcript || "";
           if (item.isFinal) {
             finalTranscript += text;
           } else {
@@ -72,26 +77,47 @@ export class WebSpeechSTT {
 
         if (transcript) {
           this.callbacks.onResult?.(transcript, isFinal);
+
+          if (this.silenceTimer) {
+            clearTimeout(this.silenceTimer);
+          }
+
+          this.silenceTimer = setTimeout(() => {
+            if (this.isListeningState) {
+              this.stop();
+            }
+          }, this.SILENCE_TIMEOUT_MS);
         }
       };
 
       this.recognition.onerror = (event: any) => {
+        if (this.silenceTimer) {
+          clearTimeout(this.silenceTimer);
+          this.silenceTimer = null;
+        }
+
         this.isListeningState = false;
-        let friendlyMessage = 'Không thể nhận diện giọng nói. Bác vui lòng thử lại nhé!';
+        this.startRequested = false;
+
+        let friendlyMessage =
+          "Không thể nhận diện giọng nói. Bác vui lòng thử lại nhé!";
 
         switch (event.error) {
-          case 'no-speech':
-            friendlyMessage = 'Cháu chưa nghe rõ bác nói gì ạ. Bác bấm lại Mic để nói nhé!';
+          case "no-speech":
+            friendlyMessage =
+              "Cháu chưa nghe rõ bác nói gì ạ. Bác bấm lại Mic để nói nhé!";
             break;
-          case 'not-allowed':
-          case 'service-not-allowed':
-            friendlyMessage = 'Thiết bị chưa cho phép truy cập Micro. Bác bấm Cho phép Micro trên trình duyệt giúp cháu nhé!';
+          case "not-allowed":
+          case "service-not-allowed":
+            friendlyMessage =
+              "Thiết bị chưa cho phép truy cập Micro. Bác bấm Cho phép Micro trên trình duyệt giúp cháu nhé!";
             break;
-          case 'audio-capture':
-            friendlyMessage = 'Không tìm thấy Micro trên thiết bị của bác.';
+          case "audio-capture":
+            friendlyMessage = "Không tìm thấy Micro trên thiết bị của bác.";
             break;
-          case 'network':
-            friendlyMessage = 'Đường truyền mạng yếu, bác có thể bấm chọn các nút câu hỏi bên dưới cho nhanh ạ!';
+          case "network":
+            friendlyMessage =
+              "Đường truyền mạng yếu, bác có thể bấm chọn các nút câu hỏi bên dưới cho nhanh ạ!";
             break;
         }
 
@@ -99,6 +125,11 @@ export class WebSpeechSTT {
       };
 
       this.recognition.onend = () => {
+        if (this.silenceTimer) {
+          clearTimeout(this.silenceTimer);
+          this.silenceTimer = null;
+        }
+
         this.isListeningState = false;
         this.startRequested = false;
         this.callbacks.onEnd?.();
@@ -122,10 +153,10 @@ export class WebSpeechSTT {
    * Kiểm tra trình duyệt có hỗ trợ Web Speech API hay không
    */
   public isSupported(): boolean {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
     return Boolean(
       (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition
+      (window as any).webkitSpeechRecognition,
     );
   }
 
@@ -136,7 +167,9 @@ export class WebSpeechSTT {
     if (!this.recognition) {
       const initialized = this.initRecognition();
       if (!initialized) {
-        this.callbacks.onError?.('Trình duyệt không hỗ trợ nhận dạng giọng nói Web Speech API.');
+        this.callbacks.onError?.(
+          "Trình duyệt không hỗ trợ nhận dạng giọng nói Web Speech API.",
+        );
         return false;
       }
     }
@@ -152,26 +185,30 @@ export class WebSpeechSTT {
       return true;
     } catch (error: any) {
       // Một số trình duyệt báo lỗi nếu start khi đang active
-       this.startRequested = false;
+      this.startRequested = false;
       this.isListeningState = false;
-      if (error.name !== 'InvalidStateError') {
-        this.callbacks.onError?.('Không thể khởi động Micro.', error);
+      if (error.name !== "InvalidStateError") {
+        this.callbacks.onError?.("Không thể khởi động Micro.", error);
       }
       return false;
     }
   }
 
-  /**
-   * Dừng lắng nghe
-   */
   public stop(): void {
-   if (this.recognition && this.startRequested) {
+    if (this.silenceTimer) {
+      clearTimeout(this.silenceTimer);
+      this.silenceTimer = null;
+    }
+
+    if (this.recognition && this.startRequested) {
       try {
         this.recognition.stop();
       } catch {
         // bỏ qua lỗi dừng
       }
     }
+
+    this.startRequested = false;
     this.isListeningState = false;
   }
 
