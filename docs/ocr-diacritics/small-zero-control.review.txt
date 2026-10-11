@@ -1,0 +1,8 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: CAMERA_TEXT_TOO_SMALL
+Mực chưa gán: 0/344 pixel (không phải phép đo độ đầy đủ OCR)
+
+line_00001 | line | recognized | bbox_xyxy=[37,50,65,79] | LOW_OR_UNKNOWN_OCR_CONFIDENCE | text="O"
+word_00001 | word | recognized | bbox_xyxy=[37,50,65,79] | LOW_OR_UNKNOWN_OCR_CONFIDENCE | text="O"
+line_00002 | line | recognized | bbox_xyxy=[35,81,40,88] | SMALL_TEXT_OCR_REVIEW | text="0"

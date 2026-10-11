@@ -1,0 +1,10 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: —
+Mực chưa gán: 0/12182 pixel (không phải phép đo độ đầy đủ OCR)
+
+line_00002 | line | recognized | bbox_xyxy=[35,116,542,172] | LINE_WORD_OCR_DISAGREEMENT | text="Độc lập hạnh phúc"
+word_00003 | word | recognized | bbox_xyxy=[35,116,141,169] | LINE_WORD_OCR_DISAGREEMENT | text="Độc"
+word_00004 | word | recognized | bbox_xyxy=[162,116,235,172] | LINE_WORD_OCR_DISAGREEMENT | text="lập"
+word_00005 | word | recognized | bbox_xyxy=[258,117,393,169] | LINE_WORD_OCR_DISAGREEMENT | text="Hạnh"
+word_00006 | word | recognized | bbox_xyxy=[417,116,542,172] | LINE_WORD_OCR_DISAGREEMENT | text="phúc"

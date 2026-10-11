@@ -1,0 +1,7 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: —
+Mực chưa gán: 0/654 pixel (không phải phép đo độ đầy đủ OCR)
+
+line_00001 | line | recognized | bbox_xyxy=[37,50,65,110] | LOW_OR_UNKNOWN_OCR_CONFIDENCE | text="2"
+word_00001 | word | recognized | bbox_xyxy=[37,50,65,110] | LOW_OR_UNKNOWN_OCR_CONFIDENCE | text="2"

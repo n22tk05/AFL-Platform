@@ -1,0 +1,17 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: partial · Chưa xác nhận độ chính xác toàn bộ
+Warnings: UNASSIGNED_INK_PRESENT
+Mực chưa gán: 1/13468 pixel (không phải phép đo độ đầy đủ OCR)
+
+region_00001 | region | not_applicable | bbox_xyxy=[10,10,1191,351] | TABLE_STRUCTURE_UNVERIFIED | text=""
+line_00001 | line | recognized | bbox_xyxy=[39,50,391,121] | LINE_WORD_OCR_DISAGREEMENT | text="Nguyễn Đặng"
+word_00001 | word_group | recognized | bbox_xyxy=[39,50,233,121] | LOW_OR_UNKNOWN_OCR_CONFIDENCE, WORD_BOUNDARY_UNCERTAIN, WORD_GROUP_REFINED_AT_PIXEL_GAPS | text="Nguyễn A"
+word_00002 | word | recognized | bbox_xyxy=[255,61,391,121] | LINE_WORD_OCR_DISAGREEMENT | text="Đặng"
+line_00002 | line | recognized | bbox_xyxy=[35,122,539,183] | LINE_WORD_OCR_DISAGREEMENT | text="Độc lập hạnh phúc"
+word_00003 | word | recognized | bbox_xyxy=[35,122,137,182] | LINE_WORD_OCR_DISAGREEMENT | text="Độc"
+word_00004 | word | recognized | bbox_xyxy=[161,122,235,183] | LINE_WORD_OCR_DISAGREEMENT | text="lập"
+word_00005 | word | recognized | bbox_xyxy=[259,125,391,182] | LINE_WORD_OCR_DISAGREEMENT | text="Hạnh"
+word_00006 | word | recognized | bbox_xyxy=[417,122,539,183] | LINE_WORD_OCR_DISAGREEMENT | text="phúc"
+unknown_region_00001 | unknown_region | unreadable | bbox_xyxy=[10,10,11,11] | UNASSIGNED_INK | text=""
+word_refined_00001 | word | recognized | bbox_xyxy=[39,65,104,121] | REFINED_WORD_REQUIRES_REVIEW, LINE_WORD_OCR_DISAGREEMENT | text="Ng"
+word_refined_00002 | word | recognized | bbox_xyxy=[111,50,233,121] | REFINED_WORD_REQUIRES_REVIEW, LINE_WORD_OCR_DISAGREEMENT | text="uyễn"

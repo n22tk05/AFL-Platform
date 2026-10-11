@@ -1,0 +1,5 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: CAMERA_LOW_CONTRAST
+Mực chưa gán: 0/7588 pixel (không phải phép đo độ đầy đủ OCR)
+

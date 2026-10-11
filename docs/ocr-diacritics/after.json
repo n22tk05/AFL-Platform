@@ -1,0 +1,246 @@
+{
+  "syntheticOnly": true,
+  "realLocalModel": true,
+  "recognizeWords": true,
+  "serviceVersion": "1.7.1",
+  "execution": "HTTP real service; independent glyph masks never supplied to inference",
+  "results": [
+    {
+      "case": "title-arial",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.0,
+      "referenceText": "CỘNG HÒA XÃ HỘI",
+      "actualText": "CỘNG HÒA XÃ HỘI",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 4
+      },
+      "elapsedMs": 750
+    },
+    {
+      "case": "stacked-arial",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.0,
+      "referenceText": "Nguyễn Đặng",
+      "actualText": "Nguyễn Đặng",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 2,
+        "guide_line": 2
+      },
+      "elapsedMs": 391
+    },
+    {
+      "case": "stacked-times",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.0,
+      "referenceText": "Nguyễn Đặng",
+      "actualText": "Nguyễn Đặng",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 2
+      },
+      "elapsedMs": 422
+    },
+    {
+      "case": "stacked-tahoma",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.0,
+      "referenceText": "Nguyễn Đặng",
+      "actualText": "Nguyễn Đặng",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 2
+      },
+      "elapsedMs": 360
+    },
+    {
+      "case": "vowel-above-below",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 1.0,
+      "referenceText": "ệ",
+      "actualText": "2",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 1
+      },
+      "elapsedMs": 141
+    },
+    {
+      "case": "horn-acute",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.0,
+      "referenceText": "Ứ",
+      "actualText": "Ứ",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 1
+      },
+      "elapsedMs": 125
+    },
+    {
+      "case": "dot-below",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 1.0,
+      "referenceText": "ẠẠẠ",
+      "actualText": "AAA",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 1
+      },
+      "elapsedMs": 172
+    },
+    {
+      "case": "tight-accented-rows",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.034482758620689655,
+      "referenceText": "Nguyễn Đặng\nĐộc lập Hạnh phúc",
+      "actualText": "Nguyễn Đặng\nĐộc lập hạnh phúc",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 6,
+        "guide_line": 2
+      },
+      "elapsedMs": 703
+    },
+    {
+      "case": "tight-accented-cell",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.034482758620689655,
+      "referenceText": "Nguyễn Đặng\nĐộc lập Hạnh phúc",
+      "actualText": "Nguyễn Đặng\nĐộc lập hạnh phúc",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "cell": 1,
+        "line": 2,
+        "word_group": 1,
+        "word": 7,
+        "guide_line": 4,
+        "unknown_region": 1
+      },
+      "elapsedMs": 844
+    },
+    {
+      "case": "small-zero-control",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.0,
+      "referenceText": "O\n0",
+      "actualText": "O\n0",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 2
+      },
+      "elapsedMs": 172
+    },
+    {
+      "case": "camera-stacked",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "unownedGlyphPixels": 0,
+      "duplicateGlyphPixels": 0,
+      "unknownRecordsContainingGlyphs": 0,
+      "extraLineRecords": 0,
+      "cer": 0.0,
+      "referenceText": "Nguyễn Đặng",
+      "actualText": "Nguyễn Đặng",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 2
+      },
+      "elapsedMs": 375
+    }
+  ]
+}

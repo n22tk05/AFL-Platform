@@ -1,0 +1,314 @@
+{
+  "schemaVersion": "detailed-1.0",
+  "status": "complete",
+  "requiresReview": true,
+  "coordinateSystem": "source-oriented-pixels-xyxy",
+  "pixelBounds": "half-open",
+  "source": {
+    "width": 1200,
+    "height": 360
+  },
+  "processed": {
+    "width": 1200,
+    "height": 360
+  },
+  "transforms": {
+    "sourceToProcessed": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "processedToSource": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "skewDegrees": 0.0
+  },
+  "preprocessing": {
+    "mode": "scan",
+    "perspectiveOrigin": "none",
+    "sourceQuad": null,
+    "detectionScore": null,
+    "detectionMethod": null,
+    "illuminationNormalized": false,
+    "quality": {
+      "medianBrightness": 255.0,
+      "inkContrast": 0,
+      "edgeSharpness": 0.0,
+      "saturatedPixelRatio": 0.9980509259259259
+    }
+  },
+  "elements": [
+    {
+      "id": "page_001",
+      "parentId": null,
+      "page": 1,
+      "kind": "page",
+      "order": 0,
+      "bbox": [
+        0.0,
+        0.0,
+        1200.0,
+        360.0
+      ],
+      "normalizedBox": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1200.0,
+          0.0
+        ],
+        [
+          1200.0,
+          360.0
+        ],
+        [
+          0.0,
+          360.0
+        ]
+      ],
+      "processedBox": [
+        0,
+        0,
+        1200,
+        360
+      ],
+      "cropBox": [
+        0,
+        0,
+        1200,
+        360
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "not_applicable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": []
+    },
+    {
+      "id": "region_00001",
+      "parentId": "page_001",
+      "page": 1,
+      "kind": "region",
+      "order": 1,
+      "bbox": [
+        39.0,
+        50.0,
+        80.0,
+        111.0
+      ],
+      "normalizedBox": [
+        0.0325,
+        0.1388888888888889,
+        0.06666666666666667,
+        0.30833333333333335
+      ],
+      "polygon": [
+        [
+          39.0,
+          50.0
+        ],
+        [
+          80.0,
+          50.0
+        ],
+        [
+          80.0,
+          111.0
+        ],
+        [
+          39.0,
+          111.0
+        ]
+      ],
+      "processedBox": [
+        39,
+        50,
+        80,
+        111
+      ],
+      "cropBox": [
+        39,
+        50,
+        80,
+        111
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "not_applicable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": []
+    },
+    {
+      "id": "line_00001",
+      "parentId": "region_00001",
+      "page": 1,
+      "kind": "line",
+      "order": 2,
+      "bbox": [
+        39.0,
+        50.0,
+        80.0,
+        111.0
+      ],
+      "normalizedBox": [
+        0.0325,
+        0.1388888888888889,
+        0.06666666666666667,
+        0.30833333333333335
+      ],
+      "polygon": [
+        [
+          39.0,
+          50.0
+        ],
+        [
+          80.0,
+          50.0
+        ],
+        [
+          80.0,
+          111.0
+        ],
+        [
+          39.0,
+          111.0
+        ]
+      ],
+      "processedBox": [
+        39,
+        50,
+        80,
+        111
+      ],
+      "cropBox": [
+        36,
+        46,
+        83,
+        115
+      ],
+      "textRaw": "Ứ",
+      "ocrConfidence": 0.8901991248130798,
+      "recognitionStatus": "recognized",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "line_crop_ocr",
+      "reviewReasons": [],
+      "readingOrder": 0
+    },
+    {
+      "id": "word_00001",
+      "parentId": "line_00001",
+      "page": 1,
+      "kind": "word",
+      "order": 3,
+      "bbox": [
+        39.0,
+        50.0,
+        80.0,
+        111.0
+      ],
+      "normalizedBox": [
+        0.0325,
+        0.1388888888888889,
+        0.06666666666666667,
+        0.30833333333333335
+      ],
+      "polygon": [
+        [
+          39.0,
+          50.0
+        ],
+        [
+          80.0,
+          50.0
+        ],
+        [
+          80.0,
+          111.0
+        ],
+        [
+          39.0,
+          111.0
+        ]
+      ],
+      "processedBox": [
+        39,
+        50,
+        80,
+        111
+      ],
+      "cropBox": [
+        37,
+        47,
+        82,
+        114
+      ],
+      "textRaw": "Ứ",
+      "ocrConfidence": 0.9145678877830505,
+      "recognitionStatus": "recognized",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "word_crop_ocr",
+      "reviewReasons": [],
+      "readingOrder": 0
+    }
+  ],
+  "warnings": [],
+  "fullText": "Ứ",
+  "coverage": {
+    "inkPixels": 768,
+    "unassignedInkPixels": 0,
+    "explainedInkRatio": 1.0,
+    "isCompletenessGuarantee": false
+  },
+  "counts": {
+    "page": 1,
+    "region": 1,
+    "line": 1,
+    "word": 1
+  },
+  "timingMs": {
+    "detection": 49,
+    "recognition": 78,
+    "total": 124
+  },
+  "provider": {
+    "name": "vietocr-local",
+    "model": "vgg_transformer",
+    "wordRecognition": true
+  }
+}

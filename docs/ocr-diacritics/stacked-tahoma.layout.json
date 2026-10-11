@@ -1,0 +1,376 @@
+{
+  "schemaVersion": "detailed-1.0",
+  "status": "complete",
+  "requiresReview": true,
+  "coordinateSystem": "source-oriented-pixels-xyxy",
+  "pixelBounds": "half-open",
+  "source": {
+    "width": 1200,
+    "height": 360
+  },
+  "processed": {
+    "width": 1200,
+    "height": 360
+  },
+  "transforms": {
+    "sourceToProcessed": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "processedToSource": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "skewDegrees": 0.0
+  },
+  "preprocessing": {
+    "mode": "scan",
+    "perspectiveOrigin": "none",
+    "sourceQuad": null,
+    "detectionScore": null,
+    "detectionMethod": null,
+    "illuminationNormalized": false,
+    "quality": {
+      "medianBrightness": 255.0,
+      "inkContrast": 0,
+      "edgeSharpness": 0.0,
+      "saturatedPixelRatio": 0.9927407407407407
+    }
+  },
+  "elements": [
+    {
+      "id": "page_001",
+      "parentId": null,
+      "page": 1,
+      "kind": "page",
+      "order": 0,
+      "bbox": [
+        0.0,
+        0.0,
+        1200.0,
+        360.0
+      ],
+      "normalizedBox": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1200.0,
+          0.0
+        ],
+        [
+          1200.0,
+          360.0
+        ],
+        [
+          0.0,
+          360.0
+        ]
+      ],
+      "processedBox": [
+        0,
+        0,
+        1200,
+        360
+      ],
+      "cropBox": [
+        0,
+        0,
+        1200,
+        360
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "not_applicable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": []
+    },
+    {
+      "id": "region_00001",
+      "parentId": "page_001",
+      "page": 1,
+      "kind": "region",
+      "order": 1,
+      "bbox": [
+        38.0,
+        50.0,
+        273.0,
+        96.0
+      ],
+      "normalizedBox": [
+        0.03166666666666667,
+        0.1388888888888889,
+        0.2275,
+        0.26666666666666666
+      ],
+      "polygon": [
+        [
+          38.0,
+          50.0
+        ],
+        [
+          273.0,
+          50.0
+        ],
+        [
+          273.0,
+          96.0
+        ],
+        [
+          38.0,
+          96.0
+        ]
+      ],
+      "processedBox": [
+        38,
+        50,
+        273,
+        96
+      ],
+      "cropBox": [
+        38,
+        50,
+        273,
+        96
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "not_applicable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": []
+    },
+    {
+      "id": "line_00001",
+      "parentId": "region_00001",
+      "page": 1,
+      "kind": "line",
+      "order": 2,
+      "bbox": [
+        38.0,
+        50.0,
+        273.0,
+        96.0
+      ],
+      "normalizedBox": [
+        0.03166666666666667,
+        0.1388888888888889,
+        0.2275,
+        0.26666666666666666
+      ],
+      "polygon": [
+        [
+          38.0,
+          50.0
+        ],
+        [
+          273.0,
+          50.0
+        ],
+        [
+          273.0,
+          96.0
+        ],
+        [
+          38.0,
+          96.0
+        ]
+      ],
+      "processedBox": [
+        38,
+        50,
+        273,
+        96
+      ],
+      "cropBox": [
+        35,
+        46,
+        276,
+        100
+      ],
+      "textRaw": "Nguyễn Đặng",
+      "ocrConfidence": 0.9329530867663297,
+      "recognitionStatus": "recognized",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "line_crop_ocr",
+      "reviewReasons": [
+        "LINE_WORD_OCR_DISAGREEMENT"
+      ],
+      "readingOrder": 0
+    },
+    {
+      "id": "word_00001",
+      "parentId": "line_00001",
+      "page": 1,
+      "kind": "word",
+      "order": 3,
+      "bbox": [
+        38.0,
+        50.0,
+        167.0,
+        96.0
+      ],
+      "normalizedBox": [
+        0.03166666666666667,
+        0.1388888888888889,
+        0.13916666666666666,
+        0.26666666666666666
+      ],
+      "polygon": [
+        [
+          38.0,
+          50.0
+        ],
+        [
+          167.0,
+          50.0
+        ],
+        [
+          167.0,
+          96.0
+        ],
+        [
+          38.0,
+          96.0
+        ]
+      ],
+      "processedBox": [
+        38,
+        50,
+        167,
+        96
+      ],
+      "cropBox": [
+        36,
+        47,
+        169,
+        99
+      ],
+      "textRaw": "Nguyễn",
+      "ocrConfidence": 0.9343875149885813,
+      "recognitionStatus": "recognized",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "word_crop_ocr",
+      "reviewReasons": [
+        "LINE_WORD_OCR_DISAGREEMENT"
+      ],
+      "readingOrder": 0
+    },
+    {
+      "id": "word_00002",
+      "parentId": "line_00001",
+      "page": 1,
+      "kind": "word",
+      "order": 4,
+      "bbox": [
+        182.0,
+        56.0,
+        273.0,
+        96.0
+      ],
+      "normalizedBox": [
+        0.15166666666666667,
+        0.15555555555555556,
+        0.2275,
+        0.26666666666666666
+      ],
+      "polygon": [
+        [
+          182.0,
+          56.0
+        ],
+        [
+          273.0,
+          56.0
+        ],
+        [
+          273.0,
+          96.0
+        ],
+        [
+          182.0,
+          96.0
+        ]
+      ],
+      "processedBox": [
+        182,
+        56,
+        273,
+        96
+      ],
+      "cropBox": [
+        180,
+        53,
+        275,
+        99
+      ],
+      "textRaw": "Đăng",
+      "ocrConfidence": 0.8186276853084564,
+      "recognitionStatus": "recognized",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "word_crop_ocr",
+      "reviewReasons": [
+        "LINE_WORD_OCR_DISAGREEMENT"
+      ],
+      "readingOrder": 1
+    }
+  ],
+  "warnings": [],
+  "fullText": "Nguyễn Đặng",
+  "coverage": {
+    "inkPixels": 2756,
+    "unassignedInkPixels": 0,
+    "explainedInkRatio": 1.0,
+    "isCompletenessGuarantee": false
+  },
+  "counts": {
+    "page": 1,
+    "region": 1,
+    "line": 1,
+    "word": 2
+  },
+  "timingMs": {
+    "detection": 56,
+    "recognition": 266,
+    "total": 340
+  },
+  "provider": {
+    "name": "vietocr-local",
+    "model": "vgg_transformer",
+    "wordRecognition": true
+  }
+}

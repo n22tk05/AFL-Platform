@@ -1,0 +1,8 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: —
+Mực chưa gán: 0/2756 pixel (không phải phép đo độ đầy đủ OCR)
+
+line_00001 | line | recognized | bbox_xyxy=[38,50,273,96] | LINE_WORD_OCR_DISAGREEMENT | text="Nguyễn Đặng"
+word_00001 | word | recognized | bbox_xyxy=[38,50,167,96] | LINE_WORD_OCR_DISAGREEMENT | text="Nguyễn"
+word_00002 | word | recognized | bbox_xyxy=[182,56,273,96] | LINE_WORD_OCR_DISAGREEMENT | text="Đăng"
