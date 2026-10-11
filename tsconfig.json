@@ -37,7 +37,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next-document-json-test/types/**/*.ts",
-    ".next-document-json-build/types/**/*.ts"
+    ".next-document-json-build/types/**/*.ts",
+    ".next-detailed-build/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

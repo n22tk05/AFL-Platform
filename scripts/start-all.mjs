@@ -62,7 +62,7 @@ export function killTree(childProcess, platform = process.platform, execute = ex
 }
 
 // Kiểm tra Health Check qua HTTP
-export function checkHttpHealth(url, { timeoutMs = 2000, ocr = false, signal } = {}) {
+export function checkHttpHealth(url, { timeoutMs = 2000, ocr = false, requiredPostPaths = [], signal } = {}) {
   return new Promise((resolve) => {
     if (signal?.aborted) return resolve(false);
     let done = false;
@@ -85,10 +85,11 @@ export function checkHttpHealth(url, { timeoutMs = 2000, ocr = false, signal } =
       res.on('error', () => finish(false));
       res.on('end', () => {
         if (res.statusCode !== 200) return finish(false);
-        if (!ocr) return finish(true);
+        if (!ocr && !requiredPostPaths.length) return finish(true);
         try {
           const health = JSON.parse(body);
-          finish(health.status === 'ok' && health.ready === true);
+          finish((!ocr || health.status === 'ok' && health.ready === true)
+            && requiredPostPaths.every(route => health.paths?.[route]?.post && typeof health.paths[route].post === 'object'));
         } catch { finish(false); }
       });
     });
@@ -96,6 +97,12 @@ export function checkHttpHealth(url, { timeoutMs = 2000, ocr = false, signal } =
     signal?.addEventListener('abort', abort, { once: true });
     deadline = setTimeout(abort, timeoutMs);
   });
+}
+
+// A loaded legacy service can still lack the detailed extraction endpoint.
+export async function checkOcrHealth(url, options = {}) {
+  if (!await checkHttpHealth(url, { ...options, ocr: true })) return false;
+  return checkHttpHealth(new URL('/openapi.json', url), { ...options, ocr: false, requiredPostPaths: ['/predict', '/predict/detailed'] });
 }
 
 // Không tiếp tục chờ nếu tiến trình đã lỗi/thoát hoặc người dùng đã dừng.
@@ -179,9 +186,11 @@ function printSummary(ocrReady, provider) {
   console.log(`${colors.bright}${colors.green}   ✨ WEB PLATFORM ĐÃ SẴN SÀNG${colors.reset}`);
   console.log(`${colors.bright}${colors.green}========================================================================${colors.reset}`);
   console.log(`  🏠 ${colors.bright}Trang chủ Kê khai:${colors.reset}           ${colors.cyan}http://localhost:3001${colors.reset}`);
-  console.log(`  📸 ${colors.bright}Chụp & Nắn phôi giấy (WASM):${colors.reset} ${colors.cyan}http://localhost:3001/scan${colors.reset}`);
-  console.log(`  🎙️  ${colors.bright}Hướng dẫn Điền phôi (Chữ đỏ):${colors.reset}${colors.cyan}http://localhost:3001/guide${colors.reset}`);
+  console.log(`  📸 ${colors.bright}Chụp & Nắn phôi giấy (WASM):${colors.reset} ${colors.cyan}http://localhost:3001/citizen/scan${colors.reset}`);
+  console.log(`  🎙️  ${colors.bright}Hướng dẫn Điền phôi (Chữ đỏ):${colors.reset}${colors.cyan}http://localhost:3001/citizen/guide${colors.reset}`);
   console.log(`  📝 ${colors.bright}Bóc tách OCR & Xuất JSON:${colors.reset}${colors.cyan}http://localhost:3001/scan-document${colors.reset}`);
+  console.log(`  📐 ${colors.bright}Đọc chi tiết & TXT tọa độ:${colors.reset} ${colors.cyan}http://localhost:3001/document-detail${colors.reset}`);
+  console.log(`  🔬 ${colors.bright}Kiểm thử OpenCV:${colors.reset}           ${colors.cyan}http://localhost:3001/opencv-test${colors.reset}`);
   console.log(`  🏛️  ${colors.bright}Cổng Quản trị Biểu mẫu:${colors.reset}       ${colors.cyan}http://localhost:3001/admin/library${colors.reset}`);
   if (provider === 'vietocr' && ocrReady) {
     console.log(`  ⚙️  ${colors.bright}VietOCR Microservice API:${colors.reset}     ${colors.cyan}http://localhost:8000/docs${colors.reset}`);
@@ -245,7 +254,7 @@ export async function main() {
     const pythonExe = process.platform === 'win32' ? pythonVenvExe : pythonUnixExe;
 
     // Kiểm tra xem port 8000 đã có ai chạy trước chưa
-    const ocrAlreadyRunning = provider === 'vietocr' && await checkHttpHealth('http://127.0.0.1:8000/health', { ocr: true, signal: controller.signal });
+    const ocrAlreadyRunning = provider === 'vietocr' && await checkOcrHealth('http://127.0.0.1:8000/health', { signal: controller.signal });
     if (controller.signal.aborted) return;
 
     if (provider !== 'vietocr') {
@@ -254,7 +263,7 @@ export async function main() {
       ocrReady = true;
       logOcr(`${colors.green}✔ VietOCR Microservice đã chạy sẵn trên cổng 8000.${colors.reset}`);
     } else if (!await isPortAvailable(8000)) {
-      logWarn('Cổng 8000 đã được sử dụng nhưng VietOCR chưa báo ready. Không khởi động thêm hoặc dừng dịch vụ đang chiếm cổng.');
+      logWarn('Cổng 8000 đã được sử dụng nhưng VietOCR chưa ready hoặc thiếu /predict/detailed. Hãy khởi động lại service cũ để dùng OCR chi tiết. Không khởi động thêm hoặc dừng dịch vụ đang chiếm cổng.');
     } else if (fs.existsSync(pythonExe)) {
       if (controller.signal.aborted) return;
       logOcr('Đang khởi động VietOCR Python FastAPI server...');
@@ -289,7 +298,7 @@ export async function main() {
           stderrTail = (stderrTail + chunk.toString()).slice(-8192);
           if (!policyLogged && /WinError 4551|Application Control policy/.test(stderrTail)) {
             policyLogged = true;
-            logErr('Windows Application Control chặn DLL PyTorch. Xem services/vietocr-service/README.json; launcher không thay đổi policy bảo mật.');
+            logErr('Windows Application Control chặn DLL PyTorch. Xem services/vietocr-service/README.md; launcher không thay đổi policy bảo mật.');
           }
           const line = chunk.toString().trim();
           if (line && !line.includes('GET /health')) {
@@ -299,7 +308,7 @@ export async function main() {
 
         // Chờ VietOCR sẵn sàng
         logOcr('Đang chờ mô hình VietOCR nạp vào bộ nhớ...');
-        ocrReady = await waitForServer('http://127.0.0.1:8000/health', { state: ocrState, ocr: true, signal: controller.signal });
+        ocrReady = await waitForServer('http://127.0.0.1:8000/health', { state: ocrState, signal: controller.signal, check: checkOcrHealth });
         if (ocrReady) {
           logOcr(`${colors.green}✔ VietOCR Microservice đã sẵn sàng hoạt động (cổng 8000)!${colors.reset}`);
         } else if (!isShuttingDown) {
@@ -350,7 +359,7 @@ export async function main() {
     if (isShuttingDown) return;
     if (!webReady) throw new Error('Next.js chưa sẵn sàng sau 120 giây.');
     // Kiểm tra lại: VietOCR có thể vừa nạp xong trong lúc Web khởi động.
-    if (provider === 'vietocr') ocrReady = await checkHttpHealth('http://127.0.0.1:8000/health', { ocr: true, signal: controller.signal });
+    if (provider === 'vietocr') ocrReady = await checkOcrHealth('http://127.0.0.1:8000/health', { signal: controller.signal });
     if (!isShuttingDown) printSummary(ocrReady, provider);
   } catch (error) {
     process.exitCode = 1;

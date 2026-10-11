@@ -2,8 +2,34 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
 import http from 'node:http';
+import { readFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
-import { checkHttpHealth, isPortAvailable, killTree, nextCommand, observeChild, waitForServer } from '../start-all.mjs';
+import { checkHttpHealth, checkOcrHealth, isPortAvailable, killTree, nextCommand, observeChild, waitForServer } from '../start-all.mjs';
+
+test('npm dev:all launches the shared system launcher', async () => {
+  const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+  assert.equal(pkg.scripts['dev:all'], 'node scripts/start-all.mjs');
+});
+
+test('ready local OCR must expose both legacy and detailed POST endpoints', async () => {
+  let detailed = false;
+  await withServer((req, res) => {
+    if (req.url === '/health') return res.end(JSON.stringify({ status: 'ok', ready: true }));
+    res.end(JSON.stringify({ paths: { '/predict': { post: {} }, ...(detailed ? { '/predict/detailed': { post: {} } } : {}) } }));
+  }, async url => {
+    assert.equal(await checkOcrHealth(url+'/health'), false);
+    detailed = true;
+    assert.equal(await checkOcrHealth(url+'/health'), true);
+  });
+});
+
+test('a failed model does not pass readiness even with detailed routes present', async () => {
+  const paths = [];
+  await withServer((req, res) => { paths.push(req.url); res.end(JSON.stringify({ status:'degraded', ready:false })); }, async url => {
+    assert.equal(await checkOcrHealth(url+'/health'), false);
+    assert.deepEqual(paths, ['/health']);
+  });
+});
 
 async function withServer(handler, run, host = '127.0.0.1') {
   const server = http.createServer(handler);

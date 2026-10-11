@@ -9,6 +9,7 @@
 /.next/
 /.next-document-json-test/
 /.next-document-json-build/
+/.next-detailed-build/
 /out/
 /build
 dist/

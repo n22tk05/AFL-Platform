@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:all": "node scripts/start-all.mjs",
     "tunnel": "npx ngrok http --url=crayfish-exodus-stingray.ngrok-free.dev 3000",
     "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\"",
     "build": "next build",
@@ -36,7 +37,9 @@
     "test:documents:inprocess": "node --import ./scripts/register-typescript.mjs --test --test-isolation=none src/modules/documents/tests/*.test.ts",
     "evaluate:documents": "node --import ./scripts/register-typescript.mjs scripts/evaluate-ocr-json.ts",
     "evaluate:documents:local": "node --import ./scripts/register-typescript.mjs scripts/evaluate-ocr-json.ts --live",
-    "test:documents:server": "node scripts/start-document-test-server.mjs"
+    "test:documents:server": "node scripts/start-document-test-server.mjs",
+    "verify:documents:detailed": "node --import ./scripts/register-typescript.mjs scripts/verify-detailed-extraction.ts",
+    "verify:documents:detailed:browser": "node scripts/verify-detailed-browser.mjs"
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^7.1.0",
