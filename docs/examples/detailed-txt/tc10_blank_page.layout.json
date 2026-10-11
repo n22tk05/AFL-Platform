@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "detailed-1.0",
+  "status": "complete",
+  "requiresReview": true,
+  "coordinateSystem": "source-oriented-pixels-xyxy",
+  "pixelBounds": "half-open",
+  "source": {
+    "width": 850,
+    "height": 1100
+  },
+  "processed": {
+    "width": 850,
+    "height": 1100
+  },
+  "transforms": {
+    "sourceToProcessed": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "processedToSource": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "skewDegrees": 0
+  },
+  "elements": [
+    {
+      "id": "page_001",
+      "parentId": null,
+      "page": 1,
+      "kind": "page",
+      "order": 0,
+      "bbox": [
+        0,
+        0,
+        850,
+        1100
+      ],
+      "normalizedBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          850,
+          0
+        ],
+        [
+          850,
+          1100
+        ],
+        [
+          0,
+          1100
+        ]
+      ],
+      "processedBox": [
+        0,
+        0,
+        850,
+        1100
+      ],
+      "cropBox": [
+        0,
+        0,
+        850,
+        1100
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "not_applicable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": []
+    }
+  ],
+  "warnings": [
+    "NO_TEXT_DETECTED"
+  ],
+  "fullText": "",
+  "coverage": {
+    "inkPixels": 0,
+    "unassignedInkPixels": 0,
+    "explainedInkRatio": 1,
+    "isCompletenessGuarantee": false
+  },
+  "counts": {
+    "page": 1
+  },
+  "timingMs": {
+    "detection": 43,
+    "recognition": 0,
+    "total": 60
+  },
+  "provider": {
+    "name": "vietocr-local",
+    "model": "vgg_transformer",
+    "wordRecognition": true
+  }
+}

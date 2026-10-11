@@ -1,0 +1,14 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: —
+Mực chưa gán: 0/9829 pixel (không phải phép đo độ đầy đủ OCR)
+
+table_00001 | table | not_applicable | bbox_xyxy=[59,109,840,356] | TABLE_STRUCTURE_UNVERIFIED | text=""
+word_00024 | word | recognized | bbox_xyxy=[150,175,159,187] | LOW_OR_UNKNOWN_OCR_CONFIDENCE | text="ở"
+line_00017 | line | recognized | bbox_xyxy=[120,274,229,287] | LINE_WORD_OCR_DISAGREEMENT | text="Xe ô tô con 5 chỗ"
+word_00042 | word | recognized | bbox_xyxy=[120,276,137,286] | LINE_WORD_OCR_DISAGREEMENT | text="Xe"
+word_00043 | word | recognized | bbox_xyxy=[141,276,149,286] | LOW_OR_UNKNOWN_OCR_CONFIDENCE, LINE_WORD_OCR_DISAGREEMENT | text="Ô"
+word_00044 | word | recognized | bbox_xyxy=[153,276,164,286] | LINE_WORD_OCR_DISAGREEMENT | text="tô"
+word_00045 | word | recognized | bbox_xyxy=[168,278,190,286] | LINE_WORD_OCR_DISAGREEMENT | text="con"
+word_00046 | word | recognized | bbox_xyxy=[195,276,202,287] | LINE_WORD_OCR_DISAGREEMENT | text="5"
+word_00047 | word | recognized | bbox_xyxy=[207,274,229,286] | LINE_WORD_OCR_DISAGREEMENT | text="chỗ"

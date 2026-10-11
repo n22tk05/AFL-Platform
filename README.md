@@ -137,4 +137,7 @@ Toàn bộ tài liệu quy chuẩn kỹ thuật và kế hoạch thực thi đã
    ```bash
    npm run dev:all
    ```
-6. **Mở trình duyệt:** Truy cập `http://localhost:3001` để xem ứng dụng hoặc `http://localhost:3001/scan-document` để thử đọc ảnh. Kiểm tra `http://127.0.0.1:8000/health`: Web mở được chưa chứng minh OCR đã sẵn sàng. Nếu import PyTorch/model thất bại, xem [chẩn đoán VietOCR](services/vietocr-service/README.md).
+   Lệnh này khởi động Next.js ở cổng **3001** và VietOCR local ở **8000**, gồm cả endpoint `/predict/detailed`; không cần mở service riêng hoặc chạy bản build cổng 3101.
+6. **Mở trình duyệt:** Truy cập `http://localhost:3001` để xem ứng dụng, `http://localhost:3001/document-detail` để đọc vùng/dòng/từ/ô và xuất TXT tọa độ, hoặc `http://localhost:3001/scan-document` để thử đọc ảnh. Nếu import PyTorch/model thất bại, xem [chẩn đoán VietOCR](services/vietocr-service/README.md).
+
+Launcher kiểm tra health VietOCR có cả `status: ok` và `ready: true`, đồng thời xác nhận hai POST endpoint `/predict` và `/predict/detailed` trong OpenAPI. Web mở được chưa chứng minh OCR đã sẵn sàng. Ctrl+C chỉ dừng các tiến trình do launcher tạo. Dịch vụ chạy sẵn được giữ nguyên; nếu service cũ thiếu endpoint chi tiết, launcher báo cần khởi động lại service đó.

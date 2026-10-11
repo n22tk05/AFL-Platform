@@ -1,0 +1,147 @@
+{
+  "model": "real-local",
+  "syntheticOnly": true,
+  "noAccuracyGuarantee": true,
+  "results": [
+    {
+      "fixture": "tc01_clean_accents",
+      "provider": {
+        "name": "vietocr-local",
+        "model": "vgg_transformer",
+        "wordRecognition": true
+      },
+      "status": "partial",
+      "counts": {
+        "page": 1,
+        "region": 19,
+        "line": 19,
+        "word": 163,
+        "word_group": 2,
+        "guide_line": 1,
+        "unknown_region": 1
+      },
+      "elementsExported": 206,
+      "timingMs": {
+        "detection": 206,
+        "recognition": 12391,
+        "total": 12628
+      },
+      "warnings": [
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "unreadable": 1,
+      "lineWordDisagreements": 9
+    },
+    {
+      "fixture": "tc04_table_empty_cells",
+      "provider": {
+        "name": "vietocr-local",
+        "model": "vgg_transformer",
+        "wordRecognition": true
+      },
+      "status": "complete",
+      "counts": {
+        "page": 1,
+        "table": 1,
+        "cell": 25,
+        "region": 1,
+        "line": 22,
+        "word": 62,
+        "guide_line": 12
+      },
+      "elementsExported": 124,
+      "timingMs": {
+        "detection": 119,
+        "recognition": 4922,
+        "total": 5056
+      },
+      "warnings": [],
+      "unreadable": 0,
+      "lineWordDisagreements": 1
+    },
+    {
+      "fixture": "tc05_checkboxes",
+      "provider": {
+        "name": "vietocr-local",
+        "model": "vgg_transformer",
+        "wordRecognition": true
+      },
+      "status": "partial",
+      "counts": {
+        "page": 1,
+        "checkbox": 7,
+        "region": 13,
+        "line": 13,
+        "word": 90,
+        "word_group": 2,
+        "guide_line": 1,
+        "unknown_region": 1
+      },
+      "elementsExported": 128,
+      "timingMs": {
+        "detection": 105,
+        "recognition": 5687,
+        "total": 5810
+      },
+      "warnings": [
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "unreadable": 1,
+      "lineWordDisagreements": 3
+    },
+    {
+      "fixture": "tc07_skewed_perspective",
+      "provider": {
+        "name": "vietocr-local",
+        "model": "vgg_transformer",
+        "wordRecognition": true
+      },
+      "status": "partial",
+      "counts": {
+        "page": 1,
+        "region": 13,
+        "line": 13,
+        "word": 85,
+        "word_group": 7,
+        "guide_line": 2,
+        "unknown_region": 10
+      },
+      "elementsExported": 131,
+      "timingMs": {
+        "detection": 271,
+        "recognition": 6469,
+        "total": 6765
+      },
+      "warnings": [
+        "OCR_DESKEW_APPLIED",
+        "OCR_DOTTED_GUIDES_DETECTED",
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "unreadable": 10,
+      "lineWordDisagreements": 1
+    },
+    {
+      "fixture": "tc10_blank_page",
+      "provider": {
+        "name": "vietocr-local",
+        "model": "vgg_transformer",
+        "wordRecognition": true
+      },
+      "status": "complete",
+      "counts": {
+        "page": 1
+      },
+      "elementsExported": 1,
+      "timingMs": {
+        "detection": 43,
+        "recognition": 0,
+        "total": 60
+      },
+      "warnings": [
+        "NO_TEXT_DETECTED"
+      ],
+      "unreadable": 0,
+      "lineWordDisagreements": 0
+    }
+  ]
+}
