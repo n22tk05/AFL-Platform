@@ -20,6 +20,7 @@ Dịch vụ nhận diện chữ tiếng Việt phục vụ pipeline OCR dòng ch
 ## Cấu trúc thư mục
 - `app.py`: FastAPI server xử lý nhận diện dòng chữ theo format của `VietOcrAdapter`.
 - `segmentation.py`: deskew, phân vùng chữ và lưới bảng có đường kẻ, ánh xạ tọa độ về ảnh nguồn.
+- `detailed.py`: cây vùng/ô/dòng/từ, checkbox, mực chưa gán, bounds native và nhận diện crop độc lập cho TXT chi tiết.
 - `recognition.py`: chia dòng rộng tại khoảng trắng thật trước khi nhận diện.
 - `requirements.txt`: Danh sách các package Python cần thiết.
 - `start.ps1`: Script PowerShell khởi chạy service trên cổng 8000.
@@ -104,6 +105,28 @@ Tham khảo: [Node.js child processes](https://nodejs.org/api/child_process.html
 - **GET /**: Kiểm tra trạng thái service và thiết bị chạy (CPU / CUDA).
 - **GET /health**: Health check (`status: ok`).
 - **POST /predict**: Nhận `image` toàn trang hoặc `lines` crop Base64; trả text, confidence, tọa độ và metadata bảng nếu phát hiện được lưới hoàn chỉnh.
+- **POST /predict/detailed** (1.5.0): Nhận `image`, `recognizeWords` (mặc định true) và `quad` tùy chọn theo TL/TR/BR/BL. Trả cây vùng/ô/dòng/từ/checkbox/đường kẻ/vùng nghi vấn, pixel XYXY, polygon ảnh nguồn, tọa độ trang xử lý và ma trận thuận/nghịch. Không thay shape `/predict` cũ.
+
+### Đọc chi tiết và xuất TXT
+
+Từ thư mục gốc chạy `npm run dev:all`, rồi mở `http://localhost:3001/document-detail`, chọn JPEG/PNG, bấm **Đọc chi tiết**. Lệnh chung khởi động cả Web và service local, kiểm tra model và endpoint mới; không cần terminal VietOCR riêng. Ảnh chụp tờ giấy có thể bật tìm bốn góc bằng OpenCV WASM; service giữ phép nắn và deskew để quy đổi về ảnh nguồn. Tọa độ nguồn theo ảnh đã chuẩn hóa hướng EXIF, gốc trên trái, hộp pixel nửa mở XYXY. Detection chi tiết dùng độ phân giải native, không bị giới hạn 70 candidates của trang debug.
+
+Chế độ mặc định đọc cả dòng và crop từ riêng; khi chúng khác nhau, giữ hai kết quả và gắn cờ đối chiếu. Chế độ nhanh gán token của dòng vào word boxes chỉ khi số lượng khớp và luôn ghi `WORD_TEXT_ALIGNMENT_UNVERIFIED`. Không chia đều tọa độ theo số từ. Từ có khoảng trắng trong crop được ghi `WORD_BOUNDARY_UNCERTAIN`.
+
+Giới hạn mỗi trang: 8 MB, 12 triệu pixel, 16.000 elements và 8.000 word boxes. OCR chạy batch 16, ưu tiên mọi dòng trước các từ, tối đa ngân sách 120 giây kiểm tra giữa batches. Quá thời gian/lỗi batch vẫn giữ vùng unreadable trong kết quả partial; vượt quota hình học trả 413 rõ ràng. Hủy ở trình duyệt loại kết quả muộn; batch CPU đã chạy có thể tiếp tục tới giới hạn xử lý. Không lưu ảnh hay chữ người dùng vào disk/log.
+
+TXT tọa độ là UTF-8 JSON Lines (mỗi dòng một JSON record): metadata và toàn bộ elements, gồm ô trống, checkbox và unknown. Có TXT toàn văn, TXT review, JSON layout và TXT vùng đang chọn. Trạng thái export draft/reviewed tách khỏi complete/partial về xử lý. Bản xuất chưa xác nhận vẫn mang nhãn draft.
+
+Kiểm tra model thật và bộ xuất TXT, dùng các fixtures tổng hợp có sẵn:
+
+```powershell
+npm run verify:documents:detailed
+npm run verify:documents:detailed:browser
+```
+
+Hai script chỉ gọi loopback; mặc định dùng Web cổng 3001 và service cổng 8000 do `npm run dev:all` khởi động, hoặc đặt `DOCUMENT_TEST_URL`. Mẫu TXT thật được lưu tại `docs/examples/detailed-txt`, screenshot/browser evidence tại `test-results/detailed`. Xem [báo cáo triển khai](../../docs/OPENCV-DETAILED-TXT-IMPLEMENTATION.md).
+
+### Hành vi endpoint `/predict` hiện có
 
 Confidence thiếu hoặc không hữu hạn là `null`, điểm `0` giữ nguyên; không tự gán
 0.95. Đây là điểm greedy character probability của model, không phải độ chính xác
@@ -156,7 +179,7 @@ không chứng minh accuracy trên ảnh camera thật.
 ```
 
 Document export uses [JSON schema 1.0.0](../../docs/DOCUMENT-JSON-EXPORT.md).
-Service cung cấp cấu trúc pixel của bảng đều có đường kẻ; không suy luận ngữ nghĩa
+Endpoint `/predict` cung cấp cấu trúc pixel của bảng đều có đường kẻ; không suy luận ngữ nghĩa
 tiêu đề, checkbox hoặc chữ ký. Xem [báo cáo tối ưu và số liệu trước/sau](../../docs/ocr-optimization/REPORT.md)
 để chạy lại benchmark và kiểm chứng JSON/trình duyệt với OCR local thật.
 

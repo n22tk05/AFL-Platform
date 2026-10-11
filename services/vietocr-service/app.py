@@ -67,7 +67,7 @@ inference_lock = threading.Lock()
 app = FastAPI(
     title="VietOCR Microservice (High Performance)",
     description="High-throughput Vietnamese line OCR service with batch inference and OpenCV line segmentation",
-    version="1.4.0"
+    version="1.5.0"
 )
 
 app.add_middleware(
@@ -137,6 +137,12 @@ class LineItem(BaseModel):
 class PredictRequest(BaseModel):
     lines: Optional[List[LineItem]] = None
     image: Optional[str] = None
+
+
+class DetailedRequest(BaseModel):
+    image: str
+    quad: Optional[List[List[float]]] = None
+    recognizeWords: bool = True
 
 class PredictionResult(BaseModel):
     lineId: Optional[str] = None
@@ -323,6 +329,37 @@ def is_flat_image(image: Image.Image) -> bool:
         return int(pixels.max()) - int(pixels.min()) <= 1
     finally:
         gray.close()
+
+
+@app.post('/predict/detailed')
+def predict_detailed(request: DetailedRequest):
+    """Versioned full-page tree; the legacy /predict response is unchanged."""
+    from detailed import build_layout, recognize_layout
+    if predictor is None:
+        raise HTTPException(status_code=503, detail='VietOCR model is not loaded yet')
+    if not inference_lock.acquire(blocking=True, timeout=1.0):
+        raise HTTPException(status_code=429, detail='VietOCR is busy; try again later')
+    started = time.perf_counter()
+    try:
+        with decode_base64_image(request.image) as image:
+            detection_started = time.perf_counter()
+            document, native, crops = build_layout(image, request.quad)
+            document['timingMs']['detection'] = round((time.perf_counter()-detection_started)*1000)
+            document = recognize_layout(document, native, crops, lambda images: fast_predict_batch(predictor, images),
+                                        recognize_words=request.recognizeWords)
+            document['provider'] = {'name': 'vietocr-local', 'model': 'vgg_transformer', 'wordRecognition': request.recognizeWords}
+            document['timingMs']['total'] = round((time.perf_counter()-started)*1000)
+            return document
+    except HTTPException:
+        raise
+    except ValueError as error:
+        code = str(error)
+        raise HTTPException(status_code=413 if 'LIMIT' in code else 400, detail=code) from error
+    except Exception as error:
+        logger.error('Detailed extraction failed (%s)', type(error).__name__)
+        raise HTTPException(status_code=500, detail='Detailed extraction failed') from error
+    finally:
+        inference_lock.release()
 
 
 @app.post("/predict", response_model=PredictResponse)
