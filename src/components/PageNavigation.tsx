@@ -9,6 +9,7 @@ const pages = [
   ['Đọc chứng từ', APP_ROUTES.scanDocument], ['Thư viện', APP_ROUTES.library],
   ['Quản trị', APP_ROUTES.admin], ['Bàn kiểm thử', APP_ROUTES.documentTest],
   ['Kiểm thử OpenCV', APP_ROUTES.opencvTest],
+  ['Đọc chi tiết & TXT', APP_ROUTES.documentDetail],
 ] as const;
 
 export function PageNavigation() {

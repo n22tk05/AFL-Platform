@@ -12,6 +12,7 @@ import {
   type DocumentQuad,
 } from '@/modules/opencv';
 import { JsonReview } from '@/components/documents/JsonReview';
+import { DetailedWorkbench } from '@/components/documents/DetailedWorkbench';
 import { assembleCandidatesToJson, type RecognizedCandidate } from '@/modules/documents/candidate-json-assembler';
 import type { DocumentJsonExport, ExportBox } from '@/shared/document-export.types';
 import type { PixelRect } from '@/modules/opencv/field-types';
@@ -72,7 +73,7 @@ function isCheckboxChecked(sourceCanvas: HTMLCanvasElement, rect: PixelRect): bo
     }
     return darkPixels / total > 0.12;
   } catch {
-    return false;
+    return null;
   }
 }
 
@@ -606,6 +607,7 @@ export default function OpenCvTestPage() {
       </section>
 
       {imageInfo && <p style={infoStyle}>{imageInfo}</p>}
+      <DetailedWorkbench file={imageReady ? currentFile : null} compact />
       {errorMessage && (
         <div role="alert" style={errorStyle}>
           <p style={{ margin: '0 0 6px' }}>{errorMessage}</p>
