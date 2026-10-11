@@ -15,6 +15,7 @@ import {
   type FieldRowDetectionConfig,
 } from "./row-detector";
 import { sortCandidatesGeometrically } from "./geometric-sort";
+import { detectWritingGuideCandidates } from './writing-guide-detector';
 import { loadOpenCv } from "./loader";
 import { preprocessToBinary } from "./preprocess";
 import type { CvMat, CvRuntime } from "./types";
@@ -169,12 +170,13 @@ export async function runLineDetectionDebug(
 
     // 5. Detect form field rows, prompts, and fill-in lines from binary
     const fieldRowCandidates = detectFieldRowCandidates(cv, binary, options.rowConfig);
+    const writingGuides = binary.data ? detectWritingGuideCandidates(binary.data, binary.cols, binary.rows) : [];
 
     // 6. Merge table cells, checkboxes, and standalone field rows
     const mergedCandidates = mergeFormCandidates(
       lineCandidates,
       checkboxCandidates,
-      fieldRowCandidates,
+      [...fieldRowCandidates, ...writingGuides],
       { width: page.cols, height: page.rows },
       options.contourConfig,
     );

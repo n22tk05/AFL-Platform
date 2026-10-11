@@ -1,0 +1,21 @@
+{
+  "sourceImage": "public/assets/forms/hop-dong-lao-dong/page-1.png",
+  "annotationScope": "Manually marked blank dotted input areas in Part A and Part B identity fields (y=0.25–0.62) from the repository's public sample image before OCR/OpenCV evaluation; excludes labels, legal text, title, contract clauses and signatures. Only page 1 is benchmarked.",
+  "imageDimensions": { "width": 1200, "height": 1700 },
+  "fields": [
+    { "id": "employer_company", "label": "Công ty", "kind": "text", "rect": [0.265, 0.167, 0.278, 0.686] },
+    { "id": "employer_address", "label": "Địa chỉ", "kind": "text", "rect": [0.291, 0.160, 0.305, 0.687] },
+    { "id": "employer_phone", "label": "Điện thoại", "kind": "text", "rect": [0.318, 0.188, 0.332, 0.687] },
+    { "id": "employer_representative", "label": "Đại diện", "kind": "text", "rect": [0.344, 0.170, 0.359, 0.287] },
+    { "id": "employer_position", "label": "Chức vụ", "kind": "text", "rect": [0.344, 0.358, 0.359, 0.438] },
+    { "id": "employee_name", "label": "Ông/bà", "kind": "text", "rect": [0.404, 0.163, 0.418, 0.683] },
+    { "id": "employee_nationality", "label": "Quốc tịch", "kind": "text", "rect": [0.429, 0.187, 0.444, 0.683] },
+    { "id": "employee_birth_date", "label": "Ngày sinh", "kind": "text", "rect": [0.456, 0.186, 0.471, 0.683] },
+    { "id": "employee_birthplace", "label": "Nơi sinh", "kind": "text", "rect": [0.482, 0.162, 0.497, 0.684] },
+    { "id": "employee_permanent_address", "label": "Địa chỉ thường trú", "kind": "text", "rect": [0.509, 0.227, 0.524, 0.703] },
+    { "id": "employee_temporary_address", "label": "Địa chỉ tạm trú", "kind": "text", "rect": [0.536, 0.206, 0.550, 0.691] },
+    { "id": "employee_identity_number", "label": "Số CMND/CCCD", "kind": "text", "rect": [0.562, 0.233, 0.577, 0.464] },
+    { "id": "employee_identity_issue_date", "label": "Cấp ngày", "kind": "text", "rect": [0.562, 0.554, 0.577, 0.713] },
+    { "id": "employee_identity_issue_place", "label": "Tại", "kind": "text", "rect": [0.588, 0.100, 0.604, 0.681] }
+  ]
+}

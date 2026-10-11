@@ -1,0 +1,29 @@
+{
+  "sourceUrl": "https://congbao.cdnchinhphu.vn/CongBaoCP/VanBan/2025/7/45617/57815-1-2025985-98668-2025-tt-btc.pdf",
+  "pdfPage": 14,
+  "printedPage": 1,
+  "pdfSha256": "0F660EED7202AD23D398342B2E151691E4D14DF87EA644278CCEE965E45C527C",
+  "imageSha256": "EB2B5DB17D8D8FB06C1872583D840A3CC20EFC5AED4D4D1CD692451609B34C83",
+  "imageDimensions": { "width": 903, "height": 1289 },
+  "annotationScope": "Manual development-independent annotation from blank Mẫu số 2 (single-member limited liability company), first printed page, before running VietOCR or the recognizer. Rectangles cover writable dotted guides only; explanatory paragraphs, field-group captions, signature instruction, table border, and footnote separator are excluded.",
+  "fields": [
+    { "id": "recipient", "label": "Kính gửi", "kind": "text", "rect": [0.289, 0.698, 0.306, 0.823] },
+    { "id": "founder_name", "label": "Tôi là (ghi họ tên bằng chữ in hoa)", "kind": "text", "rect": [0.326, 0.496, 0.343, 0.889] },
+    { "id": "birth_date", "label": "Ngày, tháng, năm sinh", "kind": "text", "rect": [0.351, 0.402, 0.368, 0.551] },
+    { "id": "gender", "label": "Giới tính", "kind": "text", "rect": [0.376, 0.279, 0.393, 0.434] },
+    { "id": "personal_identifier", "label": "Số định danh cá nhân", "kind": "text", "rect": [0.401, 0.347, 0.418, 0.789] },
+    { "id": "contact_street", "label": "Số nhà/phòng, ngách/hẻm, ngõ/kiệt, đường/phố/đại lộ, tổ/xóm/ấp/thôn", "kind": "text", "rect": [0.465, 0.785, 0.482, 0.886] },
+    { "id": "contact_commune", "label": "Xã/Phường/Đặc khu", "kind": "text", "rect": [0.491, 0.297, 0.508, 0.889] },
+    { "id": "contact_province", "label": "Tỉnh/Thành phố trực thuộc trung ương", "kind": "text", "rect": [0.518, 0.563, 0.535, 0.806] },
+    { "id": "country", "label": "Quốc gia", "kind": "text", "rect": [0.544, 0.434, 0.561, 0.573] },
+    { "id": "phone", "label": "Điện thoại (nếu có)", "kind": "text", "rect": [0.568, 0.354, 0.585, 0.532] },
+    { "id": "email", "label": "Thư điện tử (nếu có)", "kind": "text", "rect": [0.568, 0.729, 0.585, 0.837] },
+    { "id": "ethnicity", "label": "Dân tộc", "kind": "text", "rect": [0.661, 0.225, 0.678, 0.349] },
+    { "id": "nationality", "label": "Quốc tịch", "kind": "text", "rect": [0.661, 0.439, 0.678, 0.539] },
+    { "id": "passport_number", "label": "Số Hộ chiếu", "kind": "text", "rect": [0.714, 0.481, 0.731, 0.635] },
+    { "id": "passport_issue_date", "label": "Ngày cấp", "kind": "text", "rect": [0.748, 0.296, 0.765, 0.374] },
+    { "id": "passport_issue_place", "label": "Nơi cấp", "kind": "text", "rect": [0.748, 0.469, 0.765, 0.815] },
+    { "id": "permanent_street", "label": "Số nhà/phòng, ngách/hẻm, ngõ/kiệt, đường/phố/đại lộ, tổ/xóm/ấp/thôn", "kind": "text", "rect": [0.806, 0.794, 0.823, 0.879] },
+    { "id": "permanent_commune", "label": "Xã/Phường/Đặc khu", "kind": "text", "rect": [0.835, 0.297, 0.852, 0.889] }
+  ]
+}

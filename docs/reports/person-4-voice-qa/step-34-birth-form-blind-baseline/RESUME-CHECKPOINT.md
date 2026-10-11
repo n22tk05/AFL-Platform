@@ -1,0 +1,6 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 34
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`; giữ toàn bộ thay đổi local, không reset/clean/stash/commit/push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `BIRTH-FORM-BLIND-BASELINE.md`. Nguồn công khai trang 70 được render vào `private-documents/recognition-evaluation/hcmc-khai-sinh-p70.png` (ignored). Chú giải 29 vùng và Playwright opt-in `RECOGNITION_FRESH_HOLDOUT` trong repo. Browser run thành công sau restart Next `:3001`; VietOCR `:8000` ready.
+- Baseline mù: 33 field, 20 có nhãn; IoU≥0,5 khớp 26/29, exact label 7; 3 ngày/tháng/năm ký bị lệch chú giải tay nên metric nghiêm ngặt chưa thể diễn giải là detector miss. Hai đường kẻ liền cuối trang là false field thật. Các trường mẹ/cha có anchor bị gán nhầm/nhân đôi dù OCR đọc được nhãn hàng xóm. Đây giờ là **mẫu phát triển**, không còn là holdout cho sửa tiếp.
+- Chưa sửa thuật toán sau baseline. Bước tiếp: sửa anchor `Năm sinh` kèm số chú dẫn và hạn chế lấy nhãn bên phải của vùng chấm; loại cặp underline trang trí nhưng giữ underline nhập liệu thật. Test Python/TS/browser, typecheck/build; tạo báo cáo chặng 35. Sau đó cần phôi mới để đánh giá ngoài tập.

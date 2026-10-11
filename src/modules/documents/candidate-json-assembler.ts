@@ -2,7 +2,7 @@ import type { PixelRect } from '@/modules/opencv/field-types';
 import { assembleJson } from './json-assembler';
 import type { DocumentJsonExport } from '@/shared/document-export.types';
 export interface RecognizedCandidate {
-  candidateId: string; rect: PixelRect; source: 'closed_contour' | 'checkbox' | 'field_row' | 'phrase_cluster';
+  candidateId: string; rect: PixelRect; source: 'closed_contour' | 'checkbox' | 'field_row' | 'phrase_cluster' | 'writing_guide';
   isContainer?: boolean; text: string; confidence?: number | null;
   checkboxState?: 'checked' | 'unchecked' | 'unknown';
 }

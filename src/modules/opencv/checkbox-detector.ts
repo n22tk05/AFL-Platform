@@ -8,7 +8,7 @@ export interface CheckboxDetectionConfig {
   maxDimension: number;
   /** Minimum aspect ratio width/height (default 0.75) */
   minAspectRatio: number;
-  /** Maximum aspect ratio width/height (default 1.33) */
+  /** Maximum aspect ratio width/height (default 1.6) */
   maxAspectRatio: number;
   /** Minimum enclosed contour area relative to bounding box (default 0.60) */
   minRectangularity: number;
@@ -20,7 +20,7 @@ export const DEFAULT_CHECKBOX_DETECTION_CONFIG: Readonly<CheckboxDetectionConfig
   minDimension: 12,
   maxDimension: 80,
   minAspectRatio: 0.75,
-  maxAspectRatio: 1.33,
+  maxAspectRatio: 1.6,
   minRectangularity: 0.60,
   approxPolygonEpsilonRatio: 0.04,
 });
@@ -102,6 +102,9 @@ export function detectCheckboxCandidates(
         // 2. Aspect ratio check (near-square)
         const aspectRatio = rect.width / rect.height;
         if (aspectRatio < config.minAspectRatio || aspectRatio > config.maxAspectRatio) {
+          continue;
+        }
+        if (aspectRatio > 1.33 && !hasHollowCenter(binary, rect)) {
           continue;
         }
 
@@ -199,4 +202,19 @@ function isEnclosedInnerBox(inner: PixelRect, outer: PixelRect): boolean {
   const innerArea = inner.width * inner.height;
   const outerArea = outer.width * outer.height;
   return innerArea <= outerArea * 0.95;
+}
+
+function hasHollowCenter(binary: CvMat, rect: PixelRect): boolean {
+  const pixels = binary.data;
+  if (!pixels || pixels.length < binary.cols * binary.rows) return false;
+  const inset = Math.max(3, Math.round(Math.min(rect.width, rect.height) * 0.2));
+  let ink = 0;
+  let total = 0;
+  for (let vertical = rect.y + inset; vertical < rect.y + rect.height - inset; vertical++) {
+    for (let horizontal = rect.x + inset; horizontal < rect.x + rect.width - inset; horizontal++) {
+      if (pixels[vertical * binary.cols + horizontal] > 0) ink++;
+      total++;
+    }
+  }
+  return total > 0 && ink / total <= 0.15;
 }

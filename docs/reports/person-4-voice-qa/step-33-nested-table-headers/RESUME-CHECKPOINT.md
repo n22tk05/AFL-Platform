@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 33
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Toàn bộ thay đổi chặng 14–33 còn local/chưa commit. Không reset/clean/stash/push; không dùng Dely theo yêu cầu người dùng.
+- Đọc `NESTED-TABLE-HEADER-RECOGNITION.md` và checkpoint chặng 32. Chặng này sửa OCR header cao/nhiều tầng trong `services/vietocr-service/text_layout.py`, kết hợp nhãn cha/con và giữ ô header bị gắn container trong `src/modules/forms/services/form-region-recognition.ts`; có test Python và TypeScript. Dữ liệu thử và JSON xuất ra ở `private-documents/recognition-evaluation/` (ignored).
+- 09-HSB: 24/24 ô bảng đúng hình học (mean IoU 0,927), **24/24 có nhãn, 6/24 khớp nguyên văn**; 33/33 field cần review. Trước chặng này chỉ 21/24 nhãn bảng không rỗng và 0/24 khớp nguyên văn. Mẫu này đã dùng để phát triển, không phải holdout. ANTT-01 giữ 5 field, 0 checkbox giả; cụm ngày chữ ký vẫn thiếu.
+- Kiểm chứng: Python 35/35, recognition 62/62, browser opt-in 15/15 (CT01, F05, Quảng Trị), typecheck/build/diff-check PASS. Build còn cảnh báo `<img>` ở modal. Browser test không ghi asset/Gemini/DB; chưa thử staging ACTIVE/citizen bằng workflow mới.
+- Sau build, VietOCR `:8000 /health` ready và Next dev `:3001/admin/library` trả 200; cần xác nhận lại listener ở phiên sau. Không commit/push.
+- Tiếp theo: phôi trắng mới **chưa dùng chỉnh thuật toán** với annotation TP/FP/FN, CER, IoU; cải thiện header OCR dài/chữ dọc và ngày chữ ký dựa trên bằng chứng mới; sau đó kiểm tra staging admin → ACTIVE → FE/Voice, DB/RLS. Không đánh dấu mục tiêu tổng thể hoàn tất.

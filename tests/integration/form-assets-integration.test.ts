@@ -12,9 +12,11 @@ import { PrismaFormRepository } from '@/modules/forms/repositories/prisma-form.r
 import { loadAdminTemplatePages } from '@/modules/forms/services/template-preview.client';
 import { requestStepAudio } from '@/modules/voice-ai/services/tts.client';
 import { audioIdentity, boundAudioUrlOrEmpty } from '@/modules/voice-ai/services/tts.service';
-import { validateManifest } from '@/modules/forms/services/form-validation.service';
+import { validateManifest, validateWorkflow } from '@/modules/forms/services/form-validation.service';
 import { FormPersistenceService } from '@/modules/forms/services/form-persistence.service';
+import { FormController } from '@/modules/forms/controllers/form.controller';
 import type { FormWorkflow, FormGeometricManifest } from '@/shared/contracts';
+import { bindFieldMetadata } from '@/modules/forms/services/form-field-metadata';
 
 const auth = new AdminAuthorizationService(() => 'secret');
 const workflow: FormWorkflow = { formId: 'FORM_A', formCode: 'FORM-A', formTitle: 'Form A', status: 'PENDING_REVIEW', circularInfo: 'Căn cứ đã kiểm tra',
@@ -31,6 +33,84 @@ function tempStore(context: { after: (callback: () => void) => void }) {
   return { root, store: new FormArtifactStore(root) };
 }
 const image = () => sharp({ create: { width: 320, height: 240, channels: 3, background: 'white' } }).png().toBuffer();
+test('multiline metadata survives immutable artifact reload and rejects invalid or unbound regions', async context => {
+  const { store, root } = tempStore(context);
+  const page = await store.saveImage(workflow.formCode, await image());
+  const step = { ...workflow.steps[0], inputKind: 'multiline_text' as const, highlightRegions: [
+    { regionId: 'line_1', pageNumber: 1, normalizedCoords: workflow.steps[0].highlightCoords },
+    { regionId: 'line_2', pageNumber: 1, normalizedCoords: [0.4, 0.1, 0.45, 0.8] as [number, number, number, number] }] };
+  const reference = await store.save({ ...workflow, pages: [page], steps: [step] });
+  const loaded = await new FormArtifactStore(root).read(reference, workflow.formCode);
+  assert.deepEqual(bindFieldMetadata(workflow.steps, loaded?.fields)[0].highlightRegions, step.highlightRegions);
+  await assert.rejects(store.save({ ...workflow, steps: [step] }), /INVALID_WORKFLOW/);
+  await assert.rejects(store.save({ ...workflow, pages: [page], steps: [{ ...step, highlightRegions: [step.highlightRegions[1]] }] }), /INVALID_WORKFLOW/);
+});
+test('two pages retain distinct assets, step pages and cross-page continuation regions', async context => {
+  const { store, root } = tempStore(context);
+  const first = await store.saveImage(workflow.formCode, await image(), 1);
+  const second = await store.saveImage(workflow.formCode,
+    await sharp({ create: { width: 240, height: 320, channels: 3, background: 'white' } }).png().toBuffer(), 2);
+  const firstRegions = [{ regionId: 'first_primary', pageNumber: 1, normalizedCoords: workflow.steps[0].highlightCoords },
+    { regionId: 'first_continued', pageNumber: 2, normalizedCoords: [0.1, 0.1, 0.2, 0.8] as [number, number, number, number] }];
+  const secondCoords: [number, number, number, number] = [0.3, 0.2, 0.4, 0.8];
+  const secondRegions = [{ regionId: 'second_primary', pageNumber: 2, normalizedCoords: secondCoords }];
+  const steps: FormWorkflow['steps'] = [
+    { ...workflow.steps[0], inputKind: 'multiline_text', highlightRegions: firstRegions },
+    { ...workflow.steps[0], stepIndex: 2, boxId: 'box_002', pageNumber: 2, label: 'Địa chỉ',
+      highlightCoords: secondCoords, inputKind: 'single_line_text', highlightRegions: secondRegions },
+  ];
+  const manifest: FormGeometricManifest = { formId: 'FORM_A', formCode: workflow.formCode, formTitle: workflow.formTitle,
+    imageDimensions: { width: 320, height: 240 }, pages: [first, second], boxes: [
+      { boxId: 'box_001', pageNumber: 1, rawText: 'Họ tên', boxType: 'text', estimatedWidthRatio: 0.6,
+        normalizedCoords: workflow.steps[0].highlightCoords, inputKind: 'multiline_text', inputRegions: firstRegions },
+      { boxId: 'box_002', pageNumber: 2, rawText: 'Địa chỉ', boxType: 'text', estimatedWidthRatio: 0.6,
+        normalizedCoords: secondCoords, inputKind: 'single_line_text', inputRegions: secondRegions },
+    ] };
+  const multipage = { ...workflow, pages: [first, second], totalPages: 2, steps };
+  validateManifest(manifest);
+  validateWorkflow(manifest, multipage);
+  const reference = await store.save(multipage);
+  const loaded = await new FormArtifactStore(root).read(reference, workflow.formCode);
+  assert.deepEqual(loaded?.pages, [first, second]);
+  assert.deepEqual(bindFieldMetadata(steps.map(step => ({ ...step, pageNumber: 1, inputKind: undefined, highlightRegions: undefined })),
+    loaded?.fields, 2).map(step => step.pageNumber), [1, 2]);
+  assert.throws(() => bindFieldMetadata(steps, loaded?.fields?.slice(0, 1), 2), /FORM_ASSET_UNAVAILABLE/);
+  assert.deepEqual(loaded?.fields?.[0].highlightRegions, firstRegions);
+  let storedReference: string | null = null;
+  const transaction = {
+    formTemplate: { findUnique: async () => null, upsert: async (input: { create: { originalPdfUrl: string | null } }) => {
+      storedReference = input.create.originalPdfUrl; return { id: 'FORM_A' };
+    } },
+    formGeometricManifest: { upsert: async () => ({ id: 'manifest' }) },
+    formGeometricBox: { deleteMany: async () => {}, createMany: async () => {} },
+    formWorkflow: { upsert: async () => ({ id: 'workflow' }) },
+    workflowStep: { deleteMany: async () => {}, createMany: async () => {}, findMany: async () => [
+      { id: 'step_1', stepIndex: 1 }, { id: 'step_2', stepIndex: 2 },
+    ] },
+    stepFaq: { createMany: async () => {} },
+  };
+  const database = { $transaction: async (callback: (client: typeof transaction) => Promise<unknown>) => callback(transaction),
+    formTemplate: { findUnique: async () => ({ id: 'FORM_A', formCode: workflow.formCode, formTitle: workflow.formTitle,
+      status: 'ACTIVE', version: 1, originalPdfUrl: storedReference, workflow: { status: 'ACTIVE', version: 1,
+        steps: steps.map(step => ({ ...step, pageNumber: undefined, highlightYmin: step.highlightCoords[0],
+          highlightXmin: step.highlightCoords[1], highlightYmax: step.highlightCoords[2], highlightXmax: step.highlightCoords[3],
+          faqs: step.faqs, requiresPrerequisiteDoc: false, sourceFieldFromPrerequisite: null, legalWarningFlag: false })) } }) } };
+  const repository = new PrismaFormRepository(database as never, store);
+  await repository.saveDraft(manifest, multipage);
+  const publicWorkflow = await repository.getWorkflowByFormCode(workflow.formCode);
+  assert.deepEqual(publicWorkflow?.pages, [first, second]);
+  assert.deepEqual(publicWorkflow?.steps.map(step => step.pageNumber), [1, 2]);
+  assert.deepEqual(publicWorkflow?.steps[0].highlightRegions, firstRegions);
+  assert.deepEqual((await repository.getWorkflowForReview(workflow.formCode))?.steps.map(step => step.pageNumber), [1, 2]);
+  assert.equal((await handleFormImage(new Request(`http://local${second.imageUrl}`), workflow.formCode, '2',
+    { store, load: async () => ({ ...multipage, status: 'ACTIVE' }) })).status, 200);
+  assert.equal((await handleFormImage(new Request(`http://local${second.imageUrl}`), workflow.formCode, '2',
+    { store, load: async () => multipage })).status, 404);
+  assert.throws(() => validateManifest({ ...manifest, pages: [first, { ...second, pageNumber: 1 }] }), /INVALID_MANIFEST_PAGES/);
+  assert.throws(() => validateManifest({ ...manifest, boxes: [{ ...manifest.boxes[0], pageNumber: 2 }, manifest.boxes[1]] }), /INVALID_MANIFEST/);
+  assert.throws(() => validateWorkflow(manifest, { ...multipage, steps: [steps[0], { ...steps[1], pageNumber: 1 }] }), /INVALID_WORKFLOW/);
+  await assert.rejects(store.save({ ...multipage, pages: [first, { ...second, width: 200 }] }), /INVALID_WORKFLOW/);
+});
 const request = (body: unknown, key = 'secret') => new Request('http://local/api/admin/forms/assets', { method: 'POST',
   headers: { 'Content-Type': 'application/json', 'x-admin-key': key }, body: JSON.stringify(body) });
 
@@ -61,6 +141,11 @@ test('template upload authorizes before body/storage, confirms privacy and keeps
   assert.equal((await handleFormAssetUpload(request({ ...body, formCode: 'a\nsecret' }), auth, store)).status, 400);
   assert.equal((await handleFormAssetUpload(request({ ...body, imageBase64: 'data:image/gif;base64,YQ==' }), auth, store)).status, 415);
   assert.equal((await handleFormAssetUpload(request(body), auth, store)).status, 200);
+  assert.equal((await handleFormAssetUpload(request({ ...body, pageNumber: '2' }), auth, store)).status, 400);
+  assert.equal((await handleFormAssetUpload(request({ ...body, pageNumber: 21 }), auth, store)).status, 400);
+  const second = await handleFormAssetUpload(request({ ...body, pageNumber: 2 }), auth, store);
+  assert.equal(second.status, 200);
+  assert.equal((await second.json()).data.pageNumber, 2);
   assert.equal((await handleFormAssetUpload(request(body), auth, { saveImage: async () => { throw Error('EACCES'); } } as never)).status, 503);
 });
 
@@ -104,7 +189,7 @@ test('TTS envelope uses current text/region and stale or legacy audio cannot bin
   const north = `/audio/${audioIdentity(workflow.steps[0].voiceGuidance, 1, 'NORTH').fileName}`;
   const south = `/audio/${audioIdentity(workflow.steps[0].voiceGuidance, 1, 'SOUTH').fileName}`;
   assert.notEqual(north, south);
-  assert.equal(boundAudioUrlOrEmpty(workflow.steps[0].voiceGuidance, 1, north), north);
+  assert.equal(boundAudioUrlOrEmpty(workflow.steps[0].voiceGuidance, 1, north), north.replace('/audio/', '/api/audio/'));
   assert.equal(boundAudioUrlOrEmpty('Other form text', 1, north), '');
   assert.equal(boundAudioUrlOrEmpty(workflow.steps[0].voiceGuidance, 2, south), '');
   assert.equal(boundAudioUrlOrEmpty(workflow.steps[0].voiceGuidance, 1, '/audio/default.mp3'), '');
@@ -127,25 +212,38 @@ test('atomic draft persists an artifact reference and repository returns its pag
   const manifest: FormGeometricManifest = { formId: 'FORM_A', formCode: workflow.formCode, formTitle: workflow.formTitle,
     imageDimensions: { width: 320, height: 240 }, pages: [page], boxes: [{ boxId: 'box_001', rawText: 'Họ tên', boxType: 'text',
       estimatedWidthRatio: 0.6, normalizedCoords: workflow.steps[0].highlightCoords }] };
+  manifest.boxes[0].inputKind = 'multiline_text';
+  manifest.boxes[0].inputRegions = [{ regionId: 'line_1', pageNumber: 1, normalizedCoords: workflow.steps[0].highlightCoords },
+    { regionId: 'line_2', pageNumber: 1, normalizedCoords: [0.4, 0.2, 0.45, 0.8] }];
   let reference: string | null = null;
   let transactions = 0;
+  const persistedStepRows: { id: string; stepIndex: number }[] = [];
+  const persistedFaqRows: { stepId: string }[] = [];
   const tx = {
     formTemplate: { findUnique: async () => null, upsert: async (input: { create: { originalPdfUrl: string | null } }) => { reference = input.create.originalPdfUrl; return { id: 'FORM_A' }; } },
     formGeometricManifest: { upsert: async () => ({ id: 'manifest' }) },
     formGeometricBox: { deleteMany: async () => {}, createMany: async () => {} },
-    formWorkflow: { upsert: async () => ({ id: 'workflow' }) }, workflowStep: { deleteMany: async () => {}, create: async () => {} },
+    formWorkflow: { upsert: async () => ({ id: 'workflow' }) },
+    workflowStep: { deleteMany: async () => {}, createMany: async (input: { data: { id: string; stepIndex: number }[] }) => {
+      persistedStepRows.push(...input.data);
+    }, findMany: async () => persistedStepRows },
+    stepFaq: { createMany: async (input: { data: { stepId: string }[] }) => { persistedFaqRows.push(...input.data); } },
   };
   const db = { $transaction: async (callback: (client: typeof tx) => Promise<unknown>, options: unknown) => {
-    transactions++; assert.deepEqual(options, { isolationLevel: 'Serializable' }); return callback(tx);
+    transactions++; assert.deepEqual(options, { timeout: 60000, maxWait: 10000, isolationLevel: 'Serializable' }); return callback(tx);
   }, formTemplate: { findUnique: async () => ({ id: 'FORM_A', formCode: workflow.formCode, formTitle: workflow.formTitle, status: 'ACTIVE', version: 1,
     originalPdfUrl: reference, workflow: { status: 'ACTIVE', version: 1, steps: [{ ...workflow.steps[0], highlightYmin: 0.2, highlightXmin: 0.2,
       highlightYmax: 0.3, highlightXmax: 0.8, requiresPrerequisiteDoc: false, sourceFieldFromPrerequisite: null, legalWarningFlag: false }] } }) } };
   const repository = new PrismaFormRepository(db as never, store);
-  await repository.saveDraft(manifest, { ...workflow, pages: [page] });
+  await repository.saveDraft(manifest, { ...workflow, pages: [page], steps: [{ ...workflow.steps[0], inputKind: manifest.boxes[0].inputKind, highlightRegions: manifest.boxes[0].inputRegions }] });
   assert.equal(transactions, 1); assert.match(reference!, /^afl-template-v1:[a-f0-9]{64}$/);
+  assert.ok(persistedFaqRows.length > 0);
+  assert.ok(persistedFaqRows.every(faq => persistedStepRows.some(step => step.id === faq.stepId)));
   const loaded = await repository.getWorkflowByFormCode(workflow.formCode);
   assert.deepEqual(loaded?.pages, [page]); assert.equal(loaded?.steps[0].pageNumber, 1); assert.equal(loaded?.circularInfo, workflow.circularInfo);
   assert.deepEqual((await repository.getWorkflowForReview(workflow.formCode))?.pages, [page]);
+  assert.deepEqual(loaded?.steps[0].highlightRegions, manifest.boxes[0].inputRegions);
+  assert.equal((await repository.getWorkflowForReview(workflow.formCode))?.steps[0].inputKind, 'multiline_text');
   assert.throws(() => validateManifest({ ...manifest, pages: [null] }), /INVALID_MANIFEST_PAGES/);
 });
 
@@ -158,11 +256,12 @@ test('review updates manifest geometry transactionally, retains freshly bound au
     workflow: { id: 'workflow', status: 'PENDING_REVIEW', steps: [{ ...workflow.steps[0], voiceGuidance: 'Old text' }] } };
   const created: { audioUrl: string | null }[] = []; let geometryWrites = 0; let mutations = 0;
   const tx = { formTemplate: { findUnique: async () => existing, updateMany: async () => { mutations++; return { count: 1 }; } },
-    formWorkflow: { upsert: async () => ({ id: 'workflow' }) }, workflowStep: { deleteMany: async () => {}, create: async (input: { data: { audioUrl: string | null } }) => { created.push(input.data); } },
+    formWorkflow: { upsert: async () => ({ id: 'workflow' }) }, stepFaq: { deleteMany: async () => {} },
+    workflowStep: { deleteMany: async () => {}, create: async (input: { data: { audioUrl: string | null } }) => { created.push(input.data); } },
     formGeometricBox: { update: async () => { geometryWrites++; } } };
   const db = { $transaction: async (callback: (client: typeof tx) => Promise<unknown>) => callback(tx) };
   const repository = new PrismaFormRepository(db as never, store);
-  const audioUrl = `/audio/${audioIdentity(workflow.steps[0].voiceGuidance, 1, 'SOUTH').fileName}`;
+  const audioUrl = `/api/audio/${audioIdentity(workflow.steps[0].voiceGuidance, 1, 'SOUTH').fileName}`;
   const changed = { ...workflow, pages: [page], steps: [{ ...workflow.steps[0], audioUrl, highlightCoords: [0.4, 0.2, 0.5, 0.8] as [number, number, number, number] }] };
   await repository.saveReviewWorkflow(workflow.formCode, changed);
   assert.equal(geometryWrites, 1); assert.equal(created[0].audioUrl, audioUrl);
@@ -194,6 +293,38 @@ test('missing image or mismatched step geometry blocks approval before ACTIVE an
   assert.equal(mutations, 0);
 });
 
+test('approval checks both page assets and metadata before status and audit mutations', async context => {
+  const { store, root } = tempStore(context);
+  const first = await store.saveImage(workflow.formCode, await image(), 1);
+  const second = await store.saveImage(workflow.formCode,
+    await sharp({ create: { width: 240, height: 320, channels: 3, background: 'white' } }).png().toBuffer(), 2);
+  const coords: [number, number, number, number] = [0.4, 0.2, 0.5, 0.8];
+  const steps: FormWorkflow['steps'] = [
+    { ...workflow.steps[0], inputKind: 'single_line_text', highlightRegions: [{ regionId: 'r1', pageNumber: 1,
+      normalizedCoords: workflow.steps[0].highlightCoords }] },
+    { ...workflow.steps[0], stepIndex: 2, boxId: 'box_002', pageNumber: 2, label: 'Địa chỉ', highlightCoords: coords,
+      inputKind: 'single_line_text', highlightRegions: [{ regionId: 'r2', pageNumber: 2, normalizedCoords: coords }] },
+  ];
+  const reference = await store.save({ ...workflow, pages: [first, second], steps });
+  const savedSteps = steps.map(step => ({ ...step, highlightYmin: step.highlightCoords[0], highlightXmin: step.highlightCoords[1],
+    highlightYmax: step.highlightCoords[2], highlightXmax: step.highlightCoords[3] }));
+  const existing = { id: 'FORM_A', status: 'PENDING_REVIEW', originalPdfUrl: reference,
+    manifest: { imageWidth: 320, imageHeight: 240, boxes: steps.map(step => ({ boxId: step.boxId, boxYmin: step.highlightCoords[0],
+      boxXmin: step.highlightCoords[1], boxYmax: step.highlightCoords[2], boxXmax: step.highlightCoords[3] })) },
+    workflow: { id: 'workflow', status: 'PENDING_REVIEW', steps: savedSteps } };
+  let mutations = 0;
+  const mutate = async () => { mutations++; return { count: 1 }; };
+  const transaction = { formTemplate: { findUnique: async () => existing, updateMany: mutate },
+    formWorkflow: { update: mutate }, formAuditLog: { create: mutate } };
+  const repository = new PrismaFormRepository({ $transaction: async (callback: (client: typeof transaction) => Promise<unknown>) => callback(transaction) } as never, store);
+  await repository.approveWorkflow(workflow.formCode, 'shared_admin_key');
+  assert.equal(mutations, 3);
+  const secondAsset = new URL(second.imageUrl, 'http://local').searchParams.get('asset')!;
+  fs.unlinkSync(path.join(root, `${secondAsset}.png`));
+  await assert.rejects(repository.approveWorkflow(workflow.formCode, 'shared_admin_key'), /FORM_ASSET_UNAVAILABLE/);
+  assert.equal(mutations, 3);
+});
+
 test('a corrupt template fails closed without disabling the database for unrelated forms', async () => {
   let offline = 0;
   const fail = async () => { throw Error('FORM_ASSET_UNAVAILABLE'); };
@@ -203,4 +334,23 @@ test('a corrupt template fails closed without disabling the database for unrelat
   await assert.rejects(service.getWorkflowForReview('FORM-A'), /FORM_ASSET_UNAVAILABLE/);
   assert.deepEqual(await service.approveWorkflow('FORM-A'), { success: false, newStatus: 'FORM_ASSET_UNAVAILABLE' });
   assert.equal(offline, 0);
+  const reviewResponse = await new FormController(service, auth).getWorkflowForReview({ rawFormCode: 'FORM-A', adminKey: 'secret' });
+  assert.equal(reviewResponse.status, 503);
+  assert.deepEqual((reviewResponse.body as { error: { code: string } }).error, { code: 'FORM_ASSET_UNAVAILABLE' });
+});
+
+test('foreign field metadata blocks approval before status changes or audit creation', async context => {
+  const { store } = tempStore(context);
+  const page = await store.saveImage(workflow.formCode, await image());
+  const reference = await store.save({ ...workflow, pages: [page], steps: [{ ...workflow.steps[0], boxId: 'foreign_box', inputKind: 'single_line_text',
+    highlightRegions: [{ regionId: 'foreign_region', pageNumber: 1, normalizedCoords: workflow.steps[0].highlightCoords }] }] });
+  const existing = { id: 'FORM_A', status: 'PENDING_REVIEW', originalPdfUrl: reference,
+    manifest: { imageWidth: 320, imageHeight: 240, boxes: [{ boxId: 'box_001', boxYmin: 0.2, boxXmin: 0.2, boxYmax: 0.3, boxXmax: 0.8 }] },
+    workflow: { id: 'workflow', status: 'PENDING_REVIEW', steps: [{ ...workflow.steps[0], highlightYmin: 0.2, highlightXmin: 0.2, highlightYmax: 0.3, highlightXmax: 0.8 }] } };
+  let mutations = 0;
+  const mutate = async () => { mutations++; return { count: 1 }; };
+  const tx = { formTemplate: { findUnique: async () => existing, updateMany: mutate }, formWorkflow: { update: mutate }, formAuditLog: { create: mutate } };
+  const repository = new PrismaFormRepository({ $transaction: async (callback: (client: typeof tx) => Promise<unknown>) => callback(tx) } as never, store);
+  await assert.rejects(repository.approveWorkflow(workflow.formCode, 'shared_admin_key'), /UNAVAILABLE/);
+  assert.equal(mutations, 0);
 });

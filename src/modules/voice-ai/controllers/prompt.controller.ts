@@ -4,6 +4,7 @@ import type { GeminiPromptService } from '@/modules/voice-ai/services/gemini-pro
 import { PromptControllerDto } from '@/modules/voice-ai/types/voice-ai.types';
 import { FormGeometricManifest } from '@/shared/contracts';
 import { validateManifest } from '@/modules/forms/services/form-validation.service';
+import { validateOcrContextForManifest } from '@/modules/forms/services/form-ocr-context';
 import type { AdminAuthorizationService } from '@/modules/forms/services/admin-authorization.service';
 
 export class PromptController {
@@ -33,7 +34,14 @@ export class PromptController {
         };
       }
 
-      const workflow = await this.geminiPromptService.generateWorkflow(manifest);
+      let ocrContext;
+      try {
+        ocrContext = dto.ocrContext === undefined ? undefined : validateOcrContextForManifest(dto.ocrContext, manifest);
+      } catch {
+        return { status: 400, body: { success: false, error: { code: 'INVALID_OCR_CONTEXT',
+          message_vi: 'Dữ liệu OCR không hợp lệ hoặc quá lớn; vui lòng phân tích lại phôi.' } } };
+      }
+      const workflow = await this.geminiPromptService.generateWorkflow(manifest, false, ocrContext);
       const persistResult = await this.formPersistenceService.saveDraft(manifest, workflow);
 
       return {
@@ -50,12 +58,18 @@ export class PromptController {
     } catch (error) {
       console.error('[PromptController] Lỗi xử lý:', error);
       const code = error instanceof Error ? error.message : '';
+      const publicCode = ['FORM_ACTIVE', 'DATABASE_UNAVAILABLE', 'FORM_ASSET_UNAVAILABLE', 'INVALID_WORKFLOW', 'AI_UNAVAILABLE', 'AI_BUSY', 'AI_QUOTA_EXCEEDED'].includes(code)
+        ? code
+        : 'PROMPT_GENERATION_FAILED';
+      const status = code === 'FORM_ACTIVE' ? 409
+        : ['DATABASE_UNAVAILABLE', 'FORM_ASSET_UNAVAILABLE', 'AI_UNAVAILABLE', 'AI_BUSY', 'AI_QUOTA_EXCEEDED'].includes(code) ? 503
+        : code === 'INVALID_WORKFLOW' ? 400 : 502;
       return {
-        status: code === 'FORM_ACTIVE' ? 409 : ['DATABASE_UNAVAILABLE', 'FORM_ASSET_UNAVAILABLE'].includes(code) ? 503 : code === 'INVALID_WORKFLOW' ? 400 : 502,
+        status,
         body: {
           success: false,
           error: {
-            code: ['FORM_ACTIVE', 'DATABASE_UNAVAILABLE', 'FORM_ASSET_UNAVAILABLE', 'INVALID_WORKFLOW'].includes(code) ? code : 'PROMPT_GENERATION_FAILED',
+            code: publicCode,
             message_vi: 'Không thể tạo và lưu kịch bản biểu mẫu.',
           },
         },

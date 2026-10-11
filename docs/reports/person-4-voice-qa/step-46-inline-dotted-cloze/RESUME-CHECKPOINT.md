@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 11/10/2026, chặng 46
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`; toàn bộ thay đổi chặng 14–46 còn local/chưa commit. Không reset/clean/stash/push; không dùng Dely theo yêu cầu người dùng.
+- Đọc `INLINE-DOTTED-FIELDS-AND-REGRESSION.md` và checkpoint chặng 45 trước khi tiếp tục. Fixture xây dựng hash `306461E9AEB93C9DD6A384BB4335387909141300079E15110C425E8A776C17C3`, baseline mù hash `5F43A006D2296EAAF796453B214FC2E77C8523D759933433F12578F71CFE0FF3`; không ghi đè. Development JSON ở `private-documents/recognition-evaluation/CENTRAL-CONSTRUCTION-P59.development.*.json` (ignored).
+- Đã mở rộng OpenCV cho dãy 6–7 chấm có đúng một khoảng rộng; OCR gán nhãn guide ngắn chỉ khi cùng dòng và số đoạn OCR/guide bằng nhau. Bốn trường còn thiếu của trang xây dựng nay khớp vùng; tất cả giữ `needs_review`.
+- Trang xây dựng development **29 TP/0 FN/0 FP**, 9/29 nhãn chính xác, 28 trường review. Unit recognition **86/86**, Voice **19/19**, Python OCR **36/36**, TypeScript/build PASS. Browser toàn bộ 17/18 do F19-p5 timeout ở 180 giây; chạy lại riêng F19-p5 PASS trong 34 giây. Không được ghi là lượt toàn bộ 18/18 PASS.
+- Next `:3001/admin/library` HTTP 200 sau build, VietOCR `:8000/health` ready trước lượt browser. Browser chặn ghi dữ liệu và không dùng cloud/DB/audio cache thật. Thay đổi hiện tại chỉ là phát triển local, chưa nghiệm thu tổng thể.
+- Tiếp theo: holdout độc lập cho guide chấm ngắn/checkbox/multiline; đo nguyên nhân F19-p5 chậm bất thường; staging admin→ACTIVE→citizen/Voice và DB/RLS. Mục tiêu tổng thể còn mở.

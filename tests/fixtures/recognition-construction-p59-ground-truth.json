@@ -1,0 +1,505 @@
+{
+  "sourceImage": "central-construction-application-p59.png",
+  "sourceUrl": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/01/175_2024_nd-cp_30122024_1-signed.pdf",
+  "pdfPage": 59,
+  "imageDimensions": {
+    "width": 1238,
+    "height": 1744
+  },
+  "annotationScope": "Manually marked all visible dotted value spans on scanned Annex III Form 01 before running this image through OCR/OpenCV. Includes administrative heading fields and inline cloze blanks; excludes printed labels, explanatory prose, legal notes, recipient/signature titles and nonblank decorations. Historical layout benchmark only, not a statement of current legal validity.",
+  "fields": [
+    {
+      "id": "document_number",
+      "label": "Văn bản số",
+      "kind": "text",
+      "rectPx": [
+        212,
+        701,
+        231,
+        735
+      ],
+      "rect": [
+        0.12156,
+        0.566236,
+        0.132454,
+        0.5937
+      ]
+    },
+    {
+      "id": "document_place",
+      "label": "Nơi lập văn bản",
+      "kind": "text",
+      "rectPx": [
+        242,
+        489,
+        263,
+        516
+      ],
+      "rect": [
+        0.138761,
+        0.394992,
+        0.150803,
+        0.416801
+      ]
+    },
+    {
+      "id": "document_day",
+      "label": "Ngày lập",
+      "kind": "text",
+      "rectPx": [
+        242,
+        591,
+        263,
+        617
+      ],
+      "rect": [
+        0.138761,
+        0.477383,
+        0.150803,
+        0.498384
+      ]
+    },
+    {
+      "id": "document_month",
+      "label": "Tháng lập",
+      "kind": "text",
+      "rectPx": [
+        242,
+        690,
+        263,
+        716
+      ],
+      "rect": [
+        0.138761,
+        0.557351,
+        0.150803,
+        0.578352
+      ]
+    },
+    {
+      "id": "document_year",
+      "label": "Năm lập",
+      "kind": "text",
+      "rectPx": [
+        242,
+        762,
+        263,
+        799
+      ],
+      "rect": [
+        0.138761,
+        0.615509,
+        0.150803,
+        0.645396
+      ]
+    },
+    {
+      "id": "recipient_department_suffix",
+      "label": "Sở Xây dựng (địa phương)",
+      "kind": "text",
+      "rectPx": [
+        339,
+        725,
+        363,
+        837
+      ],
+      "rect": [
+        0.194381,
+        0.585622,
+        0.208142,
+        0.67609
+      ]
+    },
+    {
+      "id": "applicant_name",
+      "label": "Họ tên người làm đơn",
+      "kind": "text",
+      "rectPx": [
+        419,
+        285,
+        443,
+        403
+      ],
+      "rect": [
+        0.240252,
+        0.23021,
+        0.254014,
+        0.325525
+      ]
+    },
+    {
+      "id": "applicant_position",
+      "label": "Chức vụ người làm đơn",
+      "kind": "text",
+      "rectPx": [
+        419,
+        626,
+        443,
+        1111
+      ],
+      "rect": [
+        0.240252,
+        0.505654,
+        0.254014,
+        0.897415
+      ]
+    },
+    {
+      "id": "principal",
+      "label": "Đại diện cho",
+      "kind": "text",
+      "rectPx": [
+        513,
+        392,
+        538,
+        1092
+      ],
+      "rect": [
+        0.294151,
+        0.31664,
+        0.308486,
+        0.882068
+      ]
+    },
+    {
+      "id": "home_country_address",
+      "label": "Địa chỉ đăng ký tại chính quốc",
+      "kind": "text",
+      "rectPx": [
+        557,
+        592,
+        582,
+        1115
+      ],
+      "rect": [
+        0.319381,
+        0.478191,
+        0.333716,
+        0.900646
+      ]
+    },
+    {
+      "id": "phone_primary",
+      "label": "Số điện thoại tại chính quốc",
+      "kind": "text",
+      "rectPx": [
+        604,
+        383,
+        630,
+        549
+      ],
+      "rect": [
+        0.34633,
+        0.30937,
+        0.361239,
+        0.443457
+      ]
+    },
+    {
+      "id": "fax_primary",
+      "label": "Fax tại chính quốc",
+      "kind": "text",
+      "rectPx": [
+        604,
+        605,
+        630,
+        762
+      ],
+      "rect": [
+        0.34633,
+        0.488691,
+        0.361239,
+        0.615509
+      ]
+    },
+    {
+      "id": "email_primary",
+      "label": "Email tại chính quốc",
+      "kind": "text",
+      "rectPx": [
+        604,
+        853,
+        630,
+        1113
+      ],
+      "rect": [
+        0.34633,
+        0.689015,
+        0.361239,
+        0.899031
+      ]
+    },
+    {
+      "id": "vietnam_office_address",
+      "label": "Địa chỉ văn phòng đại diện tại Việt Nam",
+      "kind": "text",
+      "rectPx": [
+        648,
+        826,
+        675,
+        1113
+      ],
+      "rect": [
+        0.37156,
+        0.667205,
+        0.387041,
+        0.899031
+      ]
+    },
+    {
+      "id": "phone_office",
+      "label": "Số điện thoại văn phòng tại Việt Nam",
+      "kind": "text",
+      "rectPx": [
+        695,
+        394,
+        723,
+        565
+      ],
+      "rect": [
+        0.398509,
+        0.318255,
+        0.414564,
+        0.456381
+      ]
+    },
+    {
+      "id": "fax_office",
+      "label": "Fax văn phòng tại Việt Nam",
+      "kind": "text",
+      "rectPx": [
+        695,
+        625,
+        723,
+        768
+      ],
+      "rect": [
+        0.398509,
+        0.504847,
+        0.414564,
+        0.620355
+      ]
+    },
+    {
+      "id": "email_office",
+      "label": "Email văn phòng tại Việt Nam",
+      "kind": "text",
+      "rectPx": [
+        695,
+        853,
+        723,
+        1115
+      ],
+      "rect": [
+        0.398509,
+        0.689015,
+        0.414564,
+        0.900646
+      ]
+    },
+    {
+      "id": "company_name",
+      "label": "Tên công ty hoặc liên danh",
+      "kind": "text",
+      "rectPx": [
+        770,
+        611,
+        804,
+        717
+      ],
+      "rect": [
+        0.441514,
+        0.493538,
+        0.461009,
+        0.57916
+      ]
+    },
+    {
+      "id": "work_description",
+      "label": "Công việc nhận thầu",
+      "kind": "text",
+      "rectPx": [
+        812,
+        955,
+        839,
+        1008
+      ],
+      "rect": [
+        0.465596,
+        0.771405,
+        0.481078,
+        0.814216
+      ]
+    },
+    {
+      "id": "project_name",
+      "label": "Tên dự án",
+      "kind": "text",
+      "rectPx": [
+        848,
+        210,
+        870,
+        293
+      ],
+      "rect": [
+        0.486239,
+        0.169628,
+        0.498853,
+        0.236672
+      ]
+    },
+    {
+      "id": "project_location",
+      "label": "Địa điểm dự án",
+      "kind": "text",
+      "rectPx": [
+        848,
+        336,
+        870,
+        412
+      ],
+      "rect": [
+        0.486239,
+        0.271405,
+        0.498853,
+        0.332795
+      ]
+    },
+    {
+      "id": "term_from",
+      "label": "Thời gian từ",
+      "kind": "text",
+      "rectPx": [
+        848,
+        625,
+        870,
+        684
+      ],
+      "rect": [
+        0.486239,
+        0.504847,
+        0.498853,
+        0.552504
+      ]
+    },
+    {
+      "id": "term_to",
+      "label": "Thời gian đến",
+      "kind": "text",
+      "rectPx": [
+        848,
+        730,
+        870,
+        799
+      ],
+      "rect": [
+        0.486239,
+        0.589661,
+        0.498853,
+        0.645396
+      ]
+    },
+    {
+      "id": "request_department_suffix",
+      "label": "Sở Xây dựng được đề nghị cấp phép",
+      "kind": "text",
+      "rectPx": [
+        890,
+        615,
+        917,
+        659
+      ],
+      "rect": [
+        0.510321,
+        0.496769,
+        0.525803,
+        0.53231
+      ]
+    },
+    {
+      "id": "contact_name",
+      "label": "Người liên hệ khi bổ sung hồ sơ",
+      "kind": "text",
+      "rectPx": [
+        1097,
+        420,
+        1124,
+        495
+      ],
+      "rect": [
+        0.629014,
+        0.339257,
+        0.644495,
+        0.399838
+      ]
+    },
+    {
+      "id": "contact_address",
+      "label": "Địa chỉ liên hệ tại Việt Nam",
+      "kind": "text",
+      "rectPx": [
+        1097,
+        816,
+        1124,
+        944
+      ],
+      "rect": [
+        0.629014,
+        0.659128,
+        0.644495,
+        0.76252
+      ]
+    },
+    {
+      "id": "contact_phone",
+      "label": "Số điện thoại liên hệ",
+      "kind": "text",
+      "rectPx": [
+        1139,
+        178,
+        1157,
+        301
+      ],
+      "rect": [
+        0.653096,
+        0.14378,
+        0.663417,
+        0.243134
+      ]
+    },
+    {
+      "id": "contact_fax",
+      "label": "Fax liên hệ",
+      "kind": "text",
+      "rectPx": [
+        1139,
+        331,
+        1157,
+        448
+      ],
+      "rect": [
+        0.653096,
+        0.267367,
+        0.663417,
+        0.361874
+      ]
+    },
+    {
+      "id": "contact_email",
+      "label": "Email liên hệ",
+      "kind": "text",
+      "rectPx": [
+        1139,
+        548,
+        1157,
+        667
+      ],
+      "rect": [
+        0.653096,
+        0.442649,
+        0.663417,
+        0.538772
+      ]
+    }
+  ]
+}

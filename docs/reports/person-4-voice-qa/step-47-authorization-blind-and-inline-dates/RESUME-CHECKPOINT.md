@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 11/10/2026, chặng 47
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Giữ toàn bộ sửa đổi local chặng 14–47; không reset/clean/stash/commit/push và không dùng Dely theo yêu cầu người dùng.
+- Đọc `RECOGNITION-PRIORITY-AND-EVIDENCE.md` trong cùng thư mục trước khi tiếp tục. **Mục tiêu mới:** text OCR chính xác, JSON văn bản có nguồn gốc thực sự tới Gemini, tọa độ ô tương đối chính xác cho admin. Không tối ưu để nhận diện đủ mọi nhãn.
+- Phôi ủy quyền trang 61: fixture 20 vùng được khóa trước khi chạy; blind baseline 10 TP/10 FN/4 FP; development 20 TP/0 FN/0 FP, 9/20 nhãn chính xác, 20 ô review. Đây là cùng PDF nguồn với trang 59, không phải holdout nguồn độc lập. Hash ảnh/fixture/baseline ghi trong báo cáo; không ghi đè baseline.
+- Code nhận diện đã sửa ngày hành chính, chỗ trống “Quyết định”, bridge giữa guide và loại nhiễu trang trí. Hồi quy F19-p5 do bridge rộng đã được sửa. Browser opt-in **19/19 PASS**; recognition **90/90**, Voice **19/19**, Python OCR **36/36**, TypeScript/build PASS; test không dùng cloud/DB/audio cache thật.
+- **Lỗ hổng hợp đồng cần giải quyết tiếp:** FE hiện có `ocrPages.rawText/lines/blocks`, nhưng manifest và prompt Gemini chỉ chuyển `boxes`/nhãn; toàn văn có thứ tự không đến model. `POST /api/llm/prompt` giới hạn 256 KiB. Thiết kế gói JSON an toàn, giới hạn kích thước và test fake-model là ưu tiên kế tiếp.
+- Kế tiếp đo CER/word accuracy trên phôi nguồn độc lập; sau đó JSON OCR → Gemini, rồi đo sai số tọa độ/precision-recall trên holdout và staging DB/RLS. Không tuyên bố mục tiêu tổng thể đã xong.

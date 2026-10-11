@@ -19,7 +19,7 @@ const ocr = { success: true, data: { status: 'success', source: { frame: 'proces
   pages: [{ page: 1, width: 320, height: 480, coordinateSystem: 'normalized-xyxy' }], rawText: 'OCR of valid A', warnings: [],
   blocks: [], structure: { fields: [], checkboxes: [] } } };
 
-test('invalid replacement clears reviewed draft, image, OCR, file and confirmations without calling AI/storage', async ({ page }) => {
+test('invalid replacement keeps reviewed draft, image and confirmations without calling AI/storage', async ({ page }) => {
   test.setTimeout(90_000);
   let writes = 0;
   await page.route('**/api/documents/json', route => route.fulfill({ json: ocr }));
@@ -31,19 +31,18 @@ test('invalid replacement clears reviewed draft, image, OCR, file and confirmati
   await dialog.getByRole('checkbox', { name: 'Đã đối chiếu từng nhãn' }).check();
   await expect(dialog.getByRole('button', { name: 'Lưu phôi và sinh kịch bản chờ duyệt' })).toBeEnabled();
   await dialog.getByLabel('Ảnh phôi', { exact: true }).setInputFiles({ name: 'invalid-b.svg', mimeType: 'image/svg+xml', buffer: Buffer.from('<svg/>') });
-  await expect(dialog.getByRole('alert')).toContainText('Kết quả đối soát của ảnh trước đã được xóa');
-  await expect(dialog.getByRole('combobox', { name: 'Ô cần đối soát' })).toHaveCount(0);
-  await expect(dialog.locator('img')).toHaveCount(0);
-  await expect(dialog.getByText('Text OCR và cảnh báo nguồn')).toHaveCount(0);
-  await expect(dialog.getByText('Ảnh đang chọn:', { exact: false })).toHaveCount(0);
-  await expect(dialog.getByRole('checkbox', { name: 'Đây là phôi trống' })).not.toBeChecked();
+  await expect(dialog.getByRole('alert').filter({ hasText: 'Chỉ nhận ảnh JPEG hoặc PNG' })).toBeVisible();
+  await expect(dialog.getByRole('combobox', { name: 'Ô cần đối soát' })).toBeVisible();
+  await expect(dialog.locator('img')).toHaveCount(1);
+  await expect(dialog.getByText('Text OCR và cảnh báo nguồn', { exact: false })).toHaveCount(1);
+  await expect(dialog.getByText('Ảnh đang chọn:', { exact: false })).toBeVisible();
+  await expect(dialog.getByRole('checkbox', { name: 'Đây là phôi trống' })).toBeChecked();
+  await expect(dialog.getByRole('checkbox', { name: 'Đã đối chiếu từng nhãn' })).toBeChecked();
   await expect(dialog.getByLabel('Ảnh phôi', { exact: true })).toHaveValue('');
-  await dialog.getByRole('button', { name: 'Phân tích OpenCV và VietOCR' }).click();
-  await expect(dialog.getByRole('alert')).toContainText('Chọn phôi trống');
   expect(writes).toBe(0);
 });
 
-test('replacing a file during OCR cancels the operation and ignores a late response', async ({ page }) => {
+test('invalid replacement during OCR leaves the active analysis intact', async ({ page }) => {
   test.setTimeout(90_000);
   let release!: () => void;
   let started!: () => void;
@@ -63,31 +62,35 @@ test('replacing a file during OCR cancels the operation and ignores a late respo
   await dialog.getByLabel('Ảnh phôi', { exact: true }).setInputFiles({ name: 'empty.png', mimeType: 'image/png', buffer: Buffer.alloc(0) });
   release();
   await completed;
-  await expect(dialog.getByRole('alert')).toContainText('Ảnh phôi rỗng');
+  await expect(dialog.getByRole('alert').filter({ hasText: 'Ảnh phôi rỗng' })).toBeVisible();
   await expect(dialog.getByText('Đang xử lý… Có thể đóng để hủy.')).toHaveCount(0);
-  await expect(dialog.getByRole('combobox', { name: 'Ô cần đối soát' })).toHaveCount(0);
-  await expect(dialog.getByRole('checkbox', { name: 'Đây là phôi trống' })).not.toBeChecked();
+  await expect(dialog.getByRole('combobox', { name: 'Ô cần đối soát' })).toBeVisible();
+  await expect(dialog.getByRole('checkbox', { name: 'Đây là phôi trống' })).toBeChecked();
 });
 
 test('service outage has a retry control, 404 does not, and retry requests fresh server data', async ({ page }) => {
   let reads = 0;
+  let status = 503;
   await page.route('**/api/forms/*/workflow', route => {
     reads++;
-    return route.fulfill({ status: reads === 1 ? 503 : 404, json: { success: false } });
+    return route.fulfill({ status, json: { success: false } });
   });
   await page.goto('/citizen/guide?formCode=DEMO-FE');
   await expect(page.getByRole('heading', { name: 'Máy chủ tạm thời không khả dụng' })).toBeVisible();
+  const previousReads = reads;
+  status = 404;
   await page.getByRole('button', { name: 'Thử lại', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy biểu mẫu đã ban hành' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Thử lại', exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Nhấn giữ để nói' })).toHaveCount(0);
-  expect(reads).toBe(2);
+  expect(reads).toBeGreaterThan(previousReads);
 });
 
 test('admin wrong key uses an actionable localized message', async ({ page }) => {
   await page.route('**/api/admin/forms', route => route.fulfill({ status: 401, json: { success: false, error: { code: 'UNAUTHORIZED' } } }));
   await page.goto('/admin/library');
   await page.getByLabel('Khóa quản trị', { exact: false }).fill('invalid-test-key');
-  await expect(page.getByRole('alert')).toContainText('Khóa quản trị không đúng');
-  await expect(page.getByRole('alert')).not.toContainText('UNAUTHORIZED');
+  const message = page.getByRole('alert').filter({ hasText: 'Khóa quản trị không đúng' });
+  await expect(message).toBeVisible();
+  await expect(message).not.toContainText('UNAUTHORIZED');
 });

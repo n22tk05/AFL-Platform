@@ -43,7 +43,7 @@ export default function HomePage() {
               <div className="text-left">
                 <div className="font-black text-lg text-white">BẮT ĐẦU SỬ DỤNG</div>
                 <div className="text-xs text-emerald-100 font-medium">
-                  Dành cho người dân: Chụp ảnh hoặc chọn biểu mẫu
+                  Dành cho người dân: Kê khai biểu mẫu hành chính có trợ lý AI
                 </div>
               </div>
             </div>

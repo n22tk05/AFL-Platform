@@ -7,6 +7,7 @@
  * the algorithm itself.
  */
 export interface CvMat {
+  readonly data?: Uint8Array;
   readonly cols: number;
   readonly rows: number;
   channels(): number;

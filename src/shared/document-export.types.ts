@@ -1,6 +1,6 @@
 /** Export v1 uses XYXY, unlike the legacy OCR/Form YXYX contract. */
 export type ExportBox = [number, number, number, number];
-export type ContentType = 'national_heading' | 'motto' | 'document_title' | 'document_code' | 'date_line' | 'section_heading' | 'field_label_value' | 'field_label' | 'blank_input' | 'checkbox_item' | 'signature_title' | 'signature_instruction' | 'bullet_item' | 'legal_reference' | 'blank_line' | 'unknown';
+export type ContentType = 'national_heading' | 'motto' | 'document_title' | 'document_code' | 'date_line' | 'section_heading' | 'field_label_value' | 'field_label' | 'blank_input' | 'checkbox_item' | 'signature_title' | 'signature_instruction' | 'description_instruction' | 'bullet_item' | 'legal_reference' | 'blank_line' | 'unknown';
 export interface SourceLine {
   id: string; page: number | null; order: number; text: string; newline: string;
   start: number; end: number; provenance: 'text-splitting';

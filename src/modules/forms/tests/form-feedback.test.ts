@@ -21,10 +21,16 @@ test('admin errors are localized by status/code and never expose unrecognized se
   assert.match(formErrorMessage(new AdminApiError(503, 'ADMIN_KEY_UNCONFIGURED', 'raw'), 'fallback'), /chưa cấu hình/);
   assert.match(formErrorMessage(new AdminApiError(503, 'DATABASE_UNAVAILABLE', 'raw'), 'fallback'), /Cơ sở dữ liệu/);
   assert.match(formErrorMessage(new AdminApiError(503, 'AI_UNAVAILABLE', 'raw'), 'fallback'), /sinh kịch bản/);
+  assert.match(formErrorMessage(new AdminApiError(503, 'AI_BUSY', 'raw'), 'fallback'), /đợi một chút/);
+  assert.match(formErrorMessage(new AdminApiError(502, 'PROMPT_GENERATION_FAILED', 'private detail'), 'fallback'), /log máy chủ/);
+  assert.match(formErrorMessage(new AdminApiError(400, 'INVALID_WORKFLOW', 'private detail'), 'fallback'), /chưa khớp/);
+  assert.match(formErrorMessage(new AdminApiError(409, 'FORM_ACTIVE', 'private detail'), 'fallback'), /đã được công bố/);
   assert.equal(formErrorMessage(new AdminApiError(500, 'INTERNAL_SECRET', 'private SQL detail'), 'Lỗi an toàn.'), 'Lỗi an toàn.');
   assert.equal(formErrorMessage(new AdminApiError(500, '__proto__', 'private detail'), 'Lỗi an toàn.'), 'Lỗi an toàn.');
   assert.match(formErrorMessage(new TypeError('Failed to fetch'), 'fallback'), /kết nối/);
   assert.match(formErrorMessage(new Error('FRAME_MISMATCH'), 'fallback'), /không khớp/);
+  assert.match(formErrorMessage(new Error('INVALID_OCR_CONTEXT'), 'fallback'), /OCR quá lớn hoặc không hợp lệ/);
+  assert.match(formErrorMessage(new Error('PROMPT_REQUEST_TOO_LARGE'), 'fallback'), /chia nhỏ biểu mẫu/);
 });
 
 test('public workflow client retains 404 and 503 without using browser storage or fixtures', async () => {

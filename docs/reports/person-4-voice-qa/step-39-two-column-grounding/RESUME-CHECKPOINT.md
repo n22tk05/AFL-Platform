@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 39
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Toàn bộ thay đổi chặng 14–39 còn local/chưa commit; không reset/clean/stash/push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `TWO-COLUMN-GROUNDING-REGRESSION.md` và checkpoint chặng 38. Baseline mù kết hôn ở `private-documents/recognition-evaluation/HCMC-MARRIAGE-P20.blind-baseline.*.json` (ignored), hash benchmark `BEAA45BC0DB0424673B67CC0C7BFB24B31E79F50B49A7ED13C7C84FCB822DE23`; không ghi đè. Bản sau sửa ở `.development.*.json`.
+- `src/modules/forms/services/form-region-recognition.ts`: loại heading `Đề nghị cơ quan ... sau đây`, anchor tên bên nữ/nam không colon, scope nhãn theo hai cột có provenance/review, xử lý OCR `C3)`, ghép dòng lệch có review, chặn ghép qua chữ in ở hàng mới; giữ `OPEN_BOTTOM_ROW_INFERRED` ở trạng thái review. Test ở `src/modules/forms/tests/form-region-recognition.test.ts` và `tests/browser/form-recognition.spec.ts`.
+- Trang kết hôn development so với blind: TP 23→23, FN 6→6, FP 5→4, nhãn exact 4→16/23, continuation 13→15/15, nhóm đủ 6→9/9. Chưa đạt nghiệm thu hình học: tháng cấp, tình trạng hôn nhân, ba ngày ký và `Không` còn FN theo chú giải. Không chỉnh fixture dựa trên output.
+- Recognition **71/71**, Voice **19/19**, browser opt-in **17/17**, TypeScript/build PASS. Sau build restart Next `:3001`, admin 200, citizen smoke **1/1**, VietOCR `:8000` ready. Chưa dùng DB thật/Gemini/cloud/audio cache trong test.
+- Tiếp theo: đối chiếu ảnh/candidate ở FN/FP, thêm holdout thứ hai chưa tune, sau đó staging admin→ACTIVE→citizen/Voice và quyền DB/RLS. Mục tiêu tổng thể còn đang thực hiện.

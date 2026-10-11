@@ -38,6 +38,14 @@ async function main() {
   assert.equal((await prompt.generate({ manifest, adminKey: 'wrong' })).status, 401);
   assert.equal(aiCalls, 0);
   assert.equal(saveCalls, 0);
+  for (const [failure, expectedStatus] of [['AI_UNAVAILABLE', 503], ['AI_BUSY', 503], ['PROMPT_PROVIDER_FAILURE', 502]] as const) {
+    const failing = new PromptController({ generateWorkflow: async () => { throw new Error(failure); } } as any,
+      { saveDraft: async () => { saveCalls++; return { workflowId: 'id' }; } } as any,
+      new AdminAuthorizationService(() => 'secret'));
+    const response = await failing.generate({ manifest, adminKey: 'secret' });
+    assert.equal(response.status, expectedStatus);
+    assert.equal((response.body as any).error.code, failure === 'PROMPT_PROVIDER_FAILURE' ? 'PROMPT_GENERATION_FAILED' : failure);
+  }
   assert.equal((await new PromptController({ generateWorkflow: async () => { throw Error('called'); } } as any,
     {} as any, new AdminAuthorizationService(() => undefined)).generate({ manifest, adminKey: 'secret' })).status, 503);
   const invalidManifest = { ...manifest, boxes: [manifest.boxes[0], manifest.boxes[0]] };

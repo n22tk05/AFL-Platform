@@ -9,6 +9,7 @@ import {
   validateWorkflow,
   validCoords,
 } from "@/modules/forms/services/form-validation.service";
+import { validFieldMetadata } from './form-field-metadata';
 
 export interface DatabaseHealth {
   check(): Promise<boolean>;
@@ -70,12 +71,11 @@ function validateReviewWorkflow(
 
   if (
     value.pages !== undefined &&
-    (!Array.isArray(value.pages) ||
+    (!Array.isArray(value.pages) || value.pages.length < 1 || value.pages.length > 20 ||
       value.pages.some(
-        (page) =>
+        (page, index) =>
           !isRecord(page) ||
-          !Number.isSafeInteger(page.pageNumber) ||
-          (page.pageNumber as number) < 1 ||
+          page.pageNumber !== index + 1 ||
           typeof page.imageUrl !== "string" ||
           typeof page.width !== "number" ||
           !Number.isFinite(page.width) ||
@@ -87,6 +87,7 @@ function validateReviewWorkflow(
   ) {
     throw new Error("INVALID_WORKFLOW");
   }
+  const pageCount = Array.isArray(value.pages) ? value.pages.length : 1;
 
   if (
     value.steps.some(
@@ -101,9 +102,11 @@ function validateReviewWorkflow(
         typeof step.audioUrl !== "string" ||
         !nonBlankString(step.exampleRedText) ||
         !validCoords(step.highlightCoords) ||
+        !validFieldMetadata(step.inputKind, step.highlightRegions, step.highlightCoords,
+          typeof step.pageNumber === 'number' ? step.pageNumber : 1, pageCount) ||
         (step.pageNumber !== undefined &&
           (!Number.isSafeInteger(step.pageNumber) ||
-            (step.pageNumber as number) < 1)) ||
+            (step.pageNumber as number) < 1 || (step.pageNumber as number) > pageCount)) ||
         (step.requiresPrerequisiteDoc !== undefined &&
           typeof step.requiresPrerequisiteDoc !== "boolean") ||
         (step.sourceFieldFromPrerequisite !== undefined &&

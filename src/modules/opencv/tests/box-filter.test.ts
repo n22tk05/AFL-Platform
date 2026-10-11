@@ -34,6 +34,21 @@ test("filtering does not mutate input candidates", () => {
   assert.deepEqual(input, before);
 });
 
+test('outer form borders become containers before they can suppress writing areas; checkbox evidence wins duplicate contours', () => {
+  const border = candidate(40, 80, 910, 460, { candidateId: 'border' });
+  const first = candidate(260, 145, 650, 28, { candidateId: 'first', source: 'writing_guide' });
+  const second = candidate(70, 315, 840, 28, { candidateId: 'second', source: 'writing_guide' });
+  const checkbox = candidate(70, 450, 24, 24, { candidateId: 'checkbox', source: 'checkbox', rectangularity: 0.7 });
+  const checkboxContour = { ...checkbox, candidateId: 'checkbox_contour', source: 'closed_contour' as const, rectangularity: 0.95 };
+  const innerStroke = candidate(73, 453, 18, 18, { candidateId: 'inner_stroke' });
+  const merged = mergeFormCandidates([border, checkboxContour, innerStroke], [checkbox], [first, second], image);
+  assert.equal(merged.find(item => item.candidateId === 'border')?.isContainer, true);
+  assert.equal(merged.filter(item => item.source === 'writing_guide').length, 2);
+  assert.equal(merged.filter(item => item.source === 'checkbox').length, 1);
+  assert.equal(merged.some(item => item.candidateId === 'inner_stroke'), false);
+  assert.equal(border.isContainer, undefined);
+});
+
 test("mergeFormCandidates preserves standalone field rows and suppresses rows inside table cells", () => {
   // A table cell (300x80)
   const tableCell = candidate(100, 100, 300, 80, { source: "closed_contour" });

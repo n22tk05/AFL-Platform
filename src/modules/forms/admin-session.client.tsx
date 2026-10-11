@@ -1,11 +1,32 @@
 'use client';
 
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 const AdminSessionContext = createContext({ adminKey: '', setAdminKey: (_value: string) => {} });
 
 export function AdminSessionProvider({ children }: { children: ReactNode }) {
-  const [adminKey, setAdminKey] = useState('');
+  const [adminKey, setAdminKeyState] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = sessionStorage.getItem('afl_admin_key');
+      if (stored) {
+        setAdminKeyState(stored);
+      }
+    }
+  }, []);
+
+  const setAdminKey = (value: string) => {
+    setAdminKeyState(value);
+    if (typeof window !== 'undefined') {
+      if (value) {
+        sessionStorage.setItem('afl_admin_key', value);
+      } else {
+        sessionStorage.removeItem('afl_admin_key');
+      }
+    }
+  };
+
   return <AdminSessionContext.Provider value={{ adminKey, setAdminKey }}>{children}</AdminSessionContext.Provider>;
 }
 

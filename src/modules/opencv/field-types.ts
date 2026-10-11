@@ -17,7 +17,9 @@ export type FieldCandidate = {
   rectangularity: number;
   parentIndex: number;
   childIndex: number;
-  source: "closed_contour" | "checkbox" | "field_row" | "phrase_cluster";
+  source: "closed_contour" | "checkbox" | "field_row" | "phrase_cluster" | "writing_guide";
+  guideStyle?: 'dotted' | 'underline';
+  shortGuide?: boolean;
   isContainer?: boolean;
 };
 

@@ -41,12 +41,11 @@ export function sortCandidatesGeometrically(candidates: readonly FieldCandidate[
   // Identify container candidates (candidates that enclose other candidates with significantly smaller area)
   const containers: FieldCandidate[] = [];
   for (const candidate of cloned) {
-    const isCont = cloned.some(
-      (other) =>
-        other !== candidate &&
-        candidate.rect.width * candidate.rect.height >= other.rect.width * other.rect.height * 1.3 &&
-        containsRect(candidate.rect, other.rect),
-    );
+    const area = candidate.rect.width * candidate.rect.height;
+    const children = cloned.filter(other => other !== candidate && area >= other.rect.width * other.rect.height * 3
+      && containsRect(candidate.rect, other.rect));
+    const isCont = candidate.source !== 'checkbox' && candidate.source !== 'writing_guide'
+      && (candidate.isContainer === true || children.length >= 2);
     if (isCont) {
       candidate.isContainer = true;
       containers.push(candidate);

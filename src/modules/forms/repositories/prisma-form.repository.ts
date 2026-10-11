@@ -14,7 +14,61 @@ import {
 import type { AdminFormSummary, PublicFormSummary } from "@/modules/forms/types/form.types";
 import { isDeepStrictEqual } from 'node:util';
 import { FormArtifactStore, formArtifactStore } from '@/modules/forms/services/form-artifact-store';
+import { bindFieldMetadata } from '@/modules/forms/services/form-field-metadata';
 import { boundAudioUrlOrEmpty } from '@/modules/voice-ai/services/tts.service';
+import { randomUUID } from 'node:crypto';
+import type { Prisma } from '@prisma/client';
+const DB_TX_OPTIONS = {
+  timeout: 60000,
+  maxWait: 10000,
+  isolationLevel: 'Serializable' as const,
+};
+
+async function createWorkflowSteps(
+  tx: Prisma.TransactionClient,
+  workflowId: string,
+  steps: ContractWorkflowStep[],
+) {
+  await tx.workflowStep.createMany({
+    data: steps.map((step) => ({
+      id: randomUUID(),
+      workflowId,
+      stepIndex: step.stepIndex,
+      boxId: step.boxId,
+      sectionName: step.sectionName,
+      label: step.label,
+      voiceGuidance: step.voiceGuidance,
+      audioUrl: boundAudioUrlOrEmpty(step.voiceGuidance, step.stepIndex, step.audioUrl),
+      exampleRedText: step.exampleRedText,
+      highlightYmin: step.highlightCoords[0],
+      highlightXmin: step.highlightCoords[1],
+      highlightYmax: step.highlightCoords[2],
+      highlightXmax: step.highlightCoords[3],
+      requiresPrerequisiteDoc: step.requiresPrerequisiteDoc ?? false,
+      sourceFieldFromPrerequisite: step.sourceFieldFromPrerequisite ?? null,
+      legalWarningFlag: step.legalWarningFlag ?? false,
+    })),
+  });
+
+  const persistedSteps = await tx.workflowStep.findMany({
+    where: { workflowId },
+    select: { id: true, stepIndex: true },
+  });
+  const stepIdByIndex = new Map(persistedSteps.map((step) => [step.stepIndex, step.id]));
+  const faqRows = steps.flatMap((step) => {
+    const stepId = stepIdByIndex.get(step.stepIndex);
+    if (!stepId) throw new Error('WORKFLOW_STEP_PERSISTENCE_FAILED');
+    return (step.faqs ?? []).map((faq, index) => ({
+      id: randomUUID(),
+      stepId,
+      question: faq.question,
+      answer: faq.answer,
+      order: index + 1,
+    }));
+  });
+  if (faqRows.length > 0) await tx.stepFaq.createMany({ data: faqRows });
+}
+
 export class PrismaFormRepository implements FormRepository {
   constructor(private readonly database = prisma, private readonly artifacts: FormArtifactStore = formArtifactStore) {}
 
@@ -83,35 +137,7 @@ export class PrismaFormRepository implements FormRepository {
         await tx.workflowStep.deleteMany({
           where: { workflowId: formWorkflow.id },
         });
-        for (const step of workflow.steps) {
-          await tx.workflowStep.create({
-            data: {
-              workflowId: formWorkflow.id,
-              stepIndex: step.stepIndex,
-              boxId: step.boxId,
-              sectionName: step.sectionName,
-              label: step.label,
-              voiceGuidance: step.voiceGuidance,
-              audioUrl: boundAudioUrlOrEmpty(step.voiceGuidance, step.stepIndex, step.audioUrl),
-              exampleRedText: step.exampleRedText,
-              highlightYmin: step.highlightCoords[0],
-              highlightXmin: step.highlightCoords[1],
-              highlightYmax: step.highlightCoords[2],
-              highlightXmax: step.highlightCoords[3],
-              requiresPrerequisiteDoc: step.requiresPrerequisiteDoc ?? false,
-              sourceFieldFromPrerequisite:
-                step.sourceFieldFromPrerequisite ?? null,
-              legalWarningFlag: step.legalWarningFlag ?? false,
-              faqs: {
-                create: (step.faqs || []).map((faq, index) => ({
-                  question: faq.question,
-                  answer: faq.answer,
-                  order: index + 1,
-                })),
-              },
-            },
-          });
-        }
+        await createWorkflowSteps(tx, formWorkflow.id, workflow.steps);
         return {
           templateId: template.id,
           manifestId: geometricManifest.id,
@@ -119,7 +145,7 @@ export class PrismaFormRepository implements FormRepository {
           stepCount: workflow.steps.length,
         };
       },
-      { isolationLevel: "Serializable" },
+      DB_TX_OPTIONS,
     );
   }
 
@@ -324,7 +350,7 @@ export class PrismaFormRepository implements FormRepository {
       formTitle: template.formTitle,
       formCode: template.formCode,
       status: (template.workflow.status.toUpperCase() as FormStatus),
-      steps,
+      steps: bindFieldMetadata(steps, display?.fields, display?.pages.length ?? 1),
     };
   }
 
@@ -397,7 +423,7 @@ export class PrismaFormRepository implements FormRepository {
       department: display?.department,
       status: template.workflow.status as FormWorkflow["status"],
       version: template.workflow.version,
-      steps: template.workflow.steps.map((step) => ({
+      steps: bindFieldMetadata(template.workflow.steps.map((step) => ({
         stepIndex: step.stepIndex,
         boxId: step.boxId,
         pageNumber: 1,
@@ -420,7 +446,7 @@ export class PrismaFormRepository implements FormRepository {
           question: faq.question,
           answer: faq.answer,
         })),
-      })),
+      })), display?.fields, display?.pages.length ?? 1),
     };
   }
 
@@ -438,40 +464,42 @@ export class PrismaFormRepository implements FormRepository {
           if (!existing) throw new Error("NOT_FOUND");
           if (
             existing.status !== "DRAFT" &&
-            existing.status !== "PENDING_REVIEW"
+            existing.status !== "PENDING_REVIEW" &&
+            existing.status !== "ACTIVE"
           )
             throw new Error("FORM_ACTIVE");
           const persistedManifest = existing.manifest;
           const display = await this.artifacts.read(existing.originalPdfUrl, formCode);
           if (workflow.pages !== undefined && !isDeepStrictEqual(workflow.pages, display?.pages)) throw new Error('INVALID_WORKFLOW');
-          const artifactReference = await this.artifacts.save({ ...workflow, pages: display?.pages });
           if (!persistedManifest || persistedManifest.boxes.length === 0)
             throw new Error("INVALID_WORKFLOW");
           const manifest: FormGeometricManifest = {
             formId: existing.id,
             formCode: existing.formCode,
             formTitle: existing.formTitle,
+            pages: display?.pages,
             imageDimensions: {
               width: persistedManifest.imageWidth,
               height: persistedManifest.imageHeight,
             },
-            boxes: persistedManifest.boxes.map((box) => ({
+            boxes: persistedManifest.boxes.map((box) => {
+              const editedStep = workflow.steps.find(step => step.boxId === box.boxId);
+              if (!editedStep || (display?.fields?.some(field => field.boxId === box.boxId) && !editedStep.highlightRegions)) throw new Error('INVALID_WORKFLOW');
+              return {
               boxId: box.boxId,
+              pageNumber: editedStep.pageNumber ?? 1,
               rawText: box.rawText,
               boxType:
-                box.boxType === "CHECKBOX"
+                editedStep.inputKind === 'checkbox' || (!editedStep.inputKind && box.boxType === "CHECKBOX")
                   ? "checkbox"
-                  : box.boxType === "TABLE_CELL"
+                  : editedStep.inputKind === 'table_cell' || (!editedStep.inputKind && box.boxType === "TABLE_CELL")
                     ? "table_cell"
                     : "text",
               estimatedWidthRatio: box.estimatedWidthRatio,
-              normalizedCoords: [
-                box.boxYmin,
-                box.boxXmin,
-                box.boxYmax,
-                box.boxXmax,
-              ],
-            })),
+              normalizedCoords: editedStep.highlightCoords,
+              inputKind: editedStep.inputKind,
+              inputRegions: editedStep.highlightRegions,
+            }; }),
           };
           if (
             workflow.steps.some(
@@ -484,19 +512,23 @@ export class PrismaFormRepository implements FormRepository {
           } catch {
             throw new Error("INVALID_WORKFLOW");
           }
+          const artifactReference = await this.artifacts.save({ ...workflow, pages: display?.pages });
 
           const guarded = await tx.formTemplate.updateMany({
             where: {
               id: existing.id,
-              status: { in: ["DRAFT", "PENDING_REVIEW"] },
+              status: { in: ["DRAFT", "PENDING_REVIEW", "ACTIVE"] },
             },
-            data: { formTitle: workflow.formTitle, status: "PENDING_REVIEW", ...(artifactReference ? { originalPdfUrl: artifactReference } : {}) },
+            data: { formTitle: workflow.formTitle, status: existing.status === "ACTIVE" ? "ACTIVE" : "PENDING_REVIEW", ...(artifactReference ? { originalPdfUrl: artifactReference } : {}) },
           });
           if (guarded.count !== 1) throw new Error("REVIEW_CONFLICT");
           const formWorkflow = await tx.formWorkflow.upsert({
             where: { formTemplateId: existing.id },
-            update: { status: "PENDING_REVIEW", updatedAt: new Date() },
-            create: { formTemplateId: existing.id, status: "PENDING_REVIEW" },
+            update: { status: existing.status === "ACTIVE" ? "ACTIVE" : "PENDING_REVIEW", updatedAt: new Date() },
+            create: { formTemplateId: existing.id, status: existing.status === "ACTIVE" ? "ACTIVE" : "PENDING_REVIEW" },
+          });
+          await tx.stepFaq.deleteMany({
+            where: { step: { workflowId: formWorkflow.id } },
           });
           await tx.workflowStep.deleteMany({
             where: { workflowId: formWorkflow.id },
@@ -504,10 +536,11 @@ export class PrismaFormRepository implements FormRepository {
           for (const step of workflow.steps) {
             const savedAudio = boundAudioUrlOrEmpty(step.voiceGuidance, step.stepIndex, step.audioUrl);
             const box = persistedManifest.boxes.find(saved => saved.boxId === step.boxId)!;
-            if (!isDeepStrictEqual([box.boxYmin, box.boxXmin, box.boxYmax, box.boxXmax], step.highlightCoords) || box.spatialOrder !== step.stepIndex) {
+            if (!isDeepStrictEqual([box.boxYmin, box.boxXmin, box.boxYmax, box.boxXmax], step.highlightCoords) || box.spatialOrder !== step.stepIndex || step.inputKind) {
               await tx.formGeometricBox.update({ where: { manifestId_boxId: { manifestId: persistedManifest.id, boxId: step.boxId } },
                 data: { boxYmin: step.highlightCoords[0], boxXmin: step.highlightCoords[1], boxYmax: step.highlightCoords[2], boxXmax: step.highlightCoords[3],
-                  spatialOrder: step.stepIndex, estimatedWidthRatio: step.highlightCoords[3] - step.highlightCoords[1] } });
+                  spatialOrder: step.stepIndex, estimatedWidthRatio: step.highlightCoords[3] - step.highlightCoords[1],
+                  ...(step.inputKind ? { boxType: step.inputKind === 'checkbox' ? 'CHECKBOX' : step.inputKind === 'table_cell' ? 'TABLE_CELL' : 'TEXT' } : {}) } });
             }
             await tx.workflowStep.create({
               data: {
@@ -630,6 +663,9 @@ export class PrismaFormRepository implements FormRepository {
         ) {
           throw new Error("REVIEW_CONFLICT");
         }
+        bindFieldMetadata(steps.map(step => ({ ...step, audioUrl: step.audioUrl ?? '', exampleRedText: step.exampleRedText ?? '',
+          sourceFieldFromPrerequisite: step.sourceFieldFromPrerequisite ?? undefined,
+          highlightCoords: [step.highlightYmin!, step.highlightXmin!, step.highlightYmax!, step.highlightXmax!] })), display?.fields, display?.pages.length ?? 1);
         const updated = await tx.formTemplate.updateMany({
           where: { id: existing.id, status: "PENDING_REVIEW" },
           data: { status: "ACTIVE" },

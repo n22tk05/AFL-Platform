@@ -12,7 +12,7 @@ export async function requestStepAudio(text: string, stepIndex: number, region: 
     const response = await (options.fetcher ?? fetch)('/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
       body: JSON.stringify({ text, stepIndex, region }), signal: controller.signal });
     const payload = await response.json().catch(() => null);
-    if (!response.ok || payload?.success !== true || !/^\/audio\/[a-f0-9]{64}\.mp3$/.test(payload?.data?.audioUrl ?? '')) {
+    if (!response.ok || payload?.success !== true || !/^\/api\/audio\/[a-f0-9]{64}\.mp3$/.test(payload?.data?.audioUrl ?? '')) {
       throw new Error(payload?.error?.message_vi || `TTS_HTTP_${response.status}`);
     }
     return payload.data.audioUrl;

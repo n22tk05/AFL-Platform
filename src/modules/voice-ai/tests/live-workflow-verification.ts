@@ -106,11 +106,11 @@ async function main() {
       results.imageBytes = (await image.arrayBuffer()).byteLength;
       const audioChecks = [];
       for (const step of workflow.steps) {
-        assert.match(step.audioUrl, /^\/audio\/[a-f0-9]{64}\.mp3$/);
+        assert.match(step.audioUrl, /^\/api\/audio\/[a-f0-9]{64}\.mp3$/);
         const audio = await fetch(new URL(step.audioUrl, base), { signal: AbortSignal.timeout(15000) });
         const bytes = Buffer.from(await audio.arrayBuffer());
         assert.equal(audio.status, 200); assert.equal(isValidMp3(bytes), true);
-        const timing = JSON.parse(await fs.readFile(path.join(process.cwd(), 'public', step.audioUrl.replace(/^\//, '').replace(/\.mp3$/, '.timestamps.json')), 'utf8'));
+        const timing = JSON.parse(await fs.readFile(path.join(process.cwd(), 'public', 'audio', step.audioUrl.split('/').at(-1)!.replace(/\.mp3$/, '.timestamps.json')), 'utf8'));
         assert.ok(Array.isArray(timing.wordTimestamps) && timing.wordTimestamps.length > 0);
         assert.equal(timing.wordTimestamps.map((item: { word: string }) => item.word).join(' '), step.voiceGuidance.toLocaleUpperCase('vi-VN'));
         let previousEnd = 0;

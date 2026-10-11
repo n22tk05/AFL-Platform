@@ -1,0 +1,7 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 31
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`; nhánh `codex/form-recognition-and-multiline`. Mọi thay đổi chặng 14–31 còn local/chưa commit; không reset, clean, stash hoặc push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `MIXED-TABLE-OPEN-BOTTOM-RESULTS.md` và checkpoint chặng 30. Chặng 31 sửa chọn header OCR, hai lưới trên cùng trang, OCR hàng mở đáy nhiều dòng, loại glyph/ảnh mép trang, suy luận hàng 8 bắt buộc admin review. Code chính: `services/vietocr-service/text_layout.py`, `services/vietocr-service/app.py`, `src/modules/forms/services/form-region-recognition.ts`.
+- F05-p4 có 40/40 ô chọn đúng cấu trúc trực quan: 8 ô tiếp bảng Có/Không + 32 ô bảng bốn lựa chọn; 40/40 có nhãn, 40/40 `needs_review`. P2/p3 giữ 36/30. Nhãn OCR dài vẫn sai chữ/dấu; F05 là tập phát triển, không phải holdout độc lập.
+- Kiểm chứng đã chạy: recognition 58/58, Python 34/34, browser F05 ba trang 1/1, browser mặc định 4/4, typecheck/build/diff-check PASS. Build cảnh báo `<img>` không chặn. Nếu browser lỗi sau build, restart Next dev `:3001` rồi chạy lại; VietOCR `:8000` đang bật local nhưng kiểm tra listener ở phiên sau.
+- Bước kế tiếp ưu tiên tập phôi trắng độc lập nhiều loại bảng và ảnh quét; chú giải TP/FP/FN, CER, độ lệch tọa độ. Sau đó test staging admin → `ACTIVE` → citizen FE/Voice và DB/RLS trên môi trường thử nghiệm. Không tuyên bố hoàn tất mục tiêu lớn trước các bước đó.

@@ -14,8 +14,9 @@ export function VoiceAssistantPanel({ voiceGuidance, audioUrl, faqs = [], formCo
   const voice = useVoiceAssistant({ context: { formCode, stepIndex } });
   const { playGuidance, resetContext, answer } = voice;
   useEffect(() => {
-    void playGuidance(voiceGuidance, audioUrl);
-    return resetContext;
+    let canceled = false;
+    queueMicrotask(() => { if (!canceled) void playGuidance(voiceGuidance, audioUrl); });
+    return () => { canceled = true; resetContext(); };
   }, [formCode, stepIndex, voiceGuidance, audioUrl, playGuidance, resetContext]);
   useEffect(() => { if (answer) void playGuidance(answer); }, [answer, playGuidance]);
   return <section className="border rounded-xl p-4 space-y-3" aria-label="Trợ lý giọng nói">

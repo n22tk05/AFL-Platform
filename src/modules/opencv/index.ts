@@ -19,6 +19,7 @@ export {
   type PixelRect,
 } from "./field-types";
 export { detectContourCandidates } from "./contour-detector";
+export { detectWritingGuideCandidates } from './writing-guide-detector';
 export { calculateIou, filterCandidates, mergeFormCandidates } from "./box-filter";
 export { sortCandidatesGeometrically } from "./geometric-sort";
 export { detectDocument } from './document-detector';

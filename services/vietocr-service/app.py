@@ -20,6 +20,7 @@ import torch
 from vietocr.tool.config import Cfg
 from vietocr.tool.predictor import Predictor, process_input
 from vietocr.tool.translate import translate
+from text_layout import text_ink_mask, has_text_ink, is_sparse_hallucination, ruled_header_cells, ruled_matrix_label_cells, split_multiline_region, suppress_overlapping_boxes
 
 # 1. Optimize PyTorch thread pool for high-throughput CPU inference
 cpu_cores = os.cpu_count() or 4
@@ -159,7 +160,8 @@ def sort_line_boxes_geometrically(boxes: List[Tuple[int, int, int, int]]) -> Lis
         sorted_boxes.extend(row['boxes'])
     return sorted_boxes
 
-def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_WIDTH) -> List[Tuple[Image.Image, List[float], str]]:
+def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_WIDTH,
+                           split_multiline: bool = False) -> List[Tuple[Image.Image, List[float], str]]:
     """
     Detect on a smaller copy; crop OCR lines from the original pixels.
     """
@@ -189,11 +191,7 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_W
     else:
         gray = img_np
 
-    # Gaussian blur (3x3) to remove noise and paper grain before thresholding
-    blurred = cv2.GaussianBlur(gray, (3, 3), 0)
-
-    # Fast Otsu thresholding with inversion (white text on black)
-    _, binary_inv = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    binary_inv = text_ink_mask(gray)
 
     # Horizontal dilation: 25px wide x 3px high kernel to fuse characters in same line
     kw = max(15, int(25 * (proc_w / 1200.0)))
@@ -204,7 +202,7 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_W
     # Find external contours
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    max_height = max(64, int(proc_h * 0.25))
+    max_height = max(160 if split_multiline else 64, int(proc_h * 0.25))
     min_height = max(8, int(10 * scale))
     min_width = max(20, int(24 * scale))
     min_area = max(160, int(200 * scale * scale))
@@ -218,6 +216,10 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_W
         if min_height <= h <= max_height and w >= min_width and (w * h) >= min_area:
             raw_boxes.append((x, y, w, h))
 
+    if split_multiline:
+        raw_boxes = [part for rect in raw_boxes for part in split_multiline_region(binary_inv, rect)]
+    raw_boxes = suppress_overlapping_boxes(raw_boxes)
+
     if not raw_boxes:
         return []
 
@@ -225,13 +227,46 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_W
     if len(raw_boxes) > MAX_LINES:
         raise HTTPException(status_code=413, detail="Too many text regions; split the document into smaller pages")
 
-    sorted_boxes = sort_line_boxes_geometrically(raw_boxes)
-
     padding_x = int(4 * scale)
     padding_y = int(3 * scale)
-    segmented: List[Tuple[Image.Image, List[float], str]] = []
+    header_cells = ruled_header_cells(gray)
+    source_boxes = []
+    replacement_cells = []
 
-    for idx, (x, y, w, h) in enumerate(sorted_boxes):
+    for left, top, right, bottom in ruled_matrix_label_cells(gray):
+        source_x1 = max(0, math.floor(left * orig_w / proc_w))
+        source_y1 = max(0, math.floor(top * orig_h / proc_h))
+        source_x2 = min(orig_w, math.ceil(right * orig_w / proc_w))
+        source_y2 = min(orig_h, math.ceil(bottom * orig_h / proc_h))
+        with pil_img.crop((source_x1, source_y1, source_x2, source_y2)) as cell:
+            cell_regions = segment_document_lines(cell, split_multiline=True)
+            try:
+                if cell_regions:
+                    replacement_cells.append((left, top, right, bottom))
+                for _, coords, _ in cell_regions:
+                    source_boxes.append((
+                        source_x1 + round(coords[1] * cell.width), source_y1 + round(coords[0] * cell.height),
+                        source_x1 + round(coords[3] * cell.width), source_y1 + round(coords[2] * cell.height),
+                    ))
+            finally:
+                for crop, _, _ in cell_regions:
+                    crop.close()
+
+    def replaced(rect):
+        left, top, right, bottom = rect
+        return any(max(0, min(right, cell_right) - max(left, cell_left))
+                   * max(0, min(bottom, cell_bottom) - max(top, cell_top))
+                   >= (right - left) * (bottom - top) * 0.5
+                   for cell_left, cell_top, cell_right, cell_bottom in replacement_cells)
+
+    for x, y, w, h in raw_boxes:
+        if replaced((x, y, x + w, y + h)):
+            continue
+        overlap = max((max(0, min(x + w, right) - max(x, left))
+                       * max(0, min(y + h, bottom) - max(y, top)) / (w * h)
+                       for left, top, right, bottom in header_cells), default=0)
+        if overlap >= 0.35:
+            continue
         x1 = max(0, x - padding_x)
         y1 = max(0, y - padding_y)
         x2 = min(proc_w, x + w + padding_x)
@@ -242,14 +277,43 @@ def segment_document_lines(pil_img: Image.Image, target_width: int = DETECTION_W
         source_y1 = max(0, math.floor(y1 * orig_h / proc_h))
         source_x2 = min(orig_w, math.ceil(x2 * orig_w / proc_w))
         source_y2 = min(orig_h, math.ceil(y2 * orig_h / proc_h))
-        line_crop = pil_img.crop((source_x1, source_y1, source_x2, source_y2))
+        source_boxes.append((source_x1, source_y1, source_x2, source_y2))
+
+    for x1, y1, x2, y2 in header_cells:
+        if replaced((x1, y1, x2, y2)):
+            continue
+        source_x1 = max(0, math.floor(x1 * orig_w / proc_w))
+        source_y1 = max(0, math.floor(y1 * orig_h / proc_h))
+        source_x2 = min(orig_w, math.ceil(x2 * orig_w / proc_w))
+        source_y2 = min(orig_h, math.ceil(y2 * orig_h / proc_h))
+        with pil_img.crop((source_x1, source_y1, source_x2, source_y2)) as cell:
+            with cell.resize((max(1, round(cell.width * 1.5)), max(1, round(cell.height * 1.5))),
+                             Image.Resampling.LANCZOS) as enlarged_cell:
+                cell_regions = segment_document_lines(enlarged_cell, split_multiline=True)
+                try:
+                    for _, coords, _ in cell_regions:
+                        source_boxes.append((
+                            source_x1 + round(coords[1] * cell.width), source_y1 + round(coords[0] * cell.height),
+                            source_x1 + round(coords[3] * cell.width), source_y1 + round(coords[2] * cell.height),
+                        ))
+                finally:
+                    for crop, _, _ in cell_regions:
+                        crop.close()
+
+    if len(source_boxes) > MAX_LINES:
+        raise HTTPException(status_code=413, detail="Too many text regions; split the document into smaller pages")
+    sorted_boxes = sort_line_boxes_geometrically([(x1, y1, x2 - x1, y2 - y1) for x1, y1, x2, y2 in source_boxes])
+    segmented: List[Tuple[Image.Image, List[float], str]] = []
+    for index, (x1, y1, width, height) in enumerate(sorted_boxes):
+        x2, y2 = x1 + width, y1 + height
+        line_crop = pil_img.crop((x1, y1, x2, y2))
         coords = [
-            source_y1 / orig_h,
-            source_x1 / orig_w,
-            source_y2 / orig_h,
-            source_x2 / orig_w,
+            y1 / orig_h,
+            x1 / orig_w,
+            y2 / orig_h,
+            x2 / orig_w,
         ]
-        line_id = f"line_{idx+1:03d}"
+        line_id = f"line_{index+1:03d}"
         segmented.append((line_crop, coords, line_id))
 
     return segmented
@@ -389,6 +453,14 @@ def is_flat_image(image: Image.Image) -> bool:
         gray.close()
 
 
+def is_writing_area_without_text(image: Image.Image) -> bool:
+    gray = image.convert("L")
+    try:
+        return not has_text_ink(np.asarray(gray))
+    finally:
+        gray.close()
+
+
 @app.post("/predict", response_model=PredictResponse)
 def predict_lines(request: PredictRequest):
     if predictor is None:
@@ -407,7 +479,7 @@ def predict_lines(request: PredictRequest):
         if request.image:
             image = decode_base64_image(request.image)
             owned_images.append(image)
-            regions = segment_document_lines(image)
+            regions = segment_document_lines(image, split_multiline=True)
             owned_images.extend(region[0] for region in regions)
         elif request.lines:
             total_pixels = 0
@@ -420,9 +492,9 @@ def predict_lines(request: PredictRequest):
                     raise HTTPException(status_code=413, detail="Cropped lines exceed total pixel limit")
                 is_page = coords == [0, 0, 1, 1] or (coords is None and image.height > 60 and image.height / image.width > 0.15)
                 if len(request.lines) == 1 and is_page:
-                    regions = segment_document_lines(image)
+                    regions = segment_document_lines(image, split_multiline=True)
                     owned_images.extend(region[0] for region in regions)
-                elif not is_flat_image(image):
+                elif not is_writing_area_without_text(image):
                     regions.append((image, coords, line.lineId or f"line_{idx+1:03d}"))
 
         # A page with no detected text has no recognized content. Never feed
@@ -434,7 +506,13 @@ def predict_lines(request: PredictRequest):
         if len(sents) != len(regions) or len(probs) != len(regions):
             raise RuntimeError("Model result count differs from input region count")
         results = []
-        for (_, coords, line_id), text, score in zip(regions, sents, probs):
+        for (crop, coords, line_id), text, score in zip(regions, sents, probs):
+            gray = crop.convert("L")
+            try:
+                if is_sparse_hallucination(np.asarray(gray), confidence_value(score), str(text or "")):
+                    continue
+            finally:
+                gray.close()
             results.append(PredictionResult(
                 lineId=line_id,
                 text=str(text).strip() if text is not None else "",

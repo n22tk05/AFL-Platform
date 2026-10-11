@@ -125,14 +125,31 @@ export default function CitizenScanPage() {
 
   return (
     <div className="flex-1 flex flex-col bg-black text-white relative overflow-hidden select-none min-h-[calc(100vh-65px)]">
-      <label className="p-3">Biểu mẫu đã ban hành
-        <select className="block w-full text-slate-900 p-2" value={formCode} onChange={event => setFormCode(event.target.value)}>
-          <option value="">Chọn biểu mẫu đúng với phôi</option>
-          {forms.map(form => <option key={form.formCode} value={form.formCode}>{form.formCode} — {form.formTitle}</option>)}
-        </select>
-      </label>
-      <p className="px-3 text-sm">Hiện đối chiếu mẫu bằng lựa chọn của bác; chưa tự nhận diện loại biểu mẫu từ ảnh. Ảnh không lưu vào Web Storage.</p>
-      {error && <p role="alert" className="p-3 text-red-300">{error}</p>}
+      <div className="p-4 bg-slate-900 border-b border-slate-800 space-y-2">
+        <label className="block text-xs font-black uppercase text-slate-400 tracking-wider">
+          Chọn biểu mẫu khớp với tờ khai giấy của bác
+          <select
+            className="mt-1.5 block w-full bg-slate-800 text-white border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            value={formCode}
+            onChange={(event) => setFormCode(event.target.value)}
+          >
+            <option value="">-- Bấm vào đây để chọn biểu mẫu đã ban hành --</option>
+            {forms.map((form) => (
+              <option key={form.formCode} value={form.formCode}>
+                {form.formCode} — {form.formTitle}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="text-xs text-slate-400 font-medium">
+          Hệ thống sẽ đối chiếu với biểu mẫu bác chọn để phóng to từng ô hướng dẫn. Ảnh chụp không lưu trên máy chủ.
+        </p>
+        {error && (
+          <p role="alert" className="text-xs font-bold text-rose-300 bg-rose-950/60 border border-rose-800 p-2.5 rounded-lg">
+            {error}
+          </p>
+        )}
+      </div>
       {/* Top Bar: Nút quay lại /citizen & Đèn flash */}
       <div className="p-4 flex items-center justify-between z-20 bg-gradient-to-b from-black/80 to-transparent">
         <button

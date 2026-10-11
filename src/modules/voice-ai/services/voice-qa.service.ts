@@ -73,6 +73,7 @@ export class VoiceQAService {
     try {
       const prompt = JSON.stringify({ formCode: req.formCode, stepIndex: currentStep.stepIndex,
         label: currentStep.label, voiceGuidance: currentStep.voiceGuidance,
+        inputKind: currentStep.inputKind, regionCount: currentStep.highlightRegions?.length,
         exampleRedText: currentStep.exampleRedText, approvedFaqs: currentStep.faqs ?? [], userQuestion });
 
       this.activeGeminiCalls++;
@@ -111,7 +112,13 @@ export class VoiceQAService {
 
   private getSafeFallbackResponse(currentStep: WorkflowStep, startTime: number): QAResponse {
     const label = currentStep.label.replace(/[\x00-\x1f]/g, ' ').slice(0, 80);
-    const answerText = `Dạ bác ghi thông tin của chính mình vào ô "${label}", không chép thông tin ví dụ. Nếu chưa rõ, bác nhờ cán bộ quầy hỗ trợ thêm nhé!`;
+    const answerText = currentStep.inputKind === 'checkbox'
+      ? `Dạ bác tích lựa chọn phù hợp tại ô "${label}". Nếu chưa rõ, bác nhờ cán bộ hỗ trợ nhé!`
+      : currentStep.inputKind === 'character_slots'
+        ? `Dạ bác ghi mỗi ký tự vào một ô của trường "${label}", dùng thông tin của chính mình. Nếu chưa rõ, bác nhờ cán bộ hỗ trợ nhé!`
+        : currentStep.inputKind === 'multiline_text'
+          ? `Dạ bác ghi nội dung của chính mình trên các dòng của trường "${label}", không chép ví dụ. Nếu chưa rõ, bác nhờ cán bộ hỗ trợ nhé!`
+          : `Dạ bác ghi thông tin của chính mình vào ô "${label}", không chép thông tin ví dụ. Nếu chưa rõ, bác nhờ cán bộ quầy hỗ trợ thêm nhé!`;
 
     return {
       answerText,

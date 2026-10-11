@@ -49,6 +49,14 @@ test('QA uses authoritative context as data and never labels truncated or empty 
   }
 });
 
+test('offline QA uses the reviewed field kind instead of telling citizens to write text into checkboxes', async () => {
+  const service = new VoiceQAService(); service.getClient = () => null;
+  for (const [inputKind, expected] of [['checkbox', /tích lựa chọn/], ['character_slots', /mỗi ký tự/], ['multiline_text', /trên các dòng/]] as const) {
+    const response = await service.answerQuestion({ formCode: 'A', currentStep: { ...step, inputKind }, userQuestion: 'Cần làm gì?' });
+    assert.equal(response.source, 'fallback'); assert.match(response.answerText, expected);
+  }
+});
+
 test('QA concurrency is bounded and slots are released after a provider failure', async () => {
   const service = new VoiceQAService();
   let release!: () => void; const blocked = new Promise<void>(resolve => { release = resolve; });

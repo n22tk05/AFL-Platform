@@ -42,7 +42,10 @@ export class FormController {
       const workflow = await this.persistenceService.getWorkflowForReview(formCode);
       if (!workflow) return { status: 404, body: { success: false, error: { code: 'FORM_NOT_FOUND' } } };
       return { status: 200, body: { success: true, data: workflow } };
-    } catch { return { status: 503, body: { success: false, error: { code: 'DATABASE_UNAVAILABLE' } } }; }
+    } catch (error) {
+      const code = error instanceof Error && error.message === 'FORM_ASSET_UNAVAILABLE' ? 'FORM_ASSET_UNAVAILABLE' : 'DATABASE_UNAVAILABLE';
+      return { status: 503, body: { success: false, error: { code } } };
+    }
   }
 
   public async saveReviewWorkflow(dto: SaveReviewWorkflowDto): Promise<ControllerResult<unknown>> {

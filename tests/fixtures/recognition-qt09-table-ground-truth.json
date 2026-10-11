@@ -1,0 +1,17 @@
+{
+  "sourceImage": "quangtri-mau-09-hsb-1.png",
+  "sourceUrl": "https://congbao1.quangtri.gov.vn/tmp/docga_7324_page119.pdf",
+  "annotationScope": "Three blank data rows and eight input columns; excludes STT, header, watermark and upper prose fields",
+  "imageDimensions": { "width": 1450, "height": 1026 },
+  "rowBoundariesPx": [823, 850, 877, 905],
+  "columns": [
+    { "leftPx": 137, "rightPx": 411, "label": "Họ và tên" },
+    { "leftPx": 411, "rightPx": 483, "label": "Mối quan hệ với người chết" },
+    { "leftPx": 483, "rightPx": 559, "label": "Ngày, tháng, năm sinh — Nam" },
+    { "leftPx": 559, "rightPx": 636, "label": "Ngày, tháng, năm sinh — Nữ" },
+    { "leftPx": 636, "rightPx": 911, "label": "Địa chỉ nơi cư trú, số điện thoại" },
+    { "leftPx": 911, "rightPx": 1081, "label": "Mã số BHXH/số CMND/số căn cước công dân/hộ chiếu" },
+    { "leftPx": 1081, "rightPx": 1194, "label": "Mức thu nhập hàng tháng" },
+    { "leftPx": 1194, "rightPx": 1305, "label": "Loại trợ cấp tuất được hưởng" }
+  ]
+}

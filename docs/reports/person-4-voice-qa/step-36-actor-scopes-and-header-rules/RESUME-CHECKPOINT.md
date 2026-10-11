@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 36
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Toàn bộ thay đổi chặng 14–36 còn local/chưa commit; không reset/clean/stash/push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `ACTOR-SCOPES-AND-HEADER-RULES.md`, checkpoint chặng 35 và baseline chặng 34. Dữ liệu OCR/draft/benchmark phôi khai sinh ở `private-documents/recognition-evaluation/HCMC-BIRTH-P70.development.*.json` là ignored; bản `.blind-baseline.*.json` giữ nguyên.
+- `src/modules/forms/services/form-region-recognition.ts`: scope người yêu cầu/trẻ/mẹ/cha từ heading OCR, chuẩn hóa `có L` và `- Quốc tịch`, loại cặp gạch trang trí chồng nhau không phụ thuộc đầu/cuối trang. Suy luận chủ thể giữ provenance và `needs_review`.
+- Fixture `tests/fixtures/recognition-hcmc-birth-p70-ground-truth.json` sửa ba tọa độ ngày ký sau khi xem ảnh gốc; không so trực tiếp IoU của benchmark cũ với mới. Tập phát triển hiện 29 field, 26 nhãn, 29 review, 29/29 vùng khớp, 0 FP toàn trang, 18 nhãn exact. Hai checkbox chưa có ngữ cảnh câu hỏi; ba ngày ký thiếu nhãn; OCR `dệm`/`nghi bằng chữ` còn sai.
+- Unit/integration recognition **66/66**, Voice **19/19**, browser opt-in **16/16**, typecheck/build PASS. Build có cảnh báo `<img>` ở modal. Sau build dev server `:3001` phải restart vì bundle cũ làm smoke test fail; đã restart và smoke test citizen **1/1 PASS**, admin 200. VietOCR `:8000` trước lượt browser ready. Không gọi cloud/DB thật hoặc ghi audio cache.
+- Bước tiếp: ghép câu hỏi với checkbox, nhãn ngày ký, phôi trắng độc lập chưa tune, rồi staging admin→ACTIVE→citizen/Voice và quyền DB/RLS. Giữ trạng thái mục tiêu tổng thể đang thực hiện, chưa tuyên bố nghiệm thu.

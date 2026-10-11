@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { PageNavigation } from '@/components/PageNavigation';
+import { OperationToastProvider } from '@/components/OperationToastProvider';
 
 export const metadata: Metadata = {
   title: "AFL Platform - Trợ lý Điền Biểu mẫu Cho Người Cao Tuổi",
@@ -20,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body className="antialiased min-h-screen"><PageNavigation />{children}</body>
+      <body className="antialiased min-h-screen"><OperationToastProvider><PageNavigation />{children}</OperationToastProvider></body>
     </html>
   );
 }

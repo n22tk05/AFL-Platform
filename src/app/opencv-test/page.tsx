@@ -21,6 +21,7 @@ import { mapCandidateRect } from '@/modules/documents/candidate-frame';
 import { loadOpenCv } from '@/modules/opencv/loader';
 import { warpDocument } from '@/modules/opencv/perspective-transform';
 import type { CvMat } from '@/modules/opencv/types';
+import { useOperationToast } from '@/components/OperationToastProvider';
 
 const MAX_LONG_SIDE = 1600;
 type Status = 'idle' | 'decoding' | 'ready' | 'loading' | 'processing' | 'success' | 'error';
@@ -161,6 +162,7 @@ function CanvasPanel({ label, canvasRef, visible, emptyMessage, onExpand }: Canv
 }
 
 export default function OpenCvTestPage() {
+  const { showPending, updatePending, showSuccess, showError, dismiss } = useOperationToast();
   const [status, setStatus] = useState<Status>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [imageInfo, setImageInfo] = useState<string | null>(null);
@@ -185,13 +187,15 @@ export default function OpenCvTestPage() {
   const [ocrNotice, setOcrNotice] = useState<string | null>(null);
   const [selectedJsonBox, setSelectedJsonBox] = useState<ExportBox | null>(null);
   const nativeCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const ocrToastId = useRef<number | null>(null);
   const ocrController = useRef<AbortController>();
   const ocrGeneration = useRef(0);
   const expiryRef = useRef<ReturnType<typeof setTimeout>>();
   const cancelOcr = useCallback(() => {
     ocrGeneration.current++; ocrController.current?.abort();
+    dismiss(ocrToastId.current); ocrToastId.current = null;
     setIsOcrRunning(false); setOcrResult(null); setSelectedJsonBox(null); setOcrNotice(null); setOcrStepText('');
-  }, []);
+  }, [dismiss]);
 
   const inputCanvasRef = useRef<HTMLCanvasElement>(null);
   const grayscaleCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -388,6 +392,7 @@ export default function OpenCvTestPage() {
     setRejection(null);
     clearOutputCanvases();
     setStatus('loading');
+    const toastId = showPending('Đang chạy OpenCV', 'Đang nạp thư viện và phân tích đường biểu mẫu.');
     try {
       const pipelineResult = await runLineDetectionDebug({
         mode,
@@ -402,21 +407,24 @@ export default function OpenCvTestPage() {
         candidateOverlayCanvas,
         preprocessConfig: DEFAULT_PREPROCESS_CONFIG,
         lineConfig: DEFAULT_LINE_DETECTION_CONFIG,
-        onOpenCvReady: () => setStatus('processing'),
+        onOpenCvReady: () => { setStatus('processing'); updatePending(toastId, 'OpenCV đã sẵn sàng; đang phát hiện đường và khung biểu mẫu.'); },
       });
       if (selectionId !== selectionIdRef.current) return;
       setResult(pipelineResult);
       setHasResults(true);
       setStatus('success');
+      showSuccess(toastId, 'OpenCV hoàn tất', `Phát hiện ${pipelineResult.candidates.length} vùng ứng viên trong ${pipelineResult.totalProcessingTimeMs} ms.`);
     } catch (error: unknown) {
       if (selectionId !== selectionIdRef.current) return;
       if (error instanceof DocumentDetectionError) setRejection({ quality: error.quality, quad: error.sourceQuad, timeMs: error.documentDetectionTimeMs });
       setStatus('error');
-      setErrorMessage(error instanceof Error ? error.message : 'Lỗi OpenCV không xác định.');
+      const message = error instanceof Error ? error.message : 'Lỗi OpenCV không xác định.';
+      setErrorMessage(message);
+      showError(toastId, 'OpenCV thất bại', message);
     } finally {
       runningRef.current = false;
     }
-  }, [clearOutputCanvases, imageReady, mode, cancelOcr]);
+  }, [clearOutputCanvases, imageReady, mode, cancelOcr, showPending, updatePending, showSuccess, showError]);
 
   const runVietOcrOnCandidates = useCallback(async () => {
     if (!result || result.candidates.length === 0 || isOcrRunning) return;
@@ -433,10 +441,12 @@ export default function OpenCvTestPage() {
     setErrorMessage(null);
     setOcrNotice(null);
     setOcrStepText(`Đang chuẩn bị cắt ${result.candidates.length} candidates...`);
+    ocrToastId.current = showPending('Đang nhận dạng văn bản', `Chuẩn bị xử lý ${result.candidates.length} vùng bằng VietOCR.`);
 
     try {
       const cv = await loadOpenCv() as unknown as { imread(c: HTMLCanvasElement): CvMat; imshow(c: HTMLCanvasElement, m: CvMat): void };
       if (requestId !== ocrGeneration.current) return;
+      updatePending(ocrToastId.current, 'Đang căn chỉnh ảnh và gửi các vùng chữ đến VietOCR.');
       let original: CvMat | undefined, warped: CvMat | undefined;
       try {
         original = cv.imread(nativeInput);
@@ -568,13 +578,18 @@ export default function OpenCvTestPage() {
 
       setOcrTab('preview');
       setOcrNotice(assembled.rawText.trim() ? 'Bản nháp cần đối chiếu với ảnh nguồn trước khi tải.' : 'Chưa đọc được vùng này. Hãy xem ảnh nguồn.');
+      showSuccess(ocrToastId.current, 'Nhận dạng văn bản hoàn tất', `Đã xử lý ${recognizedCandidates.length} vùng; kết quả cần đối chiếu với ảnh nguồn.`);
     } catch (err) {
-      if (requestId === ocrGeneration.current) setErrorMessage(err instanceof Error ? err.message : 'Không đọc được ảnh.');
+      if (requestId === ocrGeneration.current) {
+        const message = err instanceof Error ? err.message : 'Không đọc được ảnh.';
+        setErrorMessage(message); showError(ocrToastId.current, 'Nhận dạng văn bản thất bại', message);
+      }
     } finally {
       canvas.width = 0; canvas.height = 0;
       if (requestId === ocrGeneration.current) { setIsOcrRunning(false); setOcrStepText(''); }
+      else dismiss(ocrToastId.current);
     }
-  }, [isOcrRunning, result, cancelOcr]);
+  }, [isOcrRunning, result, cancelOcr, showPending, updatePending, showSuccess, showError, dismiss]);
 
   const isBusy = status === 'loading' || status === 'processing';
   const buttonDisabled = !imageReady || isBusy;

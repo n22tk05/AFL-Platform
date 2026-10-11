@@ -245,5 +245,3547 @@
         "voiceGuidance": "Đọc hướng dẫn"
       }
     ]
+  },
+  "cache_7e67977b3d7a7a8c9cef4c00a42ff099feabe5b51292df4048171629da3b6c9d": {
+    "audioUrl": "/audio/d3f1501a6288475581207c87cbb743b5b8a2148a3d4bfcb4a2296e526cd4e27a.mp3",
+    "wordTimestamps": [
+      {
+        "word": "BÁC",
+        "startMs": 15,
+        "endMs": 280
+      },
+      {
+        "word": "GHI",
+        "startMs": 280,
+        "endMs": 501
+      },
+      {
+        "word": "SỐ",
+        "startMs": 501,
+        "endMs": 681
+      },
+      {
+        "word": "ĐIỆN",
+        "startMs": 681,
+        "endMs": 862
+      },
+      {
+        "word": "THOẠI",
+        "startMs": 862,
+        "endMs": 1112
+      },
+      {
+        "word": "BÀN",
+        "startMs": 1112,
+        "endMs": 1428
+      },
+      {
+        "word": "HOẶC",
+        "startMs": 1428,
+        "endMs": 1648
+      },
+      {
+        "word": "HOTLINE",
+        "startMs": 1648,
+        "endMs": 2208
+      },
+      {
+        "word": "CỦA",
+        "startMs": 2208,
+        "endMs": 2429
+      },
+      {
+        "word": "CÔNG",
+        "startMs": 2429,
+        "endMs": 2669
+      },
+      {
+        "word": "TY.",
+        "startMs": 2669,
+        "endMs": 3019
+      }
+    ],
+    "timestampSource": "ssml_marks"
+  },
+  "cache_64cecd9baba63706a82f599bfc2967d73fe41c44893375cf416ba14c50b7fd2f": {
+    "audioUrl": "/audio/f2420aafb8043469026011727d78cebcc68385936f2d12e0b3cb8fb553fc0ddc.mp3",
+    "wordTimestamps": [
+      {
+        "word": "BÁC",
+        "startMs": 15,
+        "endMs": 290
+      },
+      {
+        "word": "GHI",
+        "startMs": 290,
+        "endMs": 460
+      },
+      {
+        "word": "SỐ",
+        "startMs": 460,
+        "endMs": 725
+      },
+      {
+        "word": "ĐIỆN",
+        "startMs": 725,
+        "endMs": 896
+      },
+      {
+        "word": "THOẠI",
+        "startMs": 896,
+        "endMs": 1116
+      },
+      {
+        "word": "BÀN",
+        "startMs": 1116,
+        "endMs": 1443
+      },
+      {
+        "word": "HOẶC",
+        "startMs": 1443,
+        "endMs": 1683
+      },
+      {
+        "word": "HOTLINE",
+        "startMs": 1683,
+        "endMs": 2233
+      },
+      {
+        "word": "CỦA",
+        "startMs": 2233,
+        "endMs": 2389
+      },
+      {
+        "word": "CÔNG",
+        "startMs": 2389,
+        "endMs": 2584
+      },
+      {
+        "word": "TY.",
+        "startMs": 2584,
+        "endMs": 2934
+      }
+    ],
+    "timestampSource": "ssml_marks"
+  },
+  "cache_6d522e5937545fd330074e504bf5484a6b36592932761ede1d44c2e8bfa92603": {
+    "formId": "form_1791730656822",
+    "formTitle": "tờ khai ghi chú kết hôn",
+    "formCode": "TKGCKH-2023",
+    "status": "PENDING_REVIEW",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "imageUrl": "/api/forms/TKGCKH-2023/pages/1?asset=5fa943d0fdcf3dbca74caf5ade9868f9d33ec6528a04755b6a461f59aa598d02",
+        "width": 1447,
+        "height": 2047
+      }
+    ],
+    "totalPages": 1,
+    "circularInfo": "",
+    "steps": [
+      {
+        "stepIndex": 1,
+        "boxId": "box_001",
+        "sectionName": "Thông tin tiếp nhận",
+        "label": "Kính gửi",
+        "voiceGuidance": "Bác nhìn vào dòng Kính gửi đang sáng đèn trên giấy nhé. Bác ghi tên cơ quan nơi bác đang nộp hồ sơ, ví dụ như Ủy ban nhân dân quận hoặc huyện.",
+        "exampleRedText": "ỦY BAN NHÂN DÂN QUẬN HOÀN KIẾM",
+        "faqs": [
+          {
+            "question": "Tôi nộp ở đâu thì ghi tên ở đó đúng không cháu?",
+            "answer": "Dạ đúng rồi, bác nộp tại Ủy ban nhân dân quận, huyện hay cơ quan nào thì ghi tên nơi đó ạ."
+          },
+          {
+            "question": "Nếu tôi không rõ tên cơ quan thì hỏi ai?",
+            "answer": "Bác có thể hỏi ngay cán bộ tại bàn tiếp dân để ghi cho thật chuẩn xác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.18612603810454323,
+          0.3234277816171389,
+          0.1968734733756717,
+          0.7809260539046303
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_001_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.18612603810454323,
+              0.3234277816171389,
+              0.1968734733756717,
+              0.7809260539046303
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 2,
+        "boxId": "box_002",
+        "sectionName": "Thông tin người yêu cầu",
+        "label": "Họ, chữ đệm, tên người yêu cầu",
+        "voiceGuidance": "Ở ô này, bác viết họ và tên đầy đủ của chính bác vào đây. Bác nhớ viết rõ ràng, có dấu tiếng Việt đầy đủ nhé.",
+        "exampleRedText": "NGUYỄN VĂN AN",
+        "faqs": [
+          {
+            "question": "Tôi viết chữ thường hay chữ in hoa vậy cháu?",
+            "answer": "Bác viết chữ in hoa hay chữ thường đều được, miễn sao chữ ngay ngắn, rõ ràng là được ạ."
+          },
+          {
+            "question": "Tôi đi làm thủ tục hộ người khác thì ghi tên ai?",
+            "answer": "Bác là người trực tiếp đi nộp và đứng tên yêu cầu thì ghi họ tên của bác vào đây ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.2432828529555447,
+          0.38424326192121633,
+          0.2540302882266732,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_002_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.2432828529555447,
+              0.38424326192121633,
+              0.2540302882266732,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 3,
+        "boxId": "box_003",
+        "sectionName": "Thông tin người yêu cầu",
+        "label": "Nơi cư trú người yêu cầu",
+        "voiceGuidance": "Ô này có hai dòng kẻ, bác ghi địa chỉ nơi ở hiện tại của bác vào đây. Bác ghi chi tiết từ số nhà, tên đường đến phường xã, quận huyện nhé.",
+        "exampleRedText": "SỐ 12 PHỐ TRÀNG TIỀN, PHƯỜNG TRÀNG TIỀN, QUẬN HOÀN KIẾM, THÀNH PHỐ HÀ NỘI",
+        "faqs": [
+          {
+            "question": "Tôi ghi địa chỉ thường trú hay tạm trú?",
+            "answer": "Bác ghi địa chỉ nơi bác đang sinh sống hoặc địa chỉ ghi trên Căn cước công dân đều được ạ."
+          },
+          {
+            "question": "Dòng trên không đủ chỗ viết thì làm sao?",
+            "answer": "Bác cứ tự nhiên viết tiếp xuống dòng kẻ thứ hai ở ngay bên dưới nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.26477772349780165,
+          0.2128541810642709,
+          0.27552515876893013,
+          0.8762957843814789
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_003_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.26477772349780165,
+              0.2128541810642709,
+              0.27552515876893013,
+              0.8762957843814789
+            ]
+          },
+          {
+            "regionId": "box_003_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.2862725940400586,
+              0.0967519004837595,
+              0.2970200293111871,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 4,
+        "boxId": "box_004",
+        "sectionName": "Thông tin người yêu cầu",
+        "label": "Giấy tờ tùy thân người yêu cầu",
+        "voiceGuidance": "Bác điền thông tin Căn cước công dân hoặc Hộ chiếu của bác vào hai dòng kẻ này nhé. Bác nhớ ghi rõ loại giấy tờ, số giấy tờ, cùng ngày cấp và nơi cấp.",
+        "exampleRedText": "CCCD SỐ 001052001234 DO CỤC CẢNH SÁT QLHC VỀ TTXH CẤP NGÀY 10/05/2021",
+        "faqs": [
+          {
+            "question": "Tôi dùng Chứng minh nhân dân cũ được không?",
+            "answer": "Nếu giấy tờ cũ của bác vẫn còn hạn sử dụng thì bác cứ ghi số và ngày cấp vào bình thường ạ."
+          },
+          {
+            "question": "Viết tắt Căn cước công dân thành CCCD được không?",
+            "answer": "Dạ được bác ạ, nhưng bác chú ý ghi các con số thật rõ ràng để tránh nhầm lẫn nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.3077674645823156,
+          0.25777470628887356,
+          0.31851489985344406,
+          0.8762957843814789
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_004_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3077674645823156,
+              0.25777470628887356,
+              0.31851489985344406,
+              0.8762957843814789
+            ]
+          },
+          {
+            "regionId": "box_004_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.32926233512457254,
+              0.0967519004837595,
+              0.340009770395701,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 5,
+        "boxId": "box_005",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Họ, chữ đệm, tên bên nữ",
+        "voiceGuidance": "Bác nhìn sang cột bên trái có hai dòng kẻ đang sáng đèn nhé. Bác viết họ và tên của người vợ vào ô này giúp cháu.",
+        "exampleRedText": "TRẦN THỊ MAI",
+        "faqs": [
+          {
+            "question": "Người vợ là người nước ngoài thì viết thế nào?",
+            "answer": "Bác ghi đúng từng chữ theo hộ chiếu hoặc giấy chứng nhận kết hôn nước ngoài của cô ấy nhé."
+          },
+          {
+            "question": "Tên dài quá một dòng thì viết tiếp ở đâu?",
+            "answer": "Ô này có hai dòng kẻ, bác cứ viết tiếp xuống dòng kẻ ngay bên dưới ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.3761602344894968,
+          0.3178991015894955,
+          0.3869076697606253,
+          0.4837595024187975
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_005_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3761602344894968,
+              0.3178991015894955,
+              0.3869076697606253,
+              0.4837595024187975
+            ]
+          },
+          {
+            "regionId": "box_005_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3976551050317538,
+              0.10642709053213545,
+              0.40840254030288226,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 6,
+        "boxId": "box_006",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Họ, chữ đệm, tên bên nam",
+        "voiceGuidance": "Bây giờ bác nhìn sang cột bên phải ngay cạnh nhé. Bác viết họ và tên của người chồng vào hai dòng kẻ đang phát sáng ạ.",
+        "exampleRedText": "JOHN SMITH",
+        "faqs": [
+          {
+            "question": "Người chồng là người nước ngoài viết chữ tiếng Anh được không?",
+            "answer": "Dạ được, bác viết đúng từng chữ cái in hoa như trên hộ chiếu của chú ấy nhé."
+          },
+          {
+            "question": "Viết tên bằng chữ in hoa hay chữ thường?",
+            "answer": "Bác nên viết chữ in hoa để các chữ cái rõ ràng, cán bộ tiếp nhận đọc dễ nhất ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.3761602344894968,
+          0.7318590186592951,
+          0.3869076697606253,
+          0.8818244644091223
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_006_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3761602344894968,
+              0.7318590186592951,
+              0.3869076697606253,
+              0.8818244644091223
+            ]
+          },
+          {
+            "regionId": "box_006_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3976551050317538,
+              0.5051831375259157,
+              0.40840254030288226,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 7,
+        "boxId": "box_007",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Ngày, tháng, năm sinh bên nữ",
+        "voiceGuidance": "Bác nhìn lại phía dưới cột của bên nữ nhé. Bác điền ngày, tháng và năm sinh của người vợ vào dòng kẻ đang sáng đèn này ạ.",
+        "exampleRedText": "15/08/1985",
+        "faqs": [
+          {
+            "question": "Ghi ngày sinh dương lịch hay âm lịch vậy cháu?",
+            "answer": "Bác ghi theo ngày dương lịch đúng như thông tin trên giấy tờ tùy thân nhé."
+          },
+          {
+            "question": "Nếu trong giấy tờ chỉ có năm sinh thì sao?",
+            "answer": "Nếu không có ngày tháng, bác chỉ cần ghi mỗi năm sinh vào ô này là được ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.41914997557401074,
+          0.28818244644091223,
+          0.4298974108451392,
+          0.48306841741534207
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_007_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.41914997557401074,
+              0.28818244644091223,
+              0.4298974108451392,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 8,
+        "boxId": "box_008",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Ngày, tháng, năm sinh bên nam",
+        "voiceGuidance": "Bác chuyển sang ô tương ứng phía dưới cột bên nam nhé. Bác điền ngày, tháng, năm sinh của người chồng vào dòng kẻ này giúp cháu.",
+        "exampleRedText": "20/11/1982",
+        "faqs": [
+          {
+            "question": "Viết số dạng ngày/tháng/năm hay viết chữ?",
+            "answer": "Bác cứ ghi dạng các con số ngày/tháng/năm cho ngắn gọn và rõ ràng bác nhé."
+          },
+          {
+            "question": "Giấy tờ nước ngoài ghi tháng trước ngày sau thì ghi thế nào?",
+            "answer": "Bác ghi theo thứ tự ngày trước rồi đến tháng và năm theo lịch thông thường của mình nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.41914997557401074,
+          0.7021423635107118,
+          0.4298974108451392,
+          0.8811333794056669
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_008_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.41914997557401074,
+              0.7021423635107118,
+              0.4298974108451392,
+              0.8811333794056669
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 9,
+        "boxId": "box_009",
+        "sectionName": "Thông tin người kết hôn - Bên nữ",
+        "label": "Dân tộc bên nữ",
+        "voiceGuidance": "Bác nhìn vào ô sáng ở cột bên nữ giúp cháu nhé. Bác viết tên dân tộc của người vợ vào dòng này ạ.",
+        "exampleRedText": "KINH",
+        "faqs": [
+          {
+            "question": "Bên nữ là người nước ngoài thì ghi dân tộc thế nào?",
+            "answer": "Dạ nếu người vợ mang quốc tịch nước ngoài và không có thành phần dân tộc thì bác có thể để trống hoặc hỏi cán bộ hướng dẫn thêm ạ."
+          },
+          {
+            "question": "Cháu ơi, ô này viết chữ thường hay chữ in hoa?",
+            "answer": "Dạ bác viết chữ nào cũng được miễn rõ ràng, nhưng bác viết chữ in hoa thì cán bộ tiếp nhận sẽ dễ nhìn nhất ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.1824464409122322,
+          0.4513922813873962,
+          0.29163787145818937
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_009_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.1824464409122322,
+              0.4513922813873962,
+              0.29163787145818937
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 10,
+        "boxId": "box_010",
+        "sectionName": "Thông tin người kết hôn - Bên nữ",
+        "label": "Quốc tịch bên nữ",
+        "voiceGuidance": "Ngay bên cạnh ô dân tộc có một ô đang sáng, bác điền quốc tịch của người vợ vào đây. Nếu là công dân Việt Nam thì bác ghi Việt Nam ạ.",
+        "exampleRedText": "VIỆT NAM",
+        "faqs": [
+          {
+            "question": "Người vợ có quốc tịch nước ngoài thì ghi thế nào?",
+            "answer": "Dạ bác ghi đúng tên quốc gia theo hộ chiếu hoặc giấy tờ kết hôn đã được dịch thuật công chứng ạ."
+          },
+          {
+            "question": "Bác viết tắt chữ Việt Nam thành VN có được không?",
+            "answer": "Dạ bác nên viết đầy đủ chữ VIỆT NAM để giấy tờ của mình chuẩn xác và đẹp mắt nhất bác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.3897719419488597,
+          0.4513922813873962,
+          0.4837595024187975
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_010_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.3897719419488597,
+              0.4513922813873962,
+              0.4837595024187975
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 11,
+        "boxId": "box_011",
+        "sectionName": "Thông tin người kết hôn - Bên nam",
+        "label": "Dân tộc bên nam",
+        "voiceGuidance": "Bây giờ bác chuyển mắt sang cột bên nam ở ô đang phát sáng nhé. Bác ghi tên dân tộc của người chồng vào dòng này giúp cháu ạ.",
+        "exampleRedText": "KINH",
+        "faqs": [
+          {
+            "question": "Người chồng là người nước ngoài thì mục này điền gì?",
+            "answer": "Dạ nếu người chồng là người nước ngoài không có thông tin dân tộc trên giấy tờ thì bác cứ để trống và báo cán bộ kiểm tra lại ạ."
+          },
+          {
+            "question": "Dân tộc thiểu số có cần ghi rõ dấu không?",
+            "answer": "Dạ có, bác ghi tên dân tộc có đầy đủ dấu tiếng Việt để tránh bị nhầm lẫn bác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.5687629578438148,
+          0.4513922813873962,
+          0.6897028334485141
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_011_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.5687629578438148,
+              0.4513922813873962,
+              0.6897028334485141
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 12,
+        "boxId": "box_012",
+        "sectionName": "Thông tin người kết hôn - Bên nam",
+        "label": "Quốc tịch bên nam",
+        "voiceGuidance": "Bác nhìn sang ô ngay cạnh bên phải của cột nam nhé. Bác ghi tên quốc gia mà người chồng đang mang quốc tịch vào ô này ạ.",
+        "exampleRedText": "VIỆT NAM",
+        "faqs": [
+          {
+            "question": "Chồng mang hai quốc tịch thì ghi thế nào?",
+            "answer": "Dạ bác ghi quốc tịch theo đúng giấy tờ mà người chồng đang dùng để làm thủ tục ghi chú kết hôn lần này ạ."
+          },
+          {
+            "question": "Quốc tịch nước ngoài viết bằng tiếng Anh hay tiếng Việt?",
+            "answer": "Dạ bác ghi tên quốc gia theo bản dịch tiếng Việt đã công chứng của giấy tờ tùy thân của chồng bác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.7747062888735314,
+          0.4513922813873962,
+          0.8818244644091223
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_012_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.7747062888735314,
+              0.4513922813873962,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 13,
+        "boxId": "box_013",
+        "sectionName": "Thông tin người kết hôn - Bên nữ",
+        "label": "Nơi cư trú bên nữ",
+        "voiceGuidance": "Ở phần ô sáng gồm 3 dòng bên cột nữ, bác viết địa chỉ nơi ở hiện tại của người vợ. Bác cứ viết nối tiếp các dòng từ số nhà, thôn xóm đến xã phường, quận huyện và tỉnh thành nhé.",
+        "exampleRedText": "SỐ 12 ĐƯỜNG LÊ LỢI, PHƯỜNG BẾN NGHÉ, QUẬN 1, THÀNH PHỐ HỒ CHÍ MINH",
+        "faqs": [
+          {
+            "question": "Nơi cư trú ghi theo hộ khẩu hay nơi đang ở thực tế?",
+            "answer": "Dạ bác ghi theo địa chỉ thường trú ghi trên Căn cước công dân hoặc địa chỉ tạm trú hợp pháp hiện tại của người vợ ạ."
+          },
+          {
+            "question": "Địa chỉ ở nước ngoài thì ghi ra sao?",
+            "answer": "Dạ bác ghi đầy đủ tên số nhà, đường, thành phố và quốc gia ở nước ngoài theo đúng giấy tờ cư trú của người vợ ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.46213971665852466,
+          0.21769177608845888,
+          0.47288715192965314,
+          0.48306841741534207
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_013_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.46213971665852466,
+              0.21769177608845888,
+              0.47288715192965314,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_013_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.48412310698583294,
+              0.10642709053213545,
+              0.4948705422569614,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_013_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5056179775280899,
+              0.10642709053213545,
+              0.5163654127992183,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 14,
+        "boxId": "box_014",
+        "sectionName": "Thông tin người kết hôn - Bên nam",
+        "label": "Nơi cư trú bên nam",
+        "voiceGuidance": "Bác nhìn sang cột bên nam có 3 dòng đang sáng nhé. Bác ghi rõ địa chỉ nơi cư trú hiện tại của người chồng vào các dòng này giúp cháu ạ.",
+        "exampleRedText": "SỐ 45 PHỐ HUẾ, PHƯỜNG HÀNG BÀI, QUẬN HOÀN KIẾM, THÀNH PHỐ HÀ NỘI",
+        "faqs": [
+          {
+            "question": "Viết một dòng không đủ chỗ thì làm thế nào?",
+            "answer": "Dạ ô này có sẵn 3 dòng kẻ, bác cứ viết hết dòng trên rồi xuống dòng dưới viết tiếp cho thoải mái ạ."
+          },
+          {
+            "question": "Người chồng đang ở nước ngoài thì ghi địa chỉ nào?",
+            "answer": "Dạ bác ghi địa chỉ nơi ở hiện tại của chồng ở nước ngoài đúng theo giấy tờ hợp lệ của anh ấy ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.46213971665852466,
+          0.6164478230822391,
+          0.47288715192965314,
+          0.8811333794056669
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_014_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.46213971665852466,
+              0.6164478230822391,
+              0.47288715192965314,
+              0.8811333794056669
+            ]
+          },
+          {
+            "regionId": "box_014_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.48412310698583294,
+              0.5051831375259157,
+              0.4948705422569614,
+              0.8818244644091223
+            ]
+          },
+          {
+            "regionId": "box_014_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5056179775280899,
+              0.5051831375259157,
+              0.5163654127992183,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 15,
+        "boxId": "box_015",
+        "sectionName": "Thông tin người kết hôn - Bên nữ",
+        "label": "Giấy tờ tùy thân bên nữ",
+        "voiceGuidance": "Ở 4 dòng đang phát sáng bên cột nữ, bác ghi thông tin giấy tờ của người vợ. Bác ghi tên loại giấy tờ như Căn cước công dân hoặc Hộ chiếu, kèm số, ngày cấp và nơi cấp nhé.",
+        "exampleRedText": "CCCD SỐ 001198012345 DO CỤC CẢNH SÁT QLHC VỀ TTXH CẤP NGÀY 10/05/2021",
+        "faqs": [
+          {
+            "question": "Người vợ là người nước ngoài thì ghi giấy tờ gì?",
+            "answer": "Dạ bác ghi Hộ chiếu, số hộ chiếu, ngày cấp và cơ quan có thẩm quyền của nước ngoài đã cấp hộ chiếu đó ạ."
+          },
+          {
+            "question": "Bác có cần ghi rõ ngày tháng năm cấp không?",
+            "answer": "Dạ rất cần bác ạ, bác mở mặt sau thẻ Căn cước hoặc trang hộ chiếu để chép chính xác ngày cấp và nơi cấp vào đây nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.5271128480703469,
+          0.26744989633724947,
+          0.5378602833414753,
+          0.47753973738769867
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_015_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5271128480703469,
+              0.26744989633724947,
+              0.5378602833414753,
+              0.47753973738769867
+            ]
+          },
+          {
+            "regionId": "box_015_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5486077186126038,
+              0.10711817553559087,
+              0.5593551538837322,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_015_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5701025891548608,
+              0.10642709053213545,
+              0.5808500244259892,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_015_region_4",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5915974596971177,
+              0.10711817553559087,
+              0.6023448949682462,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 16,
+        "boxId": "box_016",
+        "sectionName": "Thông tin người kết hôn - Bên nam",
+        "label": "Giấy tờ tùy thân bên nam",
+        "voiceGuidance": "Bác chuyển sang 4 dòng đang sáng bên cột nam giúp cháu nhé. Bác ghi rõ loại giấy tờ của người chồng như Căn cước công dân hoặc Hộ chiếu, cùng số giấy tờ, ngày cấp và nơi cấp ạ.",
+        "exampleRedText": "HỘ CHIẾU SỐ B1234567 DO CỤC QUẢN LÝ XUẤT NHẬP CẢNH CẤP NGÀY 15/08/2022",
+        "faqs": [
+          {
+            "question": "Nếu người chồng dùng Chứng minh nhân dân cũ thì ghi thế nào?",
+            "answer": "Dạ nếu giấy tờ đó còn giá trị sử dụng thì bác ghi rõ là CMND kèm số và ngày cấp, hoặc bác đưa cán bộ kiểm tra giúp bác nhé."
+          },
+          {
+            "question": "Chữ dài quá thì chia dòng viết thế nào cho gọn?",
+            "answer": "Dạ dòng đầu bác ghi tên loại giấy tờ và số, dòng tiếp theo bác xuống dòng ghi ngày cấp và cơ quan cấp cho thật rõ ràng ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.5271128480703469,
+          0.6668970283344852,
+          0.5378602833414753,
+          0.8769868693849343
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_016_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5271128480703469,
+              0.6668970283344852,
+              0.5378602833414753,
+              0.8769868693849343
+            ]
+          },
+          {
+            "regionId": "box_016_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5486077186126038,
+              0.5051831375259157,
+              0.5593551538837322,
+              0.8811333794056669
+            ]
+          },
+          {
+            "regionId": "box_016_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.570591108939912,
+              0.5051831375259157,
+              0.5813385442110406,
+              0.8818244644091223
+            ]
+          },
+          {
+            "regionId": "box_016_region_4",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.592085979482169,
+              0.5051831375259157,
+              0.6028334147532975,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 17,
+        "boxId": "box_017",
+        "sectionName": "Thông tin đăng ký kết hôn",
+        "label": "Đã đăng ký kết hôn tại",
+        "voiceGuidance": "Bác ghi tên cơ quan hoặc nơi đã cấp giấy chứng nhận kết hôn cho bác vào dòng đang sáng. Phần này có hai dòng kẻ, nếu viết dài bác cứ viết tiếp xuống dòng dưới nhé.",
+        "exampleRedText": "ĐẠI SỨ QUÁN VIỆT NAM TẠI NHẬT BẢN",
+        "faqs": [
+          {
+            "question": "Tôi kết hôn ở nước ngoài thì ghi cơ quan nào?",
+            "answer": "Bác ghi đúng tên cơ quan nước ngoài hoặc cơ quan đại diện ngoại giao của Việt Nam nơi đã cấp giấy kết hôn cho bác."
+          },
+          {
+            "question": "Dòng trên không đủ chỗ thì làm sao?",
+            "answer": "Bác cứ viết tiếp sang dòng kẻ thứ hai ngay phía dưới, thông tin liền mạch là được ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.6170004885197851,
+          0.304077401520387,
+          0.6277479237909135,
+          0.8762957843814789
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_017_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.6170004885197851,
+              0.304077401520387,
+              0.6277479237909135,
+              0.8762957843814789
+            ]
+          },
+          {
+            "regionId": "box_017_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.6389838788470933,
+              0.0995162404975812,
+              0.6497313141182218,
+              0.5563234277816171
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 18,
+        "boxId": "box_018",
+        "sectionName": "Thông tin đăng ký kết hôn",
+        "label": "Số đăng ký",
+        "voiceGuidance": "Bác nhìn trên giấy đăng ký kết hôn và chép số đăng ký vào ô này ạ. Bác ghi đúng các chữ và số giống như trên giấy tờ nhé.",
+        "exampleRedText": "125/2023",
+        "faqs": [
+          {
+            "question": "Số đăng ký này tìm ở đâu trên giấy tờ?",
+            "answer": "Bác xem ở mục số hoặc số vào sổ trên giấy chứng nhận kết hôn đã được cấp ạ."
+          },
+          {
+            "question": "Số có chữ cái và dấu gạch thì có ghi không?",
+            "answer": "Có ạ, trên giấy thể hiện số và chữ thế nào thì bác chép y nguyên như vậy."
+          }
+        ],
+        "highlightCoords": [
+          0.6389838788470933,
+          0.5908776779543884,
+          0.6497313141182218,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_018_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.6389838788470933,
+              0.5908776779543884,
+              0.6497313141182218,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 19,
+        "boxId": "box_019",
+        "sectionName": "Thông tin đăng ký kết hôn",
+        "label": "Ngày cấp",
+        "voiceGuidance": "Bác điền ngày được cấp giấy đăng ký kết hôn vào ô nhỏ này ạ. Bác xem ngày cấp trên giấy kết hôn của mình rồi ghi vào nhé.",
+        "exampleRedText": "15",
+        "faqs": [
+          {
+            "question": "Ngày cấp là ngày nộp hồ sơ hay ngày trên giấy?",
+            "answer": "Là ngày được ghi trên giấy chứng nhận kết hôn của bác, không phải ngày hôm nay ạ."
+          },
+          {
+            "question": "Ngày từ 1 đến 9 có cần thêm số 0 phía trước không?",
+            "answer": "Bác viết số 0 phía trước hoặc viết một chữ số đều được, miễn rõ nét là được ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.659990229604299,
+          0.1686247408431237,
+          0.6707376648754274,
+          0.2066344160331721
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_019_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.659990229604299,
+              0.1686247408431237,
+              0.6707376648754274,
+              0.2066344160331721
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 20,
+        "boxId": "box_020",
+        "sectionName": "Thông tin đăng ký kết hôn",
+        "label": "Tháng cấp",
+        "voiceGuidance": "Bác ghi tháng cấp giấy kết hôn vào ô nhỏ tiếp theo này ạ.",
+        "exampleRedText": "08",
+        "faqs": [
+          {
+            "question": "Tháng cấp xem ở đâu?",
+            "answer": "Bác xem phần ngày tháng năm cấp trên giấy chứng nhận kết hôn của bác ạ."
+          },
+          {
+            "question": "Viết số hay viết chữ?",
+            "answer": "Bác ghi bằng chữ số cho gọn gàng và vừa với ô nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.659990229604299,
+          0.26399447131997233,
+          0.6707376648754274,
+          0.29163787145818937
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_020_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.659990229604299,
+              0.26399447131997233,
+              0.6707376648754274,
+              0.29163787145818937
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 21,
+        "boxId": "box_021",
+        "sectionName": "Thông tin đăng ký kết hôn",
+        "label": "Năm cấp",
+        "voiceGuidance": "Tại chỗ này, bác ghi đủ bốn chữ số của năm cấp giấy kết hôn ạ.",
+        "exampleRedText": "2023",
+        "faqs": [
+          {
+            "question": "Có cần viết đủ bốn số của năm không?",
+            "answer": "Bác nên ghi đủ cả bốn chữ số để năm được rõ ràng, chính xác ạ."
+          },
+          {
+            "question": "Năm cấp giấy từ lâu rồi thì ghi năm nào?",
+            "answer": "Bác ghi đúng năm được cấp ghi trên giấy chứng nhận kết hôn của bác ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.659990229604299,
+          0.33932273669661367,
+          0.6707376648754274,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_021_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.659990229604299,
+              0.33932273669661367,
+              0.6707376648754274,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 22,
+        "boxId": "box_022",
+        "sectionName": "Tình trạng hôn nhân",
+        "label": "Tình trạng hôn nhân trước lần kết hôn này",
+        "voiceGuidance": "Bác ghi rõ tình trạng hôn nhân của mình ngay trước lần kết hôn này vào dòng kẻ ạ. Bác có thể ghi là chưa từng kết hôn hoặc đã từng kết hôn nhưng hôn nhân đã chấm dứt.",
+        "exampleRedText": "CHƯA TỪNG KẾT HÔN",
+        "faqs": [
+          {
+            "question": "Nếu trước đây chưa từng cưới ai thì ghi thế nào?",
+            "answer": "Bác ghi vào dòng này là 'Chưa từng kết hôn' ạ."
+          },
+          {
+            "question": "Nếu trước đó từng ly hôn thì ghi ra sao?",
+            "answer": "Bác ghi là 'Đã từng kết hôn nhưng hôn nhân đã chấm dứt' theo đúng hướng dẫn trên biểu mẫu ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7069369809477284,
+          0.0967519004837595,
+          0.7176844162188569,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_022_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7069369809477284,
+              0.0967519004837595,
+              0.7176844162188569,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 23,
+        "boxId": "box_023",
+        "sectionName": "Địa điểm và thời gian làm tờ khai",
+        "label": "Làm tại",
+        "voiceGuidance": "Bác ghi tên địa danh nơi bác đang ngồi làm tờ khai này vào đây ạ. Ví dụ bác đang làm thủ tục ở quận, huyện hay tỉnh nào thì ghi tên nơi đó.",
+        "exampleRedText": "HÀ NỘI",
+        "faqs": [
+          {
+            "question": "Mục này ghi tên xã hay tên huyện, tỉnh?",
+            "answer": "Bác ghi tên huyện hoặc tỉnh nơi cơ quan tiếp nhận hồ sơ đang đặt trụ sở là được ạ."
+          },
+          {
+            "question": "Có được viết tắt tên tỉnh, thành phố không?",
+            "answer": "Bác nên viết rõ ràng tên địa danh, không nên viết tắt để hồ sơ đẹp và chuẩn bác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.7254518808011724,
+          0.5307532826537664,
+          0.7361993160723009,
+          0.6302695231513477
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_023_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7254518808011724,
+              0.5307532826537664,
+              0.7361993160723009,
+              0.6302695231513477
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 24,
+        "boxId": "box_024",
+        "sectionName": "Địa điểm và thời gian làm tờ khai",
+        "label": "Ngày ký",
+        "voiceGuidance": "Bác ghi ngày hôm nay - ngày bác đi nộp tờ khai này vào chỗ đang phát sáng ạ.",
+        "exampleRedText": "20",
+        "faqs": [
+          {
+            "question": "Đây là ngày làm tờ khai hay ngày trên giấy kết hôn?",
+            "answer": "Đây là ngày hôm nay, ngày bác trực tiếp điền và nộp tờ khai này ạ."
+          },
+          {
+            "question": "Nếu cháu lỡ viết nhầm ngày thì xử lý thế nào?",
+            "answer": "Bác có thể nhờ cán bộ tại quầy kiểm tra và hướng dẫn sửa hoặc đổi tờ khai khác cho bác ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7254518808011724,
+          0.6876295784381479,
+          0.7361993160723009,
+          0.7208016586040082
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_024_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7254518808011724,
+              0.6876295784381479,
+              0.7361993160723009,
+              0.7208016586040082
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 25,
+        "boxId": "box_025",
+        "sectionName": "Thời gian và cam đoan",
+        "label": "Tháng ký",
+        "voiceGuidance": "Bác ghi tháng làm tờ khai vào ô này giúp cháu. Bác viết chữ số của tháng hiện tại vào đây ạ.",
+        "exampleRedText": "10",
+        "faqs": [
+          {
+            "question": "Tháng này viết chữ hay số hả cháu?",
+            "answer": "Bác ghi chữ số của tháng vào đây là được bác nhé."
+          },
+          {
+            "question": "Ghi tháng hôm nay hay tháng nào?",
+            "answer": "Bác ghi tháng của ngày hôm nay bác đi nộp tờ khai ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7254518808011724,
+          0.778852798894264,
+          0.7361993160723009,
+          0.8120248790601244
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_025_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7254518808011724,
+              0.778852798894264,
+              0.7361993160723009,
+              0.8120248790601244
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 26,
+        "boxId": "box_026",
+        "sectionName": "Thời gian và cam đoan",
+        "label": "Năm ký",
+        "voiceGuidance": "Bác ghi năm làm tờ khai vào ô đang sáng này ạ. Bác viết đủ bốn chữ số của năm nay giúp cháu.",
+        "exampleRedText": "2023",
+        "faqs": [
+          {
+            "question": "Bác viết hai số cuối của năm được không?",
+            "answer": "Bác nên viết đủ cả bốn chữ số năm nay cho rõ ràng bác nhé."
+          },
+          {
+            "question": "Năm này tính theo ngày nào?",
+            "answer": "Bác ghi đúng năm của ngày hôm nay bác nộp tờ khai ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7259404005862238,
+          0.8597097442985487,
+          0.7366878358573522,
+          0.8935729094678645
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_026_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7259404005862238,
+              0.8597097442985487,
+              0.7366878358573522,
+              0.8935729094678645
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 27,
+        "boxId": "box_027",
+        "sectionName": "Yêu cầu cấp bản sao",
+        "label": "Đề nghị cấp bản sao — Có",
+        "voiceGuidance": "Nếu bác muốn xin thêm bản sao, bác đánh một dấu tích vào ô vuông này ạ. Nếu không có nhu cầu thì bác để trống ô này nhé.",
+        "exampleRedText": "V",
+        "faqs": [
+          {
+            "question": "Đánh dấu tích hay dấu nhân vào ô vuông?",
+            "answer": "Bác đánh một dấu tích chữ V rõ ràng vào giữa ô là được ạ."
+          },
+          {
+            "question": "Bác có cần xin bản sao không cháu?",
+            "answer": "Tùy nhu cầu sử dụng của gia đình, nếu cần lưu thêm bản sao thì bác tích vào đây ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7718612603810454,
+          0.3724948168624741,
+          0.7889594528578407,
+          0.3953006219765031
+        ],
+        "inputKind": "checkbox",
+        "highlightRegions": [
+          {
+            "regionId": "box_027_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7718612603810454,
+              0.3724948168624741,
+              0.7889594528578407,
+              0.3953006219765031
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 28,
+        "boxId": "box_028",
+        "sectionName": "Yêu cầu cấp bản sao",
+        "label": "Đề nghị cấp bản sao — Không",
+        "voiceGuidance": "Nếu bác không cần lấy thêm bản sao, bác đánh dấu tích vào ô này giúp cháu. Bác chỉ chọn ô này khi không tích vào ô Có ở trên nhé.",
+        "exampleRedText": "V",
+        "faqs": [
+          {
+            "question": "Bác đã tích ô Có rồi thì có tích ô này nữa không?",
+            "answer": "Dạ không, bác chỉ chọn một trong hai ô Có hoặc Không thôi ạ."
+          },
+          {
+            "question": "Đánh dấu vào ô Không thì nhận kết quả thế nào?",
+            "answer": "Dạ khi đó cơ quan chỉ trả kết quả bản chính cho bác thôi ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7923790913531998,
+          0.16793365583966827,
+          0.8094772838299951,
+          0.19073946095369732
+        ],
+        "inputKind": "checkbox",
+        "highlightRegions": [
+          {
+            "regionId": "box_028_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7923790913531998,
+              0.16793365583966827,
+              0.8094772838299951,
+              0.19073946095369732
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 29,
+        "boxId": "box_029",
+        "sectionName": "Yêu cầu cấp bản sao",
+        "label": "Số lượng bản sao",
+        "voiceGuidance": "Nếu ở trên bác chọn có xin bản sao, bác ghi số lượng muốn lấy vào đây ạ. Bác viết số bản cụ thể bằng chữ số giúp cháu.",
+        "exampleRedText": "02",
+        "faqs": [
+          {
+            "question": "Bác không xin bản sao thì ô này ghi gì?",
+            "answer": "Nếu chọn không xin bản sao thì bác để trống ô này giúp cháu ạ."
+          },
+          {
+            "question": "Bác xin bao nhiêu bản thì được?",
+            "answer": "Bác cần dùng bao nhiêu bản thì ghi số lượng vào đây để cán bộ tiếp nhận giải quyết ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.8246213971665852,
+          0.18175535590877678,
+          0.8353688324377138,
+          0.2349689011748445
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_029_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.8246213971665852,
+              0.18175535590877678,
+              0.8353688324377138,
+              0.2349689011748445
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      }
+    ]
+  },
+  "cache_4ae73124f6bbaa237104237f6a37d210863653783afd965227fd2e7acd8edc87": {
+    "formId": "form_1791731523788",
+    "formTitle": "Tờ khai ghi chú kết hôn",
+    "formCode": "TKGCKH-2023",
+    "status": "PENDING_REVIEW",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "imageUrl": "/api/forms/TKGCKH-2023/pages/1?asset=5fa943d0fdcf3dbca74caf5ade9868f9d33ec6528a04755b6a461f59aa598d02",
+        "width": 1447,
+        "height": 2047
+      }
+    ],
+    "totalPages": 1,
+    "circularInfo": "",
+    "steps": [
+      {
+        "stepIndex": 1,
+        "boxId": "box_001",
+        "sectionName": "Cơ quan tiếp nhận",
+        "label": "Kính gửi",
+        "voiceGuidance": "Dạ thưa bác, ở dòng Kính gửi đang sáng, bác viết tên cơ quan giải quyết việc ghi chú kết hôn ạ. Bác nộp hồ sơ ở huyện hoặc thành phố nào thì ghi đúng tên Ủy ban nhân dân nơi đó nhé.",
+        "exampleRedText": "ỦY BAN NHÂN DÂN QUẬN HOÀN KIẾM",
+        "faqs": [
+          {
+            "question": "Tôi nộp ở cấp huyện hay cấp xã thì viết thế nào?",
+            "answer": "Dạ, bác nộp hồ sơ tại cơ quan nào thì ghi đúng tên Ủy ban nhân dân nơi đó, hoặc bác hỏi cán bộ tiếp nhận tại bàn để điền chính xác ạ."
+          },
+          {
+            "question": "Viết tắt chữ Ủy ban nhân dân thành UBND được không?",
+            "answer": "Dạ, bác nên viết đầy đủ là Ủy ban nhân dân để văn bản rõ ràng và trang trọng hơn ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.18612603810454323,
+          0.3234277816171389,
+          0.1968734733756717,
+          0.7809260539046303
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_001_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.18612603810454323,
+              0.3234277816171389,
+              0.1968734733756717,
+              0.7809260539046303
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 2,
+        "boxId": "box_002",
+        "sectionName": "Thông tin người yêu cầu",
+        "label": "Họ, chữ đệm, tên người yêu cầu",
+        "voiceGuidance": "Tại ô này, bác viết đầy đủ họ và tên của người trực tiếp đi nộp hồ sơ ạ. Bác ghi đúng theo thẻ Căn cước công dân của mình nhé.",
+        "exampleRedText": "NGUYỄN VĂN AN",
+        "faqs": [
+          {
+            "question": "Tôi đi làm thay cho con thì ghi tên ai ở đây?",
+            "answer": "Dạ, bác là người trực tiếp đứng tên nộp tờ khai này thì bác ghi họ tên của chính bác ạ."
+          },
+          {
+            "question": "Có bắt buộc phải viết chữ in hoa không?",
+            "answer": "Dạ không bắt buộc, nhưng bác viết chữ in hoa rõ nét sẽ giúp cán bộ đọc và nhập liệu chính xác hơn ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.2432828529555447,
+          0.38424326192121633,
+          0.2540302882266732,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_002_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.2432828529555447,
+              0.38424326192121633,
+              0.2540302882266732,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 3,
+        "boxId": "box_003",
+        "sectionName": "Thông tin người yêu cầu",
+        "label": "Nơi cư trú người yêu cầu",
+        "voiceGuidance": "Dạ ô này có hai dòng, bác ghi địa chỉ nơi ở thường trú hoặc tạm trú của bác ạ. Nếu dòng trên không đủ chỗ, bác cứ viết tiếp xuống dòng dưới nhé.",
+        "exampleRedText": "SỐ 12 PHỐ TRÀNG TIỀN, PHƯỜNG TRÀNG TIỀN, QUẬN HOÀN KIẾM, THÀNH PHỐ HÀ NỘI",
+        "faqs": [
+          {
+            "question": "Nên ghi địa chỉ thường trú hay địa chỉ đang ở hiện tại?",
+            "answer": "Dạ, bác ghi địa chỉ thường trú theo Căn cước công dân hoặc nơi đăng ký tạm trú hợp pháp hiện tại của bác ạ."
+          },
+          {
+            "question": "Nếu địa chỉ dài quá một dòng thì làm sao?",
+            "answer": "Dạ, ô này có hai dòng kẻ, bác cứ viết thoải mái sang dòng thứ hai bên dưới ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.26477772349780165,
+          0.2128541810642709,
+          0.27552515876893013,
+          0.8762957843814789
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_003_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.26477772349780165,
+              0.2128541810642709,
+              0.27552515876893013,
+              0.8762957843814789
+            ]
+          },
+          {
+            "regionId": "box_003_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.2862725940400586,
+              0.0967519004837595,
+              0.2970200293111871,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 4,
+        "boxId": "box_004",
+        "sectionName": "Thông tin người yêu cầu",
+        "label": "Giấy tờ tùy thân người yêu cầu",
+        "voiceGuidance": "Bác ghi rõ loại giấy tờ tùy thân, số thẻ, ngày cấp và nơi cấp vào ô này ạ. Ví dụ bác dùng Căn cước công dân thì ghi số và ngày cấp ghi trên mặt sau thẻ nhé.",
+        "exampleRedText": "CCCD SỐ 001060123456 DO CỤC CẢNH SÁT QLHC VỀ TTXH CẤP NGÀY 10/05/2021",
+        "faqs": [
+          {
+            "question": "Dùng Chứng minh nhân dân cũ 9 số hoặc 12 số được không?",
+            "answer": "Dạ được, nếu giấy tờ còn hạn sử dụng thì bác cứ ghi số Chứng minh nhân dân kèm ngày cấp và nơi cấp bình thường ạ."
+          },
+          {
+            "question": "Thông tin dài quá có viết xuống dòng dưới được không?",
+            "answer": "Dạ được ạ, ô này có dòng kẻ tiếp theo bên dưới để bác viết trọn vẹn thông tin ngày cấp và nơi cấp."
+          }
+        ],
+        "highlightCoords": [
+          0.3077674645823156,
+          0.25777470628887356,
+          0.31851489985344406,
+          0.8762957843814789
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_004_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3077674645823156,
+              0.25777470628887356,
+              0.31851489985344406,
+              0.8762957843814789
+            ]
+          },
+          {
+            "regionId": "box_004_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.32926233512457254,
+              0.0967519004837595,
+              0.340009770395701,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 5,
+        "boxId": "box_005",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Họ, chữ đệm, tên bên nữ",
+        "voiceGuidance": "Dạ tại cột bên trái này, bác ghi đầy đủ họ tên của người vợ đã kết hôn ạ. Bác viết chuẩn xác theo Giấy chứng nhận kết hôn hoặc Hộ chiếu nhé.",
+        "exampleRedText": "LÊ THỊ MAI",
+        "faqs": [
+          {
+            "question": "Bên nữ là người nước ngoài thì viết tên thế nào?",
+            "answer": "Dạ, bác ghi đúng từng chữ cái theo tên trên Hộ chiếu hoặc Giấy tờ đăng ký kết hôn của cô ấy ạ."
+          },
+          {
+            "question": "Tên dài quá dòng trên thì viết thế nào?",
+            "answer": "Dạ, ô này có dòng phụ phía dưới, bác viết tiếp phần tên còn lại xuống dòng dưới nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.3761602344894968,
+          0.3178991015894955,
+          0.3869076697606253,
+          0.4837595024187975
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_005_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3761602344894968,
+              0.3178991015894955,
+              0.3869076697606253,
+              0.4837595024187975
+            ]
+          },
+          {
+            "regionId": "box_005_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3976551050317538,
+              0.10642709053213545,
+              0.40840254030288226,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 6,
+        "boxId": "box_006",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Họ, chữ đệm, tên bên nam",
+        "voiceGuidance": "Dạ sang cột bên phải đối diện, bác viết họ và tên của người chồng ạ. Bác lưu ý viết đúng theo giấy tờ đăng ký kết hôn nhé.",
+        "exampleRedText": "JOHN MICHAEL SMITH",
+        "faqs": [
+          {
+            "question": "Người chồng là người nước ngoài có phải phiên âm sang tiếng Việt không?",
+            "answer": "Dạ không cần phiên âm, bác cứ viết đúng theo tên chữ la-tinh trên Hộ chiếu của người đó ạ."
+          },
+          {
+            "question": "Nếu tên dài viết không đủ một dòng thì sao?",
+            "answer": "Dạ, ô này có sẵn dòng kẻ thứ hai ở dưới, bác cứ viết tiếp xuống dưới cho ngay ngắn ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.3761602344894968,
+          0.7318590186592951,
+          0.3869076697606253,
+          0.8818244644091223
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_006_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3761602344894968,
+              0.7318590186592951,
+              0.3869076697606253,
+              0.8818244644091223
+            ]
+          },
+          {
+            "regionId": "box_006_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.3976551050317538,
+              0.5051831375259157,
+              0.40840254030288226,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 7,
+        "boxId": "box_007",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Ngày, tháng, năm sinh bên nữ",
+        "voiceGuidance": "Dạ ngay dưới tên người vợ, bác điền ngày tháng năm sinh của cô ấy ạ. Bác ghi rõ ngày, tháng, năm theo đúng giấy tờ tùy thân nhé.",
+        "exampleRedText": "15/08/1992",
+        "faqs": [
+          {
+            "question": "Ghi số ngày tháng năm hay phải viết bằng chữ?",
+            "answer": "Dạ, bác ghi các con số có dấu gạch chéo hoặc viết rõ ngày tháng năm đều được ạ."
+          },
+          {
+            "question": "Nếu trên giấy tờ chỉ có năm sinh thì ghi thế nào?",
+            "answer": "Dạ, nếu giấy tờ chỉ ghi năm sinh thì bác chỉ cần điền năm sinh vào ô này thôi ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.41914997557401074,
+          0.28818244644091223,
+          0.4298974108451392,
+          0.48306841741534207
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_007_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.41914997557401074,
+              0.28818244644091223,
+              0.4298974108451392,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 8,
+        "boxId": "box_008",
+        "sectionName": "Thông tin người kết hôn",
+        "label": "Ngày, tháng, năm sinh bên nam",
+        "voiceGuidance": "Dạ ô bên phải này, bác ghi ngày tháng năm sinh của người chồng ạ. Bác kiểm tra kỹ ngày sinh trên giấy kết hôn hoặc hộ chiếu để ghi cho chuẩn nhé.",
+        "exampleRedText": "20/11/1988",
+        "faqs": [
+          {
+            "question": "Người nước ngoài ghi ngày sinh theo thứ tự nào?",
+            "answer": "Dạ, theo mẫu biểu Việt Nam, bác cứ ghi thứ tự ngày rồi đến tháng và năm cho thống nhất ạ."
+          },
+          {
+            "question": "Lỡ viết nhầm số ngày sinh thì xử lý thế nào?",
+            "answer": "Dạ, bác nên xin cán bộ tờ khai mới để viết lại cho sạch đẹp, tránh gạch xóa làm hỏng hồ sơ ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.41914997557401074,
+          0.7021423635107118,
+          0.4298974108451392,
+          0.8811333794056669
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_008_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.41914997557401074,
+              0.7021423635107118,
+              0.4298974108451392,
+              0.8811333794056669
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 9,
+        "boxId": "box_009",
+        "sectionName": "Thông tin bên nữ",
+        "label": "Dân tộc bên nữ",
+        "voiceGuidance": "Bác ghi rõ dân tộc của bên nữ vào ô này giúp cháu nhé.",
+        "exampleRedText": "KINH",
+        "faqs": [
+          {
+            "question": "Tôi mang hai dòng máu thì ghi thế nào?",
+            "answer": "Bác ghi rõ tên các dân tộc hoặc hỏi lại cán bộ tiếp dân để được hướng dẫn cụ thể ạ."
+          },
+          {
+            "question": "Có cần viết chữ in hoa không bác?",
+            "answer": "Bác cứ viết chữ in hoa rõ ràng cho dễ đọc ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.1824464409122322,
+          0.4513922813873962,
+          0.29163787145818937
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_009_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.1824464409122322,
+              0.4513922813873962,
+              0.29163787145818937
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 10,
+        "boxId": "box_010",
+        "sectionName": "Thông tin bên nữ",
+        "label": "Quốc tịch bên nữ",
+        "voiceGuidance": "Bác ghi quốc tịch của bên nữ vào ô này ạ.",
+        "exampleRedText": "VIỆT NAM",
+        "faqs": [
+          {
+            "question": "Người nước ngoài thì ghi thế nào?",
+            "answer": "Bác ghi tên quốc gia bằng tiếng Việt hoặc theo giấy tờ tùy thân của họ nhé."
+          },
+          {
+            "question": "Viết tắt có được không bác?",
+            "answer": "Cháu khuyên bác nên viết đầy đủ tên quốc gia để tránh phải sửa lại ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.3897719419488597,
+          0.4513922813873962,
+          0.4837595024187975
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_010_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.3897719419488597,
+              0.4513922813873962,
+              0.4837595024187975
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 11,
+        "boxId": "box_011",
+        "sectionName": "Thông tin bên nam",
+        "label": "Dân tộc bên nam",
+        "voiceGuidance": "Tiếp theo, bác ghi dân tộc của bên nam vào ô này nhé.",
+        "exampleRedText": "TÀY",
+        "faqs": [
+          {
+            "question": "Dân tộc ghi theo giấy tờ gì?",
+            "answer": "Bác ghi đúng theo giấy khai sinh hoặc căn cước công dân ạ."
+          },
+          {
+            "question": "Viết thường hay viết hoa bác nhỉ?",
+            "answer": "Bác viết chữ IN HOA rõ ràng giúp cháu nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.5687629578438148,
+          0.4513922813873962,
+          0.6897028334485141
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_011_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.5687629578438148,
+              0.4513922813873962,
+              0.6897028334485141
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 12,
+        "boxId": "box_012",
+        "sectionName": "Thông tin bên nam",
+        "label": "Quốc tịch bên nam",
+        "voiceGuidance": "Bác điền quốc tịch của bên nam vào ô này giúp cháu.",
+        "exampleRedText": "VIỆT NAM",
+        "faqs": [
+          {
+            "question": "Quốc tịch ghi thế nào cho đúng?",
+            "answer": "Bác ghi tên quốc gia mà bên nam đang mang quốc tịch nhé."
+          },
+          {
+            "question": "Có cần viết hoa toàn bộ không?",
+            "answer": "Dạ, bác viết IN HOA toàn bộ để tờ khai đẹp và chuẩn xác ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.4406448461162677,
+          0.7747062888735314,
+          0.4513922813873962,
+          0.8818244644091223
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_012_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.4406448461162677,
+              0.7747062888735314,
+              0.4513922813873962,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 13,
+        "boxId": "box_013",
+        "sectionName": "Thông tin bên nữ",
+        "label": "Nơi cư trú bên nữ",
+        "voiceGuidance": "Bác ghi địa chỉ nơi cư trú hiện tại của bên nữ vào các dòng này nhé.",
+        "exampleRedText": "SỐ 10, PHỐ HÀNG ĐÀO, HOÀN KIẾM, HÀ NỘI",
+        "faqs": [
+          {
+            "question": "Địa chỉ ghi theo hộ khẩu hay tạm trú?",
+            "answer": "Bác ghi theo địa chỉ thường trú ghi trên Căn cước công dân ạ."
+          },
+          {
+            "question": "Có cần ghi rõ số nhà, tên đường không?",
+            "answer": "Dạ có, bác ghi chi tiết từ số nhà, tên phố, phường xã đến tỉnh thành nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.46213971665852466,
+          0.21769177608845888,
+          0.47288715192965314,
+          0.48306841741534207
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_013_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.46213971665852466,
+              0.21769177608845888,
+              0.47288715192965314,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_013_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.48412310698583294,
+              0.10642709053213545,
+              0.4948705422569614,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_013_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5056179775280899,
+              0.10642709053213545,
+              0.5163654127992183,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 14,
+        "boxId": "box_014",
+        "sectionName": "Thông tin bên nam",
+        "label": "Nơi cư trú bên nam",
+        "voiceGuidance": "Bác ghi địa chỉ nơi cư trú của bên nam vào các dòng này giúp cháu.",
+        "exampleRedText": "SỐ 15, ĐƯỜNG LÁNG, ĐỐNG ĐA, HÀ NỘI",
+        "faqs": [
+          {
+            "question": "Địa chỉ dài quá thì viết thế nào?",
+            "answer": "Bác viết nắn nót, thu nhỏ chữ lại để vừa vặn các dòng kẻ sẵn nhé."
+          },
+          {
+            "question": "Ghi tắt tên tỉnh được không bác?",
+            "answer": "Cháu khuyên bác nên viết rõ tên tỉnh thành để cán bộ dễ kiểm tra ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.46213971665852466,
+          0.6164478230822391,
+          0.47288715192965314,
+          0.8811333794056669
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_014_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.46213971665852466,
+              0.6164478230822391,
+              0.47288715192965314,
+              0.8811333794056669
+            ]
+          },
+          {
+            "regionId": "box_014_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.48412310698583294,
+              0.5051831375259157,
+              0.4948705422569614,
+              0.8818244644091223
+            ]
+          },
+          {
+            "regionId": "box_014_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5056179775280899,
+              0.5051831375259157,
+              0.5163654127992183,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 15,
+        "boxId": "box_015",
+        "sectionName": "Thông tin bên nữ",
+        "label": "Giấy tờ tùy thân bên nữ",
+        "voiceGuidance": "Bác điền số Căn cước công dân hoặc hộ chiếu của bên nữ vào đây ạ.",
+        "exampleRedText": "CCCD SỐ 001122334455, CẤP NGÀY 01/01/2021, TẠI CỤC CSQLHC VỀ TTXH",
+        "faqs": [
+          {
+            "question": "Phải ghi những thông tin gì về giấy tờ tùy thân?",
+            "answer": "Bác ghi rõ số giấy tờ, ngày cấp và cơ quan cấp như trên thẻ ạ."
+          },
+          {
+            "question": "Dùng hộ chiếu thay căn cước được không?",
+            "answer": "Dạ được, nếu bên nữ là người nước ngoài hoặc dùng hộ chiếu nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.5271128480703469,
+          0.26744989633724947,
+          0.5378602833414753,
+          0.47753973738769867
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_015_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5271128480703469,
+              0.26744989633724947,
+              0.5378602833414753,
+              0.47753973738769867
+            ]
+          },
+          {
+            "regionId": "box_015_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5486077186126038,
+              0.10711817553559087,
+              0.5593551538837322,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_015_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5701025891548608,
+              0.10642709053213545,
+              0.5808500244259892,
+              0.48306841741534207
+            ]
+          },
+          {
+            "regionId": "box_015_region_4",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5915974596971177,
+              0.10711817553559087,
+              0.6023448949682462,
+              0.48306841741534207
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 16,
+        "boxId": "box_016",
+        "sectionName": "Thông tin bên nam",
+        "label": "Giấy tờ tùy thân bên nam",
+        "voiceGuidance": "Cuối cùng, bác ghi thông tin giấy tờ tùy thân của bên nam vào các dòng này nhé.",
+        "exampleRedText": "CCCD SỐ 005544332211, CẤP NGÀY 02/02/2022, TẠI CỤC CSQLHC VỀ TTXH",
+        "faqs": [
+          {
+            "question": "Quên ngày cấp thì làm sao bác?",
+            "answer": "Bác giở thẻ Căn cước công dân ra xem trực tiếp để ghi cho chính xác ạ."
+          },
+          {
+            "question": "Có bắt buộc phải viết hoa không?",
+            "answer": "Dạ, bác cứ viết IN HOA sạch đẹp để cán bộ tiếp dân thuận tiện đối soát."
+          }
+        ],
+        "highlightCoords": [
+          0.5271128480703469,
+          0.6668970283344852,
+          0.5378602833414753,
+          0.8769868693849343
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_016_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5271128480703469,
+              0.6668970283344852,
+              0.5378602833414753,
+              0.8769868693849343
+            ]
+          },
+          {
+            "regionId": "box_016_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.5486077186126038,
+              0.5051831375259157,
+              0.5593551538837322,
+              0.8811333794056669
+            ]
+          },
+          {
+            "regionId": "box_016_region_3",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.570591108939912,
+              0.5051831375259157,
+              0.5813385442110406,
+              0.8818244644091223
+            ]
+          },
+          {
+            "regionId": "box_016_region_4",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.592085979482169,
+              0.5051831375259157,
+              0.6028334147532975,
+              0.8818244644091223
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 17,
+        "boxId": "box_017",
+        "sectionName": "Thông tin kết hôn trước đây",
+        "label": "Đã đăng ký kết hôn tại",
+        "voiceGuidance": "Bác ghi rõ tên cơ quan và địa phương nơi trước đây đã làm thủ tục kết hôn vào các dòng này giúp cháu nhé.",
+        "exampleRedText": "UBND XÃ TÂN LẬP, HUYỆN YÊN MỸ, TỈNH HƯNG YÊN",
+        "faqs": [
+          {
+            "question": "Cháu ơi, nếu tên cơ quan dài quá thì viết thế nào?",
+            "answer": "Bác cứ viết gọn gàng, rõ ràng, có thể trải đều trên hai dòng của ô giấy này ạ."
+          },
+          {
+            "question": "Bác ghi tên nước ngoài được không?",
+            "answer": "Bác ghi tên cơ quan đăng ký nước ngoài bằng tiếng Việt hoặc phiên âm theo giấy tờ được chứng nhận ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.6170004885197851,
+          0.304077401520387,
+          0.6277479237909135,
+          0.8762957843814789
+        ],
+        "inputKind": "multiline_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_017_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.6170004885197851,
+              0.304077401520387,
+              0.6277479237909135,
+              0.8762957843814789
+            ]
+          },
+          {
+            "regionId": "box_017_region_2",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.6389838788470933,
+              0.0995162404975812,
+              0.6497313141182218,
+              0.5563234277816171
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 18,
+        "boxId": "box_018",
+        "sectionName": "Thông tin kết hôn trước đây",
+        "label": "Số đăng ký",
+        "voiceGuidance": "Bác ghi số giấy chứng nhận kết hôn cũ vào ô này nhé.",
+        "exampleRedText": "SỐ 12/2015",
+        "faqs": [
+          {
+            "question": "Không nhớ rõ số đăng ký thì sao hả cháu?",
+            "answer": "Bác mở lại bản chính hoặc bản sao giấy kết hôn cũ để ghi chính xác số vào đây ạ."
+          },
+          {
+            "question": "Có cần viết thêm chữ số hay ký hiệu không?",
+            "answer": "Bác cứ ghi đúng các chữ số và ký hiệu có trên giấy tờ cũ của mình là được ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.6389838788470933,
+          0.5908776779543884,
+          0.6497313141182218,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_018_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.6389838788470933,
+              0.5908776779543884,
+              0.6497313141182218,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 19,
+        "boxId": "box_019",
+        "sectionName": "Thông tin kết hôn trước đây",
+        "label": "Ngày cấp",
+        "voiceGuidance": "Bác ghi ngày cấp của giấy chứng nhận kết hôn cũ vào ô này ạ.",
+        "exampleRedText": "15",
+        "faqs": [
+          {
+            "question": "Chỉ ghi mỗi số ngày thôi phải không cháu?",
+            "answer": "Dạ vâng, bác ghi ngày bằng số vào ô này ạ."
+          },
+          {
+            "question": "Nếu là ngày mùng 5 thì viết thế nào?",
+            "answer": "Bác ghi số 05 hoặc số 5 đều được bác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.659990229604299,
+          0.1686247408431237,
+          0.6707376648754274,
+          0.2066344160331721
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_019_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.659990229604299,
+              0.1686247408431237,
+              0.6707376648754274,
+              0.2066344160331721
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 20,
+        "boxId": "box_020",
+        "sectionName": "Thông tin kết hôn trước đây",
+        "label": "Tháng cấp",
+        "voiceGuidance": "Bác ghi tháng cấp của giấy tờ cũ vào ô này nhé.",
+        "exampleRedText": "08",
+        "faqs": [
+          {
+            "question": "Bác ghi tháng bằng chữ có được không?",
+            "answer": "Bác nên ghi bằng số cho gọn và rõ ràng ạ."
+          },
+          {
+            "question": "Tháng sinh hay tháng cấp hả cháu?",
+            "answer": "Dạ đây là tháng cấp giấy chứng nhận kết hôn cũ bác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.659990229604299,
+          0.26399447131997233,
+          0.6707376648754274,
+          0.29163787145818937
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_020_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.659990229604299,
+              0.26399447131997233,
+              0.6707376648754274,
+              0.29163787145818937
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 21,
+        "boxId": "box_021",
+        "sectionName": "Thông tin kết hôn trước đây",
+        "label": "Năm cấp",
+        "voiceGuidance": "Bác ghi năm cấp giấy kết hôn vào ô này giúp cháu.",
+        "exampleRedText": "2018",
+        "faqs": [
+          {
+            "question": "Bác ghi đủ 4 chữ số của năm phải không?",
+            "answer": "Dạ vâng, bác ghi đủ 4 chữ số của năm cấp nhé."
+          },
+          {
+            "question": "Nếu viết nhầm thì gạch bỏ thế nào?",
+            "answer": "Bác gạch ngang một đường thật nhẹ qua chữ sai rồi viết lại bên cạnh hoặc nhờ cán bộ hướng dẫn thêm ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.659990229604299,
+          0.33932273669661367,
+          0.6707376648754274,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_021_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.659990229604299,
+              0.33932273669661367,
+              0.6707376648754274,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 22,
+        "boxId": "box_022",
+        "sectionName": "Thông tin kết hôn trước đây",
+        "label": "Tình trạng hôn nhân trước lần kết hôn này",
+        "voiceGuidance": "Bác ghi rõ tình trạng hôn nhân của mình trước khi kết hôn lần này vào ô này nhé.",
+        "exampleRedText": "CHƯA TỪNG KẾT HÔN",
+        "faqs": [
+          {
+            "question": "Bác ghi thế nào nếu đã ly hôn rồi?",
+            "answer": "Bác ghi rõ là ĐÃ LY HÔN hoặc theo đúng thực tế giấy tờ của mình ạ."
+          },
+          {
+            "question": "Có cần viết hoa không hả cháu?",
+            "answer": "Bác cứ viết chữ in rõ ràng, sạch sẽ là được ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7069369809477284,
+          0.0967519004837595,
+          0.7176844162188569,
+          0.8762957843814789
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_022_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7069369809477284,
+              0.0967519004837595,
+              0.7176844162188569,
+              0.8762957843814789
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 23,
+        "boxId": "box_023",
+        "sectionName": "Phần ký tên",
+        "label": "Làm tại",
+        "voiceGuidance": "Bác ghi tên địa phương nơi mình đang viết tờ khai vào ô này nhé.",
+        "exampleRedText": "HÀ NỘI",
+        "faqs": [
+          {
+            "question": "Bác ghi tên tỉnh hay tên quận huyện?",
+            "answer": "Bác ghi tên tỉnh hoặc thành phố nơi mình làm thủ tục vào đây ạ."
+          },
+          {
+            "question": "Ô này có bắt buộc phải điền không cháu?",
+            "answer": "Dạ có, đây là phần địa danh trước khi ghi ngày tháng năm lập tờ khai ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7254518808011724,
+          0.5307532826537664,
+          0.7361993160723009,
+          0.6302695231513477
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_023_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7254518808011724,
+              0.5307532826537664,
+              0.7361993160723009,
+              0.6302695231513477
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 24,
+        "boxId": "box_024",
+        "sectionName": "Phần ký tên",
+        "label": "Ngày ký",
+        "voiceGuidance": "Bác ghi ngày hôm nay vào ô này để hoàn thành tờ khai nhé.",
+        "exampleRedText": "20",
+        "faqs": [
+          {
+            "question": "Bác ghi ngày bằng số hay bằng chữ?",
+            "answer": "Bác ghi ngày bằng số theo lịch hôm nay ạ."
+          },
+          {
+            "question": "Sau khi điền xong thì bác đưa cho ai?",
+            "answer": "Bác kiểm tra lại thông tin rồi mang ra nộp cho cán bộ tại quầy Một cửa nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.7254518808011724,
+          0.6876295784381479,
+          0.7361993160723009,
+          0.7208016586040082
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_024_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7254518808011724,
+              0.6876295784381479,
+              0.7361993160723009,
+              0.7208016586040082
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 25,
+        "boxId": "box_025",
+        "sectionName": "Phần cuối tờ khai",
+        "label": "Tháng ký",
+        "voiceGuidance": "Bác ghi số tháng mà mình đang làm tờ khai vào ô này nhé.",
+        "exampleRedText": "12",
+        "faqs": [
+          {
+            "question": "Tháng ký là tháng mấy?",
+            "answer": "Là tháng hiện tại bác đang nộp hồ sơ tại bàn tiếp dân ạ."
+          },
+          {
+            "question": "Tôi viết số mấy?",
+            "answer": "Bác ghi rõ số chỉ tháng bằng chữ số ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7254518808011724,
+          0.778852798894264,
+          0.7361993160723009,
+          0.8120248790601244
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_025_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7254518808011724,
+              0.778852798894264,
+              0.7361993160723009,
+              0.8120248790601244
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 26,
+        "boxId": "box_026",
+        "sectionName": "Phần cuối tờ khai",
+        "label": "Năm ký",
+        "voiceGuidance": "Bác điền năm hiện tại vào ô này giúp cháu.",
+        "exampleRedText": "2023",
+        "faqs": [
+          {
+            "question": "Ghi năm dương lịch hay âm lịch?",
+            "answer": "Bác ghi năm dương lịch hiện tại đang làm thủ tục ạ."
+          },
+          {
+            "question": "Tôi có cần viết đầy đủ 4 chữ số không?",
+            "answer": "Dạ vâng, bác ghi đầy đủ bốn số của năm nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.7259404005862238,
+          0.8597097442985487,
+          0.7366878358573522,
+          0.8935729094678645
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_026_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7259404005862238,
+              0.8597097442985487,
+              0.7366878358573522,
+              0.8935729094678645
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 27,
+        "boxId": "box_027",
+        "sectionName": "Phần cuối tờ khai",
+        "label": "Đề nghị cấp bản sao - Có",
+        "voiceGuidance": "Nếu bác muốn xin thêm bản sao giấy tờ, hãy tích vào ô có chữ Có này nhé.",
+        "exampleRedText": "X",
+        "faqs": [
+          {
+            "question": "Tôi không cần bản sao thì sao?",
+            "answer": "Bác bỏ qua ô này và xem hướng dẫn ở ô không bên dưới ạ."
+          },
+          {
+            "question": "Tích dấu gì vào ô vuông?",
+            "answer": "Bác dùng bút tích dấu X hoặc dấu v đều được bác nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.7718612603810454,
+          0.3724948168624741,
+          0.7889594528578407,
+          0.3953006219765031
+        ],
+        "inputKind": "checkbox",
+        "highlightRegions": [
+          {
+            "regionId": "box_027_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7718612603810454,
+              0.3724948168624741,
+              0.7889594528578407,
+              0.3953006219765031
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 28,
+        "boxId": "box_028",
+        "sectionName": "Phần cuối tờ khai",
+        "label": "Đề nghị cấp bản sao - Không",
+        "voiceGuidance": "Nếu bác không cần lấy bản sao, bác tích dấu vào ô Không này giúp cháu.",
+        "exampleRedText": "X",
+        "faqs": [
+          {
+            "question": "Nếu đã chọn Có thì có chọn Không nữa không?",
+            "answer": "Dạ không ạ, bác chỉ chọn một trong hai phương án Có hoặc Không thôi."
+          },
+          {
+            "question": "Tích nhầm thì sửa thế nào?",
+            "answer": "Bác gạch chéo lỗi sai rồi tích sang ô đúng, hoặc nhờ cán bộ hướng dẫn thêm ạ."
+          }
+        ],
+        "highlightCoords": [
+          0.7923790913531998,
+          0.16793365583966827,
+          0.8094772838299951,
+          0.19073946095369732
+        ],
+        "inputKind": "checkbox",
+        "highlightRegions": [
+          {
+            "regionId": "box_028_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.7923790913531998,
+              0.16793365583966827,
+              0.8094772838299951,
+              0.19073946095369732
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      },
+      {
+        "stepIndex": 29,
+        "boxId": "box_029",
+        "sectionName": "Phần cuối tờ khai",
+        "label": "Số lượng bản sao",
+        "voiceGuidance": "Nếu bác có đề nghị cấp bản sao, hãy ghi số lượng cần lấy vào ô trống này.",
+        "exampleRedText": "02",
+        "faqs": [
+          {
+            "question": "Tôi không xin bản sao thì có phải điền không?",
+            "answer": "Dạ nếu bác đã chọn Không ở trên thì có thể để trống ô này ạ."
+          },
+          {
+            "question": "Ghi số lượng bằng chữ hay số?",
+            "answer": "Bác ghi bằng chữ số thông thường vào ô này nhé."
+          }
+        ],
+        "highlightCoords": [
+          0.8246213971665852,
+          0.18175535590877678,
+          0.8353688324377138,
+          0.2349689011748445
+        ],
+        "inputKind": "single_line_text",
+        "highlightRegions": [
+          {
+            "regionId": "box_029_region_1",
+            "pageNumber": 1,
+            "normalizedCoords": [
+              0.8246213971665852,
+              0.18175535590877678,
+              0.8353688324377138,
+              0.2349689011748445
+            ]
+          }
+        ],
+        "audioUrl": "",
+        "pageNumber": 1,
+        "legalWarningFlag": false
+      }
+    ]
+  },
+  "cache_ed28c63d59a7cdb01b49241f55518d405f6afda0bc5682829c2e335cb24db274": {
+    "audioUrl": "/audio/8d2ef66fbe5636712a340ea25d8fb63f44065f551ea730688ed3e0e31b129404.mp3",
+    "wordTimestamps": [
+      {
+        "word": "DẠ",
+        "startMs": 15,
+        "endMs": 320
+      },
+      {
+        "word": "THƯA",
+        "startMs": 320,
+        "endMs": 570
+      },
+      {
+        "word": "BÁC,",
+        "startMs": 570,
+        "endMs": 1137
+      },
+      {
+        "word": "Ở",
+        "startMs": 1137,
+        "endMs": 1282
+      },
+      {
+        "word": "DÒNG",
+        "startMs": 1282,
+        "endMs": 1532
+      },
+      {
+        "word": "KÍNH",
+        "startMs": 1532,
+        "endMs": 1847
+      },
+      {
+        "word": "GỬI",
+        "startMs": 1847,
+        "endMs": 2089
+      },
+      {
+        "word": "ĐANG",
+        "startMs": 2089,
+        "endMs": 2304
+      },
+      {
+        "word": "SÁNG,",
+        "startMs": 2304,
+        "endMs": 3124
+      },
+      {
+        "word": "BÁC",
+        "startMs": 3124,
+        "endMs": 3354
+      },
+      {
+        "word": "VIẾT",
+        "startMs": 3354,
+        "endMs": 3586
+      },
+      {
+        "word": "TÊN",
+        "startMs": 3586,
+        "endMs": 3921
+      },
+      {
+        "word": "CƠ",
+        "startMs": 3921,
+        "endMs": 4101
+      },
+      {
+        "word": "QUAN",
+        "startMs": 4101,
+        "endMs": 4477
+      },
+      {
+        "word": "GIẢI",
+        "startMs": 4477,
+        "endMs": 4737
+      },
+      {
+        "word": "QUYẾT",
+        "startMs": 4737,
+        "endMs": 4992
+      },
+      {
+        "word": "VIỆC",
+        "startMs": 4992,
+        "endMs": 5248
+      },
+      {
+        "word": "GHI",
+        "startMs": 5248,
+        "endMs": 5448
+      },
+      {
+        "word": "CHÚ",
+        "startMs": 5448,
+        "endMs": 5753
+      },
+      {
+        "word": "KẾT",
+        "startMs": 5753,
+        "endMs": 5978
+      },
+      {
+        "word": "HÔN",
+        "startMs": 5978,
+        "endMs": 6229
+      },
+      {
+        "word": "Ạ.",
+        "startMs": 6229,
+        "endMs": 6829
+      },
+      {
+        "word": "BÁC",
+        "startMs": 6829,
+        "endMs": 7129
+      },
+      {
+        "word": "NỘP",
+        "startMs": 7129,
+        "endMs": 7402
+      },
+      {
+        "word": "HỒ",
+        "startMs": 7402,
+        "endMs": 7587
+      },
+      {
+        "word": "SƠ",
+        "startMs": 7587,
+        "endMs": 7964
+      },
+      {
+        "word": "Ở",
+        "startMs": 7964,
+        "endMs": 8159
+      },
+      {
+        "word": "HUYỆN",
+        "startMs": 8159,
+        "endMs": 8464
+      },
+      {
+        "word": "HOẶC",
+        "startMs": 8464,
+        "endMs": 8883
+      },
+      {
+        "word": "THÀNH",
+        "startMs": 8883,
+        "endMs": 9115
+      },
+      {
+        "word": "PHỐ",
+        "startMs": 9115,
+        "endMs": 9360
+      },
+      {
+        "word": "NÀO",
+        "startMs": 9360,
+        "endMs": 9735
+      },
+      {
+        "word": "THÌ",
+        "startMs": 9735,
+        "endMs": 9970
+      },
+      {
+        "word": "GHI",
+        "startMs": 9970,
+        "endMs": 10175
+      },
+      {
+        "word": "ĐÚNG",
+        "startMs": 10175,
+        "endMs": 10440
+      },
+      {
+        "word": "TÊN",
+        "startMs": 10440,
+        "endMs": 10855
+      },
+      {
+        "word": "ỦY",
+        "startMs": 10855,
+        "endMs": 10985
+      },
+      {
+        "word": "BAN",
+        "startMs": 10985,
+        "endMs": 11225
+      },
+      {
+        "word": "NHÂN",
+        "startMs": 11225,
+        "endMs": 11456
+      },
+      {
+        "word": "DÂN",
+        "startMs": 11456,
+        "endMs": 11742
+      },
+      {
+        "word": "NƠI",
+        "startMs": 11742,
+        "endMs": 11962
+      },
+      {
+        "word": "ĐÓ",
+        "startMs": 11962,
+        "endMs": 12207
+      },
+      {
+        "word": "NHÉ.",
+        "startMs": 12207,
+        "endMs": 12557
+      }
+    ],
+    "timestampSource": "ssml_marks"
+  },
+  "cache_0ec37a97c965d85b0a284ee62582b6f0968f3065cb688ede36e040b0e51b1b09": {
+    "audioUrl": "/audio/689a2c05feb401c0a418e022192687d59ed9031ad13e4a4e5c635c35baec2b04.mp3",
+    "wordTimestamps": [
+      {
+        "word": "DẠ",
+        "startMs": 15,
+        "endMs": 300
+      },
+      {
+        "word": "THƯA",
+        "startMs": 300,
+        "endMs": 493
+      },
+      {
+        "word": "BÁC,",
+        "startMs": 493,
+        "endMs": 1021
+      },
+      {
+        "word": "Ở",
+        "startMs": 1021,
+        "endMs": 1166
+      },
+      {
+        "word": "DÒNG",
+        "startMs": 1166,
+        "endMs": 1408
+      },
+      {
+        "word": "KÍNH",
+        "startMs": 1408,
+        "endMs": 1685
+      },
+      {
+        "word": "GỬI",
+        "startMs": 1685,
+        "endMs": 1935
+      },
+      {
+        "word": "ĐANG",
+        "startMs": 1935,
+        "endMs": 2149
+      },
+      {
+        "word": "SÁNG,",
+        "startMs": 2149,
+        "endMs": 2842
+      },
+      {
+        "word": "BÁC",
+        "startMs": 2842,
+        "endMs": 3052
+      },
+      {
+        "word": "VIẾT",
+        "startMs": 3052,
+        "endMs": 3247
+      },
+      {
+        "word": "TÊN",
+        "startMs": 3247,
+        "endMs": 3532
+      },
+      {
+        "word": "CƠ",
+        "startMs": 3532,
+        "endMs": 3697
+      },
+      {
+        "word": "QUAN",
+        "startMs": 3697,
+        "endMs": 4012
+      },
+      {
+        "word": "GIẢI",
+        "startMs": 4012,
+        "endMs": 4247
+      },
+      {
+        "word": "QUYẾT",
+        "startMs": 4247,
+        "endMs": 4482
+      },
+      {
+        "word": "VIỆC",
+        "startMs": 4482,
+        "endMs": 4723
+      },
+      {
+        "word": "GHI",
+        "startMs": 4723,
+        "endMs": 4913
+      },
+      {
+        "word": "CHÚ",
+        "startMs": 4913,
+        "endMs": 5248
+      },
+      {
+        "word": "KẾT",
+        "startMs": 5248,
+        "endMs": 5448
+      },
+      {
+        "word": "HÔN",
+        "startMs": 5448,
+        "endMs": 5705
+      },
+      {
+        "word": "Ạ.",
+        "startMs": 5705,
+        "endMs": 6304
+      },
+      {
+        "word": "BÁC",
+        "startMs": 6304,
+        "endMs": 6549
+      },
+      {
+        "word": "NỘP",
+        "startMs": 6549,
+        "endMs": 6789
+      },
+      {
+        "word": "HỒ",
+        "startMs": 6789,
+        "endMs": 6944
+      },
+      {
+        "word": "SƠ",
+        "startMs": 6944,
+        "endMs": 7254
+      },
+      {
+        "word": "Ở",
+        "startMs": 7254,
+        "endMs": 7417
+      },
+      {
+        "word": "HUYỆN",
+        "startMs": 7417,
+        "endMs": 7717
+      },
+      {
+        "word": "HOẶC",
+        "startMs": 7717,
+        "endMs": 7927
+      },
+      {
+        "word": "THÀNH",
+        "startMs": 7927,
+        "endMs": 8132
+      },
+      {
+        "word": "PHỐ",
+        "startMs": 8132,
+        "endMs": 8321
+      },
+      {
+        "word": "NÀO",
+        "startMs": 8321,
+        "endMs": 8652
+      },
+      {
+        "word": "THÌ",
+        "startMs": 8652,
+        "endMs": 8994
+      },
+      {
+        "word": "GHI",
+        "startMs": 8994,
+        "endMs": 9184
+      },
+      {
+        "word": "ĐÚNG",
+        "startMs": 9184,
+        "endMs": 9399
+      },
+      {
+        "word": "TÊN",
+        "startMs": 9399,
+        "endMs": 9724
+      },
+      {
+        "word": "ỦY",
+        "startMs": 9724,
+        "endMs": 9859
+      },
+      {
+        "word": "BAN",
+        "startMs": 9859,
+        "endMs": 10039
+      },
+      {
+        "word": "NHÂN",
+        "startMs": 10039,
+        "endMs": 10209
+      },
+      {
+        "word": "DÂN",
+        "startMs": 10209,
+        "endMs": 10499
+      },
+      {
+        "word": "NƠI",
+        "startMs": 10499,
+        "endMs": 10700
+      },
+      {
+        "word": "ĐÓ",
+        "startMs": 10700,
+        "endMs": 10895
+      },
+      {
+        "word": "NHÉ.",
+        "startMs": 10895,
+        "endMs": 11245
+      }
+    ],
+    "timestampSource": "ssml_marks"
+  },
+  "cache_9323efeea9d68674db80072920fcbc32214b9b70c4f05ec2597fa9df63e7b1e8": {
+    "audioUrl": "/audio/2632e2ca935320fffba33dfde81fd999a03028cb3e749691ad44d304afd927d3.mp3",
+    "wordTimestamps": [
+      {
+        "word": "TẠI",
+        "startMs": 15,
+        "endMs": 235
+      },
+      {
+        "word": "Ô",
+        "startMs": 235,
+        "endMs": 385
+      },
+      {
+        "word": "NÀY,",
+        "startMs": 385,
+        "endMs": 1002
+      },
+      {
+        "word": "BÁC",
+        "startMs": 1002,
+        "endMs": 1222
+      },
+      {
+        "word": "VIẾT",
+        "startMs": 1222,
+        "endMs": 1437
+      },
+      {
+        "word": "ĐẦY",
+        "startMs": 1437,
+        "endMs": 1682
+      },
+      {
+        "word": "ĐỦ",
+        "startMs": 1682,
+        "endMs": 1892
+      },
+      {
+        "word": "HỌ",
+        "startMs": 1892,
+        "endMs": 2207
+      },
+      {
+        "word": "VÀ",
+        "startMs": 2207,
+        "endMs": 2358
+      },
+      {
+        "word": "TÊN",
+        "startMs": 2358,
+        "endMs": 2638
+      },
+      {
+        "word": "CỦA",
+        "startMs": 2638,
+        "endMs": 2762
+      },
+      {
+        "word": "NGƯỜI",
+        "startMs": 2762,
+        "endMs": 3007
+      },
+      {
+        "word": "TRỰC",
+        "startMs": 3007,
+        "endMs": 3270
+      },
+      {
+        "word": "TIẾP",
+        "startMs": 3270,
+        "endMs": 3480
+      },
+      {
+        "word": "ĐI",
+        "startMs": 3480,
+        "endMs": 3625
+      },
+      {
+        "word": "NỘP",
+        "startMs": 3625,
+        "endMs": 3850
+      },
+      {
+        "word": "HỒ",
+        "startMs": 3850,
+        "endMs": 4025
+      },
+      {
+        "word": "SƠ",
+        "startMs": 4025,
+        "endMs": 4291
+      },
+      {
+        "word": "Ạ.",
+        "startMs": 4291,
+        "endMs": 4832
+      },
+      {
+        "word": "BÁC",
+        "startMs": 4832,
+        "endMs": 5099
+      },
+      {
+        "word": "GHI",
+        "startMs": 5099,
+        "endMs": 5289
+      },
+      {
+        "word": "ĐÚNG",
+        "startMs": 5289,
+        "endMs": 5588
+      },
+      {
+        "word": "THEO",
+        "startMs": 5588,
+        "endMs": 5778
+      },
+      {
+        "word": "THẺ",
+        "startMs": 5778,
+        "endMs": 6077
+      },
+      {
+        "word": "CĂN",
+        "startMs": 6077,
+        "endMs": 6289
+      },
+      {
+        "word": "CƯỚC",
+        "startMs": 6289,
+        "endMs": 6524
+      },
+      {
+        "word": "CÔNG",
+        "startMs": 6524,
+        "endMs": 6734
+      },
+      {
+        "word": "DÂN",
+        "startMs": 6734,
+        "endMs": 6979
+      },
+      {
+        "word": "CỦA",
+        "startMs": 6979,
+        "endMs": 7114
+      },
+      {
+        "word": "MÌNH",
+        "startMs": 7114,
+        "endMs": 7319
+      },
+      {
+        "word": "NHÉ.",
+        "startMs": 7319,
+        "endMs": 7669
+      }
+    ],
+    "timestampSource": "ssml_marks"
+  },
+  "cache_7664ae2321bdf32165fe2073f46b3fdc35d93a9dc2cab3fe6735020bd30f222b": {
+    "audioUrl": "/api/audio/772fbb6e2df28ef4d2800307381952a5bc4cb38b85e86998e4249baaad95fc53.mp3",
+    "wordTimestamps": [
+      {
+        "word": "TẠI",
+        "startMs": 15,
+        "endMs": 310
+      },
+      {
+        "word": "Ô",
+        "startMs": 310,
+        "endMs": 491
+      },
+      {
+        "word": "NÀY,",
+        "startMs": 491,
+        "endMs": 1131
+      },
+      {
+        "word": "BÁC",
+        "startMs": 1131,
+        "endMs": 1371
+      },
+      {
+        "word": "VIẾT",
+        "startMs": 1371,
+        "endMs": 1582
+      },
+      {
+        "word": "ĐẦY",
+        "startMs": 1582,
+        "endMs": 1797
+      },
+      {
+        "word": "ĐỦ",
+        "startMs": 1797,
+        "endMs": 1987
+      },
+      {
+        "word": "HỌ",
+        "startMs": 1987,
+        "endMs": 2232
+      },
+      {
+        "word": "VÀ",
+        "startMs": 2232,
+        "endMs": 2407
+      },
+      {
+        "word": "TÊN",
+        "startMs": 2407,
+        "endMs": 2713
+      },
+      {
+        "word": "CỦA",
+        "startMs": 2713,
+        "endMs": 2843
+      },
+      {
+        "word": "NGƯỜI",
+        "startMs": 2843,
+        "endMs": 3058
+      },
+      {
+        "word": "TRỰC",
+        "startMs": 3058,
+        "endMs": 3324
+      },
+      {
+        "word": "TIẾP",
+        "startMs": 3324,
+        "endMs": 3590
+      },
+      {
+        "word": "ĐI",
+        "startMs": 3590,
+        "endMs": 3755
+      },
+      {
+        "word": "NỘP",
+        "startMs": 3755,
+        "endMs": 4010
+      },
+      {
+        "word": "HỒ",
+        "startMs": 4010,
+        "endMs": 4210
+      },
+      {
+        "word": "SƠ",
+        "startMs": 4210,
+        "endMs": 4520
+      },
+      {
+        "word": "Ạ.",
+        "startMs": 4520,
+        "endMs": 5091
+      },
+      {
+        "word": "BÁC",
+        "startMs": 5091,
+        "endMs": 5381
+      },
+      {
+        "word": "GHI",
+        "startMs": 5381,
+        "endMs": 5596
+      },
+      {
+        "word": "ĐÚNG",
+        "startMs": 5596,
+        "endMs": 5901
+      },
+      {
+        "word": "THEO",
+        "startMs": 5901,
+        "endMs": 6131
+      },
+      {
+        "word": "THẺ",
+        "startMs": 6131,
+        "endMs": 6409
+      },
+      {
+        "word": "CĂN",
+        "startMs": 6409,
+        "endMs": 6649
+      },
+      {
+        "word": "CƯỚC",
+        "startMs": 6649,
+        "endMs": 6914
+      },
+      {
+        "word": "CÔNG",
+        "startMs": 6914,
+        "endMs": 7166
+      },
+      {
+        "word": "DÂN",
+        "startMs": 7166,
+        "endMs": 7436
+      },
+      {
+        "word": "CỦA",
+        "startMs": 7436,
+        "endMs": 7601
+      },
+      {
+        "word": "MÌNH",
+        "startMs": 7601,
+        "endMs": 7856
+      },
+      {
+        "word": "NHÉ.",
+        "startMs": 7856,
+        "endMs": 8206
+      }
+    ],
+    "timestampSource": "ssml_marks"
   }
 }

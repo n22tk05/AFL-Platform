@@ -1,0 +1,13 @@
+{
+  "sourceImage": "F20-p1.png",
+  "annotationScope": "Nine blank data rows and five input columns only; excludes ordinal cells, header, footer and all non-table fields",
+  "imageDimensions": { "width": 1026, "height": 1450 },
+  "rowBoundariesPx": [769, 805, 840, 875, 910, 945, 980, 1015, 1050, 1085],
+  "columns": [
+    { "leftPx": 202, "rightPx": 431, "label": "Họ, chữ đệm và tên" },
+    { "leftPx": 431, "rightPx": 563, "label": "Ngày, tháng, năm sinh" },
+    { "leftPx": 563, "rightPx": 628, "label": "Giới tính" },
+    { "leftPx": 628, "rightPx": 812, "label": "Số định danh cá nhân" },
+    { "leftPx": 812, "rightPx": 942, "label": "Mối quan hệ với chủ hộ" }
+  ]
+}

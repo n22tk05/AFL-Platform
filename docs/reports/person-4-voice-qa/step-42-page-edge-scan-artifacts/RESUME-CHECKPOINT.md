@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 42
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Thay đổi chặng 14–42 vẫn local/chưa commit; không reset/clean/stash/push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `PAGE-EDGE-SCAN-ARTIFACT-REGRESSION.md` và checkpoint chặng 41. Fixture xây dựng 29 vùng hash `306461E9AEB93C9DD6A384BB4335387909141300079E15110C425E8A776C17C3`; benchmark mù hash `5F43A006D2296EAAF796453B214FC2E77C8523D759933433F12578F71CFE0FF3`. Không ghi đè. Phát triển ở `private-documents/recognition-evaluation/CENTRAL-CONSTRUCTION-P59.development.*.json` (ignored).
+- `src/modules/forms/services/form-region-recognition.ts` loại candidate dải rộng chạm mép trái và đỉnh/đáy scan thành `PAGE_EDGE_SCAN_ARTIFACT`; evidence vẫn giữ. `src/modules/forms/tests/form-region-recognition.test.ts` có test dương/âm. `tests/browser/form-recognition.spec.ts` tách cờ blind/dev, blind từ chối ghi đè, dev khóa 20 TP/≤3 FP và evidence.
+- Phôi xây dựng: baseline TP 20/FN 9/FP 6 → development **TP 20/FN 9/FP 3**; nhãn ngữ cảnh vẫn **1/20**, chưa đủ nghiệm thu. Ba FP còn là gạch trang trí, vùng trùng `Đại diện cho`, contour vuông giả; chín FN tập trung vào chấm ngắn. Không sửa fixture theo output.
+- Recognition **77/77**, Voice **19/19**, browser opt-in **18/18**, TypeScript/build PASS. Sau build restart Next `:3001`, `/admin/library` HTTP 200, VietOCR `:8000/health` ready, citizen smoke **1/1 PASS**. Không có DB/Gemini/cloud/audio cache writes trong browser suite.
+- Tiếp theo: nhãn/guide ngắn trong câu, ba FP còn lại; holdout mới có bảng/checkbox/multiline; staging admin→ACTIVE→citizen/Voice và DB/RLS. Mục tiêu tổng thể còn thực hiện.

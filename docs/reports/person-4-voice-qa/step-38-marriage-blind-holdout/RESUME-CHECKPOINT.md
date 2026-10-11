@@ -1,0 +1,7 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 38
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Thay đổi chặng 14–38 còn local/chưa commit; không reset/clean/stash/push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `MARRIAGE-BLIND-HOLDOUT.md` và checkpoint chặng 37. Trang 20 Công báo TP.HCM là phôi trắng hai cột, 29 trường chú giải trước khi chạy OCR, 15 dòng tiếp nối. Fixture ở `tests/fixtures/recognition-hcmc-marriage-p20-ground-truth.json`; ảnh ở `private-documents/recognition-evaluation/hcmc-holdout-p20.png` (ignored).
+- Baseline mù **23 TP / 6 FN / 5 FP** IoU≥0,5 toàn trang; 28 field sinh, 20 có nhãn, 27 review; nhãn exact 4/23; dòng tiếp nối 13/15, nhóm đủ 6/9. Đầu ra `.blind-baseline.*.json` ignored, hash benchmark `BEAA45BC0DB0424673B67CC0C7BFB24B31E79F50B49A7ED13C7C84FCB822DE23`. Không sửa fixture theo output.
+- `tests/browser/form-recognition.spec.ts` có thước đo vùng chính + continuation và tùy chọn whole-page; browser test nay gated `RECOGNITION_MARRIAGE_DEVELOPMENT=1`, ghi `.development.*` để baseline mù không bị ghi đè. Lượt chạy mù browser **1/1 PASS**, `npm run typecheck` PASS. Chưa chạy lại full regression sau thay đổi benchmark-only.
+- Bước tiếp: xử lý heading `sau đây` không là field label, anchor tên bên nữ/nam không dấu `:`, scope hai cột có bằng chứng và review; điều tra các FN/FP sau khi đối chiếu ảnh, rồi đánh giá lại trên phôi mới chưa tune. Chưa dùng DB thật/Gemini/cloud/audio cache.

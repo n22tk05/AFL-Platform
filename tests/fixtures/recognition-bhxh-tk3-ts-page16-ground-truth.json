@@ -1,0 +1,31 @@
+{
+  "sourceImage": "private-documents/recognition-evaluation/BHXH-TK3-TS-page16.png",
+  "sourceUrl": "https://vanban.bhxhtphcm.gov.vn/bitstream/BHXHTPHCM_123456789/2178/1/1318%20_9.2023_QD%20CONG%20BO%20TTHC%20%282%29.%20cong%20bo%20thu%20tuc%20hanh%20chinh%20thuoc%20tham%20quyen%20giai%20quyet%20cua%20bhxh%20vn.pdf",
+  "pdfPage": 16,
+  "imageDimensions": { "width": 1275, "height": 1650 },
+  "annotationScope": "Manually annotated the blank response lines and checkbox regions on Form TK3-TS before OCR/OpenCV evaluation. Excludes headings, legal prose, labels, signing authority and signature. This is a historical geometry benchmark, not a statement of current legal validity.",
+  "fields": [
+    { "id": "recipient", "label": "Kính gửi", "kind": "text", "rect": [0.2261, 0.3278, 0.2424, 0.7733] },
+    { "id": "organization_name", "label": "Tên đơn vị", "kind": "text", "rect": [0.2491, 0.2792, 0.2655, 0.9239] },
+    { "id": "organization_code", "label": "Mã số đơn vị", "kind": "text", "rect": [0.2745, 0.2980, 0.2909, 0.9239] },
+    { "id": "tax_code", "label": "Mã số thuế", "kind": "text", "rect": [0.3000, 0.2894, 0.3164, 0.9239] },
+    { "id": "business_address", "label": "Địa chỉ đăng ký kinh doanh", "kind": "text", "rect": [0.3248, 0.4322, 0.3412, 0.9239] },
+    { "id": "organization_type", "label": "Loại hình đơn vị", "kind": "text", "rect": [0.3515, 0.3412, 0.3679, 0.9239] },
+    { "id": "business_sector", "label": "Ngành nghề sản xuất, kinh doanh chính", "kind": "text", "rect": [0.3745, 0.5357, 0.3909, 0.9239] },
+    { "id": "contact_address", "label": "Địa chỉ giao dịch hoặc liên hệ", "kind": "text", "rect": [0.4000, 0.4282, 0.4164, 0.9239] },
+    { "id": "contact_phone", "label": "Số điện thoại liên hệ", "kind": "text", "rect": [0.4273, 0.3592, 0.4436, 0.5475] },
+    { "id": "contact_email", "label": "Địa chỉ email", "kind": "text", "rect": [0.4273, 0.6914, 0.4436, 0.9239] },
+    { "id": "registration_number", "label": "Số quyết định hoặc giấy phép", "kind": "text", "rect": [0.4776, 0.2196, 0.4939, 0.4102] },
+    { "id": "registration_issuing_place", "label": "Nơi cấp", "kind": "text", "rect": [0.4776, 0.5757, 0.4939, 0.9239] },
+    { "id": "payment_interval_three_months", "label": "[11.1]. 03 tháng một lần", "kind": "checkbox", "rect": [0.5170, 0.6392, 0.5339, 0.6596] },
+    { "id": "payment_interval_six_months", "label": "[11.2]. 06 tháng một lần", "kind": "checkbox", "rect": [0.5170, 0.9035, 0.5339, 0.9247] },
+    { "id": "change_request", "label": "Nội dung thay đổi, yêu cầu", "kind": "text", "rect": [0.5352, 0.4337, 0.5515, 0.9239], "continuationRects": [[0.5624, 0.1161, 0.5788, 0.9239]] },
+    { "id": "attachments", "label": "Hồ sơ kèm theo (nếu có)", "kind": "text", "rect": [0.5848, 0.4078, 0.6012, 0.9239], "continuationRects": [[0.6109, 0.1161, 0.6273, 0.9239], [0.6370, 0.1161, 0.6533, 0.9239]] },
+    { "id": "receive_electronic_result", "label": "Nhận kết quả bản điện tử", "kind": "checkbox", "rect": [0.6921, 0.4267, 0.7103, 0.4486] },
+    { "id": "receive_paper_result", "label": "Nhận kết quả bản giấy", "kind": "checkbox", "rect": [0.7261, 0.4267, 0.7442, 0.4494] },
+    { "id": "signing_place", "label": "Nơi lập ngày", "kind": "text", "rect": [0.7533, 0.5584, 0.7691, 0.6125] },
+    { "id": "signing_day", "label": "Ngày ký", "kind": "text", "rect": [0.7533, 0.6776, 0.7691, 0.7090] },
+    { "id": "signing_month", "label": "Tháng ký", "kind": "text", "rect": [0.7533, 0.7757, 0.7691, 0.8020] },
+    { "id": "signing_year", "label": "Năm ký", "kind": "text", "rect": [0.7533, 0.8541, 0.7691, 0.9090] }
+  ]
+}

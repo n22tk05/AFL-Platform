@@ -54,7 +54,26 @@ export interface DetectedLineText {
 // ============================================================================
 // 1. ĐẦU RA CỦA OpenCV WASM -> ĐẦU VÀO CỦA Gemini Text LLM
 // ============================================================================
+export type FormInputKind = 'single_line_text' | 'multiline_text' | 'checkbox' | 'character_slots' | 'table_cell';
+export type RegionRole = 'input' | 'checkbox' | 'character_slots' | 'label' | 'static_text' | 'description' | 'container' | 'unresolved';
+
+export interface FormInputRegion {
+  regionId: string;
+  pageNumber: number;
+  normalizedCoords: NormalizedBoundingBox;
+}
+
 export interface FormGeometricBox {
+  pageNumber?: number;
+  inputKind?: FormInputKind;
+  role?: RegionRole;
+  inputRegions?: FormInputRegion[];
+  recognition?: {
+    status: 'suggested' | 'needs_review' | 'confirmed';
+    sourceCandidateIds: string[];
+    sourceBlockIds: string[];
+    reviewReasons: string[];
+  };
   boxId: string;                     // Mã định danh duy nhất: "box_01", "box_02"...
   normalizedCoords: NormalizedBoundingBox; // [ymin, xmin, ymax, xmax] trong khoảng [0.0 - 1.0]
   rawText: string;                   // Chữ thô bóc tách được từ cụm nhãn bên cạnh ô
@@ -84,7 +103,12 @@ export interface StepFaqItem {
   answer: string;                    // Câu trả lời ngắn gọn (2-3 câu)
 }
 
+export type TargetActor = 'ALL' | 'CITIZEN' | 'EMPLOYER' | 'OFFICER';
+
+
 export interface WorkflowStep {
+  inputKind?: FormInputKind;
+  highlightRegions?: FormInputRegion[];
   stepIndex: number;
   boxId: string;                     // Khớp với boxId của OpenCV
   pageNumber?: number;
@@ -98,6 +122,7 @@ export interface WorkflowStep {
   sourceFieldFromPrerequisite?: string; // Tên trường nguồn (ví dụ: "so_do.dien_tich")
   legalWarningFlag?: boolean;        // Cờ cảnh báo ô nhạy cảm tài chính/pháp lý cần cán bộ đối soát kỹ (FR-8)
   faqs?: StepFaqItem[];              // Nút bấm gợi ý câu hỏi khi quầy tiếp dân bị ồn (Fallback)
+  targetActor?: TargetActor;
 }
 
 export interface FormPageMetadata {
@@ -122,6 +147,7 @@ export interface FormWorkflow {
   status: FormStatus;
   publishedAt?: string;               // Mốc thời gian ban hành ISO: 2026-09-27T...
   steps: WorkflowStep[];
+  ocrContext?: unknown;
 }
 
 export * from './document-extraction.types';

@@ -1,0 +1,8 @@
+{
+  "imageDimensions": { "width": 1026, "height": 1450 },
+  "rowBoundariesPx": [233, 283, 334, 384, 434, 511, 619, 698, 748, 799, 849, 900, 977, 1053, 1129, 1177, 1224, 1269, 1317],
+  "columns": [
+    { "leftPx": 715, "rightPx": 821, "label": "Có" },
+    { "leftPx": 821, "rightPx": 915, "label": "Không" }
+  ]
+}

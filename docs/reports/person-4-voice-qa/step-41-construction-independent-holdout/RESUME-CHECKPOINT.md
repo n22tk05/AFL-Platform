@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 41
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`; thay đổi chặng 14–41 vẫn local/chưa commit. Không reset/clean/stash/push; không dùng Dely theo yêu cầu người dùng.
+- Đọc `CONSTRUCTION-BLIND-BASELINE.md` và checkpoint chặng 40. Nguồn PDF Chính phủ 175/2024, phụ lục III Mẫu 01, PDF page 59; PNG 1238×1744 tại `private-documents/recognition-evaluation/central-construction-application-p59.png` (ignored). Mẫu scan lịch sử, không dùng để tư vấn hiệu lực pháp lý.
+- Fixture `tests/fixtures/recognition-construction-p59-ground-truth.json` được gán 29 vùng **trước OCR**, hash `306461E9AEB93C9DD6A384BB4335387909141300079E15110C425E8A776C17C3`; không chỉnh theo output. Baseline frozen `.blind-baseline.*.json` (ignored), benchmark hash `5F43A006D2296EAAF796453B214FC2E77C8523D759933433F12578F71CFE0FF3`.
+- Blind TP 20/29, FN 9, FP 6, exact contextual label 1/20; 26 vùng sinh, 14 có nhãn, 25 cần review. Ba FP do viền trang chạm y=0/đáy; còn gạch trang trí, vùng trùng `Đại diện cho`, contour vuông giả. FN tập trung vào ô ngắn chèn trong câu. Không có checkbox/multiline thật trên trang này.
+- Test opt-in `RECOGNITION_CONSTRUCTION_BLIND=1` ở `tests/browser/form-recognition.spec.ts` **1/1 PASS**; TypeScript PASS; asset/model writes bị chặn. Chặng 40 trước đó: recognition 75/75, Voice 19/19, browser 17/17, build PASS; chưa chạy lại toàn bộ sau khi thêm test blind (source production chưa đổi).
+- Tiếp theo: giữ nguyên fixture/baseline, thêm loại viền trang tổng quát và test âm, đánh giá `.development.*`; xử lý ô chấm ngắn trong câu, kiểm tra một holdout khác có checkbox/multiline/bảng, rồi staging DB/admin/Voice. Mục tiêu tổng thể còn thực hiện.

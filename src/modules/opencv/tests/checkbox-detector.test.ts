@@ -46,6 +46,8 @@ test("checkbox detector filters invalid shapes and retains true square checkboxe
     { rect: { x: 100, y: 100, width: 20, height: 20 }, area: 314, perimeter: 62, vertices: 8, convex: true, parent: -1, firstChild: -1 },
     // 7: Non-convex polygon (24x24) -> not convex
     { rect: { x: 500, y: 500, width: 24, height: 24 }, area: 400, perimeter: 96, vertices: 4, convex: false, parent: -1, firstChild: -1 },
+    { rect: { x: 600, y: 1400, width: 38, height: 26 }, area: 920, perimeter: 128, vertices: 4, convex: true, parent: -1, firstChild: -1 },
+    { rect: { x: 700, y: 1400, width: 26, height: 18 }, area: 430, perimeter: 88, vertices: 4, convex: true, parent: -1, firstChild: -1 },
   ];
 
   let clonedMatDeleted = false;
@@ -74,9 +76,14 @@ test("checkbox detector filters invalid shapes and retains true square checkboxe
     delete() { hierarchyDeleted = true; }
   }
 
+  const pixelData = new Uint8Array(1200 * 1600);
+  for (let vertical = 1404; vertical < 1414; vertical++) for (let horizontal = 704; horizontal < 722; horizontal++) {
+    pixelData[vertical * 1200 + horizontal] = 255;
+  }
   const mockBinaryMat = {
     cols: 1200,
     rows: 1600,
+    data: pixelData,
     clone: () => ({
       cols: 1200,
       rows: 1600,
@@ -120,17 +127,22 @@ test("checkbox detector filters invalid shapes and retains true square checkboxe
 
   const results = detectCheckboxCandidates(mockCv as unknown as Parameters<typeof detectCheckboxCandidates>[0], mockBinaryMat);
 
-  // Exactly 2 checkboxes should be retained (the two valid 24x24 ones)
+  // Exactly 3 checkboxes should be retained (two square and one wider outline)
   // Inner hole (18x18) must be suppressed!
-  assert.equal(results.length, 2);
-  assert.deepEqual(results[0].rect, { x: 100, y: 1400, width: 24, height: 24 });
-  assert.deepEqual(results[1].rect, { x: 240, y: 1400, width: 24, height: 24 });
+  assert.equal(results.length, 3);
+  assert.deepEqual(results.map(result => result.rect).sort((first, second) => first.x - second.x), [
+    { x: 100, y: 1400, width: 24, height: 24 },
+    { x: 240, y: 1400, width: 24, height: 24 },
+    { x: 600, y: 1400, width: 38, height: 26 },
+  ]);
   assert.equal(results[0].source, "checkbox");
   assert.equal(results[1].source, "checkbox");
-
   // Check memory management: all cloned Mats, vectors, and contours must be deleted
   assert.equal(clonedMatDeleted, true);
   assert.equal(hierarchyDeleted, true);
   assert.equal(vectorDeleted, true);
   assert.equal(deletedContoursCount, mockContours.length);
+  const withoutPixels = { ...mockBinaryMat, data: undefined } as unknown as CvMat;
+  assert.equal(detectCheckboxCandidates(mockCv as unknown as Parameters<typeof detectCheckboxCandidates>[0], withoutPixels)
+    .some(result => result.rect.x === 600), false);
 });

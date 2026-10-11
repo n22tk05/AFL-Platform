@@ -1,0 +1,39 @@
+{
+  "page1": [
+    "1 Khuyết tật vận động",
+    "1.1 Mềm nhẽo hoặc co cứng toàn thân",
+    "1.2 Thiếu tay hoặc không cử động được tay",
+    "1.3 Thiếu chân hoặc không cử động được chân",
+    "1.4 Yếu, liệt, teo cơ hoặc hạn chế vận động tay, chân, lưng, cổ",
+    "1.5 Cong, vẹo, chân tay, lưng, cổ; gù cột sống lưng hoặc dị dạng, biến dạng khác trên cơ thể ở đầu, cổ, lưng, tay, chân",
+    "1.6 Có kết luận của cơ sở y tế cấp tỉnh trở lên về suy giảm chức năng vận động",
+    "2 Khuyết tật nghe, nói",
+    "2.1 Không phát ra âm thanh, lời nói",
+    "2.2 Phát ra âm thanh, lời nói nhưng không rõ tiếng, rõ câu",
+    "2.3 Không nghe được",
+    "2.4 Khiếm khuyết hoặc dị dạng cơ quan phát âm ảnh hưởng đến việc phát âm",
+    "2.5 Khiếm khuyết hoặc dị dạng vành tai hoặc ống tai ngoài ảnh hưởng đến nghe",
+    "2.6 Có kết luận của cơ sở y tế cấp tỉnh trở lên về suy giảm chức năng nghe, nói",
+    "3 Khuyết tật nhìn",
+    "3.1 Mù một hoặc hai mắt",
+    "3.2 Thiếu một hoặc hai mắt",
+    "3.3 Khó khăn khi nhìn hoặc không nhìn thấy các đồ vật"
+  ],
+  "page2": [
+    "3.4 Khó khăn khi phân biệt màu sắc hoặc không phân biệt được các màu sắc",
+    "3.5 Rung, giật nhãn thị, đục nhân mắt hoặc sẹo loét giác mạc",
+    "3.6 Bị dị tật, biến dạng ở vùng mắt",
+    "3.7 Có kết luận của cơ sở y tế cấp tỉnh trở lên về suy giảm chức năng nhìn",
+    "4 Khuyết tật thần kinh, tâm thần",
+    "4.1 Thường ngồi một mình, chơi một mình, không bao giờ nói chuyện hoặc quan tâm tới bất kỳ ai",
+    "4.2 Có những hành vi bất thường như kích động, cáu giận hoặc sợ hãi vô cớ gây ảnh hưởng đến sức khỏe, sự an toàn của bản thân và người khác",
+    "4.3 Bất ngờ dừng mọi hoạt động, mắt mở trừng trừng không chớp, co giật chân tay, môi, mặt hoặc bất thình lình ngã xuống, co giật, sùi bọt mép, gọi hỏi không biết",
+    "4.4 Bị mất trí nhớ, bỏ nhà đi lang thang",
+    "4.5 Có kết luận của cơ sở y tế cấp tỉnh trở lên về suy giảm thần kinh, tâm thần",
+    "5 Khuyết tật trí tuệ",
+    "5.1 Khó khăn trong việc nhận biết người thân trong gia đình hoặc khó khăn trong giao tiếp với những người xung quanh so với người cùng lứa tuổi",
+    "5.2 Chậm chạp, ngờ nghệch hoặc không thể làm được một việc đơn giản (so với tuổi) dù đã được hướng dẫn",
+    "5.3 Khó khăn trong việc đọc, viết, tính toán và kỹ năng học tập khác so với người cùng tuổi do chậm phát triển trí tuệ",
+    "5.4 Có kết luận cơ sở y tế cấp tỉnh trở lên về chậm phát triển trí tuệ"
+  ]
+}

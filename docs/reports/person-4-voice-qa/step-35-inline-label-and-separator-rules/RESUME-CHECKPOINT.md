@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 10/10/2026, chặng 35
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Toàn bộ thay đổi chặng 14–35 còn local/chưa commit; không reset/clean/stash/push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `INLINE-LABEL-AND-SEPARATOR-REGRESSION.md`, baseline chặng 34 và checkpoint chặng 33. Mẫu khai sinh trang 70 đã chuyển từ holdout mù sang tập phát triển; bản baseline `.blind-baseline.*.json`, bản sau sửa `.development.*.json` ở `private-documents/recognition-evaluation/` (ignored). Test browser opt-in hiện dùng `RECOGNITION_BIRTH_DEVELOPMENT=1`.
+- `src/modules/forms/services/form-region-recognition.ts` sửa anchor có số chú dẫn, ngăn mượn nhãn ô bên phải, buộc review khi nhãn lặp và loại cặp underline liền trang trí. Test tổng hợp ở `src/modules/forms/tests/form-region-recognition.test.ts`. CT01 hiện **64** field do hai mảnh Email thành một field; bảng 45/45 và trang chú giải 0 vẫn giữ.
+- Phôi khai sinh sau sửa: 31 field, 26 nhãn, 26/29 vùng khớp IoU≥0,5, 9 exact label; còn ba ngày ký lệch chú giải tay, hai checkbox nhãn OCR chưa hoàn chỉnh và nhãn mẹ/cha chưa gắn chủ thể. Không được coi là nghiệm thu cuối.
+- Kiểm chứng recognition 64/64, browser opt-in 16/16, Voice/typecheck/build/diff-check PASS. Build có cảnh báo `<img>` ở modal, không có lỗi. Sau build restart Next `:3001` và xác nhận trang admin 200; VietOCR `:8000` ready. Không chạm DB thật/Gemini/cloud hoặc audio cache trong bộ kiểm tra.
+- Tiếp theo: rà lại annotation ngày ký, xử lý chủ thể mẹ/cha/trẻ có bằng chứng, tập phôi trắng mới chưa tune, rồi staging admin → ACTIVE → citizen FE/Voice và DB/RLS. Không đánh dấu mục tiêu tổng thể hoàn tất.

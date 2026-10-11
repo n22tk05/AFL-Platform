@@ -51,7 +51,7 @@ async function runVoiceAITestSuite() {
   // TEST 3: Kiểm thử FR-3 (TTS & Karaoke Timestamps)
   console.log('\n--- PHẦN 3: KIỂM THỬ FR-3 (GIỌNG ĐỌC 0.9x & MỐC THỜI GIAN KARAOKE) ---');
   const ttsResult = await ttsService.synthesizeSpeech(firstStep.voiceGuidance, 1, 'NORTH');
-  assert(/^\/audio\/[a-f0-9]{64}\.mp3$/.test(ttsResult.audioUrl), 'Đường dẫn audio theo hash nội dung và giọng đọc');
+  assert(/^\/api\/audio\/[a-f0-9]{64}\.mp3$/.test(ttsResult.audioUrl), 'Đường dẫn audio theo hash nội dung và giọng đọc');
   assert(ttsResult.wordTimestamps.length > 0, 'Trích xuất thành công mảng mốc thời gian từ vựng Karaoke', `Số từ: ${ttsResult.wordTimestamps.length}`);
   
   const firstWord = ttsResult.wordTimestamps[0];

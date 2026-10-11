@@ -48,9 +48,11 @@ export function audioIdentity(text: string, stepIndex: number, region: Vietnames
 }
 
 export function boundAudioUrlOrEmpty(text: string, stepIndex: number, audioUrl: unknown): string {
-  if (typeof audioUrl !== 'string' || !/^\/audio\/[a-f0-9]{64}\.mp3$/.test(audioUrl)) return '';
+  if (typeof audioUrl !== 'string' || !/^\/(?:api\/audio|audio)\/[a-f0-9]{64}\.mp3$/.test(audioUrl)) return '';
   try {
-    return (['NORTH', 'SOUTH'] as const).some(region => audioUrl === `/audio/${audioIdentity(text, stepIndex, region).fileName}`) ? audioUrl : '';
+    const fileName = audioUrl.split('/').at(-1);
+    return (['NORTH', 'SOUTH'] as const).some(region => fileName === audioIdentity(text, stepIndex, region).fileName)
+      ? `/api/audio/${fileName}` : '';
   } catch { return ''; }
 }
 
@@ -106,7 +108,7 @@ export class TTSService {
     const { voiceName, cacheKey, hashKey, fileName } = audioIdentity(text, stepIndex, region);
     const filePath = path.join(this.outputDir, fileName);
     const timestampPath = path.join(this.outputDir, `${hashKey}.timestamps.json`);
-    const audioUrl = `/audio/${fileName}`;
+    const audioUrl = `/api/audio/${fileName}`;
 
     if (fs.existsSync(filePath)) {
       const audioBuffer = fs.readFileSync(filePath);

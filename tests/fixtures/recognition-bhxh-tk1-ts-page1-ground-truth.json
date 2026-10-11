@@ -1,0 +1,17 @@
+{
+  "sourceUrl": "https://baohiemxahoi.gov.vn/content/hoidap/Lists/DanhSachTraLoi/Attachments/3860/31513_TK1_TS.pdf",
+  "sourceSha256": "F99691494BEDE3A512D5FA2A4B408B232F8583183455571DD129DA3DAEDA4792",
+  "pdfPage": 1,
+  "imageDimensions": { "width": 1105, "height": 1430 },
+  "annotationScope": "Manually annotated visible blank response guides for the first eight fields of section I before running OCR. Treat adjacent subfields as separate response regions. Excludes later fields, prose, section II, validation/legal assessment, and approval/signature.",
+  "fields": [
+    { "id": "full_name", "label": "Họ và tên", "kind": "text", "rect": [0.2979, 0.4072, 0.3126, 0.9023] },
+    { "id": "birth_date", "label": "Ngày, tháng, năm sinh", "kind": "text", "rect": [0.3190, 0.3692, 0.3343, 0.6172] },
+    { "id": "gender", "label": "Giới tính", "kind": "text", "rect": [0.3190, 0.7800, 0.3343, 0.9394] },
+    { "id": "nationality", "label": "Quốc tịch", "kind": "text", "rect": [0.3406, 0.2480, 0.3559, 0.4525] },
+    { "id": "ethnicity", "label": "Dân tộc", "kind": "text", "rect": [0.3406, 0.5665, 0.3559, 0.9394] },
+    { "id": "birth_registration_commune", "label": "Xã (phường, thị trấn)", "kind": "text", "rect": [0.3615, 0.5810, 0.3769, 0.9466] },
+    { "id": "birth_registration_district", "label": "Huyện (quận, thị xã, Tp thuộc tỉnh)", "kind": "text", "rect": [0.3825, 0.4620, 0.3980, 0.7040] },
+    { "id": "birth_registration_province", "label": "Tỉnh (Tp)", "kind": "text", "rect": [0.3825, 0.8350, 0.3980, 0.9450] }
+  ]
+}

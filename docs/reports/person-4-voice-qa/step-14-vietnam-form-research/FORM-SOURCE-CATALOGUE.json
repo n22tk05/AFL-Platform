@@ -1,0 +1,652 @@
+{
+  "researchDate": "2026-10-08",
+  "scope": "Structural research, not a legal-validity review or OCR benchmark",
+  "selection": "Purposive; 18 examples from one local official collection, 2 police/ministry forms",
+  "coordinateGroundTruth": false,
+  "renderedAndViewedPageCount": 44,
+  "featureCounts": {
+    "tableInput": 8,
+    "checkboxChoices": 10,
+    "segmentedIdentifier": 2,
+    "multilineGuides": 5
+  },
+  "forms": [
+    {
+      "id": "F01",
+      "title": "Tờ khai đăng ký khai sinh",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/mau-to-khai-dang-ky-khai-sinh.signed.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "7f6e96c89b96a7809a5cafa6843f63bbc5ca2407c8508b5bf5b628742d3cf440",
+      "bytes": 382241,
+      "topic": "Đăng ký khai sinh",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-ho-tich-224.html",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [
+        2
+      ],
+      "layout": "Thông tin người yêu cầu, trẻ, cha và mẹ; giá trị văn bản có thể xuống dòng.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F02",
+      "title": "Tờ khai đăng ký kết hôn",
+      "url": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-ho-tich-224.html?download=1&id=0",
+      "pdfPages": 1,
+      "renderedPages": [
+        1
+      ],
+      "sha256": "16eda7224bb982edbc831cd1c9188ed86b931f82506182c7bbc48eafc23d84af",
+      "bytes": 361046,
+      "topic": "Đăng ký kết hôn",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-ho-tich-224.html",
+      "viewedPages": [
+        1
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [],
+      "layout": "Bảng nhãn và hai cột dữ liệu độc lập; ô địa chỉ và giấy tờ có nhiều dòng.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F03",
+      "title": "Đơn xin chuyển trường",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/don-xin-chuyen-truong.signed.pdf",
+      "pdfPages": 1,
+      "renderedPages": [
+        1
+      ],
+      "sha256": "c1bb89d136a7192a656200c62e7fb64fc66335ff544ec80e96733320eaf04896",
+      "bytes": 388661,
+      "topic": "Chuyển trường tiểu học",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [],
+      "layout": "Nhãn xen trong câu; địa chỉ trường và lý do có dòng tiếp nối; ý kiến hai trường.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": true
+      }
+    },
+    {
+      "id": "F04",
+      "title": "Đơn đề nghị hỗ trợ về nhà ở",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/de-nghi-ho-tro-nha-o-mau-01.signed.pdf",
+      "pdfPages": 1,
+      "renderedPages": [
+        1
+      ],
+      "sha256": "9d18be1e6727db762eb2a1cc732bf94eebada207d45909456a178c9a4e687556",
+      "bytes": 425002,
+      "topic": "Hỗ trợ sửa chữa nhà ở",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [],
+      "layout": "Mô tả hiện trạng nhiều dòng; bảng vật liệu là các bản ghi riêng.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F05",
+      "title": "Đề nghị xác định mức độ khuyết tật",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/xac-dinh-muc-do-khuyet-tat.signed.pdf",
+      "pdfPages": 5,
+      "renderedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "sha256": "9b9bae80b1e6274c30a456c2408e25c3590132b0421c6446215cb7f5631174a1",
+      "bytes": 1804339,
+      "topic": "Đánh giá khuyết tật",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "fieldPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "nonFieldPages": [],
+      "layout": "Checkbox chọn yêu cầu và bảng đánh giá Có/Không hoặc mức độ; nhãn bảng dài.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F06",
+      "title": "Văn bản đề nghị hưởng trợ cấp hưu trí xã hội",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/tro-cap-huu-tri-xhmau-01.signed.pdf",
+      "pdfPages": 1,
+      "renderedPages": [
+        1
+      ],
+      "sha256": "7d044f4e1ea5148565d2f783f42ae0abd133e1205e178b5480689439ed6df17c",
+      "bytes": 477995,
+      "topic": "Trợ cấp hưu trí xã hội",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [],
+      "layout": "Nhóm lựa chọn loại đề nghị, chính sách đang hưởng; thông tin người giám hộ.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F07",
+      "title": "Bản khai cá nhân đề nghị chế độ BHYT",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/tk-bhyt-nd142-mau-1a.signed.pdf",
+      "pdfPages": 1,
+      "renderedPages": [
+        1
+      ],
+      "sha256": "2215c8b44bacbfe04800ab84925a725411e4ed5a892f57e636d6f997248561c9",
+      "bytes": 338799,
+      "topic": "Bảo hiểm y tế theo chế độ người có công",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [],
+      "layout": "Các nhóm dòng chấm cho khen thưởng, lý do và giấy tờ; xác nhận tách người khai.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": true
+      }
+    },
+    {
+      "id": "F08",
+      "title": "Đơn cấp đổi/cấp lại bằng Tổ quốc ghi công",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/cap-lai-bang-to-quoc-ghi-cong-mau-16.signed.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "0e25cda83858fbc23e4806029059d85450352ffe5ff9e115b0468256ef3b2504",
+      "bytes": 530051,
+      "topic": "Cấp lại giấy ghi công",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1,
+        2
+      ],
+      "nonFieldPages": [],
+      "layout": "Thông tin hai chủ thể và bảng thân nhân; ghi chú cuối trang không phải vùng điền.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F09",
+      "title": "Đơn di chuyển hồ sơ thờ cúng liệt sỹ",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/don-di-chuyen-tho-cung-mau-27.signed.pdf",
+      "pdfPages": 1,
+      "renderedPages": [
+        1
+      ],
+      "sha256": "1c38de7628be4304b3c606a700e3faf6d69a9b32563c64c364b1c034b2883683",
+      "bytes": 260932,
+      "topic": "Di chuyển hồ sơ thờ cúng",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [],
+      "layout": "Trường nhân thân, nơi cư trú và yêu cầu; câu nội dung điền sẵn có xuống dòng.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F10",
+      "title": "Tờ khai đề nghị hỗ trợ chi phí mai táng",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/mai-tang-phi-huu-tri-xh.signed.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "711565b9f7aae2973f468c8567c74c9112b292accd6e25f8a5875cada506c3d0",
+      "bytes": 577962,
+      "topic": "Hỗ trợ mai táng",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-giao-duc-bao-tro-xa-hoi-nguoi-co-cong-223.html",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1,
+        2
+      ],
+      "nonFieldPages": [],
+      "layout": "Nhánh tổ chức/cá nhân; tài khoản hoặc tiền mặt; một nhóm nhân thân qua hai trang.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F11",
+      "title": "Đơn đăng ký đất đai, tài sản gắn liền với đất",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/mau-so-15-cap-moi.signed.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "8cb131ee2bcb0736d0e41bf2cae2bfe8dcae546897cff54eed9b4866673d512f",
+      "bytes": 569140,
+      "topic": "Đăng ký đất đai",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-dat-dai-xay-dung-222.html",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1,
+        2
+      ],
+      "nonFieldPages": [],
+      "layout": "Nguồn gốc đất thành đoạn; nhóm nhà ở qua trang; danh sách giấy tờ là nhiều mục.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F12",
+      "title": "Đơn đề nghị cấp giấy phép xây dựng",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/don-xin-cap-giay-phep-xay-dung-theo-nghi-dinh-175-2025.signed.pdf",
+      "pdfPages": 4,
+      "renderedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "sha256": "de8b173cfcc6ac15e4617d5f652ac050a990b77fc479a2a0631d07a7bf983359",
+      "bytes": 260004,
+      "topic": "Cấp phép xây dựng",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-dat-dai-xay-dung-222.html",
+      "viewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "fieldPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "nonFieldPages": [],
+      "layout": "Nhiều nhánh loại công trình; nhiều nhãn/đơn vị một dòng; có trường tách qua trang.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F13",
+      "title": "Tờ khai lệ phí trước bạ nhà, đất",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/tk-01.lptb.signed.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "9f49e2403e0298753b8d4e271b8cd2f29bb591d26298fe9063c26a701753c010",
+      "bytes": 382500,
+      "topic": "Lệ phí trước bạ",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-dat-dai-xay-dung-222.html",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1,
+        2
+      ],
+      "nonFieldPages": [],
+      "layout": "Mã chỉ tiêu, lý do miễn nhiều dòng và bảng đồng sở hữu; chữ ký đại lý riêng.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": true
+      }
+    },
+    {
+      "id": "F14",
+      "title": "Tờ khai thuế thu nhập cá nhân bất động sản",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/tk-03.bds-tncn.signed.pdf",
+      "pdfPages": 5,
+      "renderedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "sha256": "7927e51fa1ca34f5cc38ef723fb9e283792b91fc7f7740140cfa449dc367f87e",
+      "bytes": 587601,
+      "topic": "Thuế thu nhập từ bất động sản",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-dat-dai-xay-dung-222.html",
+      "viewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "fieldPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "nonFieldPages": [
+        5
+      ],
+      "layout": "Mã chỉ tiêu lồng nhau; bảng đồng sở hữu; trang 5 chỉ hướng dẫn.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F15",
+      "title": "Đơn đề nghị chuyển mục đích sử dụng đất",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/mau-so-01-chuyen-muc-dich.signed.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "0144821effaff211611aff3a2b6ada74a2262dc9ade5ccee21cae54bbbb6424d",
+      "bytes": 534742,
+      "topic": "Chuyển mục đích sử dụng đất",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-dat-dai-xay-dung-222.html",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [
+        2
+      ],
+      "layout": "Hai người đề nghị; nhãn diễn giải dài nhưng nhiều vùng giá trị ngắn.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F16",
+      "title": "Giấy đề nghị đăng ký hộ kinh doanh",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/hs-dang-ky-mau.signed.pdf",
+      "pdfPages": 4,
+      "renderedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "sha256": "8e4836d9aa366007ab200dd7ba26578c99c1f3325ec2983f55240fa6a26cd872",
+      "bytes": 404890,
+      "topic": "Đăng ký hộ kinh doanh",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-kinh-doanh-225.html",
+      "viewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "fieldPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "nonFieldPages": [],
+      "layout": "Khung nhóm địa chỉ không phải một ô; bảng ngành nghề, thành viên và checkbox.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": true,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F17",
+      "title": "Hợp đồng mua bán, cho tặng xe",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/hd-mua-ban-xe.signed.pdf",
+      "pdfPages": 3,
+      "renderedPages": [
+        1,
+        2,
+        3
+      ],
+      "sha256": "896aeac7f19c295e895e23abddbc0c31bb8cd0f977e123b857db8d7b1d07b5c0",
+      "bytes": 407562,
+      "topic": "Giao dịch xe",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-chung-thuc-hop-dong-221.html",
+      "viewedPages": [
+        1,
+        2,
+        3
+      ],
+      "fieldPages": [
+        1,
+        2
+      ],
+      "nonFieldPages": [
+        3
+      ],
+      "layout": "Hai bên, thuộc tính xe và điều khoản; văn bản điều khoản không mặc nhiên là trường.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F18",
+      "title": "Hợp đồng ủy quyền",
+      "url": "https://trangbom.dongnai.gov.vn/uploads/trangbom/news/2025_09/hd-uy-quyen.signed.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "3fd29e7ce3eb469526fad00ff7ab3522cb134a6346413d320b39eb6e41c93d43",
+      "bytes": 486405,
+      "topic": "Ủy quyền dân sự",
+      "sourcePage": "https://trangbom.dongnai.gov.vn/vi/news/cai-cach-hanh-chinh/ho-so-mau-linh-vuc-chung-thuc-hop-dong-221.html",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1,
+        2
+      ],
+      "nonFieldPages": [],
+      "layout": "Hai bên và các điều khoản; nội dung phạm vi có thể là đoạn tùy biến nhưng phải review.",
+      "documentState": "official_published_filled_example",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": false,
+        "segmentedIdentifier": false,
+        "multilineGuides": false
+      }
+    },
+    {
+      "id": "F19",
+      "title": "Tờ khai đề nghị cấp hộ chiếu TK01 — bản 2021",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2021/07/tt-73.pdf",
+      "pdfPages": 11,
+      "renderedPages": [
+        5
+      ],
+      "sha256": "916b7ef81f124bc3c34699ef5ea3f54546ed2b7bdc18e209508a1ce2a466776d",
+      "bytes": 4282347,
+      "topic": "Cấp hộ chiếu",
+      "sourcePage": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2021/07/tt-73.pdf",
+      "viewedPages": [
+        5
+      ],
+      "fieldPages": [
+        5
+      ],
+      "nonFieldPages": [],
+      "layout": "Khung ảnh, QR, ô ký tự định danh, checkbox và địa chỉ hai dòng.",
+      "documentState": "official_published_blank_scan",
+      "features": {
+        "tableInput": false,
+        "checkboxChoices": true,
+        "segmentedIdentifier": true,
+        "multilineGuides": true
+      }
+    },
+    {
+      "id": "F20",
+      "title": "Tờ khai thay đổi thông tin cư trú CT01 — bản 2023",
+      "url": "https://long-an-admin-api.vts-paht.com//Upload/ThuTucHanhChinhCong/404/file/6387486664649443368238.pdf",
+      "pdfPages": 2,
+      "renderedPages": [
+        1,
+        2
+      ],
+      "sha256": "3617b40f4ffb8dc9d7e98adc5af7082761bac02f34c66572aa2ade3a2e15a702",
+      "bytes": 758015,
+      "topic": "Thay đổi thông tin cư trú",
+      "sourcePage": "https://congan.tayninh.gov.vn/vi/thu-tuc-hanh-chinh/chi-tiet-404",
+      "viewedPages": [
+        1,
+        2
+      ],
+      "fieldPages": [
+        1
+      ],
+      "nonFieldPages": [
+        2
+      ],
+      "layout": "Ô ký tự định danh, nội dung đề nghị hai dòng, bảng thành viên; trang 2 chú thích.",
+      "documentState": "official_published_blank_scan",
+      "features": {
+        "tableInput": true,
+        "checkboxChoices": false,
+        "segmentedIdentifier": true,
+        "multilineGuides": true
+      }
+    }
+  ]
+}

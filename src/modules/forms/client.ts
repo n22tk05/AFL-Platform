@@ -1,6 +1,7 @@
 'use client'
 
 import type { FormWorkflow } from '@/shared/contracts';
+import { validFieldMetadata } from './services/form-field-metadata';
 export { AdminApiError, approveAdminWorkflow, listAdminForms, readAdminWorkflow, saveAdminWorkflow } from '@/modules/forms/services/form-api.client';
 export type { AdminApiFetch } from '@/modules/forms/services/form-api.client';
 
@@ -39,8 +40,9 @@ function validWorkflow(value: unknown): value is FormWorkflow {
       (workflow.publishedAt !== undefined && typeof workflow.publishedAt !== 'string') ||
       (workflow.formTitleVi !== undefined && typeof workflow.formTitleVi !== 'string') ||
       (workflow.circularInfo !== undefined && typeof workflow.circularInfo !== 'string')) return false;
-  if (workflow.pages !== undefined && (!Array.isArray(workflow.pages) || workflow.pages.some(page =>
-    !page || !Number.isSafeInteger(page.pageNumber) || page.pageNumber < 1 || typeof page.imageUrl !== 'string' ||
+  if (workflow.pages !== undefined && (!Array.isArray(workflow.pages) || workflow.pages.length < 1 || workflow.pages.length > 20
+    || workflow.pages.some((page, index) =>
+    !page || page.pageNumber !== index + 1 || typeof page.imageUrl !== 'string' ||
     !Number.isFinite(page.width) || page.width <= 0 || !Number.isFinite(page.height) || page.height <= 0))) return false;
   return workflow.steps.every((step, index) => step && Number.isSafeInteger(step.stepIndex) && step.stepIndex === index + 1 &&
     typeof step.boxId === 'string' && !!step.boxId.trim() &&
@@ -51,10 +53,12 @@ function validWorkflow(value: unknown): value is FormWorkflow {
     Array.isArray(step.highlightCoords) && step.highlightCoords.length === 4 &&
     step.highlightCoords.every(coord => Number.isFinite(coord) && coord >= 0 && coord <= 1) &&
     step.highlightCoords[0] < step.highlightCoords[2] && step.highlightCoords[1] < step.highlightCoords[3] &&
+    validFieldMetadata(step.inputKind, step.highlightRegions, step.highlightCoords, step.pageNumber ?? 1, workflow.pages?.length ?? 1) &&
     (step.requiresPrerequisiteDoc === undefined || typeof step.requiresPrerequisiteDoc === 'boolean') &&
     (step.sourceFieldFromPrerequisite === undefined || typeof step.sourceFieldFromPrerequisite === 'string') &&
     (step.legalWarningFlag === undefined || typeof step.legalWarningFlag === 'boolean') &&
-    (step.pageNumber === undefined || (Number.isSafeInteger(step.pageNumber) && step.pageNumber >= 1)) &&
+    (step.pageNumber === undefined || (Number.isSafeInteger(step.pageNumber) && step.pageNumber >= 1
+      && step.pageNumber <= (workflow.pages?.length ?? 1))) &&
     (step.faqs === undefined || (Array.isArray(step.faqs) && step.faqs.every(faq =>
       faq && typeof faq.question === 'string' && !!faq.question.trim() &&
       typeof faq.answer === 'string' && !!faq.answer.trim()))));

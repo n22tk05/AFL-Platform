@@ -1,0 +1,16 @@
+{
+  "sourceUrl": "https://vanban.bhxhtphcm.gov.vn/bitstream/BHXHTPHCM_123456789/2178/1/1318%20_9.2023_QD%20CONG%20BO%20TTHC%20%282%29.%20cong%20bo%20thu%20tuc%20hanh%20chinh%20thuoc%20tham%20quyen%20giai%20quyet%20cua%20bhxh%20vn.pdf",
+  "pdfPage": 58,
+  "imageSha256": "C3DA948B00917301A1602B3FDF828121D55D6BA9FF613AF72E1B94E251CDF912",
+  "imageDimensions": { "width": 1075, "height": 1521 },
+  "annotationScope": "Manually annotated section I response guides and checkbox squares on the blank Mẫu 01-TK page before OCR. Scope includes fields 01.1–01.4 and the three choices under field 02; excludes all later fields, prose, legal assessment, signature and section II.",
+  "fields": [
+    { "id": "household_head_identity", "label": "Số CCCD/ĐDCN", "kind": "text", "rect": [0.2584, 0.3795, 0.2735, 0.5330] },
+    { "id": "household_head_name", "label": "Họ và tên", "kind": "text", "rect": [0.2584, 0.6986, 0.2735, 0.9200] },
+    { "id": "household_head_birth_date", "label": "Ngày, tháng năm sinh", "kind": "text", "rect": [0.2807, 0.4167, 0.2965, 0.5302] },
+    { "id": "household_head_gender", "label": "Giới tính", "kind": "text", "rect": [0.2807, 0.7014, 0.2965, 0.9228] },
+    { "id": "near_poor_household", "label": "Người thuộc hộ gia đình cận nghèo", "kind": "checkbox", "rect": [0.3290, 0.1430, 0.3385, 0.1580] },
+    { "id": "multidimensional_poverty_household", "label": "Người thuộc hộ gia đình nghèo đa chiều", "kind": "checkbox", "rect": [0.3510, 0.1430, 0.3605, 0.1580] },
+    { "id": "farmer_household", "label": "Người thuộc hộ gia đình làm nông nghiệp, lâm nghiệp, ngư nghiệp và diêm nghiệp có mức sống trung bình", "kind": "checkbox", "rect": [0.3710, 0.1430, 0.3805, 0.1580] }
+  ]
+}

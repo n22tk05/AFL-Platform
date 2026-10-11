@@ -55,6 +55,45 @@ test('citizen reads different text per step/form and submits one authoritative-c
   await expect(page.locator('img[src*="01-lptb"]')).toHaveCount(0);
 });
 
+test('citizen voice follows reviewed page ownership and skips a notes-only page', async ({ page }) => {
+  await mockSpeech(page);
+  const pages = [1, 2, 3].map(pageNumber => ({ pageNumber, width: 320, height: 480,
+    imageUrl: `/api/forms/FORM-MULTI/pages/${pageNumber}?asset=${String(pageNumber).repeat(64)}` }));
+  const firstCoords: [number, number, number, number] = [0.2, 0.1, 0.3, 0.7];
+  const thirdCoords: [number, number, number, number] = [0.4, 0.1, 0.5, 0.7];
+  const steps = form('FORM-MULTI').steps;
+  const workflow: FormWorkflow = { ...form('FORM-MULTI'), pages, totalPages: 3, steps: [
+    { ...steps[0], pageNumber: 1, inputKind: 'multiline_text', highlightCoords: firstCoords,
+      highlightRegions: [{ regionId: 'first', pageNumber: 1, normalizedCoords: firstCoords },
+        { regionId: 'continued', pageNumber: 3, normalizedCoords: thirdCoords }] },
+    { ...steps[1], pageNumber: 3, inputKind: 'single_line_text', highlightCoords: thirdCoords,
+      highlightRegions: [{ regionId: 'third', pageNumber: 3, normalizedCoords: thirdCoords }] },
+  ] };
+  const questions: unknown[] = [];
+  const image = await sharp({ create: { width: 320, height: 480, channels: 3, background: 'white' } }).png().toBuffer();
+  await page.route('**/api/forms/FORM-MULTI/workflow', route => route.fulfill({ json: { success: true, data: workflow } }));
+  await page.route('**/api/forms/FORM-MULTI/pages/*', route => route.fulfill({ body: image, contentType: 'image/png' }));
+  await page.route('**/api/llm/qa', route => { questions.push(route.request().postDataJSON());
+    return route.fulfill({ json: { success: true, data: { answerText: 'Trả lời trang ba.' } } }); });
+  await page.goto('/citizen/guide?formCode=FORM-MULTI');
+  await expect(page.getByRole('img', { name: 'Tờ khai trang 1' })).toBeVisible();
+  await expect(page.getByText('Trang 1/3')).toBeVisible();
+  await expect(page.getByTestId('field-highlight-region')).toHaveCount(1);
+  await expect.poll(() => spoken(page)).toContain('Hướng dẫn riêng FORM-MULTI bước 1.');
+  await page.getByRole('button', { name: 'Sang dòng kế tiếp' }).click();
+  await expect(page.getByRole('img', { name: 'Tờ khai trang 3' })).toBeVisible();
+  await expect(page.getByText('Trang 3/3')).toBeVisible();
+  await expect(page.getByTestId('field-highlight-region')).toHaveCount(1);
+  await expect(page.getByRole('img', { name: 'Tờ khai trang 2' })).toHaveCount(0);
+  await expect.poll(() => spoken(page)).toContain('Hướng dẫn riêng FORM-MULTI bước 2.');
+  const microphone = page.getByRole('button', { name: 'Nhấn giữ để nói' });
+  await microphone.focus(); await page.keyboard.down('Space');
+  await expect(page.getByRole('button', { name: 'Đang nghe — nhả để gửi câu hỏi' })).toBeVisible();
+  await page.keyboard.up('Space');
+  await expect.poll(() => questions.length).toBe(1);
+  expect(questions[0]).toEqual({ formCode: 'FORM-MULTI', stepIndex: 2, userQuestion: 'Bác điền gì vào đây?' });
+});
+
 test('public 404/503 cannot display a local ACTIVE workflow or speak a fixture', async ({ page }) => {
   await mockSpeech(page);
   await page.addInitScript(() => localStorage.setItem('afl:forms:workflow:FORM-A', JSON.stringify({ formCode: 'FORM-A', status: 'ACTIVE', steps: [{ voiceGuidance: 'Sai từ cache' }] })));
@@ -80,7 +119,7 @@ test('admin review saves TTS metadata before confirming approval, using the shar
   await page.route('**/api/tts', route => {
     expect(route.request().headers()['x-admin-key']).toBe('secret');
     expect(route.request().postDataJSON()).toEqual({ text: draft.steps[0].voiceGuidance, stepIndex: 1, region: 'SOUTH' });
-    return route.fulfill({ json: { success: true, data: { audioUrl: `/audio/${'a'.repeat(64)}.mp3`, wordTimestamps: [] } } });
+    return route.fulfill({ json: { success: true, data: { audioUrl: `/api/audio/${'a'.repeat(64)}.mp3`, wordTimestamps: [] } } });
   });
   await page.route('**/api/admin/forms/FORM-A/approve', route => {
     expect(route.request().headers()['x-admin-key']).toBe('secret');
@@ -103,7 +142,7 @@ test('admin review saves TTS metadata before confirming approval, using the shar
   await expect(page.getByRole('button', { name: 'Lưu thay đổi trên máy chủ' })).toBeEnabled();
   await page.getByRole('button', { name: 'Lưu thay đổi trên máy chủ' }).click();
   await expect.poll(() => writes.length).toBe(1);
-  expect(writes[0].steps[0].audioUrl).toBe(`/audio/${'a'.repeat(64)}.mp3`);
+  expect(writes[0].steps[0].audioUrl).toBe(`/api/audio/${'a'.repeat(64)}.mp3`);
   await page.getByRole('checkbox', { name: 'Tôi đã đối soát toàn bộ' }).check();
   await approve.click();
   await expect(page.getByText('Trạng thái máy chủ: ACTIVE')).toBeVisible();

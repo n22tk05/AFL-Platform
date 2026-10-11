@@ -43,6 +43,7 @@ export interface STTCallbacks {
 
 export interface PromptControllerDto {
   manifest?: unknown;
+  ocrContext?: unknown;
   authorization?: string | null;
   adminKey?: string | null;
 }

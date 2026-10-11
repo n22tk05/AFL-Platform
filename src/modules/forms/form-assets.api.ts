@@ -10,10 +10,12 @@ export async function handleFormAssetUpload(req: Request, authorization: AdminAu
   try {
     const body = await readLimitedJson(req, 12 * 1024 * 1024) as Record<string, unknown>;
     if (!body || body.blankTemplateConfirmed !== true || typeof body.formCode !== 'string' || body.formCode.length > 200 || /[\x00-\x1f]/.test(body.formCode)
-      || !/^[A-Za-z0-9À-ỹ][A-Za-z0-9À-ỹ\s:()./_-]*$/.test(body.formCode)) throw new Error('INVALID_TEMPLATE_UPLOAD');
+      || !/^[A-Za-z0-9À-ỹ][A-Za-z0-9À-ỹ\s:()./_-]*$/.test(body.formCode)
+      || (body.pageNumber !== undefined && (!Number.isSafeInteger(body.pageNumber) || (body.pageNumber as number) < 1
+        || (body.pageNumber as number) > 20))) throw new Error('INVALID_TEMPLATE_UPLOAD');
     const input = await parseDocumentImage(new Request(req.url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ imageBase64: body.imageBase64 }) }));
-    const page = await store.saveImage(body.formCode, input.bytes);
+    const page = await store.saveImage(body.formCode, input.bytes, (body.pageNumber as number | undefined) ?? 1);
     return Response.json({ success: true, data: page }, { headers });
   } catch (reason) {
     const message = reason instanceof Error ? reason.message : '';

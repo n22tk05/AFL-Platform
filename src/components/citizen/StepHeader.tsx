@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { AlertTriangle, FileText } from "lucide-react";
+import { AlertTriangle, FileText, UserCheck } from "lucide-react";
+import type { TargetActor } from "@/shared/contracts";
 
 interface StepHeaderProps {
   currentIndex: number;
@@ -10,6 +11,7 @@ interface StepHeaderProps {
   fieldLabel: string;
   requiresPrerequisiteDoc?: boolean;
   legalWarningFlag?: boolean;
+  targetActor?: TargetActor;
 }
 
 export function StepHeader({
@@ -19,6 +21,7 @@ export function StepHeader({
   fieldLabel,
   requiresPrerequisiteDoc,
   legalWarningFlag,
+  targetActor,
 }: StepHeaderProps) {
   const currentStepNumber = currentIndex + 1;
   const progressPercent = (currentStepNumber / totalSteps) * 100;
@@ -59,6 +62,27 @@ export function StepHeader({
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold rounded-lg shadow-sm">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
             <span>Đối soát kỹ số tiền / tài khoản</span>
+          </div>
+        )}
+
+        {targetActor === 'CITIZEN' && (
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-bold rounded-lg shadow-sm">
+            <UserCheck className="w-3.5 h-3.5 text-emerald-700" />
+            <span>Phần người dân điền</span>
+          </div>
+        )}
+
+        {targetActor === 'EMPLOYER' && (
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-sky-50 border border-sky-300 text-sky-900 text-xs font-bold rounded-lg shadow-sm">
+            <UserCheck className="w-3.5 h-3.5 text-sky-700" />
+            <span>Phần người sử dụng LĐ</span>
+          </div>
+        )}
+
+        {targetActor === 'OFFICER' && (
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-purple-50 border border-purple-300 text-purple-900 text-xs font-bold rounded-lg shadow-sm">
+            <UserCheck className="w-3.5 h-3.5 text-purple-700" />
+            <span>Phần cán bộ tiếp nhận</span>
           </div>
         )}
       </div>

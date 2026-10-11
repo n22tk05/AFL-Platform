@@ -1,0 +1,14 @@
+{
+  "sourceUrl": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/06-vbhn-btc.pdf",
+  "pdfPage": 108,
+  "pdfSha256": "64B04C7E3320FDB64657171792ACF35066A34D80E24BBCB4820A77C8C7520752",
+  "imageSha256": "58C225D7613477B431CB717C05830ED5977403E269A70DDBEFF471B080E6A613",
+  "imageDimensions": { "width": 1232, "height": 1761 },
+  "annotationScope": "Manually annotated from the blank Mẫu 09-MST page before OCR: four dotted input areas for tax authority, taxpayer, tax identifier, and contact phone. Excludes header/date, legal prose, old/new address split rows, footnotes, signature, and unrelated content.",
+  "fields": [
+    { "id": "tax_authority", "label": "Cục Thuế/Chi cục Thuế", "kind": "text", "rect": [0.4832, 0.4010, 0.4957, 0.7776] },
+    { "id": "taxpayer_name", "label": "Người nộp thuế", "kind": "text", "rect": [0.5099, 0.3596, 0.5224, 0.9099] },
+    { "id": "tax_identifier", "label": "MST/MSDN", "kind": "text", "rect": [0.5287, 0.3352, 0.5412, 0.9018] },
+    { "id": "contact_phone", "label": "Số điện thoại liên hệ mới", "kind": "text", "rect": [0.6638, 0.4537, 0.6775, 0.9099] }
+  ]
+}

@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const authStatus = adminAuthorizationService.authorize(authorization, adminKey);
   if (authStatus !== 200) return NextResponse.json({ success: false, error: { code: authStatus === 503 ? 'ADMIN_KEY_UNCONFIGURED' : 'UNAUTHORIZED' } }, { status: authStatus });
   try {
-    const body = await readLimitedJson(req, 256 * 1024) as Record<string, unknown>;
+    const body = await readLimitedJson(req, 384 * 1024) as Record<string, unknown>;
     const result = await promptController.generate({ ...body, authorization, adminKey });
     return NextResponse.json(result.body, { status: result.status });
   } catch (error) {

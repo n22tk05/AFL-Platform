@@ -36,7 +36,7 @@ export function passesGeometry(candidate: FieldCandidate, image: ImageSize, conf
   const heightRatio = rect.height / image.height;
 
   // Source-adapted thresholds: allow fine-grained detail for phrase clusters, field rows, and checkboxes
-  const isDetail = candidate.source === "phrase_cluster" || candidate.source === "field_row" || candidate.source === "checkbox";
+  const isDetail = candidate.source === "phrase_cluster" || candidate.source === "field_row" || candidate.source === "checkbox" || candidate.source === "writing_guide";
   const minWidthRatio = isDetail ? Math.min(config.minWidthRatio, 0.005) : config.minWidthRatio;
   const minHeightRatio = isDetail ? Math.min(config.minHeightRatio, 0.003) : config.minHeightRatio;
   const minAreaRatio = isDetail ? Math.min(config.minAreaRatio, 0.00002) : config.minAreaRatio;
@@ -87,7 +87,8 @@ function isValidRect(rect: PixelRect): boolean { return [rect.x, rect.y, rect.wi
 function relativeDifference(left: number, right: number, scale: number): number { return Math.abs(left - right) / Math.max(scale, 1); }
 function copyCandidate(candidate: FieldCandidate): FieldCandidate { return { ...candidate, rect: { ...candidate.rect } }; }
 function comparePreference(left: FieldCandidate, right: FieldCandidate): number {
-  return right.rectangularity - left.rectangularity || right.contourArea - left.contourArea || right.areaRatio - left.areaRatio || comparePosition(left, right);
+  const sourcePriority = (candidate: FieldCandidate) => candidate.source === 'checkbox' ? 3 : candidate.source === 'writing_guide' ? 2 : candidate.source === 'closed_contour' ? 1 : 0;
+  return sourcePriority(right) - sourcePriority(left) || right.rectangularity - left.rectangularity || right.contourArea - left.contourArea || right.areaRatio - left.areaRatio || comparePosition(left, right);
 }
 function comparePosition(left: FieldCandidate, right: FieldCandidate): number { return left.rect.y - right.rect.y || left.rect.x - right.rect.x || left.rect.width - right.rect.width || left.rect.height - right.rect.height || left.parentIndex - right.parentIndex || left.childIndex - right.childIndex; }
 
@@ -106,10 +107,23 @@ export function mergeFormCandidates(
   const config = resolveContourDetectionConfig(configOverrides);
 
   // 1. Filter valid line candidates (tables and boxes)
-  const validLineBoxes = filterCandidates(lineCandidates, image, config);
+  const filteredLineBoxes = filterCandidates(lineCandidates, image, config);
 
   // 2. Filter valid checkbox candidates
   const validCheckboxes = filterCandidates(checkboxCandidates, image, config);
+  const distinctLineBoxes = filteredLineBoxes.filter(candidate => !validCheckboxes.some(checkbox => {
+    const inner = candidate.rect, outer = checkbox.rect;
+    return inner.x >= outer.x - 3 && inner.y >= outer.y - 3 && inner.x + inner.width <= outer.x + outer.width + 3
+      && inner.y + inner.height <= outer.y + outer.height + 3 && inner.width >= outer.width * 0.5 && inner.height >= outer.height * 0.5;
+  }));
+  const structuralChildren = [...distinctLineBoxes, ...validCheckboxes, ...fieldRowCandidates.filter(candidate => candidate.source === 'writing_guide' && passesGeometry(candidate, image, config))];
+  const validLineBoxes = distinctLineBoxes.map(candidate => {
+    const outerArea = candidate.rect.width * candidate.rect.height;
+    const inside = structuralChildren.filter(child => child !== candidate && outerArea >= child.rect.width * child.rect.height * 3
+      && intersectionArea(candidate.rect, child.rect) / (child.rect.width * child.rect.height) >= 0.95);
+    const distinct = inside.filter((child, index) => !inside.slice(0, index).some(previous => calculateIou(child.rect, previous.rect) > 0.4));
+    return distinct.length >= 2 ? { ...candidate, isContainer: true } : candidate;
+  });
 
   // 3. For field rows, only keep those that are NOT already contained inside a table cell
   const standaloneFieldRows: FieldCandidate[] = [];

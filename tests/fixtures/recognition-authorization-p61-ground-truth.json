@@ -1,0 +1,29 @@
+{
+  "sourceImage": "central-authorization-p61.png",
+  "sourceUrl": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/01/175_2024_nd-cp_30122024_1-signed.pdf",
+  "pdfPage": 61,
+  "imageDimensions": { "width": 1192, "height": 1674 },
+  "annotationScope": "Manually marked 20 visible dotted value spans on scanned Annex III Form 03 before running this page through OCR/OpenCV. Includes short administrative and inline cloze blanks; excludes printed prose, headings, recipient boilerplate and signature captions. Historical layout benchmark only, not a statement of current legal validity.",
+  "fields": [
+    { "id": "organization", "label": "Tổ chức", "kind": "text", "rectPx": [145, 389, 167, 419], "rect": [0.086619, 0.326342, 0.099761, 0.35151] },
+    { "id": "document_number", "label": "Văn bản số", "kind": "text", "rectPx": [238, 324, 265, 386], "rect": [0.142174, 0.271812, 0.158303, 0.323826] },
+    { "id": "document_place", "label": "Nơi lập văn bản", "kind": "text", "rectPx": [238, 628, 265, 657], "rect": [0.142174, 0.526846, 0.158303, 0.551174] },
+    { "id": "document_day", "label": "Ngày lập", "kind": "text", "rectPx": [238, 734, 265, 756], "rect": [0.142174, 0.615772, 0.158303, 0.634228] },
+    { "id": "document_month", "label": "Tháng lập", "kind": "text", "rectPx": [238, 827, 265, 852], "rect": [0.142174, 0.693792, 0.158303, 0.714765] },
+    { "id": "document_year", "label": "Năm lập", "kind": "text", "rectPx": [238, 916, 265, 941], "rect": [0.142174, 0.768456, 0.158303, 0.78943] },
+    { "id": "tender_number", "label": "Số quyết định trúng thầu", "kind": "text", "rectPx": [425, 865, 449, 889], "rect": [0.253883, 0.725671, 0.26822, 0.745805] },
+    { "id": "tender_day", "label": "Ngày quyết định", "kind": "text", "rectPx": [425, 948, 449, 973], "rect": [0.253883, 0.795302, 0.26822, 0.816275] },
+    { "id": "tender_month", "label": "Tháng quyết định", "kind": "text", "rectPx": [425, 1049, 449, 1074], "rect": [0.253883, 0.880034, 0.26822, 0.901007] },
+    { "id": "tender_year", "label": "Năm quyết định", "kind": "text", "rectPx": [459, 223, 484, 249], "rect": [0.274194, 0.187081, 0.289128, 0.208893] },
+    { "id": "company", "label": "Công ty", "kind": "text", "rectPx": [459, 839, 484, 895], "rect": [0.274194, 0.703859, 0.289128, 0.750839] },
+    { "id": "principal_name", "label": "Họ tên người ủy quyền", "verbatimLabel": "Tôi tên là", "kind": "text", "rectPx": [504, 346, 530, 1069], "rect": [0.301075, 0.290268, 0.316607, 0.896812] },
+    { "id": "principal_position", "label": "Chức vụ người ủy quyền", "kind": "text", "rectPx": [548, 337, 574, 1061], "rect": [0.32736, 0.282718, 0.342891, 0.890101] },
+    { "id": "delegate_name", "label": "Họ tên người được ủy quyền", "kind": "text", "rectPx": [591, 473, 619, 1059], "rect": [0.353047, 0.396812, 0.369773, 0.888423] },
+    { "id": "delegate_position", "label": "Chức vụ người được ủy quyền", "kind": "text", "rectPx": [636, 337, 663, 1061], "rect": [0.379928, 0.282718, 0.396057, 0.890101] },
+    { "id": "passport", "label": "Số hộ chiếu", "kind": "text", "rectPx": [680, 367, 707, 653], "rect": [0.406213, 0.307886, 0.422342, 0.547819] },
+    { "id": "nationality", "label": "Quốc tịch", "verbatimLabel": "Quốc tịch nước", "kind": "text", "rectPx": [680, 848, 707, 1064], "rect": [0.406213, 0.711409, 0.422342, 0.892617] },
+    { "id": "delegate_prefix", "label": "Ông/Bà được ủy quyền", "kind": "text", "rectPx": [724, 308, 754, 374], "rect": [0.432497, 0.258389, 0.450418, 0.313758] },
+    { "id": "work_scope", "label": "Công việc được ủy quyền", "kind": "text", "rectPx": [755, 398, 784, 1064], "rect": [0.451016, 0.333893, 0.468339, 0.892617] },
+    { "id": "recipient_suffix", "label": "Sở Xây dựng (địa phương)", "kind": "text", "rectPx": [871, 303, 897, 339], "rect": [0.520311, 0.254195, 0.535842, 0.284396] }
+  ]
+}

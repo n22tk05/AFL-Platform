@@ -3,6 +3,7 @@
 import type { FormWorkflow } from '@/shared/contracts';
 import type { AdminFormSummary } from '@/modules/forms/types/form.types';
 import { validCoords } from './form-validation.service';
+import { validFieldMetadata } from './form-field-metadata';
 import { formErrorMessage } from './form-feedback.client';
 
 export function parseReviewWorkflowEditor(editor: string): FormWorkflow | undefined {
@@ -11,7 +12,8 @@ export function parseReviewWorkflowEditor(editor: string): FormWorkflow | undefi
     if (!workflow || typeof workflow.formCode !== 'string' || typeof workflow.formTitle !== 'string' || !Array.isArray(workflow.steps)
       || workflow.steps.some(step => !step || !Number.isSafeInteger(step.stepIndex) || typeof step.boxId !== 'string'
         || ['sectionName', 'label', 'voiceGuidance', 'exampleRedText', 'audioUrl'].some(field => typeof step[field as keyof typeof step] !== 'string')
-        || !validCoords(step.highlightCoords))) return undefined;
+        || !validCoords(step.highlightCoords) || !validFieldMetadata(step.inputKind, step.highlightRegions, step.highlightCoords,
+          step.pageNumber ?? 1, workflow.pages?.length ?? 1))) return undefined;
     return workflow;
   } catch { return undefined; }
 }
@@ -139,7 +141,7 @@ export class AdminReviewSession {
     try {
       const value = JSON.parse(this.state.editor) as FormWorkflow;
       if (value.formCode !== baseline.formCode || value.formCode !== this.formCode) throw new Error('formCode cannot be changed.');
-      if (value.status !== baseline.status || String(value.status).toUpperCase() === 'ACTIVE') throw new Error('status is managed by the server and cannot be edited.');
+      if (value.status !== baseline.status) throw new Error('status is managed by the server and cannot be edited.');
       await saveAdminWorkflow(this.formCode, this.adminKey, value, this.fetcher);
       if (!this.valid) return this.result(true);
       const saved = await readAdminWorkflow(this.formCode, this.adminKey, this.fetcher);
@@ -177,7 +179,7 @@ export class AdminReviewSession {
 
   private editable(): boolean {
     const status = String(this.state.workflow?.status ?? '').toUpperCase();
-    return !!this.state.workflow && status !== 'ACTIVE' && ['DRAFT', 'PENDING_REVIEW'].includes(status);
+    return !!this.state.workflow && ['DRAFT', 'PENDING_REVIEW', 'ACTIVE'].includes(status);
   }
   private result(stale: boolean): AdminReviewResult { return { stale, state: this.snapshot() }; }
 }

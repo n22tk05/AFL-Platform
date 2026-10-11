@@ -112,3 +112,11 @@ test("nested table inside another container (multi-level hierarchy) sorts correc
   assert.equal(sorted[1].isContainer, true);
   assert.equal(sorted[2].isContainer, false);
 });
+
+test('a table header cell containing one small printing artifact is not a group container', () => {
+  const header = candidate(200, 400, 200, 60);
+  const artifact = candidate(250, 410, 15, 15);
+  const next = candidate(400, 400, 200, 60);
+  const sorted = sortCandidatesGeometrically([header, artifact, next]);
+  assert.equal(sorted.find(item => item.rect.x === 200)?.isContainer, false);
+});

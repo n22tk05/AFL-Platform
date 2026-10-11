@@ -1,0 +1,8 @@
+# Checkpoint nhận diện biểu mẫu — 11/10/2026, chặng 43
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Thay đổi chặng 14–43 vẫn local/chưa commit; không reset/clean/stash/push. Không dùng Dely theo yêu cầu người dùng.
+- Đọc `CONSTRUCTION-INLINE-CONTINUATION-REGRESSION.md`, checkpoint chặng 42 và baseline chặng 41 trước khi sửa tiếp. Fixture xây dựng 29 vùng hash `306461E9AEB93C9DD6A384BB4335387909141300079E15110C425E8A776C17C3`; benchmark mù hash `5F43A006D2296EAAF796453B214FC2E77C8523D759933433F12578F71CFE0FF3`. Không ghi đè. File phát triển nằm ở `private-documents/recognition-evaluation/CENTRAL-CONSTRUCTION-P59.development.*.json` (ignored).
+- `src/modules/forms/services/form-region-recognition.ts` loại gạch trang trí dưới dòng ngày và nối hai guide chấm cùng hàng chỉ khi trường trước đơn dòng, không có OCR xen giữa. `tests/browser/form-recognition.spec.ts` dùng hợp hình học của các đoạn cùng hàng để chấm benchmark; production vẫn giữ hai `inputRegions` chính xác. Test dương/âm ở `src/modules/forms/tests/form-region-recognition.test.ts`.
+- Xây dựng **20 TP/9 FN/1 FP**, 2/20 nhãn ngữ cảnh đúng, 20 trường cần review. Hồi quy kết hôn từng thất bại với quy tắc nối quá rộng; đã sửa và kiểm lại **26 TP/21 nhãn đúng/15 continuation/9 nhóm đúng/5 FP**. Không giảm các ngưỡng để che lỗi.
+- Recognition **82/82**, Voice **19/19**, browser opt-in **18/18**, TypeScript/build PASS. Next `:3001/admin/library` HTTP 200, VietOCR `:8000/health` ready. Browser chặn asset/model writes, không ghi DB/Gemini/audio cache.
+- Tiếp theo: chấm ngắn có OCR neo, contour vuông giả, holdout mới có checkbox/multiline; staging admin→ACTIVE→citizen/Voice và DB/RLS. Mục tiêu tổng thể còn thực hiện.

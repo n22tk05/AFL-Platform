@@ -1,0 +1,7 @@
+# Checkpoint nhận diện biểu mẫu — 11/10/2026, chặng 48
+
+- Workspace `D:\Users\BT\N3_K1\AFL\AFL-Platform`, nhánh `codex/form-recognition-and-multiline`. Giữ các sửa đổi local chặng 14–48; không reset/clean/stash/commit/push. Không dùng Dely theo yêu cầu người dùng.
+- Ưu tiên thực tế: text OCR đúng và JSON có thứ tự/provenance tới Gemini; tọa độ ô tương đối chính xác để admin duyệt. Không cần nhận diện đủ mọi nhãn. Đọc `OCR-JSON-TO-GEMINI-CONTRACT.md` và báo cáo chặng 47 trước khi tiếp tục.
+- Đường FE mới đã gửi `ocrContext` với manifest tới `/api/llm/prompt`; controller xác thực trước AI/DB; Gemini prompt chứa text OCR và cache khóa cả context. Gói bị giới hạn byte/trang/block, không cắt text. API legacy vẫn cho phép không có context.
+- Browser synthetic một/hai trang 2/2 PASS sau restart Next dev và 2/2 PASS trên production build sau bổ sung `coordinateSystem`. Recognition 92/92, Voice 19/19, forms API 12/12, TypeScript/build PASS. Bốn OCR ảnh thật serialize hợp lệ nhưng chưa đánh giá CER. Lượt browser đầu timeout do JS chunk 404 khi build/dev tranh chấp `.next`, đã xử lý bằng dừng/restart dev; không tính pass. Production Next hiện chạy local `:3001` trong session `75278`; VietOCR `:8000` đã ready trước lượt browser.
+- Tiếp theo: ground truth text nguồn độc lập và CER/word accuracy; kiểm chứng prompt với Gemini thật nhưng không chứa dữ liệu công dân; chấm hướng dẫn với admin; holdout vùng nhập/ô tích/multiline; staging DB/RLS/FE citizen/Voice. Không mark mục tiêu hoàn thành.
