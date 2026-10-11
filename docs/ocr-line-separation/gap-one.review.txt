@@ -1,0 +1,10 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: partial · Chưa xác nhận độ chính xác toàn bộ
+Warnings: CAMERA_LOW_CONTRAST
+Mực chưa gán: 0/1916 pixel (không phải phép đo độ đầy đủ OCR)
+
+word_00001 | word | unreadable | bbox_xyxy=[30,35,108,52] | WORD_TOKEN_COUNT_MISMATCH | text=""
+word_00002 | word | unreadable | bbox_xyxy=[116,35,150,52] | WORD_TOKEN_COUNT_MISMATCH | text=""
+word_00003 | word | unreadable | bbox_xyxy=[155,35,193,52] | WORD_TOKEN_COUNT_MISMATCH | text=""
+word_00004 | word | recognized | bbox_xyxy=[31,53,93,70] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="BETA"
+word_00005 | word | recognized | bbox_xyxy=[101,53,177,70] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="567890"

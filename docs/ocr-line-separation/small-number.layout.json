@@ -1,0 +1,454 @@
+{
+  "schemaVersion": "detailed-1.0",
+  "status": "partial",
+  "requiresReview": true,
+  "coordinateSystem": "source-oriented-pixels-xyxy",
+  "pixelBounds": "half-open",
+  "source": {
+    "width": 700,
+    "height": 220
+  },
+  "processed": {
+    "width": 699,
+    "height": 219
+  },
+  "transforms": {
+    "sourceToProcessed": [
+      [
+        0.9985693848354793,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.9954337899543378,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "processedToSource": [
+      [
+        1.0014326647564469,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0045871559633028,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "skewDegrees": 0.0
+  },
+  "preprocessing": {
+    "mode": "camera",
+    "perspectiveOrigin": "manual",
+    "sourceQuad": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        699.0,
+        0.0
+      ],
+      [
+        699.0,
+        219.0
+      ],
+      [
+        0.0,
+        219.0
+      ]
+    ],
+    "detectionScore": null,
+    "detectionMethod": null,
+    "illuminationNormalized": false,
+    "quality": {
+      "medianBrightness": 255.0,
+      "inkContrast": 0,
+      "edgeSharpness": 0.0,
+      "saturatedPixelRatio": 0.9988176194302363
+    }
+  },
+  "elements": [
+    {
+      "id": "page_001",
+      "parentId": null,
+      "page": 1,
+      "kind": "page",
+      "order": 0,
+      "bbox": [
+        0.0,
+        0.0,
+        700.0,
+        220.0
+      ],
+      "normalizedBox": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          700.0014326647564,
+          0.0
+        ],
+        [
+          700.0014326647564,
+          220.00458715596332
+        ],
+        [
+          0.0,
+          220.00458715596332
+        ]
+      ],
+      "processedBox": [
+        0,
+        0,
+        699,
+        219
+      ],
+      "cropBox": [
+        0,
+        0,
+        699,
+        219
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "not_applicable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": []
+    },
+    {
+      "id": "region_00001",
+      "parentId": "page_001",
+      "page": 1,
+      "kind": "region",
+      "order": 1,
+      "bbox": [
+        30.042979942693407,
+        34.1559633027523,
+        65.09312320916905,
+        42.19266055045872
+      ],
+      "normalizedBox": [
+        0.0429185427752763,
+        0.1552543786488741,
+        0.09299017601309864,
+        0.19178482068390326
+      ],
+      "polygon": [
+        [
+          30.042979942693407,
+          34.1559633027523
+        ],
+        [
+          65.09312320916905,
+          34.1559633027523
+        ],
+        [
+          65.09312320916905,
+          42.19266055045872
+        ],
+        [
+          30.042979942693407,
+          42.19266055045872
+        ]
+      ],
+      "processedBox": [
+        30,
+        34,
+        65,
+        42
+      ],
+      "cropBox": [
+        30,
+        34,
+        65,
+        42
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "not_applicable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": []
+    },
+    {
+      "id": "line_00001",
+      "parentId": "region_00001",
+      "page": 1,
+      "kind": "line",
+      "order": 2,
+      "bbox": [
+        30.042979942693407,
+        34.1559633027523,
+        65.09312320916905,
+        42.19266055045872
+      ],
+      "normalizedBox": [
+        0.0429185427752763,
+        0.1552543786488741,
+        0.09299017601309864,
+        0.19178482068390326
+      ],
+      "polygon": [
+        [
+          30.042979942693407,
+          34.1559633027523
+        ],
+        [
+          65.09312320916905,
+          34.1559633027523
+        ],
+        [
+          65.09312320916905,
+          42.19266055045872
+        ],
+        [
+          30.042979942693407,
+          42.19266055045872
+        ]
+      ],
+      "processedBox": [
+        30,
+        34,
+        65,
+        42
+      ],
+      "cropBox": [
+        27,
+        32,
+        68,
+        44
+      ],
+      "textRaw": "001234",
+      "ocrConfidence": 0.9304222961266836,
+      "recognitionStatus": "recognized",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "line_crop_ocr",
+      "reviewReasons": [
+        "SMALL_TEXT_OCR_REVIEW"
+      ],
+      "readingOrder": 0
+    },
+    {
+      "id": "word_00001",
+      "parentId": "line_00001",
+      "page": 1,
+      "kind": "word",
+      "order": 3,
+      "bbox": [
+        30.042979942693407,
+        34.1559633027523,
+        41.05873925501432,
+        42.19266055045872
+      ],
+      "normalizedBox": [
+        0.0429185427752763,
+        0.1552543786488741,
+        0.058655341792877604,
+        0.19178482068390326
+      ],
+      "polygon": [
+        [
+          30.042979942693407,
+          34.1559633027523
+        ],
+        [
+          41.05873925501432,
+          34.1559633027523
+        ],
+        [
+          41.05873925501432,
+          42.19266055045872
+        ],
+        [
+          30.042979942693407,
+          42.19266055045872
+        ]
+      ],
+      "processedBox": [
+        30,
+        34,
+        41,
+        42
+      ],
+      "cropBox": [
+        28,
+        32,
+        43,
+        44
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "unreadable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": [
+        "WORD_TOKEN_COUNT_MISMATCH"
+      ],
+      "readingOrder": 0
+    },
+    {
+      "id": "word_00002",
+      "parentId": "line_00001",
+      "page": 1,
+      "kind": "word",
+      "order": 4,
+      "bbox": [
+        43.06160458452722,
+        35.1605504587156,
+        46.06590257879655,
+        42.19266055045872
+      ],
+      "normalizedBox": [
+        0.061516577977896024,
+        0.1598206839032527,
+        0.06580843225542364,
+        0.19178482068390326
+      ],
+      "polygon": [
+        [
+          43.06160458452722,
+          35.1605504587156
+        ],
+        [
+          46.06590257879655,
+          35.1605504587156
+        ],
+        [
+          46.06590257879655,
+          42.19266055045872
+        ],
+        [
+          43.06160458452722,
+          42.19266055045872
+        ]
+      ],
+      "processedBox": [
+        43,
+        35,
+        46,
+        42
+      ],
+      "cropBox": [
+        41,
+        32,
+        48,
+        44
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "unreadable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": [
+        "WORD_TOKEN_COUNT_MISMATCH"
+      ],
+      "readingOrder": 1
+    },
+    {
+      "id": "word_00003",
+      "parentId": "line_00001",
+      "page": 1,
+      "kind": "word",
+      "order": 5,
+      "bbox": [
+        48.068767908309454,
+        34.1559633027523,
+        65.09312320916905,
+        42.19266055045872
+      ],
+      "normalizedBox": [
+        0.06866966844044207,
+        0.1552543786488741,
+        0.09299017601309864,
+        0.19178482068390326
+      ],
+      "polygon": [
+        [
+          48.068767908309454,
+          34.1559633027523
+        ],
+        [
+          65.09312320916905,
+          34.1559633027523
+        ],
+        [
+          65.09312320916905,
+          42.19266055045872
+        ],
+        [
+          48.068767908309454,
+          42.19266055045872
+        ]
+      ],
+      "processedBox": [
+        48,
+        34,
+        65,
+        42
+      ],
+      "cropBox": [
+        46,
+        32,
+        67,
+        44
+      ],
+      "textRaw": "",
+      "ocrConfidence": null,
+      "recognitionStatus": "unreadable",
+      "geometryOrigin": "pixel_detector",
+      "textOrigin": "none",
+      "reviewReasons": [
+        "WORD_TOKEN_COUNT_MISMATCH"
+      ],
+      "readingOrder": 2
+    }
+  ],
+  "warnings": [
+    "PERSPECTIVE_APPLIED",
+    "CAMERA_TEXT_TOO_SMALL"
+  ],
+  "fullText": "001234",
+  "coverage": {
+    "inkPixels": 143,
+    "unassignedInkPixels": 0,
+    "explainedInkRatio": 1.0,
+    "isCompletenessGuarantee": false
+  },
+  "counts": {
+    "page": 1,
+    "region": 1,
+    "line": 1,
+    "word": 3
+  },
+  "timingMs": {
+    "detection": 24,
+    "recognition": 110,
+    "total": 130
+  },
+  "provider": {
+    "name": "vietocr-local",
+    "model": "vgg_transformer",
+    "wordRecognition": false
+  }
+}

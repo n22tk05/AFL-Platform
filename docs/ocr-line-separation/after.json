@@ -1,0 +1,199 @@
+{
+  "syntheticOnly": true,
+  "realLocalModel": true,
+  "recognizeWords": false,
+  "execution": "HTTP real service, current implementation",
+  "geometryScope": "Independent glyph masks; one-to-one IoU >= 0.65, OCR crop tested for neighboring glyphs; no reference supplied to OCR.",
+  "results": [
+    {
+      "case": "gap-one",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "ALPHA 001234\nBETA 567890",
+      "actualText": "ALPHA 001234\nBETA 567890",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 5
+      },
+      "elapsedMs": 344
+    },
+    {
+      "case": "gap-two",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "ALPHA 001234\nBETA 567890",
+      "actualText": "ALPHA 001234\nBETA 567890",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 5
+      },
+      "elapsedMs": 344
+    },
+    {
+      "case": "gap-three",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "ALPHA 001234\nBETA 567890",
+      "actualText": "ALPHA 001234\nBETA 567890",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 5
+      },
+      "elapsedMs": 281
+    },
+    {
+      "case": "three-rows",
+      "expectedLines": 3,
+      "detectedLines": 3,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.02702702702702703,
+      "referenceText": "ALPHA 001234\nBETA 567890\nGAMMA 009876",
+      "actualText": "ALPHA 001234\nBETA567890\nGAMMA 009876",
+      "counts": {
+        "page": 1,
+        "region": 3,
+        "line": 3,
+        "word": 8
+      },
+      "elapsedMs": 485
+    },
+    {
+      "case": "multiline-cell",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "ALPHA 001234\nBETA 567890",
+      "actualText": "ALPHA 001234\nBETA 567890",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "cell": 1,
+        "line": 2,
+        "word": 5,
+        "guide_line": 4,
+        "unknown_region": 1
+      },
+      "elapsedMs": 313
+    },
+    {
+      "case": "mixed-font",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "ALPHA 001234\nbeta 567890",
+      "actualText": "ALPHA 001234\nbeta 567890",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 6
+      },
+      "elapsedMs": 297
+    },
+    {
+      "case": "vietnamese-tight",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.034482758620689655,
+      "referenceText": "Nguyễn Đặng\nĐộc lập Hạnh phúc",
+      "actualText": "Nguyễn Đặng\nĐộc lập hạnh phúc",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 6
+      },
+      "elapsedMs": 328
+    },
+    {
+      "case": "vietnamese-control",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.034482758620689655,
+      "referenceText": "Nguyễn Đặng\nĐộc lập Hạnh phúc",
+      "actualText": "Nguyễn Đặng\nĐộc lập hạnh phúc",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 6
+      },
+      "elapsedMs": 328
+    },
+    {
+      "case": "offset-columns",
+      "expectedLines": 2,
+      "detectedLines": 2,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "ALPHA\nBETA",
+      "actualText": "ALPHA\nBETA",
+      "counts": {
+        "page": 1,
+        "region": 2,
+        "line": 2,
+        "word": 2
+      },
+      "elapsedMs": 172
+    },
+    {
+      "case": "small-number",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "001234",
+      "actualText": "001234",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 3
+      },
+      "elapsedMs": 125
+    },
+    {
+      "case": "small-zero",
+      "expectedLines": 1,
+      "detectedLines": 1,
+      "missedOrMergedLines": 0,
+      "neighborContaminatedCrops": 0,
+      "cer": 0.0,
+      "referenceText": "0",
+      "actualText": "0",
+      "counts": {
+        "page": 1,
+        "region": 1,
+        "line": 1,
+        "word": 1
+      },
+      "elapsedMs": 79
+    }
+  ]
+}

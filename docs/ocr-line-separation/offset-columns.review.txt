@@ -1,0 +1,7 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: OCR_DESKEW_APPLIED
+Mực chưa gán: 0/1019 pixel (không phải phép đo độ đầy đủ OCR)
+
+word_00001 | word | recognized | bbox_xyxy=[29.507410845935613,32.96013671362501,109.01108554954665,54.17707274662338] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="ALPHA"
+word_00002 | word | recognized | bbox_xyxy=[121.27382694619003,42.547882857269265,183.78424233206448,63.28613552920464] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="BETA"

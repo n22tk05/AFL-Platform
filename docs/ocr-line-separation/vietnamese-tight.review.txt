@@ -1,0 +1,11 @@
+AFL · ĐỐI CHIẾU TÀI LIỆU
+Trạng thái: complete · Chưa xác nhận độ chính xác toàn bộ
+Warnings: CAMERA_LOW_CONTRAST
+Mực chưa gán: 0/2368 pixel (không phải phép đo độ đầy đủ OCR)
+
+word_00001 | word | recognized | bbox_xyxy=[31,35,110,61] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="Nguyễn"
+word_00002 | word | recognized | bbox_xyxy=[118,39,173,61] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="Đặng"
+word_00003 | word | recognized | bbox_xyxy=[30,62,72,82] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="Độc"
+word_00004 | word | recognized | bbox_xyxy=[80,62,110,84] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="lập"
+word_00005 | word | recognized | bbox_xyxy=[119,62,172,82] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="hạnh"
+word_00006 | word | recognized | bbox_xyxy=[181,62,231,84] | WORD_TEXT_ALIGNMENT_UNVERIFIED | text="phúc"
