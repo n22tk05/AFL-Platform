@@ -5,7 +5,7 @@ export function OcrAttemptReview({ review, onRegion }: { review?: OcrReview; onR
   return <section className="bg-slate-950 border border-slate-700 rounded-2xl p-5 space-y-4" aria-label="Vùng cần kiểm tra">
     <h2 className="font-bold text-xl">Vùng cần kiểm tra</h2>
     <p>Điểm tin cậy cao vẫn có thể sai. Đối chiếu ảnh nguồn; hệ thống giữ nguyên kết quả từng lần đọc.</p>
-    {review.documentDetectionFailed && <p>Đã đọc toàn ảnh vì chưa xác định được vùng giấy; ảnh này chưa nắn phối cảnh.</p>}
+    {review.documentDetectionFailed && <p>Trình duyệt chưa xác định được vùng giấy. Máy đọc tiếp tục xử lý ảnh đã gửi; hãy đối chiếu vùng nhận diện và kết quả từng lần đọc.</p>}
     {review.regions.map((region, index) => <article className="border border-amber-600 rounded-xl p-3 space-y-2" key={index}>
       <button className="min-h-14 px-4 py-3 rounded-xl bg-amber-950 w-full text-left" onClick={() => onRegion(index)}>
         Vùng cần kiểm tra {index + 1} — {region.status === 'unreadable' ? 'Chưa đọc được vùng này' : 'Cần đối chiếu ảnh nguồn'}

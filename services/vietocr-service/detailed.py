@@ -8,6 +8,8 @@ import numpy as np
 from PIL import Image
 
 from segmentation import ink_mask, rule_masks, remove_dotted_guides, skew_angle, text_boxes, ordered_boxes, _peaks
+from camera import prepare_document, camera_skew
+from line_layout import refine_lines, isolated_crop, small_text_evidence
 
 MAX_ELEMENTS = 16000
 MAX_WORDS = 8000
@@ -47,26 +49,19 @@ def word_boxes(mask, box, gap_threshold=None):
     return result
 
 
-def split_lines(mask):
-    """Separate vertically fused bands using real empty rows, then tighten ink bounds."""
-    result = []
-    for x, y, w, h in text_boxes(mask):
-        local = mask[y:y+h, x:x+w]
-        active = groups(np.flatnonzero(np.any(local != 0, axis=1)))
-        # Join detached accents to the body; split only substantial interline whitespace.
-        gap_limit = max(3, round(min(h, 40) * 0.14))
-        bands = []
-        for run in active:
-            top, bottom = int(run[0]), int(run[-1])+1
-            if bands and top-bands[-1][1] < gap_limit:
-                bands[-1] = (bands[-1][0], bottom)
-            else:
-                bands.append((top, bottom))
-        for top, bottom in bands:
-            yy, xx = np.nonzero(local[top:bottom])
-            if len(xx) and bottom-top >= 2:
-                result.append((x+int(xx.min()), y+top+int(yy.min()), int(xx.max()-xx.min()+1), int(yy.max()-yy.min()+1)))
-    return ordered_boxes(result)
+def split_lines(mask, ownership_mask=None):
+    return ordered_boxes(refine_lines(mask,text_boxes(mask),ownership_mask))
+
+
+def non_text_crop(mask,box,gray=None):
+    x,y,w,h=box
+    # Perspective interpolation thickens/slants underlines. Test original ink
+    # continuity before removed-rule holes, rather than recognizing the fragments.
+    if h<=12 and w/max(1,h)>20 and np.mean(np.any(mask[y:y+h,x:x+w]!=0,axis=0))>=0.95:
+        return 'guide_line'
+    if (h<9 or w<4) and not small_text_evidence(mask,gray,box):
+        return 'unknown_region'
+    return None
 
 
 def ruled_cells(horizontal, vertical):
@@ -195,37 +190,13 @@ def checkbox_boxes(binary):
     return sorted(result, key=lambda b: (b[1], b[0]))
 
 
-def build_layout(image, quad=None):
+def build_layout(image, quad=None, photo_mode='auto'):
     if min(image.size) < 1 or max(image.size) > 8192 or image.width*image.height > 12_000_000:
         raise ValueError('DETAILED_IMAGE_LIMIT')
-    native = np.asarray(image.convert('RGB'))
-    source_h, source_w = native.shape[:2]
-    forward = np.eye(3)
-    warnings = []
-    if quad is not None:
-        points = np.asarray(quad, dtype=np.float64)
-        if points.shape != (4, 2) or not np.isfinite(points).all():
-            raise ValueError('INVALID_DOCUMENT_QUAD')
-        if np.any(points < 0) or np.any(points[:, 0] > source_w-1) or np.any(points[:, 1] > source_h-1):
-            raise ValueError('INVALID_DOCUMENT_QUAD')
-        contour = points.astype(np.float32).reshape(-1, 1, 2)
-        if not cv2.isContourConvex(contour) or cv2.contourArea(contour, oriented=True) <= 4:
-            raise ValueError('INVALID_DOCUMENT_QUAD')
-        # Require TL, TR, BR, BL winding with top/left edges in the corresponding halves.
-        if not (points[:2, 1].mean() < points[2:, 1].mean() and points[[0, 3], 0].mean() < points[[1, 2], 0].mean()):
-            raise ValueError('INVALID_DOCUMENT_QUAD_ORDER')
-        out_w = round(max(np.linalg.norm(points[1]-points[0]), np.linalg.norm(points[2]-points[3])))
-        out_h = round(max(np.linalg.norm(points[3]-points[0]), np.linalg.norm(points[2]-points[1])))
-        if min(out_w, out_h) < 20 or out_w*out_h > 12_000_000 or max(out_w, out_h) > 8192:
-            raise ValueError('PERSPECTIVE_OUTPUT_LIMIT')
-        forward = cv2.getPerspectiveTransform(points.astype(np.float32), np.array([[0, 0], [out_w-1, 0], [out_w-1, out_h-1], [0, out_h-1]], np.float32))
-        denominators = np.c_[points, np.ones(4)] @ forward[2]
-        if not np.isfinite(forward).all() or abs(np.linalg.det(forward)) < 1e-12 or np.min(denominators)*np.max(denominators) <= 0:
-            raise ValueError('INVALID_PERSPECTIVE_TRANSFORM')
-        native = cv2.warpPerspective(native, forward, (out_w, out_h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-        warnings.append('PERSPECTIVE_APPLIED')
+    native, forward, preprocessing, warnings = prepare_document(image, quad, photo_mode)
+    source_w, source_h = image.size
     binary = ink_mask(cv2.cvtColor(native, cv2.COLOR_RGB2GRAY))
-    angle = skew_angle(binary)
+    angle = skew_angle(binary) or (camera_skew(binary) if photo_mode!='scan' else 0.0)
     if angle:
         h, w = binary.shape
         rotation = cv2.getRotationMatrix2D((w/2, h/2), angle, 1)
@@ -243,12 +214,23 @@ def build_layout(image, quad=None):
             warnings.append('OCR_DESKEW_APPLIED')
     height, width = binary.shape
     inverse = np.linalg.inv(forward)
+    gray=cv2.cvtColor(native,cv2.COLOR_RGB2GRAY)
     horizontal, vertical = rule_masks(binary)
     rules = cv2.bitwise_or(horizontal, vertical)
     clean = cv2.bitwise_and(binary, cv2.bitwise_not(rules))
     before_dots = clean
     clean, dotted = remove_dotted_guides(clean)
     dotted_mask = cv2.bitwise_and(before_dots, cv2.bitwise_not(clean))
+    edge_ink = np.zeros_like(clean)
+    if preprocessing['perspectiveOrigin'] != 'none':
+        # Warp/JPEG halos at the measured paper boundary are evidence to retain,
+        # not text crops to feed to a line-only model. Keep even one pixel later.
+        rim = max(3,min(10,round(min(width,height)*0.006)))
+        edge_ink[:rim] = clean[:rim]; edge_ink[-rim:] = clean[-rim:]
+        edge_ink[:,:rim] = clean[:,:rim]; edge_ink[:,-rim:] = clean[:,-rim:]
+        clean[edge_ink != 0] = 0
+        if np.any(edge_ink):
+            warnings.append('PAGE_EDGE_INK_RETAINED')
     if dotted:
         warnings.append('OCR_DOTTED_GUIDES_DETECTED')
     elements, crops = [], []
@@ -283,6 +265,8 @@ def build_layout(image, quad=None):
 
     add('page', (0, 0, width, height), None)
     outside = clean.copy()
+    outside_ownership = binary.copy()
+    outside_ownership[edge_ink!=0]=0
     covered = np.zeros_like(binary)
     line_entries = []
     tables = ruled_cells(horizontal, vertical)
@@ -292,6 +276,7 @@ def build_layout(image, quad=None):
     for x,y,w,h in checkboxes:
         clean[y:y+h, x:x+w] = 0
         outside[y:y+h, x:x+w] = 0
+        outside_ownership[y:y+h, x:x+w] = 0
     for table in tables:
         tx, ty, tw, th = table['box']
         table_element = add('table' if len(table['cells']) > 1 else 'region', table['box'],
@@ -301,15 +286,24 @@ def build_layout(image, quad=None):
         for cell in table['cells']:
             cx, cy, cw, ch = cell['box']
             outside[cy:cy+ch, cx:cx+cw] = 0
+            outside_ownership[cy:cy+ch, cx:cx+cw] = 0
             cell_element = add('cell', cell['box'], table_element['id'], **{k: v for k, v in cell.items() if k != 'box'})
             pad = min(3, max(1, min(cw, ch)//10))
             cx, cy, cw, ch = cx+pad, cy+pad, cw-2*pad, ch-2*pad
             local = clean[cy:cy+ch, cx:cx+cw]
-            boxes = split_lines(local)
+            boxes = split_lines(local,binary[cy:cy+ch,cx:cx+cw])
             cell_element['recognitionStatus'] = 'blank' if not np.any(local) else 'not_applicable'
             if not boxes and np.any(local):
                 add('unknown_region', (cx, cy, cw, ch), cell_element['id'], recognitionStatus='unreadable', reviewReasons=['UNSEGMENTED_CELL_INK'])
-            line_entries.extend(((cx+x, cy+y, w, h), cell_element['id']) for x, y, w, h in boxes)
+            for x,y,w,h in boxes:
+                box=(cx+x,cy+y,w,h)
+                non_text=non_text_crop(binary,box,gray) if preprocessing['perspectiveOrigin']!='none' else None
+                if non_text:
+                    add(non_text,box,cell_element['id'],recognitionStatus='unreadable' if non_text=='unknown_region' else 'not_applicable',
+                        reviewReasons=['TEXT_CROP_TOO_SMALL' if non_text=='unknown_region' else 'THIN_PIXEL_STROKE'])
+                    covered[cy+y:cy+y+h,cx+x:cx+x+w]=255
+                else:
+                    line_entries.append((box,cell_element['id']))
         # Unresolved, nonrectangular spans still flow through the independent text
         # detector. Masking the entire table here would discard those source lines.
     for box in checkboxes:
@@ -328,20 +322,30 @@ def build_layout(image, quad=None):
         if parent != 'page_001':
             next(e for e in elements if e['id'] == parent)['recognitionStatus'] = 'not_applicable'
         outside[y:y+h, x:x+w] = 0
+        outside_ownership[y:y+h, x:x+w] = 0
         clean[y:y+h, x:x+w] = 0
         covered[y:y+h, x:x+w] = 255
-    for box in split_lines(outside):
+    for box in split_lines(outside,outside_ownership):
         x,y,w,h = box
+        non_text=non_text_crop(binary,box,gray) if preprocessing['perspectiveOrigin']!='none' else None
+        if non_text:
+            add(non_text,box,recognitionStatus='unreadable' if non_text=='unknown_region' else 'not_applicable',
+                reviewReasons=['TEXT_CROP_TOO_SMALL' if non_text=='unknown_region' else 'THIN_PIXEL_STROKE'])
+            covered[y:y+h,x:x+w]=255
+            continue
         parent = next((e['id'] for e in elements if e['kind'] in ('table','region') and e['parentId']=='page_001'
                        and e['processedBox'][0] <= x and e['processedBox'][1] <= y and e['processedBox'][2] >= x+w and e['processedBox'][3] >= y+h), 'page_001')
         region = add('region', box,parent)
         line_entries.append((box, region['id']))
     ordering = {b: i for i, b in enumerate(ordered_boxes([b for b, _ in line_entries]))}
     line_entries.sort(key=lambda entry: ordering[entry[0]])
+    crop_neighbors=np.asarray([b for b,_ in line_entries],dtype=np.int32).reshape(-1,4)
     for line_order, (box, parent) in enumerate(line_entries):
         x, y, w, h = box
         line = add('line', box, parent, recognitionStatus='unreadable', readingOrder=line_order)
-        px, py, right, bottom = max(0, x-3), max(0, y-4), min(width, x+w+3), min(height, y+h+4)
+        if h<9:
+            line['reviewReasons'].append('SMALL_TEXT_OCR_REVIEW')
+        px, py, right, bottom = isolated_crop(box,crop_neighbors,width,height,padding_y=2 if h<9 else 4)
         parent_element = next(e for e in elements if e['id'] == parent)
         if parent_element['kind'] == 'cell':
             bounds = parent_element['processedBox']
@@ -382,20 +386,25 @@ def build_layout(image, quad=None):
                 add('guide_line', (x+int(xx.min()), y+int(yy.min()), int(xx.max()-xx.min()+1), int(yy.max()-yy.min()+1)),
                     reviewReasons=['DOTTED_INPUT_GUIDE'])
     residual = cv2.bitwise_and(clean, cv2.bitwise_not(covered))
+    residual = cv2.bitwise_or(residual, cv2.bitwise_and(edge_ink,cv2.bitwise_not(covered)))
     count, _, stats, _ = cv2.connectedComponentsWithStats(residual, 8)
     for x, y, w, h, area in stats[1:]:
         if area >= 1:
             add('unknown_region', (x, y, w, h), recognitionStatus='unreadable', reviewReasons=['UNASSIGNED_INK'])
-    ink_pixels = int(np.count_nonzero(clean))
+    ink_pixels = int(np.count_nonzero(cv2.bitwise_or(clean,edge_ink)))
     residual_pixels = int(np.count_nonzero(residual))
     if residual_pixels:
         warnings.append('UNASSIGNED_INK_PRESENT')
     if not line_entries:
         warnings.append('NO_TEXT_DETECTED')
+    line_heights = [b[3] for b,_ in line_entries]
+    if line_heights and min(line_heights)<9:
+        warnings.append('CAMERA_TEXT_TOO_SMALL')
     document = {'schemaVersion': 'detailed-1.0', 'status': 'partial', 'requiresReview': True,
                 'coordinateSystem': 'source-oriented-pixels-xyxy', 'pixelBounds': 'half-open',
                 'source': {'width': source_w, 'height': source_h}, 'processed': {'width': width, 'height': height},
                 'transforms': {'sourceToProcessed': forward.tolist(), 'processedToSource': inverse.tolist(), 'skewDegrees': float(angle)},
+                'preprocessing': preprocessing,
                 'elements': elements, 'warnings': warnings, 'fullText': '',
                 'coverage': {'inkPixels': ink_pixels, 'unassignedInkPixels': residual_pixels,
                              'explainedInkRatio': 1-residual_pixels/max(1, ink_pixels), 'isCompletenessGuarantee': False},

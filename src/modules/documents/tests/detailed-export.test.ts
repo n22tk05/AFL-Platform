@@ -95,9 +95,31 @@ test('detailed API rejects missing records/frame mismatch/invalid options instea
   const mismatch = fixture(); mismatch.source.width = 101;
   assert.equal((await handleDetailedExtraction(request(), async () => mismatch)).status, 502);
   let calls = 0;
-  const invalidOptions: Record<string,string>[] = [{ quad: '[[0,0],[NaN,0]]' }, { quad: '[[0,0],[100,0],[99,99],[0,99]]' }, { recognizeWords: 'maybe' }];
+  const invalidOptions: Record<string,string>[] = [{ quad: '[[0,0],[NaN,0]]' }, { quad: '[[0,0],[100,0],[99,99],[0,99]]' }, { recognizeWords: 'maybe' }, { photoMode: 'night' }];
   for (const options of invalidOptions) {
     assert.equal((await handleDetailedExtraction(request(png, options), async () => { calls++; return fixture(); })).status, 400);
   }
   assert.equal(calls, 0);
+});
+
+test('detailed API forwards capture modes and defaults to automatic preparation', async () => {
+  for (const photoMode of ['auto', 'camera', 'scan'] as const) {
+    const response = await handleDetailedExtraction(request(png, { photoMode }), async input => {
+      assert.equal(input.photoMode, photoMode); return fixture();
+    });
+    assert.equal(response.status, 200);
+  }
+  await handleDetailedExtraction(request(), async input => { assert.equal(input.photoMode, 'auto'); return fixture(); });
+});
+
+test('camera metadata and larger measured deskew survive coordinate TXT; invalid source corners are rejected', () => {
+  const document = fixture();
+  document.transforms.skewDegrees = 18;
+  document.preprocessing = { mode: 'camera', perspectiveOrigin: 'auto', sourceQuad: [[5,5],[95,5],[95,95],[5,95]],
+    detectionScore: 0.85, detectionMethod: 'edges', illuminationNormalized: true,
+    quality: { medianBrightness: 92, inkContrast: 60, edgeSharpness: 75, saturatedPixelRatio: 0.02 } };
+  assert.doesNotThrow(() => validateDetailedDocument(document));
+  assert.deepEqual(JSON.parse(serializeDetailedCoordinates(document).split('\n')[0]).preprocessing, document.preprocessing);
+  document.preprocessing.sourceQuad![0][0] = -1;
+  assert.throws(() => serializeDetailedCoordinates(document), /INVALID_DETAILED_DOCUMENT/);
 });

@@ -16,7 +16,7 @@ export function validateDetailedDocument(value: unknown): asserts value is Detai
     || !d.source || !d.processed || ![d.source.width, d.source.height, d.processed.width, d.processed.height].every(n => integer(n) && n > 0 && n <= 8192)
     || d.source.width*d.source.height > 12_000_000 || d.processed.width*d.processed.height > 12_000_000
     || !d.transforms || !matrix(d.transforms.sourceToProcessed) || !matrix(d.transforms.processedToSource)
-    || !finite(d.transforms.skewDegrees) || Math.abs(d.transforms.skewDegrees) > 12
+    || !finite(d.transforms.skewDegrees) || Math.abs(d.transforms.skewDegrees) > 35
     || !d.provider || d.provider.name !== 'vietocr-local' || typeof d.provider.model !== 'string' || d.provider.model.length > 200 || typeof d.provider.wordRecognition !== 'boolean'
     || !Array.isArray(d.elements) || !d.elements.length || d.elements.length > 16000
     || !strings(d.warnings) || typeof d.fullText !== 'string' || d.fullText.length > 500_000
@@ -25,6 +25,18 @@ export function validateDetailedDocument(value: unknown): asserts value is Detai
     || !d.coverage || !integer(d.coverage.inkPixels) || !integer(d.coverage.unassignedInkPixels)
     || d.coverage.unassignedInkPixels > d.coverage.inkPixels || !finite(d.coverage.explainedInkRatio)
     || d.coverage.explainedInkRatio < 0 || d.coverage.explainedInkRatio > 1 || d.coverage.isCompletenessGuarantee !== false || !d.counts) fail();
+  if (d.preprocessing !== undefined) {
+    const p = d.preprocessing;
+    if (!p || !['auto','camera','scan'].includes(p.mode) || !['auto','manual','none'].includes(p.perspectiveOrigin)
+      || typeof p.illuminationNormalized !== 'boolean'
+      || !(p.detectionScore === null || finite(p.detectionScore) && p.detectionScore >= 0 && p.detectionScore <= 1)
+      || !(p.detectionMethod === null || typeof p.detectionMethod === 'string' && p.detectionMethod.length <= 100)
+      || !p.quality || ![p.quality.medianBrightness,p.quality.inkContrast,p.quality.edgeSharpness,p.quality.saturatedPixelRatio].every(n => finite(n) && n >= 0)
+      || p.quality.medianBrightness > 255 || p.quality.inkContrast > 255 || p.quality.saturatedPixelRatio > 1) fail();
+    if (p.sourceQuad !== null && (!Array.isArray(p.sourceQuad) || p.sourceQuad.length !== 4 || p.sourceQuad.some(point => !Array.isArray(point)
+      || point.length !== 2 || !point.every(finite) || point[0] < 0 || point[1] < 0 || point[0] > d.source.width-1 || point[1] > d.source.height-1))) fail();
+    if ((p.perspectiveOrigin === 'none') !== (p.sourceQuad === null)) fail();
+  }
   const f = d.transforms.sourceToProcessed, inv = d.transforms.processedToSource;
   for (let row = 0; row < 3; row++) for (let col = 0; col < 3; col++) {
     if (Math.abs(f[row].reduce((sum, n, k) => sum+n*inv[k][col], 0)-(row === col ? 1 : 0)) > 1e-5) fail();

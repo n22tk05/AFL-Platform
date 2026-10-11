@@ -15,6 +15,9 @@
     "test:vietocr": "node scripts/test-vietocr.mjs",
     "benchmark:vietocr": "node --import ./scripts/register-typescript.mjs scripts/benchmark-vietocr.ts",
     "benchmark:vietocr:latency": "node scripts/benchmark-vietocr-latency.mjs",
+    "benchmark:documents:camera": "node scripts/benchmark-camera.mjs",
+    "benchmark:documents:lines": "node scripts/benchmark-line-separation.mjs",
+    "benchmark:documents:diacritics": "node scripts/benchmark-diacritics.mjs",
     "test:documents:browser": "node scripts/test-documents-browser.mjs",
     "test:opencv": "tsx --test src/modules/opencv/tests/*.test.ts",
     "test:voice": "tsx src/modules/voice-ai/tests/test-voice.ts",
@@ -39,7 +42,8 @@
     "evaluate:documents:local": "node --import ./scripts/register-typescript.mjs scripts/evaluate-ocr-json.ts --live",
     "test:documents:server": "node scripts/start-document-test-server.mjs",
     "verify:documents:detailed": "node --import ./scripts/register-typescript.mjs scripts/verify-detailed-extraction.ts",
-    "verify:documents:detailed:browser": "node scripts/verify-detailed-browser.mjs"
+    "verify:documents:detailed:browser": "node scripts/verify-detailed-browser.mjs",
+    "verify:documents:camera": "node --import ./scripts/register-typescript.mjs scripts/verify-camera-words.ts"
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^7.1.0",

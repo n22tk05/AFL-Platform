@@ -44,6 +44,21 @@ class ServiceTests(unittest.TestCase):
                 app.decode_base64_image(payload)
             self.assertEqual(caught.exception.status_code, 413)
 
+    def test_phone_exif_orientation_is_applied_before_source_coordinates(self):
+        from detailed import build_layout
+        with Image.new('RGB',(80,120),'white') as image:
+            ImageDraw.Draw(image).rectangle((5,10,30,20),fill='black')
+            for orientation,expected in ((3,(80,120)),(6,(120,80)),(8,(120,80))):
+                with self.subTest(orientation=orientation):
+                    exif=Image.Exif(); exif[274]=orientation
+                    buffer=io.BytesIO(); image.save(buffer,format='JPEG',exif=exif)
+                    with app.decode_base64_image(base64.b64encode(buffer.getvalue()).decode('ascii')) as decoded:
+                        self.assertEqual(decoded.size,expected)
+                        document,_,_=build_layout(decoded,photo_mode='scan')
+                        self.assertEqual(document['source'],{'width':expected[0],'height':expected[1]})
+                        self.assertTrue(all(0<=e['bbox'][0]<e['bbox'][2]<=expected[0] and
+                                            0<=e['bbox'][1]<e['bbox'][3]<=expected[1] for e in document['elements']))
+
     def test_blank_page_returns_no_text_without_inference(self):
         with Image.new("RGB", (800, 1000), "white") as image:
             payload = encoded(image)

@@ -6,6 +6,7 @@ from typing import List, Tuple
 import cv2
 import numpy as np
 from PIL import Image
+from line_layout import refine_lines, isolated_crop, _diacritic_parents
 
 Box = Tuple[int, int, int, int]
 
@@ -14,8 +15,10 @@ def ink_mask(gray):
     # Local threshold survives shadows; Otsu retains faint uniform-page strokes.
     local = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                   cv2.THRESH_BINARY_INV, 51, 8)
-    _, global_mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    if np.count_nonzero(global_mask) / gray.size < 0.12:
+    threshold, global_mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    # Near-white JPEG/warp halos can occupy more pixels than glyphs. Otsu then
+    # calls gray paper texture "ink". Require actual contrast from the background.
+    if threshold <= float(np.median(gray))-10 and np.count_nonzero(global_mask) / gray.size < 0.12:
         local = cv2.bitwise_or(local, global_mask)
     return local
 
@@ -43,8 +46,12 @@ def remove_dotted_guides(binary):
     characters = [h for x, y, w, h, area in stats[1:] if 5 <= h <= 80 and w <= 4*h]
     height = float(np.median(characters)) if characters else 12
     small = max(2, round(height*0.3))
-    candidates = sorted((tuple(int(n) for n in box[:4]) for box in stats[1:]
-                         if box[2] <= small and box[3] <= small), key=lambda b: (b[1]+b[3]/2, b[0]))
+    marks = _diacritic_parents(binary,stats[1:])
+    candidates = sorted((tuple(int(n) for n in box[:4]) for i,box in enumerate(stats[1:])
+                         if box[2] <= small and box[3] <= small
+                         and 0.5 <= box[2]/max(1,box[3]) <= 3
+                         and box[4]/max(1,box[2]*box[3]) >= 0.6
+                         and i not in marks), key=lambda b: (b[1]+b[3]/2, b[0]))
     rows = {}
     for box in candidates:
         center = box[1]+box[3]/2
@@ -185,27 +192,27 @@ class PageLayout:
 
 
 def segment_page(image: Image.Image, target_width=2400, max_regions=1000) -> PageLayout:
+    from camera import prepare_document, camera_skew
     original_w, original_h = image.size
-    proc_w = min(original_w, target_width)
-    proc_h = max(1, round(original_h * proc_w/original_w))
-    resized = image.resize((proc_w, proc_h)) if proc_w != original_w else image
-    try:
-        gray = np.asarray(resized.convert('L'))
-    finally:
-        if resized is not image:
-            resized.close()
+    native, transform, preprocessing, camera_warnings = prepare_document(image)
+    initial_h, initial_w = native.shape[:2]
+    proc_w = min(initial_w, target_width)
+    proc_h = max(1, round(initial_h * proc_w/initial_w))
+    gray = cv2.cvtColor(cv2.resize(native, (proc_w, proc_h), interpolation=cv2.INTER_AREA), cv2.COLOR_RGB2GRAY)
     binary = ink_mask(gray)
-    angle = skew_angle(binary)
-    native = np.asarray(image.convert('RGB'))
-    transform = np.array([[1., 0., 0.], [0., 1., 0.]])
+    angle = skew_angle(binary) or camera_skew(binary)
     if angle:
-        transform = cv2.getRotationMatrix2D((original_w/2, original_h/2), angle, 1)
+        rotation = cv2.getRotationMatrix2D((initial_w/2, initial_h/2), angle, 1)
         radians = math.radians(angle)
-        out_w = math.ceil(original_w*abs(math.cos(radians)) + original_h*abs(math.sin(radians)))
-        out_h = math.ceil(original_h*abs(math.cos(radians)) + original_w*abs(math.sin(radians)))
-        transform[0, 2] += (out_w-original_w)/2
-        transform[1, 2] += (out_h-original_h)/2
-        native = cv2.warpAffine(native, transform, (out_w, out_h), flags=cv2.INTER_CUBIC, borderValue=(255, 255, 255))
+        out_w = math.ceil(initial_w*abs(math.cos(radians)) + initial_h*abs(math.sin(radians)))
+        out_h = math.ceil(initial_h*abs(math.cos(radians)) + initial_w*abs(math.sin(radians)))
+        if out_w*out_h>12_000_000 or max(out_w,out_h)>8192:
+            camera_warnings.append('DESKEW_OUTPUT_LIMIT'); angle=0.0
+        else:
+            rotation[0, 2] += (out_w-initial_w)/2
+            rotation[1, 2] += (out_h-initial_h)/2
+            native = cv2.warpAffine(native, rotation, (out_w, out_h), flags=cv2.INTER_CUBIC, borderValue=(255, 255, 255))
+            transform = np.vstack([rotation,[0,0,1]]) @ transform
     native_h, native_w = native.shape[:2]
     proc_w = min(native_w, target_width)
     proc_h = max(1, round(native_h*proc_w/native_w))
@@ -222,8 +229,13 @@ def segment_page(image: Image.Image, target_width=2400, max_regions=1000) -> Pag
     rules = cv2.bitwise_or(horizontal, vertical)
     clean = cv2.bitwise_and(binary, cv2.bitwise_not(rules))
     clean, dotted_guides = remove_dotted_guides(clean)
+    if preprocessing['perspectiveOrigin']!='none':
+        rim=max(3,min(10,round(min(clean.shape)*0.006)))
+        clean[:rim]=0; clean[-rim:]=0; clean[:,:rim]=0; clean[:,-rim:]=0
+        camera_warnings.append('PAGE_EDGE_INK_RETAINED_IN_DETAILED_MODE')
     grids = table_grids(horizontal, vertical)
     outside = clean.copy()
+    outside_ownership = binary.copy()
     entries, table_entries = [], []
     for table_index, (xs, ys) in enumerate(grids):
         rows = []
@@ -232,7 +244,8 @@ def segment_page(image: Image.Image, target_width=2400, max_regions=1000) -> Pag
             for x1, x2 in zip(xs, xs[1:]):
                 bounds = (x1+2, y1+2, x2-x1-3, y2-y1-3)
                 bx, by, bw, bh = bounds
-                boxes = [(bx+x, by+y, w, h) for x, y, w, h in text_boxes(clean[by:by+bh, bx:bx+bw])]
+                local=clean[by:by+bh,bx:bx+bw]
+                boxes = [(bx+x, by+y, w, h) for x, y, w, h in refine_lines(local,text_boxes(local),binary[by:by+bh,bx:bx+bw])]
                 cell = {"lineIds": [], "coordinates": None}
                 for box in boxes or [bounds]:
                     entries.append({"box": box, "cell": cell, "blank": not boxes, "bounds": bounds})
@@ -240,22 +253,25 @@ def segment_page(image: Image.Image, target_width=2400, max_regions=1000) -> Pag
             rows.append(cells)
         table_entries.append({"id": f"table_{table_index+1:03d}", "rows": rows, "headerRowCount": 0})
         outside[ys[0]:ys[-1]+1, xs[0]:xs[-1]+1] = 0
-    entries.extend({"box": box, "cell": None, "blank": False, "bounds": None} for box in text_boxes(outside))
+        outside_ownership[ys[0]:ys[-1]+1, xs[0]:xs[-1]+1] = 0
+    entries.extend({"box": box, "cell": None, "blank": False, "bounds": None} for box in refine_lines(outside,text_boxes(outside),outside_ownership))
     if len(entries) > max_regions:
         raise ValueError('Too many text regions; split the document into smaller pages')
     # Assign deterministic IDs in geometric order (including empty table cells).
     order = {box: i for i, box in enumerate(ordered_boxes([e['box'] for e in entries]))}
     entries.sort(key=lambda e: order[e['box']])
-    inverse = cv2.invertAffineTransform(transform)
+    inverse = np.linalg.inv(transform)
     def source_coordinates(x1, y1, x2, y2):
         corners = np.array([[x1, y1, 1], [x2, y1, 1], [x2, y2, 1], [x1, y2, 1]]) @ inverse.T
+        corners = corners[:,:2]/corners[:,2:]
         low, high = corners.min(axis=0), corners.max(axis=0)
         return [max(0., low[1]/original_h), max(0., low[0]/original_w), min(1., high[1]/original_h), min(1., high[0]/original_w)]
     regions = []
+    crop_neighbors=np.asarray([e['box'] for e in entries],dtype=np.int32).reshape(-1,4)
     try:
         for index, entry in enumerate(entries):
             x, y, w, h = entry['box']
-            x1, y1, x2, y2 = max(0, x-3), max(0, y-4), min(proc_w, x+w+3), min(proc_h, y+h+4)
+            x1,y1,x2,y2=isolated_crop(entry['box'],crop_neighbors,proc_w,proc_h)
             if entry['bounds']:
                 bx, by, bw, bh = entry['bounds']
                 x1, y1, x2, y2 = max(bx, x1), max(by, y1), min(bx+bw, x2), min(by+bh, y2)
@@ -273,7 +289,7 @@ def segment_page(image: Image.Image, target_width=2400, max_regions=1000) -> Pag
         for crop, _, _ in regions:
             crop.close()
         raise
-    warnings = ['OCR_DESKEW_APPLIED'] if angle else []
+    warnings = camera_warnings + (['OCR_DESKEW_APPLIED'] if angle else [])
     if grids:
         warnings.append('TABLE_HEADER_UNVERIFIED')
     if dotted_guides:

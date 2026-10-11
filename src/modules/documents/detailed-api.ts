@@ -2,9 +2,9 @@ import sharp from 'sharp';
 import { checkImage, InputError, limitedBody } from './api';
 import { DOCUMENT_LIMITS } from './config';
 import { validateDetailedDocument } from './detailed-export';
-import type { DetailedDocument } from '@/shared/detailed-document.types';
+import type { DetailedDocument, PhotoMode } from '@/shared/detailed-document.types';
 
-export interface DetailedInput { bytes: Uint8Array; mimeType: string; quad: number[][] | null; recognizeWords: boolean; signal: AbortSignal }
+export interface DetailedInput { bytes: Uint8Array; mimeType: string; quad: number[][] | null; recognizeWords: boolean; photoMode: PhotoMode; signal: AbortSignal }
 type Extractor = (input: DetailedInput) => Promise<unknown>;
 const headers = { 'Cache-Control': 'no-store, max-age=0', 'X-Content-Type-Options': 'nosniff' };
 
@@ -14,7 +14,7 @@ export async function extractDetailed(input: DetailedInput): Promise<unknown> {
   if (!endpoint.pathname.endsWith('/predict/detailed')) throw new InputError('OCR_ENDPOINT_INVALID', 503);
   const response = await fetch(endpoint, { method: 'POST', cache: 'no-store',
     headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.any([input.signal, AbortSignal.timeout(150_000)]),
-    body: JSON.stringify({ image: `data:${input.mimeType};base64,${Buffer.from(input.bytes).toString('base64')}`, quad: input.quad, recognizeWords: input.recognizeWords }) });
+    body: JSON.stringify({ image: `data:${input.mimeType};base64,${Buffer.from(input.bytes).toString('base64')}`, quad: input.quad, recognizeWords: input.recognizeWords, photoMode: input.photoMode }) });
   if (!response.ok) {
     await response.body?.cancel();
     throw new InputError(response.status === 429 ? 'OCR_BUSY' : response.status === 413 ? 'DETAILED_LIMIT_EXCEEDED'
@@ -42,6 +42,8 @@ export async function handleDetailedExtraction(req: Request, extractor: Extracto
     await checkImage(bytes, file.type);
     const mode = form.get('recognizeWords') ?? 'true';
     if (mode !== 'true' && mode !== 'false') throw new InputError('INVALID_REQUEST', 400);
+    const photoMode = form.get('photoMode') ?? 'auto';
+    if (photoMode !== 'auto' && photoMode !== 'camera' && photoMode !== 'scan') throw new InputError('INVALID_REQUEST', 400);
     let quad: number[][] | null = null;
     if (form.has('quad')) {
       try { quad = JSON.parse(String(form.get('quad'))); }
@@ -56,7 +58,7 @@ export async function handleDetailedExtraction(req: Request, extractor: Extracto
     const height = (rotated ? metadata.width : metadata.height)!;
     if (quad?.some(([x,y]) => x < 0 || y < 0 || x > width-1 || y > height-1)) throw new InputError('INVALID_DOCUMENT_GEOMETRY', 400);
     if (process.env.DOCUMENT_OCR_PROVIDER && process.env.DOCUMENT_OCR_PROVIDER !== 'vietocr') throw new InputError('OCR_NOT_CONFIGURED', 503);
-    const result = await extractor({ bytes, mimeType: file.type, quad, recognizeWords: mode === 'true', signal: req.signal });
+    const result = await extractor({ bytes, mimeType: file.type, quad, recognizeWords: mode === 'true', photoMode, signal: req.signal });
     try { validateDetailedDocument(result); }
     catch { throw new InputError('OCR_INVALID_RESPONSE', 502); }
     if (result.source.width !== width || result.source.height !== height) throw new InputError('OCR_FRAME_MISMATCH', 502);

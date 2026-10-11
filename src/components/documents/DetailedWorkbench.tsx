@@ -1,14 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent, type MouseEvent } from 'react';
 import { ArrowDownToLine, ArrowUpRight, Check, ChevronLeft, ChevronRight, FileText, Focus, Layers3, Loader2, Search, ScanLine, Upload, X, ZoomIn, ZoomOut } from 'lucide-react';
-import { DETAIL_KINDS, type DetailKind, type DetailedDocument, type DetailedElement } from '@/shared/detailed-document.types';
+import { DETAIL_KINDS, type DetailKind, type DetailedDocument, type DetailedElement, type DetailedPoint, type PhotoMode } from '@/shared/detailed-document.types';
+import { CAMERA_FEEDBACK } from '@/modules/documents/camera-feedback';
 import { detailedTranscript, safeDetailedFilename, serializeDetailedCoordinates, serializeDetailedReview, validateDetailedDocument } from '@/modules/documents/detailed-export';
 import { DOCUMENT_LIMITS } from '@/modules/documents/config';
-import { loadOpenCv } from '@/modules/opencv/loader';
-import { detectDocument } from '@/modules/opencv/document-detector';
-import { quadPoints } from '@/modules/opencv/corner-ordering';
-import type { CvMat, CvRuntime } from '@/modules/opencv/types';
+import { quadPoints, orderDocumentCorners } from '@/modules/opencv/corner-ordering';
 
 const labels: Record<DetailKind, string> = { page: 'Trang', region: 'Vùng', table: 'Bảng', cell: 'Ô biểu mẫu', line: 'Dòng', word: 'Từ', word_group: 'Cụm từ', checkbox: 'Checkbox', guide_line: 'Đường kẻ', unknown_region: 'Chưa xác định' };
 const tones: Record<DetailKind, string> = { page: '#64748b', region: '#4f46e5', table: '#0284c7', cell: '#0891b2', line: '#23875b', word: '#d68b16', word_group:'#b87a3c', checkbox: '#a855f7', guide_line: '#64748b', unknown_region: '#df5d3b' };
@@ -29,18 +27,19 @@ export function DetailedWorkbench({ file, compact = false }: { file?: File | nul
   const [source, setSource] = useState(''), [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [document, setDocument] = useState<DetailedDocument | null>(null);
   const [busy, setBusy] = useState(false), [phase, setPhase] = useState(''), [error, setError] = useState('');
-  const [precise, setPrecise] = useState(true), [camera, setCamera] = useState(false), [dragging, setDragging] = useState(false);
+  const [precise, setPrecise] = useState(true), [photoMode, setPhotoMode] = useState<PhotoMode>('auto'), [dragging, setDragging] = useState(false);
+  const [corners, setCorners] = useState<DetailedPoint[]>([]), [pickingCorners, setPickingCorners] = useState(false);
   const [kind, setKind] = useState<DetailKind>('line'), [query, setQuery] = useState(''), [onlyReview, setOnlyReview] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null), [zoom, setZoom] = useState(1), [page, setPage] = useState(0);
   const [confirmed, setConfirmed] = useState(false), [tab, setTab] = useState<'records' | 'transcript'>('records');
   const controller = useRef<AbortController>(), generation = useRef(0), input = useRef<HTMLInputElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
   const invalidate = useCallback(() => { generation.current++; controller.current?.abort(); }, []);
 
   useEffect(() => {
     const id = ++generation.current;
     controller.current?.abort(); setBusy(false); setDocument(null); setConfirmed(false); setSelectedId(null);
     setError(''); setSource(''); setDimensions({ width: 0, height: 0 }); setPage(0); setZoom(1);
+    setCorners([]); setPickingCorners(false);
     if (!chosenFile) return;
     if (!['image/png','image/jpeg'].includes(chosenFile.type) || !chosenFile.size || chosenFile.size > DOCUMENT_LIMITS.fileBytes) {
       setError('Chọn JPEG hoặc PNG hợp lệ, tối đa 8 MB.'); return;
@@ -64,28 +63,20 @@ export function DetailedWorkbench({ file, compact = false }: { file?: File | nul
   }, [chosenFile, invalidate]);
 
   const run = useCallback(async () => {
-    if (!chosenFile || !source || busy) return;
+    if (!chosenFile || !source || busy || pickingCorners) return;
     const id = ++generation.current;
     controller.current?.abort(); const abort = new AbortController(); controller.current = abort;
     setBusy(true); setError(''); setDocument(null); setConfirmed(false); setSelectedId(null); setPage(0);
     try {
       const form = new FormData(); form.set('file', chosenFile); form.set('recognizeWords', String(precise));
-      if (camera) {
-        setPhase('Đang tìm bốn góc tờ giấy…');
-        const cv = await loadOpenCv() as unknown as CvRuntime & { imread(canvas: HTMLCanvasElement): CvMat };
-        if (id !== generation.current) return;
-        const image = imageRef.current;
-        if (!image?.complete || !image.naturalWidth) throw new Error('Ảnh nguồn chưa sẵn sàng.');
-        const canvas = window.document.createElement('canvas'); canvas.width = dimensions.width; canvas.height = dimensions.height;
-        const context = canvas.getContext('2d'); if (!context) throw new Error('Không tạo được canvas.');
-        context.drawImage(image, 0, 0); let mat: CvMat | undefined;
-        try {
-          mat = cv.imread(canvas);
-          const detected = detectDocument(cv, mat);
-          form.set('quad', JSON.stringify(quadPoints(detected.sourceQuad).map(p => [p.x, p.y])));
-        } finally { mat?.delete(); canvas.width = 0; canvas.height = 0; }
+      form.set('photoMode', photoMode);
+      if (corners.length === 4) {
+        const ordered = orderDocumentCorners(corners.map(([x,y]) => ({x,y})));
+        form.set('quad', JSON.stringify(quadPoints(ordered).map(p => [p.x,p.y])));
       }
-      setPhase(precise ? 'Đang đọc dòng và kiểm tra từng từ…' : 'Đang đọc dòng và tách tọa độ từ…');
+      // Only user-selected corners are authoritative. Browser edge quads can be
+      // an internal table, so let the native detector verify paper contrast.
+      setPhase(photoMode === 'scan' ? 'Đang đọc dòng và tách tọa độ…' : 'Đang tìm giấy, cân bằng sáng và đọc từng vùng…');
       const response = await fetch('/api/documents/detailed', { method: 'POST', body: form, cache: 'no-store',
         signal: AbortSignal.any([abort.signal, AbortSignal.timeout(160_000)]) });
       const payload = await response.json();
@@ -99,7 +90,7 @@ export function DetailedWorkbench({ file, compact = false }: { file?: File | nul
       if (id === generation.current) setError(failure instanceof Error && failure.name === 'TimeoutError' ? 'Hết thời gian đọc; thử chế độ nhanh hoặc chia trang nhỏ hơn.'
         : failure instanceof Error ? failure.message : 'Không đọc được tài liệu.');
     } finally { if (id === generation.current) { setBusy(false); setPhase(''); } }
-  }, [chosenFile, source, busy, precise, camera, dimensions]);
+  }, [chosenFile, source, busy, precise, photoMode, dimensions, corners, pickingCorners]);
 
   const records = useMemo(() => document?.elements.filter(e => e.kind === kind
     && (!onlyReview || e.reviewReasons.length || e.recognitionStatus === 'unreadable')
@@ -111,6 +102,8 @@ export function DetailedWorkbench({ file, compact = false }: { file?: File | nul
   const selectedIndex = records.findIndex(e => e.id === selectedId);
   const prefix = safeDetailedFilename(chosenFile?.name ?? 'document');
   const unresolved = document?.elements.filter(e => e.recognitionStatus === 'unreadable').length ?? 0;
+  const cameraHints = document?.warnings.filter(code => CAMERA_FEEDBACK[code]) ?? [];
+  const pageQuad = corners.length === 4 ? corners : document?.preprocessing?.sourceQuad;
 
   function choose(next: File | null) { setOwnFile(next); }
   function drop(event: DragEvent) { event.preventDefault(); setDragging(false); if (file === undefined) choose(event.dataTransfer.files[0] ?? null); }
@@ -119,6 +112,20 @@ export function DetailedWorkbench({ file, compact = false }: { file?: File | nul
   function edit(text: string) {
     setConfirmed(false);
     setDocument(prev => prev ? { ...prev, elements: prev.elements.map(e => e.id === selectedId ? { ...e, textReviewed: text } : e) } : null);
+  }
+  function startCorners() {
+    setDocument(null); setConfirmed(false); setSelectedId(null); setCorners([]); setPickingCorners(true); setError('');
+  }
+  function pickCorner(event: MouseEvent<SVGSVGElement>) {
+    if (!pickingCorners || busy) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const point: DetailedPoint = [Math.max(0,Math.min(dimensions.width-1,(event.clientX-bounds.left)*dimensions.width/bounds.width)),
+      Math.max(0,Math.min(dimensions.height-1,(event.clientY-bounds.top)*dimensions.height/bounds.height))];
+    const next = [...corners,point];
+    if (next.length === 4) {
+      try { setCorners(quadPoints(orderDocumentCorners(next.map(([x,y]) => ({x,y})))).map(p => [p.x,p.y])); setPickingCorners(false); }
+      catch { setCorners([]); setError('Bốn góc phải tạo thành vùng giấy lồi. Hãy chọn lại đúng bốn mép giấy.'); }
+    } else setCorners(next);
   }
 
   return <section aria-label="Đọc chi tiết và xuất TXT" className={`${compact ? 'my-6 rounded-3xl border border-stone-200 p-5' : ''} text-[#253b2e]`}>
@@ -143,12 +150,15 @@ export function DetailedWorkbench({ file, compact = false }: { file?: File | nul
       <div className="rounded-2xl bg-[#263e30] p-6 text-[#f1f4e9]">
         <div className="mb-4 flex items-center justify-between"><p className="text-xs uppercase tracking-[0.17em] text-[#b8ccb4]">Cách đọc tài liệu</p><ScanLine size={19} /></div>
         <label className="mb-3 flex cursor-pointer items-start gap-3 text-sm"><input type="checkbox" className="mt-1 accent-[#d5a855]" checked={precise} onChange={e => setPrecise(e.target.checked)} disabled={busy} /><span>Kiểm tra từng từ bằng OCR<small className="mt-1 block text-[#b8ccb4]">Đọc crop từ riêng và báo khác biệt với dòng. Tắt để đọc nhanh.</small></span></label>
-        <label className="mb-4 flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" className="accent-[#d5a855]" checked={camera} onChange={e => setCamera(e.target.checked)} disabled={busy} /> Nắn phối cảnh ảnh chụp tờ giấy</label>
-        <div className="flex gap-2"><button className={`${pill} w-full bg-[#e9bd71] text-[#263e30]`} disabled={!source || busy} onClick={run}>{busy ? <Loader2 size={17} className="animate-spin" /> : <ScanLine size={17} />}{busy ? 'Đang đọc tài liệu' : 'Đọc chi tiết'}{!busy && <ArrowUpRight size={17} />}</button>
+        <label className="mb-4 block text-sm">Loại ảnh<select aria-label="Loại ảnh tài liệu" value={photoMode} disabled={busy} onChange={e => setPhotoMode(e.target.value as PhotoMode)} className="mt-2 block w-full rounded-lg border border-white/20 bg-[#324e3a] p-2 text-sm"><option value="auto">Tự động · ảnh chụp hoặc scan</option><option value="camera">Ảnh điện thoại · nắn giấy, cân bằng sáng</option><option value="scan">Ảnh scan đã thẳng · giữ xử lý gốc</option></select></label>
+        <div className="flex gap-2"><button className={`${pill} w-full bg-[#e9bd71] text-[#263e30]`} disabled={!source || busy || pickingCorners} onClick={run}>{busy ? <Loader2 size={17} className="animate-spin" /> : <ScanLine size={17} />}{busy ? 'Đang đọc tài liệu' : 'Đọc chi tiết'}{!busy && <ArrowUpRight size={17} />}</button>
           {busy && <button aria-label="Hủy đọc chi tiết" className={`${pill} bg-white/10`} onClick={() => { generation.current++; controller.current?.abort(); setBusy(false); setPhase(''); }}><X size={18} /></button>}</div>
       </div>
     </div>
     {error && <p role="alert" className="mb-5 rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-orange-900">{error}</p>}
+    {pickingCorners && <p role="status" className="mb-5 rounded-xl bg-blue-50 p-4 text-sm text-blue-900">Chọn 4 góc giấy trên ảnh, theo thứ tự bất kỳ ({corners.length}/4). Có thể phóng to hoặc cuộn ảnh để chọn mép dưới. Chỉ chọn phần giấy cần đọc.</p>}
+    {cameraHints.length > 0 && <div className="mb-5 rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm leading-6 text-orange-900">{cameraHints.map(code => <p key={code}>{CAMERA_FEEDBACK[code]}</p>)}</div>}
+    {document?.preprocessing && <p className="mb-4 text-xs text-stone-600">{document.preprocessing.perspectiveOrigin === 'auto' ? 'Đã tự tìm và nắn bốn góc giấy.' : document.preprocessing.perspectiveOrigin === 'manual' ? 'Đã nắn theo bốn góc đã chọn.' : 'Đang dùng toàn ảnh làm trang.'} {document.preprocessing.illuminationNormalized ? 'Đã cân bằng ánh sáng trước khi tách chữ và OCR.' : 'Giữ ánh sáng ảnh nguồn.'} Tọa độ xuất vẫn quy về ảnh nguồn.</p>}
     {busy && <div role="status" className="mb-5 flex items-center gap-3 rounded-xl bg-[#e8eee2] p-4 text-sm"><Loader2 size={18} className="animate-spin" />{phase} <span className="ml-auto text-xs text-stone-500">Các vùng chưa xử lý sẽ được giữ và đánh dấu.</span></div>}
 
     {document && <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-5">
@@ -158,15 +168,18 @@ export function DetailedWorkbench({ file, compact = false }: { file?: File | nul
 
     <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
       <div className="overflow-hidden rounded-2xl border border-[#dce3d7] bg-white">
+        {source && <div className="flex flex-wrap items-center gap-2 border-b border-[#e5e9e0] px-5 py-3"><button className="rounded-lg border border-stone-200 px-3 py-2 text-xs disabled:opacity-40" disabled={busy} onClick={startCorners}>Chỉnh 4 góc giấy</button>{(corners.length > 0 || pickingCorners) && <button className="rounded-lg px-3 py-2 text-xs text-stone-500" disabled={busy} onClick={() => { setCorners([]); setPickingCorners(false); }}>Bỏ chọn góc</button>}<span className="text-xs text-stone-500">Ảnh chéo, nền phức tạp hoặc mất mép: chọn vùng giấy trước khi đọc.</span></div>}
         <div className="flex items-center justify-between border-b border-[#e5e9e0] px-5 py-4"><div><p className="text-sm font-semibold">Ảnh nguồn</p><p className="mt-1 text-xs text-stone-500">Tọa độ trên ảnh sau chuẩn hóa hướng EXIF · XYXY</p></div>
           <div className="flex items-center gap-2"><button aria-label="Thu nhỏ ảnh nguồn" className="rounded-lg p-2 hover:bg-stone-100" onClick={() => setZoom(z => Math.max(1, z-0.25))}><ZoomOut size={17} /></button><span className="text-xs tabular-nums">{Math.round(zoom*100)}%</span><button aria-label="Phóng lớn ảnh nguồn" className="rounded-lg p-2 hover:bg-stone-100" onClick={() => setZoom(z => Math.min(4, z+0.25))}><ZoomIn size={17} /></button></div>
         </div>
         <div className="max-h-[800px] min-h-[400px] overflow-auto bg-[#e7ebe2] p-5" style={{ backgroundImage: 'radial-gradient(#c9d2c4 1px, transparent 1px)', backgroundSize: '18px 18px' }}>
           {source ? <div className="relative bg-white shadow-lg" style={{ width: `${zoom*100}%` }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img ref={imageRef} src={source} alt="Ảnh nguồn của tài liệu chi tiết" className="block w-full" />
-            {document && <svg viewBox={`0 0 ${dimensions.width} ${dimensions.height}`} className="absolute inset-0 h-full w-full" aria-label="Tọa độ các vùng trên ảnh nguồn">
-              {records.filter(e => e.id !== selectedId).map(e => <polygon key={e.id} points={e.polygon.map(p => p.join(',')).join(' ')} fill={tones[e.kind]} fillOpacity={0.05} stroke={tones[e.kind]} strokeWidth="1" vectorEffect="non-scaling-stroke" className="cursor-pointer" onClick={() => select(e)}><title>{e.id}: {e.textRaw || states[e.recognitionStatus]}</title></polygon>)}
+            <img src={source} alt="Ảnh nguồn của tài liệu chi tiết" className="block w-full" />
+            {(document || pickingCorners || corners.length > 0) && <svg viewBox={`0 0 ${dimensions.width} ${dimensions.height}`} className={`absolute inset-0 h-full w-full ${pickingCorners ? 'cursor-crosshair' : ''}`} aria-label="Tọa độ các vùng trên ảnh nguồn" onClick={pickCorner}>
+              {pageQuad && <polygon data-testid="detailed-paper-quad" points={pageQuad.map(p => p.join(',')).join(' ')} fill="none" stroke="#0284c7" strokeDasharray="8 5" strokeWidth="2" vectorEffect="non-scaling-stroke" pointerEvents="none" />}
+              {corners.map(([x,y],i) => <g key={i} pointerEvents="none"><circle cx={x} cy={y} r={Math.max(8,dimensions.width/70)} fill="#0284c7" stroke="white" strokeWidth="2" /><text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontSize={Math.max(10,dimensions.width/90)} fill="white">{i+1}</text></g>)}
+              {records.filter(e => e.id !== selectedId).map(e => <polygon key={e.id} points={e.polygon.map(p => p.join(',')).join(' ')} fill={tones[e.kind]} fillOpacity={0.05} stroke={tones[e.kind]} strokeWidth="1" vectorEffect="non-scaling-stroke" className="cursor-pointer" pointerEvents={pickingCorners ? 'none' : undefined} onClick={() => select(e)}><title>{e.id}: {e.textRaw || states[e.recognitionStatus]}</title></polygon>)}
               {selected && <polygon data-testid="detailed-selected-polygon" points={selected.polygon.map(p => p.join(',')).join(' ')} fill="#df5d3b" fillOpacity={0.16} stroke="#df5d3b" strokeWidth="3" vectorEffect="non-scaling-stroke" pointerEvents="none" />}
             </svg>}
           </div> : <div className="flex min-h-[380px] flex-col items-center justify-center text-[#70836c]"><Focus size={48} strokeWidth={1} /><p className="mt-4 text-sm">Chọn ảnh để bắt đầu khám phá chi tiết.</p></div>}

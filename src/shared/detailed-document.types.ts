@@ -1,5 +1,6 @@
 export type DetailedBox = [number, number, number, number];
 export type DetailedPoint = [number, number];
+export type PhotoMode = 'auto' | 'camera' | 'scan';
 export const DETAIL_KINDS = ['page', 'region', 'table', 'cell', 'line', 'word', 'word_group', 'checkbox', 'guide_line', 'unknown_region'] as const;
 export type DetailKind = typeof DETAIL_KINDS[number];
 export interface DetailedElement {
@@ -20,6 +21,11 @@ export interface DetailedDocument {
   coordinateSystem: 'source-oriented-pixels-xyxy'; pixelBounds: 'half-open';
   source: { width: number; height: number }; processed: { width: number; height: number };
   transforms: { sourceToProcessed: number[][]; processedToSource: number[][]; skewDegrees: number };
+  preprocessing?: {
+    mode: PhotoMode; perspectiveOrigin: 'auto' | 'manual' | 'none'; sourceQuad: DetailedPoint[] | null;
+    detectionScore: number | null; detectionMethod: string | null; illuminationNormalized: boolean;
+    quality: { medianBrightness: number; inkContrast: number; edgeSharpness: number; saturatedPixelRatio: number };
+  };
   provider: { name: 'vietocr-local'; model: string; wordRecognition: boolean };
   elements: DetailedElement[]; warnings: string[]; fullText: string;
   coverage: { inkPixels: number; unassignedInkPixels: number; explainedInkRatio: number; isCompletenessGuarantee: false };

@@ -4,7 +4,7 @@ Ngày triển khai: 11/10/2026. Phạm vi: vùng, dòng, từ, ô biểu mẫu, 
 
 ## Sử dụng
 
-Từ thư mục gốc chạy **`npm run dev:all`** để khởi động cả Next.js ở 3001 và VietOCR ở 8000. Mở `http://localhost:3001/document-detail`, hoặc phần **Đọc chi tiết & TXT** trên `/opencv-test`. Chọn ảnh, giữ **Kiểm tra từng từ bằng OCR** để OCR riêng từng crop từ, rồi nhấn **Đọc chi tiết**. Với ảnh chụp tờ giấy, bật nắn phối cảnh. Giao diện dùng OpenCV WASM tìm bốn góc giấy; service xử lý ảnh gốc và lưu phép biến đổi ngược về ảnh nguồn.
+Từ thư mục gốc chạy **`npm run dev:all`** để khởi động cả Next.js ở 3001 và VietOCR ở 8000. Mở `http://localhost:3001/document-detail`, hoặc phần **Đọc chi tiết & TXT** trên `/opencv-test`. Chọn ảnh, giữ **Kiểm tra từng từ bằng OCR** để OCR riêng từng crop từ, rồi nhấn **Đọc chi tiết**. Chế độ mặc định **Tự động** và **Ảnh điện thoại** tìm giấy và cân bằng sáng ở service; không cần chờ WASM trình duyệt để đọc chi tiết. Có thể dùng **Chỉnh 4 góc giấy** để chọn vùng thủ công. Chi tiết cải tiến và các trường hợp chụp sai nằm trong [báo cáo ảnh điện thoại](OPENCV-PHONE-PHOTO-OPTIMIZATION.md).
 
 Chọn một bản ghi để xem polygon trên ảnh, tọa độ pixel, tọa độ chuẩn hóa, crop OCR, quan hệ cha–con, confidence và lý do cần đối chiếu. Có bộ lọc loại vùng, tìm kiếm, phân trang, phóng to và chỉnh nội dung đối chiếu. Nội dung gốc luôn được giữ. Thay ảnh/hủy yêu cầu sẽ vô hiệu hóa kết quả đang chờ; sửa nội dung sẽ hủy xác nhận đối chiếu trước đó.
 
@@ -17,6 +17,10 @@ Các nút xuất:
 
 ## Thay đổi thuật toán
 
+VietOCR 1.7.1 bổ sung ghép dấu với thân chữ qua ranh giới vùng coarse, tránh nhận dấu thành dòng riêng hoặc crop trùng. Các ô được xử lý độc lập; số nhỏ và mực chưa đủ bằng chứng được giữ. Xem [báo cáo sửa dấu tiếng Việt](OPENCV-DIACRITICS-FIX.md), gồm TXT mẫu và lỗi nhận diện còn lại.
+
+VietOCR 1.7.0 dùng bằng chứng thân chữ để tách dòng sát nhau, giới hạn padding theo khoảng trắng lân cận và thử OCR chữ nhỏ đủ nét. Tách dòng áp dụng cả trong ô biểu mẫu và vùng độc lập, dùng chung với API cũ. Kết quả 11 mẫu tổng hợp: 21/21 dòng khớp hình học, không crop nào lấy nét dòng bên cạnh; chi tiết và giới hạn trong [báo cáo tách dòng](OPENCV-LINE-SEPARATION-OPTIMIZATION.md).
+
 Đường xử lý mới dùng độ phân giải gốc, không dùng giới hạn 70 candidate của màn hình debug. Mỗi dòng trong ô bảng được giữ riêng; mỗi từ lấy bounds từ pixel mực thực. Khi crop chứa nhiều token, chỉ tinh chỉnh ở khoảng cột thực sự không có mực, giữ bản ghi ban đầu dưới dạng `word_group`, rồi OCR lại các từ con. Những ranh giới này vẫn cần đối chiếu.
 
 Lưới có đường kẻ được phân tích theo mức hỗ trợ của từng cạnh. Ô gộp hình chữ nhật giữ `rowSpan`/`columnSpan`; ô trống vẫn có bản ghi. Lưới hỏng hoặc nhóm ô không hình chữ nhật được đánh dấu, và chữ bên trong vẫn đi qua bộ tách dòng độc lập. Checkbox vuông và ký hiệu `[x]`/`[ ]` giữ tọa độ riêng, trạng thái suy từ pixel và liên kết dòng nhãn.
@@ -26,8 +30,8 @@ Lưới có đường kẻ được phân tích theo mức hỗ trợ của từ
 API mới:
 
 ```text
-POST /api/documents/detailed     multipart: file, recognizeWords=true|false, quad? (JSON)
-POST /predict/detailed          JSON: image, recognizeWords, quad?
+POST /api/documents/detailed     multipart: file, recognizeWords=true|false, photoMode=auto|camera|scan, quad? (JSON)
+POST /predict/detailed          JSON: image, recognizeWords, photoMode, quad?
 ```
 
 Provider là VietOCR local; API `/predict` và luồng JSON biểu mẫu cũ vẫn tương thích. Bộ kiểm tra đầu ra từ chối dữ liệu có ID trùng, parent sai, thiếu bản ghi, counts sai, hình học sai, ma trận nghịch đảo không khớp hoặc transcript không khớp.
@@ -56,7 +60,7 @@ Kết quả chạy thật trên máy hiện tại, bật OCR từng từ:
 | TC07 ảnh nghiêng | 13 | 85 | — | 131 | 6,77 s | 10 |
 | TC10 trang trắng | 0 | 0 | — | 1 | 0,06 s | 0 |
 
-Kiểm thử: **55/55 OpenCV, 172/172 documents, 49/49 Python, 18/18 browser suite hiện có** đều PASS. Script trình duyệt chi tiết mới chạy trên Chrome với service thật: 124 bản ghi TC04 được tải lại nguyên vẹn, 4 ô trống, overlay từ, xác nhận bị hủy khi chỉnh sửa, mobile 390 px không tràn ngang, trang trắng không sinh chữ; camera tổng hợp nhận 3 dòng sau nhận diện giấy WASM và nắn phối cảnh thật. Không có page error. Typecheck và build production PASS. Thời gian ở bảng là một lượt chạy (có tác vụ kiểm thử khác), không phải benchmark độc lập, phân vị hoặc cam kết hiệu năng.
+Kiểm thử ở lượt triển khai ban đầu: **55/55 OpenCV, 172/172 documents, 49/49 Python, 18/18 browser suite hiện có** đều PASS. TC04 tải lại đủ 124 bản ghi và 4 ô trống; overlay từ, chỉnh sửa hủy xác nhận, mobile 390 px, trang trắng và camera tổng hợp đã được kiểm tra với model thật. Bản 1.7.0 được kiểm tra lại với **72/72 Python, 176/176 documents, 8 tình huống browser**, typecheck và build production đều đạt; xem báo cáo tách dòng liên kết ở trên. Thời gian ở bảng là một lượt chạy (có tác vụ kiểm thử khác), không phải benchmark độc lập, phân vị hoặc cam kết hiệu năng.
 
 Chạy lại:
 
@@ -72,10 +76,13 @@ Giữ terminal `npm run dev:all` đang chạy, mở terminal khác để kiểm 
 
 ```powershell
 npm run verify:documents:detailed
+npm run benchmark:documents:camera
+npm run benchmark:documents:lines
+npm run benchmark:documents:diacritics
 npm run verify:documents:detailed:browser
 ```
 
-Có thể đổi Web bằng `DOCUMENT_TEST_URL`; script chỉ cho phép loopback. Browser script kiểm tra tải ảnh, overlay từ, tải TXT và đếm đủ ô trống, chỉnh sửa hủy xác nhận, thay ảnh xóa kết quả cũ, trang trắng, desktop/mobile và nắn phối cảnh bằng OpenCV WASM thật. Evidence trình duyệt được lưu tại `test-results/detailed`.
+Có thể đổi Web bằng `DOCUMENT_TEST_URL`; script chỉ cho phép loopback. Browser script kiểm tra tải ảnh, overlay từ, tải TXT và đếm đủ ô trống, chỉnh sửa hủy xác nhận, thay ảnh xóa kết quả cũ, trang trắng, desktop/mobile, nắn phối cảnh native, góc thủ công, ảnh tối và ô có hai dòng sát nhau. Evidence trình duyệt được lưu tại `test-results/detailed`.
 
 ## Giới hạn cần hiểu
 

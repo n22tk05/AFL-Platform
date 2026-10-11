@@ -7,7 +7,7 @@ import math
 import tempfile
 import threading
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Literal
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -67,7 +67,7 @@ inference_lock = threading.Lock()
 app = FastAPI(
     title="VietOCR Microservice (High Performance)",
     description="High-throughput Vietnamese line OCR service with batch inference and OpenCV line segmentation",
-    version="1.5.0"
+    version="1.7.1"
 )
 
 app.add_middleware(
@@ -143,6 +143,7 @@ class DetailedRequest(BaseModel):
     image: str
     quad: Optional[List[List[float]]] = None
     recognizeWords: bool = True
+    photoMode: Literal['auto', 'camera', 'scan'] = 'auto'
 
 class PredictionResult(BaseModel):
     lineId: Optional[str] = None
@@ -343,7 +344,7 @@ def predict_detailed(request: DetailedRequest):
     try:
         with decode_base64_image(request.image) as image:
             detection_started = time.perf_counter()
-            document, native, crops = build_layout(image, request.quad)
+            document, native, crops = build_layout(image, request.quad, request.photoMode)
             document['timingMs']['detection'] = round((time.perf_counter()-detection_started)*1000)
             document = recognize_layout(document, native, crops, lambda images: fast_predict_batch(predictor, images),
                                         recognize_words=request.recognizeWords)

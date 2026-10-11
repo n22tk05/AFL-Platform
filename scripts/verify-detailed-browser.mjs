@@ -68,14 +68,91 @@ try {
     return c.toDataURL('image/png').split(',')[1];
   });
   await page.getByLabel('Chọn ảnh đọc chi tiết').setInputFiles({name:'camera.png',mimeType:'image/png',buffer:Buffer.from(cameraPng,'base64')});
-  await page.getByRole('checkbox',{name:'Nắn phối cảnh ảnh chụp tờ giấy'}).check();
+  await page.getByLabel('Loại ảnh tài liệu').selectOption('camera');
   await page.getByRole('checkbox',{name:/Kiểm tra từng từ bằng OCR/}).uncheck();
   await page.waitForFunction(() => document.querySelector('img[alt="Ảnh nguồn của tài liệu chi tiết"]')?.complete);
   const cameraResponse = page.waitForResponse(r => r.url().endsWith('/api/documents/detailed'));
   await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).click();
   const camera = await (await cameraResponse).json();
   if (!camera.success || !camera.data.warnings.includes('PERSPECTIVE_APPLIED') || camera.data.source.width !== 1000 || camera.data.counts.line < 3) throw new Error('CAMERA_PERSPECTIVE_FAILED:'+JSON.stringify(camera));
-  report.runs.push({fixture:'synthetic-camera',counts:camera.data.counts,realWasmDocumentDetection:true,perspectiveApplied:true,sourceDimensions:camera.data.source});
+  if (camera.data.preprocessing.perspectiveOrigin !== 'auto') throw new Error('CAMERA_AUTO_QUAD_MISSING');
+  report.runs.push({fixture:'synthetic-camera',counts:camera.data.counts,nativeDocumentDetection:true,perspectiveApplied:true,sourceDimensions:camera.data.source});
+  await page.getByLabel('Chọn ảnh đọc chi tiết').setInputFiles('test-results/camera/fixtures/low-light.jpg');
+  await page.getByLabel('Loại ảnh tài liệu').selectOption('auto');
+  await page.waitForFunction(() => document.querySelector('img[alt="Ảnh nguồn của tài liệu chi tiết"]')?.complete);
+  const darkResponse = page.waitForResponse(r => r.url().endsWith('/api/documents/detailed'));
+  await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).click();
+  const dark = await (await darkResponse).json();
+  if (!dark.success || dark.data.preprocessing.perspectiveOrigin !== 'auto' || dark.data.counts.line !== 19
+    || !dark.data.warnings.includes('CAMERA_LOW_LIGHT')) throw new Error('AUTO_LOW_LIGHT_FAILED:'+JSON.stringify(dark));
+  await page.getByTestId('detailed-paper-quad').waitFor();
+  report.runs.push({fixture:'synthetic-low-light',counts:dark.data.counts,serverAutoPerspective:true,lowLightFeedback:true});
+  await page.getByRole('button',{name:'Chỉnh 4 góc giấy',exact:true}).click();
+  if (await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).isEnabled()) throw new Error('PARTIAL_CORNERS_ENABLED_OCR');
+  // Dispatch at source-relative positions to verify mapping even when the image
+  // is larger than its scroll viewport. Any order must become TL/TR/BR/BL.
+  for (const point of [[1260,1450],[130,140],[60,1550],[1150,90]]) await page.evaluate(([x,y]) => {
+    const img = document.querySelector('img[alt="Ảnh nguồn của tài liệu chi tiết"]');
+    const svg = img.parentElement.querySelector('svg');
+    const bounds = svg.getBoundingClientRect();
+    svg.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:bounds.left+x/1500*bounds.width,clientY:bounds.top+y/1750*bounds.height}));
+  }, point);
+  await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).waitFor();
+  const manualResponse = page.waitForResponse(r => r.url().endsWith('/api/documents/detailed'));
+  await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).click();
+  const manual = await (await manualResponse).json();
+  if (!manual.success || manual.data.preprocessing.perspectiveOrigin !== 'manual' || manual.data.counts.line < 19
+    || Math.abs(manual.data.preprocessing.sourceQuad[0][0]-130)>3) throw new Error('MANUAL_CORNERS_FAILED:'+JSON.stringify({success:manual.success,counts:manual.data?.counts,preprocessing:manual.data?.preprocessing}));
+  report.runs.push({fixture:'synthetic-low-light-manual',manualSourceCorners:true,counts:manual.data.counts});
+  const darkFrame = await page.evaluate(() => {
+    const canvas = document.createElement('canvas'); canvas.width=500; canvas.height=500;
+    const ctx = canvas.getContext('2d'); ctx.fillStyle='#0c0c0c'; ctx.fillRect(0,0,500,500);
+    return canvas.toDataURL('image/png').split(',')[1];
+  });
+  await page.getByLabel('Chọn ảnh đọc chi tiết').setInputFiles({name:'dark-frame.png',mimeType:'image/png',buffer:Buffer.from(darkFrame,'base64')});
+  await page.getByLabel('Loại ảnh tài liệu').selectOption('camera');
+  await page.waitForFunction(() => document.querySelector('img[alt="Ảnh nguồn của tài liệu chi tiết"]')?.complete);
+  const failedCornersResponse = page.waitForResponse(r => r.url().endsWith('/api/documents/detailed'));
+  await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).click();
+  const failedCorners = await (await failedCornersResponse).json();
+  if (!failedCorners.success || failedCorners.data.preprocessing.perspectiveOrigin !== 'none' || failedCorners.data.fullText !== ''
+    || !failedCorners.data.warnings.includes('DOCUMENT_CORNERS_NEED_REVIEW')) throw new Error('CAMERA_FALLBACK_NOT_REVIEWABLE');
+  report.runs.push({fixture:'dark-frame',missingCornersStillReviewable:true,noInventedQuadOrText:true,manualCornersResetOnNewImage:true});
+  await page.getByLabel('Chọn ảnh đọc chi tiết').setInputFiles('tests/fixtures/ocr-json/tc04_table_empty_cells.png');
+  await page.waitForFunction(() => document.querySelector('img[alt="Ảnh nguồn của tài liệu chi tiết"]')?.complete);
+  const scanCameraResponse = page.waitForResponse(r => r.url().endsWith('/api/documents/detailed'));
+  await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).click();
+  const scanCamera = await (await scanCameraResponse).json();
+  if (!scanCamera.success || scanCamera.data.counts.cell !== 25 || scanCamera.data.preprocessing.perspectiveOrigin !== 'none') throw new Error('TABLE_MISTAKEN_FOR_CAMERA_PAGE');
+  report.runs.push({fixture:'TC04-camera-mode',printedTableNotUsedAsPaperQuad:true,counts:scanCamera.data.counts});
+  await page.getByLabel('Chọn ảnh đọc chi tiết').setInputFiles('test-results/line-separation/fixtures/multiline-cell.png');
+  await page.getByLabel('Loại ảnh tài liệu').selectOption('scan');
+  await page.getByRole('checkbox',{name:/Kiểm tra từng từ bằng OCR/}).check();
+  await page.waitForFunction(() => document.querySelector('img[alt="Ảnh nguồn của tài liệu chi tiết"]')?.complete);
+  const tightResponse = page.waitForResponse(r => r.url().endsWith('/api/documents/detailed'));
+  await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).click();
+  const tight = await (await tightResponse).json();
+  if (!tight.success || tight.data.counts.line !== 2 || tight.data.counts.cell !== 1 || !tight.data.provider.wordRecognition) throw new Error('TIGHT_CELL_LINES_LOST');
+  const tightLines = tight.data.elements.filter(e => e.kind === 'line');
+  if (tightLines[0].cropBox[3] > tightLines[1].processedBox[1] || tightLines[1].cropBox[1] < tightLines[0].processedBox[3]) throw new Error('TIGHT_CROP_CONTAINS_NEIGHBOR');
+  report.runs.push({fixture:'tight-multiline-cell',realWordCropOcr:true,independentRowsAndCrops:true,counts:tight.data.counts});
+  await page.screenshot({path:'test-results/detailed/tight-lines.png',fullPage:true});
+  await page.getByLabel('Chọn ảnh đọc chi tiết').setInputFiles('test-results/diacritics/fixtures/stacked-tahoma.png');
+  await page.waitForFunction(() => document.querySelector('img[alt="Ảnh nguồn của tài liệu chi tiết"]')?.complete);
+  const accentResponse = page.waitForResponse(r => r.url().endsWith('/api/documents/detailed'));
+  await page.getByRole('button',{name:'Đọc chi tiết',exact:true}).click();
+  const accent = await (await accentResponse).json();
+  if (!accent.success || accent.data.counts.line !== 1 || accent.data.counts.word !== 2
+      || accent.data.counts.unknown_region || !accent.data.provider.wordRecognition) throw new Error('DETACHED_ACCENT_RECORDS_REMAIN');
+  const accentDownload = page.waitForEvent('download');
+  await page.getByRole('button',{name:'TXT tọa độ',exact:true}).click();
+  const accentDownloaded = await accentDownload;
+  await accentDownloaded.saveAs('test-results/detailed/diacritics.coordinates.txt');
+  const accentRecords = (await readFile('test-results/detailed/diacritics.coordinates.txt','utf8')).trim().split('\n').map(line => JSON.parse(line));
+  if (accentRecords.length !== accent.data.elements.length+1 || accentRecords.filter(e => e.kind === 'line').length !== 1
+      || accentRecords.filter(e => e.kind === 'word').length !== 2) throw new Error('DIACRITIC_TXT_RECORDS_DUPLICATED_OR_LOST');
+  report.runs.push({fixture:'stacked-tahoma',realWordCropOcr:true,detachedMarksStayWithGlyph:true,recordsExported:accentRecords.length-1,counts:accent.data.counts});
+  await page.screenshot({path:'test-results/detailed/diacritics.png',fullPage:true});
   if (errors.length) throw new Error(errors.join('\n'));
   console.log(JSON.stringify(report));
 } finally {
