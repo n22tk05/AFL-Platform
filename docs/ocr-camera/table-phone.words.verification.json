@@ -1,0 +1,35 @@
+{
+  "syntheticOnly": true,
+  "realLocalModel": true,
+  "provider": {
+    "name": "vietocr-local",
+    "model": "vgg_transformer",
+    "wordRecognition": true
+  },
+  "counts": {
+    "page": 1,
+    "table": 1,
+    "cell": 25,
+    "region": 1,
+    "line": 22,
+    "word": 62,
+    "word_group": 2,
+    "guide_line": 19,
+    "unknown_region": 708
+  },
+  "blankCells": 4,
+  "lineWordDisagreements": 2,
+  "timingMs": {
+    "detection": 560,
+    "recognition": 4000,
+    "total": 4568
+  },
+  "warnings": [
+    "DOCUMENT_QUAD_AUTO_DETECTED",
+    "PERSPECTIVE_APPLIED",
+    "ILLUMINATION_NORMALIZED",
+    "PAGE_EDGE_INK_RETAINED",
+    "OCR_DOTTED_GUIDES_DETECTED",
+    "UNASSIGNED_INK_PRESENT"
+  ]
+}

@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { warpDocument } from '@/modules/opencv/perspective-transform';
-import { detectDocument } from '@/modules/opencv/document-detector';
+import { detectDocument, detectCameraDocument } from '@/modules/opencv/document-detector';
+import { DocumentDetectionError } from '@/modules/opencv/document-types';
 import type { CvRuntime } from '@/modules/opencv/types';
 
 function runtime(fail: boolean, invalidTransform = false) {
@@ -38,4 +39,22 @@ test('failed detection frees kernels, Mats and MatVector without freeing caller 
 test('non-finite warp is rejected before processing and frees all transforms', () => {
   const r = runtime(false, true); assert.throws(() => warpDocument(r.cv, r.source, quad), /Non-finite/);
   assert.equal(r.live.size, 1); r.source.delete(); assert.equal(r.live.size, 0);
+});
+
+test('camera sweep remains bounded and frees all Mats across rejected attempts', () => {
+  const r = runtime(false);
+  let attempts = 0;
+  const cv = r.cv as unknown as { Canny: () => void };
+  cv.Canny = () => { attempts++; };
+  assert.throws(() => detectCameraDocument(r.cv, r.source), error => error instanceof DocumentDetectionError && error.code === 'DOCUMENT_NOT_FOUND');
+  assert.equal(attempts, 3); assert.equal(r.live.size, 1); assert.equal(r.vectors(), 0);
+  r.source.delete();
+});
+
+test('camera sweep propagates runtime errors without repeated allocations', () => {
+  const r = runtime(false);
+  let attempts = 0;
+  (r.cv as unknown as { Canny: () => void }).Canny = () => { attempts++; throw Error('WASM unavailable'); };
+  assert.throws(() => detectCameraDocument(r.cv, r.source), /WASM unavailable/);
+  assert.equal(attempts, 1); assert.equal(r.live.size, 1); r.source.delete();
 });

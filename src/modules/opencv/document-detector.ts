@@ -4,6 +4,26 @@ import { evaluateDocumentQuality } from './document-quality';
 import { DocumentDetectionError, type DetectedDocument, type DocumentCvRuntime, type DocumentMat, type DocumentMatVector, type DocumentQuad } from './document-types';
 import type { CvMat, CvRuntime } from './types';
 
+/** A bounded camera sweep recovers weaker edges without lowering the quad's
+ * area, border, convexity or measured edge-support requirements. Runtime and
+ * allocation errors propagate; only rejected detections are retried. */
+export function detectCameraDocument(cv: CvRuntime, source: CvMat): DetectedDocument {
+  const variants: Partial<DocumentDetectionConfig>[] = [
+    {},
+    { cannyLowThreshold: 18, cannyHighThreshold: 65, polygonApproximationRatio: 0.03 },
+    { cannyLowThreshold: 30, cannyHighThreshold: 100, polygonApproximationRatio: 0.012 },
+  ];
+  let rejection: DocumentDetectionError | undefined;
+  for (const config of variants) {
+    try { return detectDocument(cv, source, config); }
+    catch (error) {
+      if (!(error instanceof DocumentDetectionError)) throw error;
+      rejection = error;
+    }
+  }
+  throw rejection!;
+}
+
 /** Find a trustworthy page quad from an 8-bit gray/RGB/RGBA source. Source remains
  * caller-owned and unchanged; result is JSON only. Reject instead of using the
  * image boundary. All resized/edge/contour Mats and wrappers are freed in finally.

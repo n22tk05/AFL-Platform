@@ -1,4 +1,4 @@
-import { detectDocument } from '@/modules/opencv/document-detector';
+import { detectCameraDocument } from '@/modules/opencv/document-detector';
 import { warpDocument } from '@/modules/opencv/perspective-transform';
 import { loadOpenCv } from '@/modules/opencv/loader';
 import { DocumentDetectionError } from '@/modules/opencv/document-types';
@@ -50,7 +50,7 @@ export async function prepareDocumentImage(file: File, mode: PreparationMode, op
         if (source.cols < 2 || source.rows < 2) throw new DocumentDetectionError('DOCUMENT_NOT_FOUND', {
           accepted: false, confidence: 0, areaRatio: 0, rectangularity: 0, borderMarginRatio: 0, rejectionReasons: ['IMAGE_TOO_SMALL_FOR_DETECTION'],
         });
-        quad = detectDocument(cv, source).sourceQuad;
+        quad = detectCameraDocument(cv, source).sourceQuad;
       }
       catch (error) {
         if (!(error instanceof DocumentDetectionError)) throw error;

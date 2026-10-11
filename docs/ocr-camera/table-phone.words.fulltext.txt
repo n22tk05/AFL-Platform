@@ -1,0 +1,24 @@
+AFL · BẢN NHÁP CẦN ĐỐI CHIẾU
+
+BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP
+STT
+Loại tài sản
+Diện tích (m2)
+Giá trị ước tính
+Ghi chú
+1
+Nhà ở tại Hà Nội
+120.5
+4.500.000.000 đ
+Nhà cấp 3
+2
+Đất nông nghiệp
+500.0
+800.000.000 đ
+3
+Xe ô tô con 5 chỗ
+650.000.000 đ
+Đứng tên cá nhân
+4
+Tiền tiết kiệm gửi ngân hàng
+300.000.000 đ

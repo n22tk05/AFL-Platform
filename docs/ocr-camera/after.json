@@ -1,0 +1,330 @@
+{
+  "syntheticOnly": true,
+  "model": "real-local-vietocr",
+  "mode": "auto",
+  "wordRecognition": false,
+  "metricScope": "NFC, collapsed whitespace, no reference text supplied to OCR; six deterministic scenes, not a real-phone holdout.",
+  "results": [
+    {
+      "case": "scan-control",
+      "fixture": "TC01",
+      "reference": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. Họ và tên: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố Hà Nội\n4. Dân tộc: Kinh               Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\n(Ký, ghi rõ họ tên)\nTrần Đăng Quang\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, đóng dấu)\nNguyễn Văn Bình",
+      "success": true,
+      "cer": 0.09090909090909091,
+      "wer": 0.10429447852760736,
+      "counts": {
+        "page": 1,
+        "region": 19,
+        "line": 19,
+        "word": 161,
+        "guide_line": 1,
+        "unknown_region": 1
+      },
+      "warnings": [
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "actualText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố Hà Nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\nTrần Đăng Quang\nNguyễn Văn Bình",
+      "preprocessing": {
+        "mode": "auto",
+        "perspectiveOrigin": "none",
+        "sourceQuad": null,
+        "detectionScore": null,
+        "detectionMethod": null,
+        "illuminationNormalized": false,
+        "quality": {
+          "medianBrightness": 255.0,
+          "inkContrast": 139.0,
+          "edgeSharpness": 7589.170410156251,
+          "saturatedPixelRatio": 0.962820320855615
+        }
+      },
+      "elapsedMs": 4813
+    },
+    {
+      "case": "diagonal-shadow",
+      "fixture": "TC01",
+      "reference": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. Họ và tên: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố Hà Nội\n4. Dân tộc: Kinh               Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\n(Ký, ghi rõ họ tên)\nTrần Đăng Quang\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, đóng dấu)\nNguyễn Văn Bình",
+      "success": true,
+      "cer": 0.11261872455902307,
+      "wer": 0.13496932515337423,
+      "counts": {
+        "page": 1,
+        "region": 19,
+        "line": 19,
+        "word": 154,
+        "guide_line": 10,
+        "unknown_region": 200
+      },
+      "warnings": [
+        "DOCUMENT_QUAD_AUTO_DETECTED",
+        "PERSPECTIVE_APPLIED",
+        "ILLUMINATION_NORMALIZED",
+        "PAGE_EDGE_INK_RETAINED",
+        "OCR_DOTTED_GUIDES_DETECTED",
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "actualText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường nhau Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n1987. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn tháng với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\nTrần Đăng Quang\nNguyễn Văn Bình",
+      "preprocessing": {
+        "mode": "auto",
+        "perspectiveOrigin": "auto",
+        "sourceQuad": [
+          [
+            148.91690962099125,
+            70.22916666666667
+          ],
+          [
+            1160.5787172011662,
+            200.02083333333334
+          ],
+          [
+            1030.8411078717202,
+            1531.4791666666667
+          ],
+          [
+            220.3454810495627,
+            1379.8125
+          ]
+        ],
+        "detectionScore": 0.9078993767015263,
+        "detectionMethod": "edges",
+        "illuminationNormalized": true,
+        "quality": {
+          "medianBrightness": 150.0,
+          "inkContrast": 81.0,
+          "edgeSharpness": 3647.689453125,
+          "saturatedPixelRatio": 1.4654591283449105e-06
+        }
+      },
+      "elapsedMs": 5625
+    },
+    {
+      "case": "strong-perspective",
+      "fixture": "TC01",
+      "reference": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. Họ và tên: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố Hà Nội\n4. Dân tộc: Kinh               Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\n(Ký, ghi rõ họ tên)\nTrần Đăng Quang\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, đóng dấu)\nNguyễn Văn Bình",
+      "success": true,
+      "cer": 0.10854816824966079,
+      "wer": 0.13496932515337423,
+      "counts": {
+        "page": 1,
+        "unknown_region": 406,
+        "region": 19,
+        "guide_line": 9,
+        "line": 19,
+        "word": 146
+      },
+      "warnings": [
+        "DOCUMENT_QUAD_AUTO_DETECTED",
+        "PERSPECTIVE_APPLIED",
+        "ILLUMINATION_NORMALIZED",
+        "PAGE_EDGE_INK_RETAINED",
+        "OCR_DOTTED_GUIDES_DETECTED",
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "actualText": "TRONG CỌNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM THỊ\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\nTrần Đăng Quang\nNguyễn Văn Bình",
+      "preprocessing": {
+        "mode": "auto",
+        "perspectiveOrigin": "auto",
+        "sourceQuad": [
+          [
+            379.23760932944606,
+            150.4375
+          ],
+          [
+            1112.4737609329445,
+            350.2291666666667
+          ],
+          [
+            1281.569970845481,
+            1401.6875
+          ],
+          [
+            119.76239067055394,
+            1560.6458333333333
+          ]
+        ],
+        "detectionScore": 0.8679595416794336,
+        "detectionMethod": "luminance",
+        "illuminationNormalized": true,
+        "quality": {
+          "medianBrightness": 209.0,
+          "inkContrast": 127.0,
+          "edgeSharpness": 2906.8578613281256,
+          "saturatedPixelRatio": 0.0016378511868030215
+        }
+      },
+      "elapsedMs": 5234
+    },
+    {
+      "case": "low-light",
+      "fixture": "TC01",
+      "reference": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. Họ và tên: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố Hà Nội\n4. Dân tộc: Kinh               Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\n(Ký, ghi rõ họ tên)\nTrần Đăng Quang\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, đóng dấu)\nNguyễn Văn Bình",
+      "success": true,
+      "cer": 0.1587516960651289,
+      "wer": 0.18404907975460122,
+      "counts": {
+        "page": 1,
+        "region": 19,
+        "line": 19,
+        "word": 150,
+        "guide_line": 7,
+        "unknown_region": 370
+      },
+      "warnings": [
+        "DOCUMENT_QUAD_AUTO_DETECTED",
+        "PERSPECTIVE_APPLIED",
+        "ILLUMINATION_NORMALIZED",
+        "CAMERA_LOW_LIGHT",
+        "PAGE_EDGE_INK_RETAINED",
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "actualText": "TRONG CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM THUẬT\nĐộc lập - Tự do - Hạnh phúc trị\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. HỌ VÀ TÊN: TRÀN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành Là phố Hà Nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n1965. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n1986. Nghề nghiệp: Kỹ sư xây dựng công trình giao chính thông thủy lợi\n1987. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết tháng hôn với ai\n1988. Mục đích sử dụng: Để làm thủ tục vay vốn thế thánh chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Kỷ, ghi rõ họ tên)\n(Ký, đóng dấu)\nTrần Đăng Quang\nNguyễn Văn Bình",
+      "preprocessing": {
+        "mode": "auto",
+        "perspectiveOrigin": "auto",
+        "sourceQuad": [
+          [
+            129.96647230320698,
+            140.22916666666666
+          ],
+          [
+            1150.3746355685132,
+            90.64583333333333
+          ],
+          [
+            1259.704081632653,
+            1449.8125
+          ],
+          [
+            61.4533527696793,
+            1550.4375
+          ]
+        ],
+        "detectionScore": 0.9723804811530546,
+        "detectionMethod": "edges",
+        "illuminationNormalized": true,
+        "quality": {
+          "medianBrightness": 127.0,
+          "inkContrast": 68.0,
+          "edgeSharpness": 2003.7847167968755,
+          "saturatedPixelRatio": 0.0
+        }
+      },
+      "elapsedMs": 5078
+    },
+    {
+      "case": "table-phone",
+      "fixture": "TC04",
+      "reference": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\nSTT | Loại tài sản | Diện tích (m2) | Giá trị ước tính | Ghi chú\n1 | Nhà ở tại Hà Nội | 120.5 | 4.500.000.000 đ | Nhà cấp 3\n2 | Đất nông nghiệp | 500.0 | 800.000.000 đ |\n3 | Xe ô tô con 5 chỗ | | 650.000.000 đ | Đứng tên cá nhân\n4 | Tiền tiết kiệm gửi ngân hàng | | 300.000.000 đ |",
+      "success": true,
+      "cer": 0.12738853503184713,
+      "wer": 0.24390243902439024,
+      "counts": {
+        "page": 1,
+        "table": 1,
+        "cell": 25,
+        "region": 1,
+        "line": 22,
+        "word": 60,
+        "guide_line": 19,
+        "unknown_region": 708
+      },
+      "warnings": [
+        "DOCUMENT_QUAD_AUTO_DETECTED",
+        "PERSPECTIVE_APPLIED",
+        "ILLUMINATION_NORMALIZED",
+        "PAGE_EDGE_INK_RETAINED",
+        "OCR_DOTTED_GUIDES_DETECTED",
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "actualText": "BẢNG KÊ KHAI TÀI SẢN VÀ THU NHẬP\nSTT\nLoại tài sản\nDiện tích (m2)\nGiá trị ước tính\nGhi chú\n1\nNhà ở tại Hà Nội\n120.5\n4.500.000.000 đ\nNhà cấp 3\n2\nĐất nông nghiệp\n500.0\n800.000.000 đ\n3\nXe ô tô con 5 chỗ\n650.000.000 đ\nĐứng tên cá nhân\n4\nTiền tiết kiệm gửi ngân hàng\n300.000.000 đ",
+      "preprocessing": {
+        "mode": "auto",
+        "perspectiveOrigin": "auto",
+        "sourceQuad": [
+          [
+            350.08309037900875,
+            99.39583333333333
+          ],
+          [
+            1350.0830903790088,
+            379.3958333333333
+          ],
+          [
+            1199.9373177842565,
+            1551.8958333333333
+          ],
+          [
+            119.76239067055394,
+            1449.8125
+          ]
+        ],
+        "detectionScore": 0.9414541853731084,
+        "detectionMethod": "edges",
+        "illuminationNormalized": true,
+        "quality": {
+          "medianBrightness": 188.0,
+          "inkContrast": 63.0,
+          "edgeSharpness": 2417.572363281249,
+          "saturatedPixelRatio": 0.00048773924450872886
+        }
+      },
+      "elapsedMs": 2328
+    },
+    {
+      "case": "near-border",
+      "fixture": "TC01",
+      "reference": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. Họ và tên: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố Hà Nội\n4. Dân tộc: Kinh               Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường Giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\n(Ký, ghi rõ họ tên)\nTrần Đăng Quang\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, đóng dấu)\nNguyễn Văn Bình",
+      "success": true,
+      "cer": 0.09497964721845319,
+      "wer": 0.12269938650306748,
+      "counts": {
+        "page": 1,
+        "region": 19,
+        "unknown_region": 176,
+        "line": 19,
+        "word": 162,
+        "guide_line": 4
+      },
+      "warnings": [
+        "DOCUMENT_QUAD_AUTO_DETECTED",
+        "PERSPECTIVE_APPLIED",
+        "ILLUMINATION_NORMALIZED",
+        "PAGE_EDGE_INK_RETAINED",
+        "UNASSIGNED_INK_PRESENT"
+      ],
+      "actualText": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\nHà Nội, ngày 18 tháng 05 năm 2026\nKính gửi: Ủy ban nhân dân phường Khương Mai, quận Thanh Xuân\n1. HỌ VÀ TÊN: TRẦN ĐĂNG QUANG\n2. Ngày sinh: 25 tháng 10 năm 1978\n3. Nơi sinh: Bệnh viện Phụ sản Trung ương, thành phố hà nội\n4. Dân tộc: Kinh Quốc tịch: Việt Nam\n5. Nơi cư trú: Số 45 ngõ 12 đường giải Phóng, phường Đồng Tâm, quận Hai Bà Trưng\n6. Nghề nghiệp: Kỹ sư xây dựng công trình giao thông thủy lợi\n7. Tình trạng hôn nhân: Hiện tại chưa đăng ký kết hôn với ai\n8. Mục đích sử dụng: Để làm thủ tục vay vốn thế chấp tại ngân hàng thương mại\nNGƯỜI LÀM ĐƠN\nCHỦ TỊCH UBND PHƯỜNG\n(Ký, ghi rõ họ tên)\n(Ký, đóng dấu)\nTrần Đăng Quang\nNguyễn Văn Bình",
+      "preprocessing": {
+        "mode": "auto",
+        "perspectiveOrigin": "auto",
+        "sourceQuad": [
+          [
+            0.2288629737609329,
+            179.60416666666666
+          ],
+          [
+            1179.5291545189505,
+            4.604166666666667
+          ],
+          [
+            1329.6749271137026,
+            1500.8541666666667
+          ],
+          [
+            59.99562682215743,
+            1670.0208333333333
+          ]
+        ],
+        "detectionScore": 0.9833713498563529,
+        "detectionMethod": "edges",
+        "illuminationNormalized": true,
+        "quality": {
+          "medianBrightness": 180.0,
+          "inkContrast": 101.0,
+          "edgeSharpness": 2551.63515625,
+          "saturatedPixelRatio": 0.00039862474463102295
+        }
+      },
+      "elapsedMs": 5422
+    }
+  ]
+}
